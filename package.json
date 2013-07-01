@@ -1,0 +1,11 @@
+{
+  "name": "dota2",
+  "version": "0.0.1",
+  "dependencies": {
+    "protobuf": "*",
+    "deferred": "*"
+  },
+  "peerDependencies": {
+    "steam": ">= 0.5.6"
+  }
+}

@@ -1,0 +1,4 @@
+test/config.js
+test/sentry
+node_modules
+test/node_modules
