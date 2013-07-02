@@ -17,6 +17,9 @@ var onSteamLogOn = function onSteamLogOn(){
         Dota2.on("ready", function() {
             // Dota2.setItemPositions([[ITEM ID, POSITION]]);
             // Dota2.deleteItem(ITEM ID);
+            Dota2.joinChat("wobwobwob");
+            // setTimeout(function(){ Dota2.sendMessage("wobwobwob", "wowoeagnaeigniaeg"); }, 5000);
+            setTimeout(function(){ Dota2.leaveChat("wobwobwob"); }, 5000);
         });
         // setTimeout(function(){ Dota2.exit(); }, 5000);
     },
@@ -40,7 +43,7 @@ var onSteamLogOn = function onSteamLogOn(){
         });
     };
 
-bot.logOn(config.steam_user, config.steam_pass, fs.readFileSync('sentry') || config.steam_guard_code);
+bot.logOn(config.steam_user, config.steam_pass, config.steam_guard_code || fs.readFileSync('sentry'));
 bot.on("loggedOn", onSteamLogOn)
     .on('sentry', onSteamSentry)
     .on('servers', onSteamServers)

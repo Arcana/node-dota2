@@ -5,6 +5,7 @@ var Schema = require('protobuf').Schema,
     Deferred = require("deferred"),
     base_gcmessages = new Schema(fs.readFileSync(__dirname + "/generated/base_gcmessages.desc")),
     gcsdk_gcmessages = new Schema(fs.readFileSync(__dirname + "/generated/gcsdk_gcmessages.desc")),
+    dota_gcmessages = new Schema(fs.readFileSync(__dirname + "/generated/dota_gcmessages.desc")),
     protoMask = 0x80000000;
 
 module.exports = Dota2;
@@ -16,6 +17,7 @@ function Dota2(steamClient, debug) {
   this._client = steamClient;
   this._appid = 570;
   this._gcReady = false;
+  this.chatChannels = {}; // Map channel names to channel data.
 
   // TODO: Autogenerate these from SteamRE resources, in to seperate file.
   this.EGCItemMsg = {
@@ -44,6 +46,14 @@ function Dota2(steamClient, debug) {
         k_EMsgGCChatMessage: 7146,
         k_EMsgClientsRejoinChatChannels: 7217,
         k_EMsgGCToGCLeaveAllChatChannels: 7220
+  },
+  this.DOTAChatChannelType_t = {
+        DOTAChannelType_Regional: 0,
+        DOTAChannelType_Custom: 1,
+        DOTAChannelType_Party: 2,
+        DOTAChannelType_Lobby: 3,
+        DOTAChannelType_Team: 4,
+        DOTAChannelType_Guild: 5
   };
 
   var self = this;
@@ -56,7 +66,8 @@ function Dota2(steamClient, debug) {
         break;
 
       case self.EDOTAGCMsg.k_EMsgGCJoinChatChannelResponse:
-        // TODO;
+        var channelData = dota_gcmessages.CMsgDOTAJoinChatChannelResponse.parse(message);
+        self.chatChannels[channelData.channelName] = channelData;
         break;
 
       case self.EDOTAGCMsg.k_EMsgGCChatMessage:
@@ -105,11 +116,54 @@ Dota2.prototype.setItemPositions = function(itemPositions) {
 };
 
 Dota2.prototype.joinChat = function(channel) {
-    // TODO; seems to be non-proto, pls snoop
+  if (!this._gcReady) {
+    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+    return null;
+  }
+
+  if (this.debug) util.log("Joining chat channel: " + channel);
+  var payload = dota_gcmessages.CMsgDOTAJoinChatChannel.serialize({
+    "channelName": channel,
+    "channelType": this.DOTAChatChannelType_t.DOTAChannelType_Custom
+  });
+
+  this._client.toGC(this._appid, (this.EDOTAGCMsg.k_EMsgGCJoinChatChannel | protoMask), payload);
 };
 
 Dota2.prototype.leaveChat = function(channel) {
-    // TODO; seems to be non-proto, pls snoop
+  if (!this._gcReady) {
+    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+    return null;
+  }
+
+  if (this.debug) util.log("Leaving chat channel: " + channel);
+  var payload = dota_gcmessages.CMsgDOTALeaveChatChannel.serialize({
+     "channelId": this.chatChannels[channel].channelId
+  });
+
+  this._client.toGC(this._appid, (this.EDOTAGCMsg.k_EMsgGCLeaveChatChannel | protoMask), payload);
+};
+
+Dota2.prototype.sendMessage = function(channel, message) {
+  if (!this._gcReady) {
+    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+    return null;
+  }
+
+  if (this.debug) util.log("Sending message to " + channel);
+  var payload = dota_gcmessages.CMsgDOTAChatMessage.serialize({
+      "accountId": 0,
+      "channelId": this.chatChannels[channel].channelId,
+      "personaName": bot.persona_name,
+      "text": message,
+      "timestamp": 0,
+      "suggestInviteAccountId": 0,
+      "suggestInviteName": ""
+    });
+
+  console.log(dota_gcmessages.CMsgDOTAChatMessage.parse(payload));
+
+  this._client.toGC(this._appid, (this.EDOTAGCMsg.k_EMsgGCChatMessage | protoMask), payload);
 };
 
 Dota2.prototype.deleteItem = function(itemid) {

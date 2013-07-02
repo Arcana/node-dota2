@@ -13,7 +13,7 @@ Parameters:
 ```js
 var Steam = require('steam'),
     steamClient = new Steam.SteamClient(),
-    dota2 = require('tf2'),
+    dota2 = require('dota2'),
     Dota2 = new dota2(steamClient, true);
 ```
 
