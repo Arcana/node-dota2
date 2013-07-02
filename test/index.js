@@ -17,9 +17,13 @@ var onSteamLogOn = function onSteamLogOn(){
         Dota2.on("ready", function() {
             // Dota2.setItemPositions([[ITEM ID, POSITION]]);
             // Dota2.deleteItem(ITEM ID);
-            Dota2.joinChat("wobwobwob");
+            // Dota2.joinChat("wobwobwob");
             // setTimeout(function(){ Dota2.sendMessage("wobwobwob", "wowoeagnaeigniaeg"); }, 5000);
-            setTimeout(function(){ Dota2.leaveChat("wobwobwob"); }, 5000);
+            // setTimeout(function(){ Dota2.leaveChat("wobwobwob"); }, 10000);
+        });
+
+        Dota2.on("chatMessage", function(channel, personaName, message) {
+            util.log([channel, personaName, message].join(", "));
         });
         // setTimeout(function(){ Dota2.exit(); }, 5000);
     },

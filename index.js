@@ -17,9 +17,10 @@ function Dota2(steamClient, debug) {
   this._client = steamClient;
   this._appid = 570;
   this._gcReady = false;
-  this.chatChannels = {}; // Map channel names to channel data.
+  this.chatChannels = []; // Map channel names to channel data.
 
   // TODO: Autogenerate these from SteamRE resources, in to seperate file.
+  // Warning:  These values can change with Dota 2 updates.
   this.EGCItemMsg = {
     k_EMsgGCSetItemPosition: 1001,
     k_EMsgGCDelete: 1004,
@@ -36,14 +37,14 @@ function Dota2(steamClient, debug) {
   this.EDOTAGCMsg = {
         k_EMsgGCJoinChatChannel: 7009,
         k_EMsgGCJoinChatChannelResponse: 7010,
-        k_EMsgGCLeaveChatChannel: 7011,
+        k_EMsgGCLeaveChatChannel: 7272,
         k_EMsgGCOtherJoinedChannel: 7013,
         k_EMsgGCOtherLeftChannel: 7014,
         k_EMsgGCRequestDefaultChatChannel: 7058,
         k_EMsgGCRequestDefaultChatChannelResponse: 7059,
         k_EMsgGCRequestChatChannelList: 7060,
         k_EMsgGCRequestChatChannelListResponse: 7061,
-        k_EMsgGCChatMessage: 7146,
+        k_EMsgGCChatMessage: 7273,
         k_EMsgClientsRejoinChatChannels: 7217,
         k_EMsgGCToGCLeaveAllChatChannels: 7220
   },
@@ -67,11 +68,16 @@ function Dota2(steamClient, debug) {
 
       case self.EDOTAGCMsg.k_EMsgGCJoinChatChannelResponse:
         var channelData = dota_gcmessages.CMsgDOTAJoinChatChannelResponse.parse(message);
-        self.chatChannels[channelData.channelName] = channelData;
+        self.chatChannels.push(channelData);
         break;
 
       case self.EDOTAGCMsg.k_EMsgGCChatMessage:
-        // TODO;
+        var chatData = dota_gcmessages.CMsgDOTAChatMessage.parse(message);
+        self.emit("chatMessage",
+          self.chatChannels.map(function (item) {if (item.channelId === chatData.channelId) return item.channelName; })[0],
+          chatData.personaName,
+          chatData.text,
+          chatData);
         break;
 
       case self.EDOTAGCMsg.k_EMsgGCOtherJoinedChannel:
@@ -137,8 +143,13 @@ Dota2.prototype.leaveChat = function(channel) {
   }
 
   if (this.debug) util.log("Leaving chat channel: " + channel);
+  var channelId = this.chatChannels.map(function (item) {if (item.channelName == channel) return item.channelId; })[0];
+  if (channelId === undefined) {
+    if (this.debug) util.log("Cannot leave a channel you have not joined.");
+    return;
+  }
   var payload = dota_gcmessages.CMsgDOTALeaveChatChannel.serialize({
-     "channelId": this.chatChannels[channel].channelId
+     "channelId": channelId
   });
 
   this._client.toGC(this._appid, (this.EDOTAGCMsg.k_EMsgGCLeaveChatChannel | protoMask), payload);
@@ -151,17 +162,15 @@ Dota2.prototype.sendMessage = function(channel, message) {
   }
 
   if (this.debug) util.log("Sending message to " + channel);
+  var channelId = this.chatChannels.map(function (item) {if (item.channelName == channel) return item.channelId; })[0];
+  if (channelId === undefined) {
+    if (this.debug) util.log("Cannot send message to a channel you have not joined.");
+    return;
+  }
   var payload = dota_gcmessages.CMsgDOTAChatMessage.serialize({
-      "accountId": 0,
-      "channelId": this.chatChannels[channel].channelId,
-      "personaName": bot.persona_name,
-      "text": message,
-      "timestamp": 0,
-      "suggestInviteAccountId": 0,
-      "suggestInviteName": ""
+      "channelId": channelId,
+      "text": message
     });
-
-  console.log(dota_gcmessages.CMsgDOTAChatMessage.parse(payload));
 
   this._client.toGC(this._appid, (this.EDOTAGCMsg.k_EMsgGCChatMessage | protoMask), payload);
 };
