@@ -20,10 +20,17 @@ var onSteamLogOn = function onSteamLogOn(){
             // Dota2.joinChat("wobwobwob");
             // setTimeout(function(){ Dota2.sendMessage("wobwobwob", "wowoeagnaeigniaeg"); }, 5000);
             // setTimeout(function(){ Dota2.leaveChat("wobwobwob"); }, 10000);
+            // Dota2.inviteToGuild(5287, 28956443);
+            // Dota2.setGuildAccountRole(5287, 28956443, 2);
+            // Dota2.cancelInviteToGuild(5287, 75028261);
         });
 
         Dota2.on("chatMessage", function(channel, personaName, message) {
-            util.log([channel, personaName, message].join(", "));
+            // util.log([channel, personaName, message].join(", "));
+        });
+
+        Dota2.on("guildInvite", function(guildId, guildName, inviter) {
+            // Dota2.setGuildAccountRole(guildId, 75028261, 3);
         });
         // setTimeout(function(){ Dota2.exit(); }, 5000);
     },
