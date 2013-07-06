@@ -3,7 +3,7 @@ var steam = require("steam"),
     fs = require("fs"),
     dota2 = require("../"),
     bot = new steam.SteamClient(),
-    Dota2 = new dota2(bot, true);
+    Dota2 = new dota2.Dota2Client(bot, true);
 
 global.config = require("./config");
 
@@ -31,6 +31,10 @@ var onSteamLogOn = function onSteamLogOn(){
 
         Dota2.on("guildInvite", function(guildId, guildName, inviter) {
             // Dota2.setGuildAccountRole(guildId, 75028261, 3);
+        });
+
+        Dota2.on("unhandled", function(kMsg) {
+            util.log("UNHANDLED MESSAGE " + kMsg);
         });
         // setTimeout(function(){ Dota2.exit(); }, 5000);
     },
