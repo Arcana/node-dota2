@@ -27,6 +27,10 @@ var onSteamLogOn = function onSteamLogOn(){
             // Dota2.on("passportData", function (accountId, passportData) {
             //     console.log(passportData.leagueGuesses.stampedPlayers);
             // });
+            // Dota2.profileRequest(28956443, true);
+            // Dota2.on("profileData", function (accountId, profileData) {
+            //     console.log(JSON.stringify(profileData, null, 2));
+            // });
         });
 
         Dota2.on("chatMessage", function(channel, personaName, message) {

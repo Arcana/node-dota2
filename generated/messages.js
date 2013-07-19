@@ -44,7 +44,9 @@ Dota2.EDOTAGCMsg = {
     k_EMsgGCGuildUpdateDetailsResponse: 7233,
     k_EMsgGCGuildInviteData: 7254,
     k_EMsgGCPassportDataRequest: 7248,
-    k_EMsgGCPassportDataResponse: 7249
+    k_EMsgGCPassportDataResponse: 7249,
+    k_EMsgGCProfileRequest: 7098,
+    k_EMsgGCProfileResponse: 7099
 };
 
 Dota2.DOTAChatChannelType_t = {

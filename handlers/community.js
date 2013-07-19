@@ -9,6 +9,22 @@ var Dota2 = require("../index"),
 
 // Methods
 
+Dota2.Dota2Client.prototype.profileRequest = function(accountId, requestName) {
+  /* Attempts to move inventory items to positions as noted itemPositions - which is interpreted as a [itemid, position] tuple. */
+  if (!this._gcReady) {
+    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+    return null;
+  }
+
+  if (this.debug) util.log("Sending profile request");
+  var payload = dota_gcmessages.CMsgDOTAProfileRequest.serialize({
+    "accountId": accountId,
+    "requestName": requestName
+  });
+
+  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCProfileRequest | protoMask), payload);
+};
+
 Dota2.Dota2Client.prototype.passportDataRequest = function(accountId) {
   /* Attempts to move inventory items to positions as noted itemPositions - which is interpreted as a [itemid, position] tuple. */
   if (!this._gcReady) {
@@ -26,6 +42,13 @@ Dota2.Dota2Client.prototype.passportDataRequest = function(accountId) {
 // Handlers
 
 var handlers = Dota2.Dota2Client.prototype._handlers;
+
+handlers[Dota2.EDOTAGCMsg.k_EMsgGCProfileResponse] = function onPassportDataResponse(message) {
+  var profileResponse = dota_gcmessages.CMsgDOTAProfileResponse  .parse(message);
+
+  if (this.debug) util.log("Recevied profile data for: " + profileResponse.gameAccountClient.accountId);
+  this.emit("profileData", profileResponse.gameAccountClient.accountId, profileResponse);
+};
 
 handlers[Dota2.EDOTAGCMsg.k_EMsgGCPassportDataResponse] = function onPassportDataResponse(message) {
   var passportDataResponse = dota_gcmessages.CMsgPassportDataResponse .parse(message);

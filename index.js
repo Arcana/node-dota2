@@ -72,4 +72,4 @@ Dota2.Dota2Client = Dota2Client;
 require("./handlers/inventory");
 require("./handlers/chat");
 require("./handlers/guild");
-require("./handlers/passport");
+require("./handlers/community");
