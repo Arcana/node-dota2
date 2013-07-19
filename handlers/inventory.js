@@ -18,8 +18,7 @@ Dota2.Dota2Client.prototype.setItemPositions = function(itemPositions) {
 
   if (this.debug) util.log("Setting item positions.");
   var payloadItemPositions = itemPositions.map(function(item){ return {"itemId": item[0], "position": item[1]}; }),
-    payload = base_gcmessages.CMsgSetItemPositions.serialize({"itemPositions": payloadItemPositions}),
-    Dota2 = {};
+    payload = base_gcmessages.CMsgSetItemPositions.serialize({"itemPositions": payloadItemPositions});
 
   this._client.toGC(this._appid, (Dota2.EGCItemMsg.k_EMsgGCSetItemPositions | protoMask), payload);
 };

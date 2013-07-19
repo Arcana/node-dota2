@@ -23,6 +23,10 @@ var onSteamLogOn = function onSteamLogOn(){
             // Dota2.inviteToGuild(5287, 28956443);
             // Dota2.setGuildAccountRole(5287, 28956443, 2);
             // Dota2.cancelInviteToGuild(5287, 75028261);
+            // Dota2.passportDataRequest(28956443);
+            // Dota2.on("passportData", function (accountId, passportData) {
+            //     console.log(passportData.leagueGuesses.stampedPlayers);
+            // });
         });
 
         Dota2.on("chatMessage", function(channel, personaName, message) {

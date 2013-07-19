@@ -42,7 +42,9 @@ Dota2.EDOTAGCMsg = {
     k_EMsgGCGuildCancelInviteResponse: 7231,
     k_EMsgGCGuildUpdateDetailsRequest: 7232,
     k_EMsgGCGuildUpdateDetailsResponse: 7233,
-    k_EMsgGCGuildInviteData: 7254
+    k_EMsgGCGuildInviteData: 7254,
+    k_EMsgGCPassportDataRequest: 7248,
+    k_EMsgGCPassportDataResponse: 7249
 };
 
 Dota2.DOTAChatChannelType_t = {

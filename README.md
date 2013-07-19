@@ -82,6 +82,12 @@ Attempts to cancel a user's guild invitation; use this on your own account ID to
 Attempts to set a user's role within a guild; use this with your own account ID and the 'Member' role to accept guild invitations. Requires the GC to be ready (listen for the `ready` event before calling).
 
 
+### Passport (Compendium)
+#### passportDataRequest(accountId)
+* `accountId` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose passport data you wish to view.
+
+Sends a message to the Game Coordinator requesting `accountId`'s passport data.  Listen for `passportData` event for Game Coordinator's response.
+
 ## Events
 ### `ready`
 Emitted when the GC is ready to receive messages.
@@ -102,6 +108,14 @@ Emitted for chat messages received from Dota 2 chat channels
 * `guildInviteDataObject` - The raw guildInviteData object to do with as you wish.
 
 You can respond with `cancelInviteToGuild` or `setGuildAccountRole`.
+
+### `passportData` (`accountId`, `passportData`)
+* `accountId` - Account ID whom the passport belongs to.
+* `passportData` - The raw passport data object.
+
+Emitted when GC response to the `passportDataRequest` method.
+
+See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages.proto#L2993) for `passportData`'s object structure.
 
 ## Testing
 There is no automated test suite for node-dota2 (I've no idea how I'd make one for the stuff this does :o), however there the `test` directory does contain a Steam bot with commented-out dota2 methods; you can use this bot to test the library.
