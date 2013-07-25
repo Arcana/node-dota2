@@ -82,7 +82,13 @@ Attempts to cancel a user's guild invitation; use this on your own account ID to
 Attempts to set a user's role within a guild; use this with your own account ID and the 'Member' role to accept guild invitations. Requires the GC to be ready (listen for the `ready` event before calling).
 
 
-### Passport (Compendium)
+### Community
+#### profileRequest(accountId, requestName)
+* `accountId` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose passport data you wish to view.
+* `requestName` - Boolean, whether you want the GC to return the accounts current display name.
+
+Sends a message to the Game Coordinator requesting `accountId`'s profile data.  Listen for `profileData` event for Game Coordinator's response.
+
 #### passportDataRequest(accountId)
 * `accountId` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose passport data you wish to view.
 
@@ -108,6 +114,14 @@ Emitted for chat messages received from Dota 2 chat channels
 * `guildInviteDataObject` - The raw guildInviteData object to do with as you wish.
 
 You can respond with `cancelInviteToGuild` or `setGuildAccountRole`.
+
+### `profileData` (`accountId`, `profileData`)
+* `accountId` - Account ID whom the data is associated with.
+* `profileData` - The raw profile data object.
+
+Emitted when GC response to the `passportDataRequest` method.
+
+See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages.proto#2261) for `profileData`'s object structure.
 
 ### `passportData` (`accountId`, `passportData`)
 * `accountId` - Account ID whom the passport belongs to.
