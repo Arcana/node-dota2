@@ -73,3 +73,4 @@ require("./handlers/inventory");
 require("./handlers/chat");
 require("./handlers/guild");
 require("./handlers/community");
+require("./handlers/match");

@@ -94,6 +94,13 @@ Sends a message to the Game Coordinator requesting `accountId`'s profile data.  
 
 Sends a message to the Game Coordinator requesting `accountId`'s passport data.  Listen for `passportData` event for Game Coordinator's response.
 
+
+### Matches
+#### matchDetailsRequest(matchId)
+* `matchId` - The matches ID
+
+Sends a message to the Game Coordinator requesting `matchId`'s match details.  Listen for `matchData` event for Game Coordinator's response.
+
 ## Events
 ### `ready`
 Emitted when the GC is ready to receive messages.
@@ -119,7 +126,7 @@ You can respond with `cancelInviteToGuild` or `setGuildAccountRole`.
 * `accountId` - Account ID whom the data is associated with.
 * `profileData` - The raw profile data object.
 
-Emitted when GC response to the `passportDataRequest` method.
+Emitted when GC response to the `profileRequest` method.
 
 See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages.proto#2261) for `profileData`'s object structure.
 
@@ -130,6 +137,14 @@ See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resour
 Emitted when GC response to the `passportDataRequest` method.
 
 See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages.proto#L2993) for `passportData`'s object structure.
+
+### `matchData` (`matchId`, `matchData`)
+* `matchId` - Match ID whom the data is associatd with.
+* `matchData` - The raw match details data object.
+
+Emitted when GC response to the `matchDetailsRequest` method.
+
+See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages.proto#L2250) for `matchData`'s object structure.
 
 ## Testing
 There is no automated test suite for node-dota2 (I've no idea how I'd make one for the stuff this does :o), however there the `test` directory does contain a Steam bot with commented-out dota2 methods; you can use this bot to test the library.

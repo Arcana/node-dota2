@@ -45,6 +45,8 @@ Dota2.EDOTAGCMsg = {
     k_EMsgGCGuildInviteData: 7254,
     k_EMsgGCPassportDataRequest: 7248,
     k_EMsgGCPassportDataResponse: 7249,
+    k_EMsgGCMatchDetailsRequest: 7095,
+    k_EMsgGCMatchDetailsResponse: 7096,
     k_EMsgGCProfileRequest: 7098,
     k_EMsgGCProfileResponse: 7099
 };
