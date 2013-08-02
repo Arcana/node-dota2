@@ -87,19 +87,24 @@ Attempts to set a user's role within a guild; use this with your own account ID 
 * `accountId` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose passport data you wish to view.
 * `requestName` - Boolean, whether you want the GC to return the accounts current display name.
 
-Sends a message to the Game Coordinator requesting `accountId`'s profile data.  Listen for `profileData` event for Game Coordinator's response.
+Sends a message to the Game Coordinator requesting `accountId`'s profile data.  Listen for `profileData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
 #### passportDataRequest(accountId)
 * `accountId` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose passport data you wish to view.
 
-Sends a message to the Game Coordinator requesting `accountId`'s passport data.  Listen for `passportData` event for Game Coordinator's response.
+Sends a message to the Game Coordinator requesting `accountId`'s passport data.  Listen for `passportData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+
+#### hallOfFameRequest(week)
+* `week` - The week of which you wish to know the Hall of Fame members; will return latest week if omitted.  Weeks also randomly start at 2233 for some reason, valf please.
+
+Sends a message to the Game Coordinator requesting the Hall of Fame data for `week`.  Listen for the `hallOfFameData` event for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
 
 ### Matches
 #### matchDetailsRequest(matchId)
 * `matchId` - The matches ID
 
-Sends a message to the Game Coordinator requesting `matchId`'s match details.  Listen for `matchData` event for Game Coordinator's response.
+Sends a message to the Game Coordinator requesting `matchId`'s match details.  Listen for `matchData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
 ## Events
 ### `ready`
@@ -126,7 +131,7 @@ You can respond with `cancelInviteToGuild` or `setGuildAccountRole`.
 * `accountId` - Account ID whom the data is associated with.
 * `profileData` - The raw profile data object.
 
-Emitted when GC response to the `profileRequest` method.
+Emitted when GC responds to the `profileRequest` method.
 
 See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages.proto#2261) for `profileData`'s object structure.
 
@@ -134,7 +139,7 @@ See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resour
 * `accountId` - Account ID whom the passport belongs to.
 * `passportData` - The raw passport data object.
 
-Emitted when GC response to the `passportDataRequest` method.
+Emitted when GC responds to the `passportDataRequest` method.
 
 See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages.proto#L2993) for `passportData`'s object structure.
 
@@ -142,9 +147,17 @@ See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resour
 * `matchId` - Match ID whom the data is associatd with.
 * `matchData` - The raw match details data object.
 
-Emitted when GC response to the `matchDetailsRequest` method.
+Emitted when GC responds to the `matchDetailsRequest` method.
 
 See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages.proto#L2250) for `matchData`'s object structure.
+
+### `hallOfFameData` (`week`, `featuredPlayers`, `featuredFarmer`, `hallOfFameResponse`)
+* `week` - Week the data is associated with.
+* `featuredPlayers` - Array of featured players for that week. `[{ accountId, heroId, averageScaledMetric, numGames }]`
+* `featuredFarmer` - Featured farmer for that week. `{ accountId, heroId, goldPerMin, matchId }`
+* `hallOfFameResponse` - Raw response object.
+
+Emitted when the GC responds to the `hallOfFameRequest` method.
 
 ## Testing
 There is no automated test suite for node-dota2 (I've no idea how I'd make one for the stuff this does :o), however there the `test` directory does contain a Steam bot with commented-out dota2 methods; you can use this bot to test the library.

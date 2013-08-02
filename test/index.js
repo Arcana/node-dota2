@@ -31,10 +31,11 @@ var onSteamLogOn = function onSteamLogOn(){
             // Dota2.on("profileData", function (accountId, profileData) {
             //     console.log(JSON.stringify(profileData, null, 2));
             // });
-            Dota2.matchDetailsRequest(246546269, true);
-            Dota2.on("matchData", function (matchId, matchData) {
-                console.log(JSON.stringify(matchData, null, 2));
-            });
+            // Dota2.matchDetailsRequest(246546269, true);
+            // Dota2.on("matchData", function (matchId, matchData) {
+            //     console.log(JSON.stringify(matchData, null, 2));
+            // });
+            // Dota2.hallOfFameRequest();
         });
 
         Dota2.on("chatMessage", function(channel, personaName, message) {
@@ -43,6 +44,10 @@ var onSteamLogOn = function onSteamLogOn(){
 
         Dota2.on("guildInvite", function(guildId, guildName, inviter) {
             // Dota2.setGuildAccountRole(guildId, 75028261, 3);
+        });
+
+        Dota2.on("hallOfFameData", function(week, featuredPlayers, featuredFarmer, hallOfFameResponse) {
+            console.log(JSON.stringify(hallOfFameResponse, null, 2));
         });
 
         Dota2.on("unhandled", function(kMsg) {

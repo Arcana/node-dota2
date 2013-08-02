@@ -48,7 +48,9 @@ Dota2.EDOTAGCMsg = {
     k_EMsgGCMatchDetailsRequest: 7095,
     k_EMsgGCMatchDetailsResponse: 7096,
     k_EMsgGCProfileRequest: 7098,
-    k_EMsgGCProfileResponse: 7099
+    k_EMsgGCProfileResponse: 7099,
+    k_EMsgGCHallOfFameRequest: 7172,
+    k_EMsgGCHallOfFameResponse:  7173
 };
 
 Dota2.DOTAChatChannelType_t = {
