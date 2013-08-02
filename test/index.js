@@ -36,6 +36,7 @@ var onSteamLogOn = function onSteamLogOn(){
             //     console.log(JSON.stringify(matchData, null, 2));
             // });
             // Dota2.hallOfFameRequest();
+            // Dota2.matchmakingStatsRequest();
         });
 
         Dota2.on("chatMessage", function(channel, personaName, message) {
@@ -48,6 +49,10 @@ var onSteamLogOn = function onSteamLogOn(){
 
         Dota2.on("hallOfFameData", function(week, featuredPlayers, featuredFarmer, hallOfFameResponse) {
             console.log(JSON.stringify(hallOfFameResponse, null, 2));
+        });
+
+        Dota2.on("matchmakingStatsData", function(waitTimesByGroup, searchingPlayersByGroup, disabledGroups, matchmakingStatsResponse) {
+            console.log(JSON.stringify(matchmakingStatsResponse, null, 2));
         });
 
         Dota2.on("unhandled", function(kMsg) {

@@ -24,6 +24,20 @@ Dota2.Dota2Client.prototype.matchDetailsRequest = function(matchId) {
   this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCMatchDetailsRequest | protoMask), payload);
 };
 
+Dota2.Dota2Client.prototype.matchmakingStatsRequest = function() {
+  /* Sends a message to the Game Coordinator requesting `matchId`'s match details.  Listen for `matchData` event for Game Coordinator's response. */
+  if (!this._gcReady) {
+    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+    return null;
+  }
+
+  if (this.debug) util.log("Sending matchmaking stats request");
+  var payload = dota_gcmessages.CMsgDOTAMatchmakingStatsRequest.serialize({
+  });
+
+  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCMatchmakingStatsRequest | protoMask), payload);
+};
+
 
 // Handlers
 
@@ -37,4 +51,13 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCMatchDetailsResponse] = function onMatchDetail
     this.emit("matchData", matchDetailsResponse.match.matchId, matchDetailsResponse);
   }
   else if (this.debug) util.log("Received a bad matchDetailsResponse");
+};
+
+
+
+handlers[Dota2.EDOTAGCMsg.k_EMsgGCMatchmakingStatsResponse] = function onMatchmakingStatsResponse(message) {
+  var matchmakingStatsResponse = dota_gcmessages.CMsgDOTAMatchmakingStatsResponse.parse(message);
+
+  if (this.debug) util.log("Recevied matchmaking stats.");
+  this.emit("matchmakingStatsData", matchmakingStatsResponse.waitTimesByGroup, matchmakingStatsResponse.searchingPlayersByGroup, matchmakingStatsResponse.disabledGroups, matchmakingStatsResponse);
 };

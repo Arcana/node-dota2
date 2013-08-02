@@ -87,25 +87,28 @@ Attempts to set a user's role within a guild; use this with your own account ID 
 * `accountId` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose passport data you wish to view.
 * `requestName` - Boolean, whether you want the GC to return the accounts current display name.
 
-Sends a message to the Game Coordinator requesting `accountId`'s profile data.  Listen for `profileData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+Sends a message to the Game Coordinator requesting `accountId`'s profile data. Listen for `profileData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
 #### passportDataRequest(accountId)
 * `accountId` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose passport data you wish to view.
 
-Sends a message to the Game Coordinator requesting `accountId`'s passport data.  Listen for `passportData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+Sends a message to the Game Coordinator requesting `accountId`'s passport data. Listen for `passportData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
 #### hallOfFameRequest(week)
 * `week` - The week of which you wish to know the Hall of Fame members; will return latest week if omitted.  Weeks also randomly start at 2233 for some reason, valf please.
 
-Sends a message to the Game Coordinator requesting the Hall of Fame data for `week`.  Listen for the `hallOfFameData` event for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+Sends a message to the Game Coordinator requesting the Hall of Fame data for `week`. Listen for the `hallOfFameData` event for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
 
 ### Matches
 #### matchDetailsRequest(matchId)
 * `matchId` - The matches ID
 
-Sends a message to the Game Coordinator requesting `matchId`'s match details.  Listen for `matchData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+Sends a message to the Game Coordinator requesting `matchId`'s match details. Listen for `matchData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
+#### matchmakingStatsRequest()
+
+Sends a message to the Game Coordinator requesting some matchmaking stats. Listen for the `matchmakingStatsData` event for the Game Coordinator's response. Rqeuired the GC to be ready (listen for the `ready` event before calling).
 ## Events
 ### `ready`
 Emitted when the GC is ready to receive messages.
@@ -158,6 +161,30 @@ See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resour
 * `hallOfFameResponse` - Raw response object.
 
 Emitted when the GC responds to the `hallOfFameRequest` method.
+
+### `matchmakingStatsData` (`waitTimesByGroup`, `searchingPlayersByGroup`, `disabledGroups`, `matchmakingStatsResponse`)
+* `waitTimesByGroup` - Current average matchmaking waiting times, in seconds, per group.
+* `searchingPlayersByGroup` - Current players searching for matches per group.
+* `disabledGroups` - I don't know how the data is formatted here, I've only observed it to be zero.
+* `matchmakingStatsResponse` - Raw response object.
+
+Emitted when te GC response to the `matchmakingStatsRequest` method.  The array order dictates which matchmaking groups the figure belongs to, the groups are discoverable through `regions.txt` in Dota 2's game files.  Here are the groups at the time of this sentence being written (with unecessary data trimmed out):
+
+```
+    "USWest":               {"matchgroup": "0"},
+    "USEast":               {"matchgroup": "1"},
+    "Europe":               {"matchgroup": "2"},
+    "Singapore":            {"matchgroup": "3"},
+    "Shanghai":             {"matchgroup": "4"},
+    "Brazil":               {"matchgroup": "5"},
+    "Korea":                {"matchgroup": "6"},
+    "Austria":              {"matchgroup": "8"},
+    "Stockholm":            {"matchgroup": "7"},
+    "Australia":            {"matchgroup": "9"},
+    "SouthAfrica":          {"matchgroup": "10"},
+    "PerfectWorldTelecom":  {"matchgroup": "11"},
+    "PerfectWorldUnicom":   {"matchgroup": "12"}
+```
 
 ## Testing
 There is no automated test suite for node-dota2 (I've no idea how I'd make one for the stuff this does :o), however there the `test` directory does contain a Steam bot with commented-out dota2 methods; you can use this bot to test the library.
