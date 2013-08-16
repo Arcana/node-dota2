@@ -15,28 +15,77 @@ var onSteamLogOn = function onSteamLogOn(){
 
         Dota2.launch();
         Dota2.on("ready", function() {
+
+            /* INVENTORY */
             // Dota2.setItemPositions([[ITEM ID, POSITION]]);
             // Dota2.deleteItem(ITEM ID);
-            // Dota2.joinChat("wobwobwob");
-            // setTimeout(function(){ Dota2.sendMessage("wobwobwob", "wowoeagnaeigniaeg"); }, 5000);
-            // setTimeout(function(){ Dota2.leaveChat("wobwobwob"); }, 10000);
-            // Dota2.inviteToGuild(5287, 28956443);
-            // Dota2.setGuildAccountRole(5287, 28956443, 2);
-            // Dota2.cancelInviteToGuild(5287, 75028261);
-            // Dota2.passportDataRequest(28956443);
-            // Dota2.on("passportData", function (accountId, passportData) {
-            //     console.log(passportData.leagueGuesses.stampedPlayers);
+
+            /* MATCHES */
+                // Event based
+            // Dota2.matchDetailsRequest(246546269);
+            // Dota2.on("matchData", function (matchId, matchData) {
+            //     console.log(JSON.stringify(matchData, null, 2));
             // });
+            // Dota2.matchmakingStatsRequest();
+            // Dota2.on("matchmakingStatsData", function(waitTimesByGroup, searchingPlayersByGroup, disabledGroups, matchmakingStatsResponse) {
+            //     console.log(JSON.stringify(matchmakingStatsResponse, null, 2));
+            // });
+
+                // Callback based
+            // Dota2.matchDetailsRequest(246546269, function(err, body){
+            //     if (err) console.log(err);
+            //     console.log(JSON.stringify(body));
+            // });
+
+            /* COMMUNITY */
+                // Event based
             // Dota2.profileRequest(28956443, true);
             // Dota2.on("profileData", function (accountId, profileData) {
             //     console.log(JSON.stringify(profileData, null, 2));
             // });
-            // Dota2.matchDetailsRequest(246546269, true);
-            // Dota2.on("matchData", function (matchId, matchData) {
-            //     console.log(JSON.stringify(matchData, null, 2));
+            // Dota2.passportDataRequest(28956443);
+            // Dota2.on("passportData", function (accountId, passportData) {
+            //     console.log(passportData.leagueGuesses.stampedPlayers);
             // });
             // Dota2.hallOfFameRequest();
-            // Dota2.matchmakingStatsRequest();
+            // Dota2.on("hallOfFameData", function(week, featuredPlayers, featuredFarmer, hallOfFameResponse) {
+            //     console.log(JSON.stringify(hallOfFameResponse, null, 2));
+            // });
+
+                // Callback based
+            // Dota2.profileRequest(28956443, true, function(err, body){
+            //     console.log(JSON.stringify(body));
+            // });
+            // Dota2.passportDataRequest(28956443, function(err, body){
+            //     console.log(JSON.stringify(body));
+            // });
+            // Dota2.hallOfFameRequest(null, function(err, body){
+            //     console.log(JSON.stringify(body));
+            // });
+
+            /* CHAT */
+                // Event based
+            // Dota2.joinChat("wobwobwob");
+            // setTimeout(function(){ Dota2.sendMessage("wobwobwob", "wowoeagnaeigniaeg"); }, 5000);
+            // setTimeout(function(){ Dota2.leaveChat("wobwobwob"); }, 10000);
+
+            /* GUILD */
+                // Event based
+            // Dota2.inviteToGuild(5287, 28956443);
+            // Dota2.setGuildAccountRole(5287, 28956443, 2);
+            // Dota2.cancelInviteToGuild(5287, 75028261);
+
+                // Callback based
+            // Dota2.inviteToGuild(5287, 28956443, function(err, body){
+            //     console.log(JSON.stringify(body));
+            // });
+            // Dota2.cancelInviteToGuild(5287, 75028261, function(err, body){
+            //     console.log(JSON.stringify(body));
+            // });
+            // Dota2.setGuildAccountRole(5287, 28956443, 2, function(err, body){
+            //     console.log(JSON.stringify(body));
+            // });
+
         });
 
         Dota2.on("chatMessage", function(channel, personaName, message) {
@@ -47,13 +96,6 @@ var onSteamLogOn = function onSteamLogOn(){
             // Dota2.setGuildAccountRole(guildId, 75028261, 3);
         });
 
-        Dota2.on("hallOfFameData", function(week, featuredPlayers, featuredFarmer, hallOfFameResponse) {
-            console.log(JSON.stringify(hallOfFameResponse, null, 2));
-        });
-
-        Dota2.on("matchmakingStatsData", function(waitTimesByGroup, searchingPlayersByGroup, disabledGroups, matchmakingStatsResponse) {
-            console.log(JSON.stringify(matchmakingStatsResponse, null, 2));
-        });
 
         Dota2.on("unhandled", function(kMsg) {
             util.log("UNHANDLED MESSAGE " + kMsg);
@@ -71,16 +113,20 @@ var onSteamLogOn = function onSteamLogOn(){
     onWebSessionID = function onWebSessionID(webSessionID) {
         util.log("Received web session id.");
         // steamTrade.sessionID = webSessionID;
-        bot.webLogOn(function onWebLogonSetTradeCookies(strCookies) {
+        bot.webLogOn(function onWebLogonSetTradeCookies(cookies) {
             util.log("Received cookies.");
-            cookies = strCookies.split(";");
             for (var i = 0; i < cookies.length; i++) {
                 // steamTrade.setCookie(cookies[i]);
             }
         });
     };
 
-bot.logOn(config.steam_user, config.steam_pass, config.steam_guard_code || fs.readFileSync('sentry'));
+bot.logOn({
+    "accountName": config.steam_user,
+    "password": config.steam_pass,
+    "authCode": config.steam_guard_code,
+    "shaSentryfile": fs.readFileSync('sentry')
+});
 bot.on("loggedOn", onSteamLogOn)
     .on('sentry', onSteamSentry)
     .on('servers', onSteamServers)

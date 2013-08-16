@@ -58,19 +58,21 @@ Sends a message to the specified chat channel, won't send if you're not in the c
 
 
 ### Guild
-#### inviteToGuild(guildId, targetAccountId)
+#### inviteToGuild(guildId, targetAccountId, [callback])
 * `guildId` - ID of a guild.
 * `targetAccountId` - Account ID (lower 32-bits of a 64-bit steam id) of user to invite to guild.
+* `[callback]` - optional callback, returns args: `err, response`.
 
 Attempts to invite a user to guild. Requires the GC to be ready (listen for the `ready` event before calling).
 
-#### cancelInviteToGuild(guildId, targetAccountId)
+#### cancelInviteToGuild(guildId, targetAccountId, [callback])
 * `guildId` - ID of a guild.
 * `targetAccountId` - Account ID (lower 32-bits of a 64-bit steam id) of user whoms guild invite you wish to cancel.
+* `[callback]` - optional callback, returns args: `err, response`.
 
 Attempts to cancel a user's guild invitation; use this on your own account ID to reject guild invitations. Requires the GC to be ready (listen for the `ready` event before calling).
 
-#### setGuildAccountRole(guildId, targetAccountId, targetRole)
+#### setGuildAccountRole(guildId, targetAccountId, targetRole, [callback])
 * `guildId` - ID of a guild.
 * `targetAccountId` - Account ID (lower 32-bits of a 64-bit steam id) of user whoms guild invite you wish to cancel.
 * `targetRole` - Role in guild to have.
@@ -78,37 +80,43 @@ Attempts to cancel a user's guild invitation; use this on your own account ID to
 * * `1` - Leader.
 * * `2` - Officer.
 * * `3` - Member.
+* `[callback]` - optional callback, returns args: `err, response`.
 
 Attempts to set a user's role within a guild; use this with your own account ID and the 'Member' role to accept guild invitations. Requires the GC to be ready (listen for the `ready` event before calling).
 
 
 ### Community
-#### profileRequest(accountId, requestName)
+#### profileRequest(accountId, requestName, [callback])
 * `accountId` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose passport data you wish to view.
 * `requestName` - Boolean, whether you want the GC to return the accounts current display name.
+* `[callback]` - optional callback, returns args: `err, response`.
 
-Sends a message to the Game Coordinator requesting `accountId`'s profile data. Listen for `profileData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+Sends a message to the Game Coordinator requesting `accountId`'s profile data. Provide a callback or listen for `profileData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
-#### passportDataRequest(accountId)
+#### passportDataRequest(accountId, [callback])
 * `accountId` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose passport data you wish to view.
+* `[callback]` - optional callback, returns args: `err, response`.
 
-Sends a message to the Game Coordinator requesting `accountId`'s passport data. Listen for `passportData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+Sends a message to the Game Coordinator requesting `accountId`'s passport data. Provide a callback or listen for `passportData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
-#### hallOfFameRequest(week)
-* `week` - The week of which you wish to know the Hall of Fame members; will return latest week if omitted.  Weeks also randomly start at 2233 for some reason, valf please.
+#### hallOfFameRequest([week], [callback])
+* `[week]` - The week of which you wish to know the Hall of Fame members; will return latest week if omitted.  Weeks also randomly start at 2233 for some reason, valf please.
+* `[callback]` - optional callback, returns args: `err, response`.
 
-Sends a message to the Game Coordinator requesting the Hall of Fame data for `week`. Listen for the `hallOfFameData` event for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+Sends a message to the Game Coordinator requesting the Hall of Fame data for `week`. Provide a callback or listen for the `hallOfFameData` event for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
 
 ### Matches
-#### matchDetailsRequest(matchId)
+#### matchDetailsRequest(matchId, [callback])
 * `matchId` - The matches ID
+* `[callback]` - optional callback, returns args: `err, response`.
 
-Sends a message to the Game Coordinator requesting `matchId`'s match details. Listen for `matchData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+Sends a message to the Game Coordinator requesting `matchId`'s match details. Provide a callback or listen for `matchData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
 #### matchmakingStatsRequest()
 
-Sends a message to the Game Coordinator requesting some matchmaking stats. Listen for the `matchmakingStatsData` event for the Game Coordinator's response. Rqeuired the GC to be ready (listen for the `ready` event before calling).
+Sends a message to the Game Coordinator requesting some matchmaking stats. Listen for the `matchmakingStatsData` event for the Game Coordinator's response (cannot take a callback because of Steam's backend, or RJackson's incompetence; not sure which). Rqeuired the GC to be ready (listen for the `ready` event before calling).
+
 ## Events
 ### `ready`
 Emitted when the GC is ready to receive messages.

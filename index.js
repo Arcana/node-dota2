@@ -18,13 +18,20 @@ var Dota2Client = function Dota2Client(steamClient, debug) {
   this._gcReady = false;
 
   var self = this;
-  this._client.on("fromGC", function fromGC(app, type, message) {
+  this._client.on("fromGC", function fromGC(app, type, message, callback) {
     /* Routes messages from Game Coordinator to their handlers. */
+    callback = callback || null;
+
     var kMsg = type & ~protoMask;
     if (self.debug) util.log("Dota2 fromGC: " + [app, kMsg].join(", "));  // TODO:  Turn type-protoMask into key name.
 
     if (kMsg in self._handlers) {
-      self._handlers[kMsg].call(self, message);
+      if (callback) {
+        self._handlers[kMsg].call(self, message, callback);
+      }
+      else {
+        self._handlers[kMsg].call(self, message);
+      }
     }
     else {
       self.emit("unhandled", kMsg);
