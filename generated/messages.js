@@ -52,7 +52,25 @@ Dota2.EDOTAGCMsg = {
     k_EMsgGCHallOfFameRequest: 7172,
     k_EMsgGCHallOfFameResponse:  7173,
     k_EMsgGCMatchmakingStatsRequest: 7197,
-    k_EMsgGCMatchmakingStatsResponse: 7198
+    k_EMsgGCMatchmakingStatsResponse: 7198,
+
+    k_EMsgGCPracticeLobbyCreate: 7038,
+    k_EMsgGCPracticeLobbyLeave: 7040,
+    k_EMsgGCPracticeLobbyLaunch: 7041,
+    k_EMsgGCPracticeLobbyList: 7042,
+    k_EMsgGCPracticeLobbyListResponse: 7043,
+    k_EMsgGCPracticeLobbyJoin: 7044,
+    k_EMsgGCPracticeLobbySetDetails: 7046,
+    k_EMsgGCPracticeLobbySetTeamSlot: 7047,
+    k_EMsgGCPracticeLobbyResponse: 7055,
+    k_EMsgGCPracticeLobbyKick: 7081,
+    k_EMsgGCFriendPracticeLobbyListRequest: 7111,
+    k_EMsgGCFriendPracticeLobbyListResponse: 7112,
+    k_EMsgGCPracticeLobbyJoinResponse: 7113,
+    k_EMsgGCApplyTeamToPracticeLobby: 7142,
+    k_EMsgGCPracticeLobbyJoinBroadcastChannel: 7149,
+    k_EMsgGCBalancedShuffleLobby: 7188,
+    k_EMsgGCFlipLobbyTeams: 7320,
 };
 
 Dota2.DOTAChatChannelType_t = {
@@ -62,4 +80,39 @@ Dota2.DOTAChatChannelType_t = {
     DOTAChannelType_Lobby: 3,
     DOTAChannelType_Team: 4,
     DOTAChannelType_Guild: 5
+};
+
+Dota2.ServerRegion = {
+    UNSPECIFIED: 0,
+    USWEST: 1,
+    USEAST: 2,
+    EUROPE: 3,
+    KOREA: 4,
+    SINGAPORE: 5,
+    AUSTRALIA: 7,
+    STOCKHOLM: 8,
+    AUSTRIA: 9,
+    BRAZIL: 10,
+    SOUTHAFRICA: 11,
+    PERFECTWORLDTELECOM: 12,
+    PERFECTWORLDUNICOM: 13
+};
+
+Dota2.GameMode = {
+    DOTA_GAMEMODE_NONE: 0,
+    DOTA_GAMEMODE_AP: 1,
+    DOTA_GAMEMODE_CM: 2,
+    DOTA_GAMEMODE_RD: 3,
+    DOTA_GAMEMODE_SD: 4,
+    DOTA_GAMEMODE_AR: 5,
+    DOTA_GAMEMODE_INTRO: 6,
+    DOTA_GAMEMODE_HW: 7,
+    DOTA_GAMEMODE_REVERSE_CM: 8,
+    DOTA_GAMEMODE_XMAS: 9,
+    DOTA_GAMEMODE_TUTORIAL: 10,
+    DOTA_GAMEMODE_MO: 11,
+    DOTA_GAMEMODE_LP: 12,
+    DOTA_GAMEMODE_POOL1: 13,
+    DOTA_GAMEMODE_FH: 14,
+    DOTA_GAMEMODE_CUSTOM: 15
 };

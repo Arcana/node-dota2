@@ -117,6 +117,21 @@ Sends a message to the Game Coordinator requesting `matchId`'s match details. Pr
 
 Sends a message to the Game Coordinator requesting some matchmaking stats. Listen for the `matchmakingStatsData` event for the Game Coordinator's response (cannot take a callback because of Steam's backend, or RJackson's incompetence; not sure which). Rqeuired the GC to be ready (listen for the `ready` event before calling).
 
+
+### Lobbies
+#### createPracticeLobby([gameName], [password], [serverRegion], [gameMode], [callback])
+* `[gameName]` Display name for the lobby (optional).
+* `[password]` Password to restrict access to the lobby (optional).
+* `[serverRegion]` Server region for the lobby` see [ServerRegion Enum](#Enums) (optional).
+* `[gameMode]` Gamemode for the lobby` see [GameMode Enum](#Enums)(optional).
+* `[callback]` - optional callback` returns args: `err` response`.
+
+Sends a message to the Game Coordinating requesting to create a lobby.  Provide a callback or listen for `practiceLobbyJoinResponse` for the Game Coordinator's response (Node:  GC seems to erroneously return `DOTA_JOIN_RESULT_ALREADY_IN_GAME`).  Requires the GC to be ready (listen for the `ready` event before calling).
+
+#### leavePracticeLobby()
+
+Sends a message to the Game Coordinator requesting to leave the current lobby.  Requires the GC to be ready (listen for the `ready` event before calling).
+
 ## Events
 ### `ready`
 Emitted when the GC is ready to receive messages.
@@ -193,6 +208,51 @@ Emitted when te GC response to the `matchmakingStatsRequest` method.  The array 
     "PerfectWorldTelecom":  {"matchgroup": "11"},
     "PerfectWorldUnicom":   {"matchgroup": "12"}
 ```
+
+### `practiceLobbyJoinResponse`(`result` `practiceLobbyJoinResponse`)
+* `result` - The result object from `practiceLobbyJoinResponse`.
+* `practiceLobbyJoinResponse` - The raw response object.
+
+Emitted when the GC responds to `createPracticeLobby` method; erroneously emits "DOTA_JOIN_RESULT_ALREADY_IN_GAME" though` so never trust it. vOv
+
+
+## Enums
+### ServerRegion
+* `UNSPECIFIED: 0`
+* `USWEST: 1`
+* `USEAST: 2`
+* `EUROPE: 3`
+* `KOREA: 4`
+* `SINGAPORE: 5`
+* `AUSTRALIA: 7`
+* `STOCKHOLM: 8`
+* `AUSTRIA: 9`
+* `BRAZIL: 10`
+* `SOUTHAFRICA: 11`
+* `PERFECTWORLDTELECOM: 12`
+* `PERFECTWORLDUNICOM: 13`
+
+Use this to pass valid server region data to `createPracticeLobby`.
+
+### GameMode
+* `DOTA_GAMEMODE_NONE: 0` - None
+* `DOTA_GAMEMODE_AP: 1` - All Pick
+* `DOTA_GAMEMODE_CM: 2` - Captain's Mode
+* `DOTA_GAMEMODE_RD: 3` - Random Draft
+* `DOTA_GAMEMODE_SD: 4` - Single Draft
+* `DOTA_GAMEMODE_AR: 5` - All Random
+* `DOTA_GAMEMODE_INTRO: 6` - Unknown
+* `DOTA_GAMEMODE_HW: 7` - Diretide
+* `DOTA_GAMEMODE_REVERSE_CM: 8` - Reverse Captain's Mode
+* `DOTA_GAMEMODE_XMAS: 9` - The Greeviling
+* `DOTA_GAMEMODE_TUTORIAL: 10` - Tutorial
+* `DOTA_GAMEMODE_MO: 11` - Mid Only
+* `DOTA_GAMEMODE_LP: 12` - Least Played
+* `DOTA_GAMEMODE_POOL1: 13` - Limited Heroes
+* `DOTA_GAMEMODE_FH: 14` - Compendium
+* `DOTA_GAMEMODE_CUSTOM: 15` - Unknown
+
+Use this to pass valid game mode data to `createPracticeLobby`.
 
 ## Testing
 There is no automated test suite for node-dota2 (I've no idea how I'd make one for the stuff this does :o), however there the `test` directory does contain a Steam bot with commented-out dota2 methods; you can use this bot to test the library.

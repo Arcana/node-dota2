@@ -86,6 +86,17 @@ var onSteamLogOn = function onSteamLogOn(){
             //     console.log(JSON.stringify(body));
             // });
 
+            /* LOBBIES */
+            // Dota2.createPracticeLobby("Techies cheese", "boop", Dota2.ServerRegion.PERFECTWORLDTELECOM, Dota2.GameMode.DOTA_GAMEMODE_AR, function(err, body){
+            //     console.log(JSON.stringify(body));
+            // });
+
+            // setTimeout(function(){
+            //     Dota2.leavePracticeLobby(function(err, body){
+            //         console.log(JSON.stringify(body));
+            //     });
+            // }, 60000);
+
         });
 
         Dota2.on("chatMessage", function(channel, personaName, message) {

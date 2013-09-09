@@ -42,6 +42,10 @@ util.inherits(Dota2Client, EventEmitter);
 
 require("./generated/messages");
 
+// Expose enums
+Dota2Client.prototype.ServerRegion = Dota2.ServerRegion;
+Dota2Client.prototype.GameMode = Dota2.GameMode;
+
 // Methods
 Dota2Client.prototype.launch = function() {
   /* Reports to Steam that we are running Dota 2. Initiates communication with GC with EMsgGCClientHello */
@@ -81,3 +85,4 @@ require("./handlers/chat");
 require("./handlers/guild");
 require("./handlers/community");
 require("./handlers/match");
+require("./handlers/lobbies");
