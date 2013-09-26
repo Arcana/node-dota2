@@ -34,7 +34,7 @@ Dota2.Dota2Client.prototype.leaveChat = function(channel) {
   }
 
   if (this.debug) util.log("Leaving chat channel: " + channel);
-  var channelId = this.chatChannels.filter(function (item) {if (item.channelName == channel) return item.channelId; })[0];
+  var channelId = this.chatChannels.filter(function (item) {if (item.channelName == channel) return true; }).map(function (item) { return item.channelId })[0]
   if (channelId === undefined) {
     if (this.debug) util.log("Cannot leave a channel you have not joined.");
     return;
@@ -54,7 +54,7 @@ Dota2.Dota2Client.prototype.sendMessage = function(channel, message) {
   }
 
   if (this.debug) util.log("Sending message to " + channel);
-  var channelId = this.chatChannels.filter(function (item) {if (item.channelName == channel) return item.channelId; })[0];
+  var channelId = this.chatChannels.filter(function (item) {if (item.channelName == channel) return true; }).map(function (item) { return item.channelId })[0]
   if (channelId === undefined) {
     if (this.debug) util.log("Cannot send message to a channel you have not joined.");
     return;
@@ -82,7 +82,7 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCChatMessage] = function onChatMessage(message)
   /* Chat channel message from another user. */
   var chatData = dota_gcmessages.CMsgDOTAChatMessage.parse(message);
   this.emit("chatMessage",
-    this.chatChannels.filter(function (item) {if (item.channelId === chatData.channelId) return item.channelName; })[0],
+    this.chatChannels.filter(function (item) {if (item.channelName == channel) return true; }).map(function (item) { return item.channelId })[0],
     chatData.personaName,
     chatData.text,
     chatData);
