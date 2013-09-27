@@ -142,6 +142,9 @@ Sends a message to the Game Coordinator requesting to leave the current lobby.  
 ### `ready`
 Emitted when the GC is ready to receive messages.
 
+### `unready`
+Emitted when the connection status to the GC changes, and renders the library unavailable to interact.
+
 
 ### `chatMessage` (`channel`, `senderName`, `message`, `chatObject`)
 * `channel` - Channel name.

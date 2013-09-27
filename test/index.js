@@ -15,6 +15,11 @@ var onSteamLogOn = function onSteamLogOn(){
 
         Dota2.launch();
         Dota2.on("ready", function() {
+            console.log("Node-dota2 ready.");
+            /* Note:  Should not declare new event listeners nested inside of
+            'ready', else you could end up with duplicated handlers if 'ready'
+            is fired multiple times.  Exception is made within this test file
+            for the same of keeping relevant samples together. */
 
             /* INVENTORY */
             // Dota2.setItemPositions([[ITEM ID, POSITION]]);
@@ -70,8 +75,8 @@ var onSteamLogOn = function onSteamLogOn(){
             // setTimeout(function(){ Dota2.leaveChat("rj"); }, 10000);
 
             /* GUILD */
-            Dota2.requestGuildData();
-            Dota2.on("guildOpenPartyData", function(guildId, openParties){
+            // Dota2.requestGuildData();
+            // Dota2.on("guildOpenPartyData", function(guildId, openParties){
                     // Event based
                 // Dota2.inviteToGuild(guildId, 28956443);
                 // Dota2.setGuildAccountRole(guildId, 28956443, 2);
@@ -94,8 +99,7 @@ var onSteamLogOn = function onSteamLogOn(){
 
                 // setTimeout(function(){ Dota2.sendMessage(guildChannelName, "wowoeagnaeigniaeg"); }, 5000);
                 // setTimeout(function(){ Dota2.leaveChat(guildChannelName); }, 10000);
-
-            });
+            // });
 
             /* LOBBIES */
             // Dota2.createPracticeLobby("Techies cheese", "boop", Dota2.ServerRegion.PERFECTWORLDTELECOM, Dota2.GameMode.DOTA_GAMEMODE_AR, function(err, body){
@@ -108,6 +112,10 @@ var onSteamLogOn = function onSteamLogOn(){
             //     });
             // }, 60000);
 
+        });
+
+        Dota2.on("unready", function onUnready(){
+            console.log("Node-dota2 unready.");
         });
 
         Dota2.on("chatMessage", function(channel, personaName, message) {

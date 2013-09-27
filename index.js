@@ -78,6 +78,25 @@ handlers[Dota2.EGCBaseClientMsg.k_EMsgGCClientWelcome] = function clientWelcomeH
   this.emit("ready");
 };
 
+handlers[Dota2.EGCBaseClientMsg.k_EMsgGCClientConnectionStatus] = function gcClientConnectionStatus(message) {
+  /* Catch and handle changes in connection status, cuz reasons u know. */
+
+  var status = gcsdk_gcmessages.CMsgConnectionStatus.parse(message).status;
+
+  switch (status) {
+    case gcsdk_gcmessages.GCConnectionStatus.GCConnectionStatus_HAVE_SESSION:
+      if (this.debug) util.log("GC Connection Status regained.");
+      this._gcReady = true;
+      this.emit("ready");
+      break;
+    default:
+      if (this.debug) util.log("GC Connection Status unreliable - " + status);
+      this._gcReady = false;
+      this.emit("unready");
+      break;
+  }
+};
+
 Dota2.Dota2Client = Dota2Client;
 
 require("./handlers/inventory");
