@@ -10,6 +10,21 @@ var Dota2 = require("../index"),
 
 // Methods
 
+Dota2.Dota2Client.prototype.requestGuildData = function() {
+  /* Asks the GC for info on the users current guilds.  Expect k_EMsgGCGuildOpenPartyRefresh from GC for guild ids. */
+  if (!this._gcReady) {
+    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+    return null;
+  }
+
+  if (this.debug) util.log("Requesting current user guild data. ");
+  var payload = dota_gcmessages.CMsgDOTARequestGuildData.serialize({
+    // Doesn't take anything.
+  });
+
+  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCRequestGuildData | protoMask), payload);
+};
+
 Dota2.Dota2Client.prototype.inviteToGuild = function(guildId, targetAccountId, callback) {
   callback = callback || null;
 
@@ -76,6 +91,13 @@ Dota2.Dota2Client.prototype.setGuildAccountRole = function(guildId, targetAccoun
 
 var handlers = Dota2.Dota2Client.prototype._handlers;
 
+handlers[Dota2.EDOTAGCMsg.k_EMsgGCGuildOpenPartyRefresh] = function onGuildOpenPartyRefresh(message) {
+  /* Response from requestGuildData containing data on open parties, but most notably - it can tell the library what guilds the user is in. */
+  var response = dota_gcmessages.CMsgDOTAGuildOpenPartyRefresh.parse(message);
+  if (this.debug) util.log("Got guild open party data");
+  this.emit("guildOpenPartyData", response.guildId, response.openParties, response);
+};
+
 handlers[Dota2.EDOTAGCMsg.k_EMsgGCGuildInviteAccountResponse] = function onGuildInviteResponse(message, callback) {
   callback = callback || null;
   /* Response to inviting another player to a guild.
@@ -95,7 +117,7 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCGuildInviteAccountResponse] = function onGuild
 };
 
 handlers[Dota2.EDOTAGCMsg.k_EMsgGCGuildCancelInviteResponse] = function onGuildCancelInviteResponse(message, callback) {
-  callback = callback || null
+  callback = callback || null;
   /* Response to cancelling another player's invitation to a guild.
   enum EResult {
     SUCCESS = 0;

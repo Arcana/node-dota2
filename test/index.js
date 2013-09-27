@@ -65,26 +65,37 @@ var onSteamLogOn = function onSteamLogOn(){
 
             /* CHAT */
                 // Event based
-            // Dota2.joinChat("wobwobwob");
-            // setTimeout(function(){ Dota2.sendMessage("wobwobwob", "wowoeagnaeigniaeg"); }, 5000);
-            // setTimeout(function(){ Dota2.leaveChat("wobwobwob"); }, 10000);
+            // Dota2.joinChat("rj");
+            // setTimeout(function(){ Dota2.sendMessage("rj", "wowoeagnaeigniaeg"); }, 5000);
+            // setTimeout(function(){ Dota2.leaveChat("rj"); }, 10000);
 
             /* GUILD */
-                // Event based
-            // Dota2.inviteToGuild(5287, 28956443);
-            // Dota2.setGuildAccountRole(5287, 28956443, 2);
-            // Dota2.cancelInviteToGuild(5287, 75028261);
+            Dota2.requestGuildData();
+            Dota2.on("guildOpenPartyData", function(guildId, openParties){
+                    // Event based
+                // Dota2.inviteToGuild(guildId, 28956443);
+                // Dota2.setGuildAccountRole(guildId, 28956443, 2);
+                // Dota2.cancelInviteToGuild(guildId, 75028261);
 
-                // Callback based
-            // Dota2.inviteToGuild(5287, 28956443, function(err, body){
-            //     console.log(JSON.stringify(body));
-            // });
-            // Dota2.cancelInviteToGuild(5287, 75028261, function(err, body){
-            //     console.log(JSON.stringify(body));
-            // });
-            // Dota2.setGuildAccountRole(5287, 28956443, 2, function(err, body){
-            //     console.log(JSON.stringify(body));
-            // });
+                    // Callback based
+                // Dota2.inviteToGuild(guildId, 28956443, function(err, body){
+                //     console.log(JSON.stringify(body));
+                // });
+                // Dota2.cancelInviteToGuild(guildId, 75028261, function(err, body){
+                //     console.log(JSON.stringify(body));
+                // });
+                // Dota2.setGuildAccountRole(guildId, 28956443, 2, function(err, body){
+                //     console.log(JSON.stringify(body));
+                // });
+
+                    // Doing chat stuffs.
+                // var guildChannelName = util.format("Guild_%s", guildId);
+                // Dota2.joinChat(guildChannelName, dota2.DOTAChatChannelType_t.DOTAChannelType_Guild);
+
+                // setTimeout(function(){ Dota2.sendMessage(guildChannelName, "wowoeagnaeigniaeg"); }, 5000);
+                // setTimeout(function(){ Dota2.leaveChat(guildChannelName); }, 10000);
+
+            });
 
             /* LOBBIES */
             // Dota2.createPracticeLobby("Techies cheese", "boop", Dota2.ServerRegion.PERFECTWORLDTELECOM, Dota2.GameMode.DOTA_GAMEMODE_AR, function(err, body){

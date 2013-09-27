@@ -10,7 +10,9 @@ var Dota2 = require("../index"),
 
 // Methods
 
-Dota2.Dota2Client.prototype.joinChat = function(channel) {
+Dota2.Dota2Client.prototype.joinChat = function(channel, type) {
+  type = type || Dota2.DOTAChatChannelType_t.DOTAChannelType_Custom;
+
   /* Attempts to join a chat channel.  Expect k_EMsgGCJoinChatChannelResponse from GC */
   if (!this._gcReady) {
     if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
@@ -20,7 +22,7 @@ Dota2.Dota2Client.prototype.joinChat = function(channel) {
   if (this.debug) util.log("Joining chat channel: " + channel);
   var payload = dota_gcmessages.CMsgDOTAJoinChatChannel.serialize({
     "channelName": channel,
-    "channelType": Dota2.DOTAChatChannelType_t.DOTAChannelType_Custom
+    "channelType": type
   });
 
   this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCJoinChatChannel | protoMask), payload);

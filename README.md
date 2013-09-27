@@ -40,8 +40,9 @@ Attempts to delete an item. Requires the GC to be ready (listen for the `ready` 
 
 
 ### Chat
-#### joinChat(channel)
+#### joinChat(channel, [type])
 * `channel` - A string for the channel name.
+* `[type]` - The type of the channel being joined.  Defaults to `dota2.DOTAChatChannelType_t.DOTAChannelType_Custom`.
 
 Joins a chat channel.  Listen for the `chatMessage` event for other people's chat messages.
 
@@ -58,6 +59,11 @@ Sends a message to the specified chat channel, won't send if you're not in the c
 
 
 ### Guild
+#### requestGuildData()
+
+Sends a request to the GC for new guild data, which returns `openPartyData` events - telling the client the status of current open parties for each guild, as well as exposing `guildIds` to the client.
+
+
 #### inviteToGuild(guildId, targetAccountId, [callback])
 * `guildId` - ID of a guild.
 * `targetAccountId` - Account ID (lower 32-bits of a 64-bit steam id) of user to invite to guild.
@@ -144,6 +150,16 @@ Emitted when the GC is ready to receive messages.
 * `chatObject` - The raw chat object to do with as you wish.
 
 Emitted for chat messages received from Dota 2 chat channels
+
+### `guildOpenPartyData` (`guildId`, `openParties`)
+* `guildId` - ID of the guild.
+* `openParties` - Array containing information about open guild parties.  Each object has the following properties:
+* * `partyId` - Unique ID of the party.
+* * `member_account_ids` - Array of account ids.
+* * `time_created` - Something about Back to the Future.
+* * `description` - A user-inputted string.  Do not trust.
+
+Emitted for each guild the bot's account is a member of, containing information on open parties for each guild.  Also exposes guildId's, which is handy.
 
 ### `guildInvite` (`guildId`, `guildName`, `inviter`, `guildInviteDataObject`)
 * `guildId` - ID of the guild.
