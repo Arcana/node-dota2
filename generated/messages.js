@@ -17,6 +17,14 @@ Dota2.EGCBaseClientMsg = {
     k_EMsgGCServerConnectionStatus: 4010
 };
 
+Dota2.GCConnectionStatus = {
+        GCConnectionStatus_HAVE_SESSION: 0,
+        GCConnectionStatus_GC_GOING_DOWN: 1,
+        GCConnectionStatus_NO_SESSION: 2,
+        GCConnectionStatus_NO_SESSION_IN_LOGON_QUEUE: 3,
+        GCConnectionStatus_NO_STEAM: 4
+};
+
 Dota2.EDOTAGCMsg = {
     k_EMsgGCJoinChatChannel: 7009,
     k_EMsgGCJoinChatChannelResponse: 7010,

@@ -84,7 +84,7 @@ handlers[Dota2.EGCBaseClientMsg.k_EMsgGCClientConnectionStatus] = function gcCli
   var status = gcsdk_gcmessages.CMsgConnectionStatus.parse(message).status;
 
   switch (status) {
-    case gcsdk_gcmessages.GCConnectionStatus.GCConnectionStatus_HAVE_SESSION:
+    case Dota2.GCConnectionStatus.GCConnectionStatus_HAVE_SESSION:
       if (this.debug) util.log("GC Connection Status regained.");
       this._gcReady = true;
       this.emit("ready");
