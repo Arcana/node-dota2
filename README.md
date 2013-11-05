@@ -119,6 +119,8 @@ Sends a message to the Game Coordinator requesting the Hall of Fame data for `we
 
 Sends a message to the Game Coordinator requesting `matchId`'s match details. Provide a callback or listen for `matchData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
+Note:  There is a server-side rate-limit of 100 requests per 24 hours on this method.
+
 #### matchmakingStatsRequest()
 
 Sends a message to the Game Coordinator requesting some matchmaking stats. Listen for the `matchmakingStatsData` event for the Game Coordinator's response (cannot take a callback because of Steam's backend, or RJackson's incompetence; not sure which). Rqeuired the GC to be ready (listen for the `ready` event before calling).
