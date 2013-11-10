@@ -112,6 +112,17 @@ var onSteamLogOn = function onSteamLogOn(){
             //     });
             // }, 60000);
 
+            /* LEAGUES */
+            // Dota2.leaguesInMonthRequest(10, 2013, function(err, data) { // November 2013
+            //     console.log('Found ' + data.leagues.length + ' leagues full of schedule data :D');
+            // });
+
+            // Dota2.leaguesInMonthRequest(10, 2013); // November 2013
+            // Dota2.on("leaguesInMonthResponse",  function(err, data) {
+            //     console.log('Found ' + data.leagues.length + ' leagues full of schedule data :D');
+            // });
+
+
         });
 
         Dota2.on("unready", function onUnready(){

@@ -140,6 +140,17 @@ Sends a message to the Game Coordinating requesting to create a lobby.  Provide 
 
 Sends a message to the Game Coordinator requesting to leave the current lobby.  Requires the GC to be ready (listen for the `ready` event before calling).
 
+
+
+### Leagues
+#### leaguesInMonthRequest([month], [year], [callback])
+* `[month]` - Int for the month (MM) you want to query data for.  Defaults to current month. **IMPORTANT NOTE**:  Month is zero-aligned, not one-aligned; so Jan = 00, Feb = 01, etc.
+* `[year]`  - Int for the year (YYYY) you want to query data for .  Defaults to current year.
+* `[callback]` - optional callback` returns args: `err` response`.
+
+Sends a message to the Game Coordinator requesting data on leagues being played in the given month.  Provide a callback or listen for `leaguesInMonthResponse` for the Game Coordinator's response.  Requires the GC to be ready (listen for the `ready` event before calling).
+
+
 ## Events
 ### `ready`
 Emitted when the GC is ready to receive messages.
@@ -236,6 +247,42 @@ Emitted when te GC response to the `matchmakingStatsRequest` method.  The array 
 
 Emitted when the GC responds to `createPracticeLobby` method; erroneously emits "DOTA_JOIN_RESULT_ALREADY_IN_GAME" though` so never trust it. vOv
 
+
+### `leaguesInMonthResponse` (`result`, `leaguesInMonthResponse`)
+* `result` - The result object from `leaguesInMonthResponse`.
+* `leaguesInMonthResponse` - The raw response object.
+
+Emitted when the GC responds to `leaguesInMonthRequest` method.
+
+Notes:
+
+* The `month` property is used to filter the data to the leagues which have matches scheduled in the given month, however the `schedule` object contains schedules for a league's entire duration - i.e. before or after `month`.
+* `month` is also zero-aligned, so January = 0, Febuary = 1, March = 2, etc.
+* Not every participating team seems to be hooked up to Dota 2's team system, so there will be a few `{ teamId: 0 }` objects for some schedule blocks.
+
+The response object is visualized as follows:
+
+```
+{
+    eresult,            // EResult enum
+    month,              // Int representing which month this data represents.
+    leagues: [{         // An array of CMsgLeague objects
+        leagueId,       // ID of the league associated
+        schedule: [{    // An array of CMsgLeagueScheduleBlock objects
+            blockId,    // ID represending this block
+            startTime,  // Unix timestamp of a scheduled match (or group of matches)
+            finals,     // Boolean represending if this match is a final.
+            comment,    // Comment about this scheduled block - often the team names & position in bracket
+            teams: [{   // An array of CMsgLeagueScheduleBlockTeamInfo objects
+                teamId, // ID of the associated team
+                name,   // The teams name
+                tag,    // The teams tag
+                logo    // The teams logo
+            }]
+        }]
+    }]
+}
+```
 
 ## Enums
 ### ServerRegion

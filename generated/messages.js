@@ -81,6 +81,14 @@ Dota2.EDOTAGCMsg = {
     k_EMsgGCPracticeLobbyJoinBroadcastChannel: 7149,
     k_EMsgGCBalancedShuffleLobby: 7188,
     k_EMsgGCFlipLobbyTeams: 7320,
+
+
+    k_EMsgGCLeagueScheduleRequest: 7191,
+    k_EMsgGCLeagueScheduleResponse: 7192,
+    k_EMsgGCLeagueScheduleEdit: 7193,
+    k_EMsgGCLeagueScheduleEditResponse: 7194,
+    k_EMsgGCLeaguesInMonthRequest: 7195,
+    k_EMsgGCLeaguesInMonthResponse: 7196,
 };
 
 Dota2.DOTAChatChannelType_t = {

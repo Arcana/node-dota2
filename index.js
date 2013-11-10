@@ -105,3 +105,4 @@ require("./handlers/guild");
 require("./handlers/community");
 require("./handlers/match");
 require("./handlers/lobbies");
+require("./handlers/leagues");
