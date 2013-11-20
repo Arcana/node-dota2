@@ -162,12 +162,15 @@ var onSteamLogOn = function onSteamLogOn(){
         });
     };
 
-bot.logOn({
+// Login, only passing authCode if it exists
+var logOnDetails = {
     "accountName": config.steam_user,
     "password": config.steam_pass,
-    "authCode": config.steam_guard_code,
-    "shaSentryfile": fs.readFileSync('sentry')
-});
+};
+if (config.steam_guard_code) logOnDetails.authCode = config.steam_guard_code;
+var sentry = fs.readFileSync('sentry');
+if (sentry.length) logOnDetails.shaSentryfile = sentry;
+bot.logOn(logOnDetails);
 bot.on("loggedOn", onSteamLogOn)
     .on('sentry', onSteamSentry)
     .on('servers', onSteamServers)
