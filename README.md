@@ -153,10 +153,10 @@ Sends a message to the Game Coordinator requesting data on leagues being played 
 
 ## Events
 ### `ready`
-Emitted when the GC is ready to receive messages.
+Emitted when the GC is ready to receive messages.  Be careful not to declare anonymous functions as event handlers here, as you'll need to be able to invalidate event handlers on an `unready` event.
 
 ### `unready`
-Emitted when the connection status to the GC changes, and renders the library unavailable to interact.
+Emitted when the connection status to the GC changes, and renders the library unavailable to interact.  You should clear any event handlers set in the `ready` event here, otherwise you'll have multiple handlers for each message every time a new `ready` event is sent.
 
 
 ### `chatMessage` (`channel`, `senderName`, `message`, `chatObject`)
