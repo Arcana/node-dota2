@@ -326,6 +326,8 @@ Use this to pass valid game mode data to `createPracticeLobby`.
 There is no automated test suite for node-dota2 (I've no idea how I'd make one for the stuff this does :o), however there the `test` directory does contain a Steam bot with commented-out dota2 methods; you can use this bot to test the library.
 
 ### Setting up
+* `npm install` in the repository root.
+* `npm install` in the `test` directory.
 * Copy `config_SAMPLE.js` to `config.js` and edit appropriately.
 * Create a blank file named 'sentry' in the tests directory.
 * Attempt to log-in, you'll receive Error 63 - which means you need to provide a Steam Guard code.
