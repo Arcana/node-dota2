@@ -4,7 +4,7 @@ var Dota2 = require("../index"),
     Schema = require('protobuf').Schema,
     base_gcmessages = new Schema(fs.readFileSync(__dirname + "/../generated/base_gcmessages.desc")),
     gcsdk_gcmessages = new Schema(fs.readFileSync(__dirname + "/../generated/gcsdk_gcmessages.desc")),
-    dota_gcmessages = new Schema(fs.readFileSync(__dirname + "/../generated/dota_gcmessages.desc")),
+    dota_gcmessages_client = new Schema(fs.readFileSync(__dirname + "/../generated/dota_gcmessages_client.desc")),
     protoMask = 0x80000000;
 
 
@@ -20,7 +20,7 @@ Dota2.Dota2Client.prototype.joinChat = function(channel, type) {
   }
 
   if (this.debug) util.log("Joining chat channel: " + channel);
-  var payload = dota_gcmessages.CMsgDOTAJoinChatChannel.serialize({
+  var payload = dota_gcmessages_client.CMsgDOTAJoinChatChannel.serialize({
     "channelName": channel,
     "channelType": type
   });
@@ -41,7 +41,7 @@ Dota2.Dota2Client.prototype.leaveChat = function(channel) {
     if (this.debug) util.log("Cannot leave a channel you have not joined.");
     return;
   }
-  var payload = dota_gcmessages.CMsgDOTALeaveChatChannel.serialize({
+  var payload = dota_gcmessages_client.CMsgDOTALeaveChatChannel.serialize({
     "channelId": channelId
   });
 
@@ -61,7 +61,7 @@ Dota2.Dota2Client.prototype.sendMessage = function(channel, message) {
     if (this.debug) util.log("Cannot send message to a channel you have not joined.");
     return;
   }
-  var payload = dota_gcmessages.CMsgDOTAChatMessage.serialize({
+  var payload = dota_gcmessages_client.CMsgDOTAChatMessage.serialize({
     "channelId": channelId,
     "text": message
   });
@@ -76,13 +76,13 @@ var handlers = Dota2.Dota2Client.prototype._handlers;
 
 handlers[Dota2.EDOTAGCMsg.k_EMsgGCJoinChatChannelResponse] = function onJoinChatChannelResponse(message) {
   /* Channel data after we sent k_EMsgGCJoinChatChannel */
-  var channelData = dota_gcmessages.CMsgDOTAJoinChatChannelResponse.parse(message);
+  var channelData = dota_gcmessages_client.CMsgDOTAJoinChatChannelResponse.parse(message);
   this.chatChannels.push(channelData);
 };
 
 handlers[Dota2.EDOTAGCMsg.k_EMsgGCChatMessage] = function onChatMessage(message) {
   /* Chat channel message from another user. */
-  var chatData = dota_gcmessages.CMsgDOTAChatMessage.parse(message);
+  var chatData = dota_gcmessages_client.CMsgDOTAChatMessage.parse(message);
   this.emit("chatMessage",
     this.chatChannels.filter(function (item) {if (item.channelId === chatData.channelId) return true; }).map(function (item) { return item.channelName; })[0],
     chatData.personaName,

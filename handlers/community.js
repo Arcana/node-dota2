@@ -4,7 +4,7 @@ var Dota2 = require("../index"),
     Schema = require('protobuf').Schema,
     base_gcmessages = new Schema(fs.readFileSync(__dirname + "/../generated/base_gcmessages.desc")),
     gcsdk_gcmessages = new Schema(fs.readFileSync(__dirname + "/../generated/gcsdk_gcmessages.desc")),
-    dota_gcmessages = new Schema(fs.readFileSync(__dirname + "/../generated/dota_gcmessages.desc")),
+    dota_gcmessages_client = new Schema(fs.readFileSync(__dirname + "/../generated/dota_gcmessages_client.desc")),
     protoMask = 0x80000000;
 
 // Methods
@@ -18,7 +18,7 @@ Dota2.Dota2Client.prototype.profileRequest = function(accountId, requestName, ca
   }
 
   if (this.debug) util.log("Sending profile request");
-  var payload = dota_gcmessages.CMsgDOTAProfileRequest.serialize({
+  var payload = dota_gcmessages_client.CMsgDOTAProfileRequest.serialize({
     "accountId": accountId,
     "requestName": requestName
   });
@@ -36,7 +36,7 @@ Dota2.Dota2Client.prototype.passportDataRequest = function(accountId, callback) 
   }
 
   if (this.debug) util.log("Sending passport data request");
-  var payload = dota_gcmessages.CMsgPassportDataRequest.serialize({"accountId": accountId});
+  var payload = dota_gcmessages_client.CMsgPassportDataRequest.serialize({"accountId": accountId});
 
   this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCPassportDataRequest | protoMask), payload, callback);
 };
@@ -52,7 +52,7 @@ Dota2.Dota2Client.prototype.hallOfFameRequest = function(week, callback) {
   }
 
   if (this.debug) util.log("Sending hall of fame request.");
-  var payload = dota_gcmessages.CMsgDOTAHallOfFameRequest.serialize({
+  var payload = dota_gcmessages_client.CMsgDOTAHallOfFameRequest.serialize({
     "week": week,
   });
 
@@ -66,7 +66,7 @@ var handlers = Dota2.Dota2Client.prototype._handlers;
 
 handlers[Dota2.EDOTAGCMsg.k_EMsgGCProfileResponse] = function onProfileResponse(message, callback) {
   callback = callback || null;
-  var profileResponse = dota_gcmessages.CMsgDOTAProfileResponse.parse(message);
+  var profileResponse = dota_gcmessages_client.CMsgDOTAProfileResponse.parse(message);
 
   if (profileResponse.result === 1) {
     if (this.debug) util.log("Recevied profile data for: " + profileResponse.gameAccountClient.accountId);
@@ -81,7 +81,7 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCProfileResponse] = function onProfileResponse(
 
 handlers[Dota2.EDOTAGCMsg.k_EMsgGCPassportDataResponse] = function onPassportDataResponse(message, callback) {
   callback = callback || null;
-  var passportDataResponse = dota_gcmessages.CMsgPassportDataResponse.parse(message);
+  var passportDataResponse = dota_gcmessages_client.CMsgPassportDataResponse.parse(message);
 
   if (this.debug) util.log("Recevied passport data for: " + passportDataResponse.accountId);
   this.emit("passportData", passportDataResponse.accountId, passportDataResponse);
@@ -90,7 +90,7 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCPassportDataResponse] = function onPassportDat
 
 handlers[Dota2.EDOTAGCMsg.k_EMsgGCHallOfFameResponse] = function onHallOfFameResponse(message, callback) {
   callback = callback || null;
-  var hallOfFameResponse = dota_gcmessages.CMsgDOTAHallOfFameResponse.parse(message);
+  var hallOfFameResponse = dota_gcmessages_client.CMsgDOTAHallOfFameResponse.parse(message);
 
   if (hallOfFameResponse.eresult === 1) {
     if (this.debug) util.log("Recevied hall of fame response for week: " + hallOfFameResponse.hallOfFame.week);
