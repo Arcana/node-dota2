@@ -4,7 +4,7 @@ var Dota2 = require("../index"),
     Schema = require('protobuf').Schema,
     base_gcmessages = new Schema(fs.readFileSync(__dirname + "/../generated/base_gcmessages.desc")),
     gcsdk_gcmessages = new Schema(fs.readFileSync(__dirname + "/../generated/gcsdk_gcmessages.desc")),
-    dota_gcmessages = new Schema(fs.readFileSync(__dirname + "/../generated/dota_gcmessages.desc")),
+    dota_gcmessages_client = new Schema(fs.readFileSync(__dirname + "/../generated/dota_gcmessages_client.desc")),
     protoMask = 0x80000000;
 
 // Methods
@@ -61,7 +61,7 @@ Dota2.Dota2Client.prototype.createPracticeLobby = function(game_name, password, 
   }
 
   if (this.debug) util.log("Sending match CMsgPracticeLobbyCreate request");
-  var payload = dota_gcmessages.CMsgPracticeLobbyCreate.serialize({
+  var payload = dota_gcmessages_client.CMsgPracticeLobbyCreate.serialize({
     "lobbyDetails": {
       // TODO:  Add ability to set some settings here.
       "gameName": game_name,
@@ -86,7 +86,7 @@ Dota2.Dota2Client.prototype.leavePracticeLobby = function(callback) {
   }
 
   if (this.debug) util.log("Sending match CMsgPracticeLobbyCreate request");
-  var payload = dota_gcmessages.CMsgPracticeLobbyLeave.serialize({
+  var payload = dota_gcmessages_client.CMsgPracticeLobbyLeave.serialize({
   });
 
   this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyLeave | protoMask), payload, callback);
@@ -100,7 +100,7 @@ var handlers = Dota2.Dota2Client.prototype._handlers;
 handlers[Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyResponse] = function onPracticeLobbyJoinResponse(message, callback) {
   // TODO:  Always seems to return "DOTA_JOIN_RESULT_ALREADY_IN_GAME", not trustworthy. >:
   callback = callback || null;
-  var practiceLobbyJoinResponse = dota_gcmessages.CMsgPracticeLobbyJoinResponse.parse(message);
+  var practiceLobbyJoinResponse = dota_gcmessages_client.CMsgPracticeLobbyJoinResponse.parse(message);
 
   if (practiceLobbyJoinResponse.result === 1) {
     if (this.debug) util.log("Recevied practice lobby join response " + practiceLobbyJoinResponse.result);
