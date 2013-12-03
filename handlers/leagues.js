@@ -4,7 +4,7 @@ var Dota2 = require("../index"),
     Schema = require('protobuf').Schema,
     base_gcmessages = new Schema(fs.readFileSync(__dirname + "/../generated/base_gcmessages.desc")),
     gcsdk_gcmessages = new Schema(fs.readFileSync(__dirname + "/../generated/gcsdk_gcmessages.desc")),
-    dota_gcmessages = new Schema(fs.readFileSync(__dirname + "/../generated/dota_gcmessages.desc")),
+    dota_gcmessages_client = new Schema(fs.readFileSync(__dirname + "/../generated/dota_gcmessages_client.desc")),
     protoMask = 0x80000000;
 
 // Methods
@@ -25,7 +25,7 @@ Dota2.Dota2Client.prototype.leaguesInMonthRequest = function(month, year, callba
   }
 
   if (this.debug) util.log("Sending CMsgDOTALeaguesInMonthRequest");
-  var payload = dota_gcmessages.CMsgDOTALeaguesInMonthRequest.serialize({
+  var payload = dota_gcmessages_client.CMsgDOTALeaguesInMonthRequest.serialize({
     month: month,
     year: year
   });
@@ -40,7 +40,7 @@ var handlers = Dota2.Dota2Client.prototype._handlers;
 
 handlers[Dota2.EDOTAGCMsg.k_EMsgGCLeaguesInMonthResponse] = function onLeaguesInMonthResponse(message, callback) {
   callback = callback || null;
-  var response = dota_gcmessages.CMsgDOTALeaguesInMonthResponse.parse(message);
+  var response = dota_gcmessages_client.CMsgDOTALeaguesInMonthResponse.parse(message);
 
   if (response.eresult === 1) {
     if (this.debug) util.log("Recevied practice lobby join response " + response.eresult);
