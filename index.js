@@ -70,6 +70,12 @@ Dota2Client.prototype.launch = function() {
 Dota2Client.prototype.exit = function() {
   /* Reports to Steam we are not running any apps. */
   if (this.debug) util.log("Exiting Dota 2");
+
+  /* stop knocking if exit comes before ready event */
+  if (this._gcClientHelloIntervalId) {
+      clearInterval(this._gcClientHelloIntervalId);
+      this._gcClientHelloIntervalId = null;
+  }
   this._gcReady = false;
   this._client.gamesPlayed([]);
 };
