@@ -1,0 +1,21 @@
+
+//Accept users that added you when you we're offline. 
+
+bot.on('relationships', function () {
+  for(var friend in bot.friends) {
+    if(bot.friends[friend] == 2) {
+      bot.addFriend(friend);
+      console.log('SteamID ' + friend + ' added!')
+    }
+  }
+});
+
+
+//Accept users that add's you while you're online.
+
+bot.on('friend', function (SteamID, Relation){
+	if (Relation == 2){
+        bot.addFriend(SteamID);
+	console.log(SteamID + " Accepted")
+}
+});
