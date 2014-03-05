@@ -1,4 +1,3 @@
-
 //Accept users that added you when you we're offline. 
 
 bot.on('relationships', function () {
