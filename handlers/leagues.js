@@ -13,7 +13,7 @@ Dota2.Dota2Client.prototype.leaguesInMonthRequest = function(month, year, callba
   callback = callback || null;
 
   // Month & year default to current time values
-  month = month || (new Date()).getMonth() - 1; // -1 because GC wants zero-aligned months.
+  month = month || (new Date()).getMonth();
   year = year || (new Date()).getFullYear();
 
   /* Sends a message to the Game Coordinator requesting the data on the given month's leagues.
