@@ -73,8 +73,8 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCProfileResponse] = function onProfileResponse(
     this.emit("profileData", profileResponse.gameAccountClient.accountId, profileResponse);
     if (callback) callback(null, profileResponse);
   }
-  else if (this.debug) {
-    util.log("Received a bad profileResponse");
+  else {
+    if (this.debug) util.log("Received a bad profileResponse");
     if (callback) callback(profileResponse.result, profileResponse);
   }
 };
