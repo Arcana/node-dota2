@@ -69,7 +69,7 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCProfileResponse] = function onProfileResponse(
   var profileResponse = dota_gcmessages_client.CMsgDOTAProfileResponse.parse(message);
 
   if (profileResponse.result === 1) {
-    if (this.debug) util.log("Recevied profile data for: " + profileResponse.gameAccountClient.accountId);
+    if (this.debug) util.log("Received profile data for: " + profileResponse.gameAccountClient.accountId);
     this.emit("profileData", profileResponse.gameAccountClient.accountId, profileResponse);
     if (callback) callback(null, profileResponse);
   }
@@ -83,7 +83,7 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCPassportDataResponse] = function onPassportDat
   callback = callback || null;
   var passportDataResponse = dota_gcmessages_client.CMsgPassportDataResponse.parse(message);
 
-  if (this.debug) util.log("Recevied passport data for: " + passportDataResponse.accountId);
+  if (this.debug) util.log("Received passport data for: " + passportDataResponse.accountId);
   this.emit("passportData", passportDataResponse.accountId, passportDataResponse);
   if (callback) callback(null, passportDataResponse);
 };
@@ -93,12 +93,12 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCHallOfFameResponse] = function onHallOfFameRes
   var hallOfFameResponse = dota_gcmessages_client.CMsgDOTAHallOfFameResponse.parse(message);
 
   if (hallOfFameResponse.eresult === 1) {
-    if (this.debug) util.log("Recevied hall of fame response for week: " + hallOfFameResponse.hallOfFame.week);
+    if (this.debug) util.log("Received hall of fame response for week: " + hallOfFameResponse.hallOfFame.week);
     this.emit("hallOfFameData", hallOfFameResponse.hallOfFame.week, hallOfFameResponse.hallOfFame.featuredPlayers, hallOfFameResponse.hallOfFame.featuredFarmer, hallOfFameResponse);
     if (callback) callback(null, hallOfFameResponse);
   }
-  else if (this.debug) {
-    util.log("Received a bad hall of fame.");
-    if (callback) callback(hallOfFameResponse.result, hallOfFameResponse);
+  else {
+      if (this.debug) util.log("Received a bad hall of fame.");
+      if (callback) callback(hallOfFameResponse.result, hallOfFameResponse);
   }
 };
