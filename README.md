@@ -134,7 +134,23 @@ Sends a message to the Game Coordinator requesting some matchmaking stats. Liste
 * `[gameMode]` Gamemode for the lobby` see [GameMode Enum](#Enums)(optional).
 * `[callback]` - optional callback` returns args: `err` response`.
 
-Sends a message to the Game Coordinating requesting to create a lobby.  Provide a callback or listen for `practiceLobbyJoinResponse` for the Game Coordinator's response (Node:  GC seems to erroneously return `DOTA_JOIN_RESULT_ALREADY_IN_GAME`).  Requires the GC to be ready (listen for the `ready` event before calling).
+Sends a message to the Game Coordinator requesting to create a lobby.  Provide a callback or listen for `practiceLobbyJoinResponse` for the Game Coordinator's response (Node:  GC seems to erroneously return `DOTA_JOIN_RESULT_ALREADY_IN_GAME`).  Requires the GC to be ready (listen for the `ready` event before calling).
+
+#### configPracticeLobby(options, [callback])
+* `options` A set of options to set. All are optional, but send at least one.
+* * `game_name`: String, lobby title.
+* * `server_region`: Use the server region enum.
+* * `game_mode`: Use the game mode enum.
+* * `allow_cheats`: True/false, allow cheats.
+* * `fill_with_bots`: Fill available slots with bots?
+* * `allow_spectating`: Allow spectating?
+* * `pass_key`: Password.
+* * `series_type`: Use the series type enum.
+* * `radiant_series_wins`: Best of 3 for example, # of games won so far.
+* * `dire_series_wins`: Best of 3 for example, # of games won so far.
+* * `allchat`: Enable all chat?
+
+Sends a message to the Game Coordinator requesting to configure some options of the active lobby. Requires the GC to be ready (listen for the `ready` event before calling).
 
 #### leavePracticeLobby()
 

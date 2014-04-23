@@ -43,8 +43,8 @@ var Dota2 = require("../index"),
 //   optional uint32 client_version = 6;
 //   optional .CMsgPracticeLobbySetDetails lobby_details = 7;
 // }
-  // optional uint32 server_region = 4;
-  // optional uint32 game_mode = 5;
+// optional uint32 server_region = 4;
+// optional uint32 game_mode = 5;
 
 Dota2.Dota2Client.prototype.createPracticeLobby = function(game_name, password, server_region, game_mode, callback) {
   callback = callback || null;
@@ -65,13 +65,60 @@ Dota2.Dota2Client.prototype.createPracticeLobby = function(game_name, password, 
     "lobbyDetails": {
       // TODO:  Add ability to set some settings here.
       "gameName": game_name,
-      "serverRegion": server_region,
-      "gameMode": game_mode,
-      "passKey": password,
+    "serverRegion": server_region,
+    "gameMode": game_mode,
+    "passKey": password,
     }
   });
 
   this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyCreate | protoMask), payload, callback);
+};
+
+Dota2.Dota2Client.prototype.configPracticeLobby = function(options, callback){
+  if (!this._gcReady) {
+    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+    return null;
+  }
+
+  var command, option, possibleOptions, type, value;
+
+  command = {};
+
+  possibleOptions = {
+    game_name: String,
+    server_region: Number,
+    game_mode: Number,
+    allow_cheats: Boolean,
+    fill_with_bots: Boolean,
+    allow_spectating: Boolean,
+    pass_key: String,
+    series_type: Number,
+    radiant_series_wins: Number,
+    dire_series_wins: Number,
+    allchat: Boolean
+  };
+
+  for (option in options) {
+    value = options[option];
+    type = possibleOptions[option];
+    if (type == null) {
+      if (this.debug) {
+        util.log("Lobby option " + option + " is not possible.");
+      }
+      continue;
+    }
+    if (typeof value !== type) {
+      if (this.debug) {
+        util.log("Lobby option " + option + " must be a " + type + ".");
+      }
+      continue;
+    }
+    command[option] = value;
+  }
+
+  var payload = dota_gcmessages_client.CMsgPracticeLobbySetDetails.serialize(command);
+
+  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbySetDetails | protoMask), payload, callback);
 };
 
 
@@ -108,13 +155,7 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyResponse] = function onPracticeLo
     if (callback) callback(null, practiceLobbyJoinResponse);
   }
   else {
-      if (this.debug) util.log("Received a bad practiceLobbyJoinResponse");
-      if (callback) callback(practiceLobbyJoinResponse.result, practiceLobbyJoinResponse);
+    if (this.debug) util.log("Received a bad practiceLobbyJoinResponse");
+    if (callback) callback(practiceLobbyJoinResponse.result, practiceLobbyJoinResponse);
   }
 };
-
-// handlers[Dota2.ESOMsg.k_ESOMsg_UpdateMultiple] = function onWeirdShit(message, callback) {
-//   callback = callback || null;
-//   var weird = gcsdk_gcmessages.CMsgSOMultipleObjects.parse(message);
-//   console.log(JSON.stringify(weird));
-// };
