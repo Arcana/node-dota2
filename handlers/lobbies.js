@@ -85,17 +85,17 @@ Dota2.Dota2Client.prototype.configPracticeLobby = function(options, callback){
   command = {};
 
   possibleOptions = {
-    game_name: String,
-    server_region: Number,
-    game_mode: Number,
-    allow_cheats: Boolean,
-    fill_with_bots: Boolean,
-    allow_spectating: Boolean,
-    pass_key: String,
-    series_type: Number,
-    radiant_series_wins: Number,
-    dire_series_wins: Number,
-    allchat: Boolean
+    game_name: "string",
+    server_region: "number",
+    game_mode: "number",
+    allow_cheats: "boolean",
+    fill_with_bots: "boolean",
+    allow_spectating: "boolean",
+    pass_key: "string",
+    series_type: "number",
+    radiant_series_wins: "number",
+    dire_series_wins: "number",
+    allchat: "boolean"
   };
 
   for (option in options) {
