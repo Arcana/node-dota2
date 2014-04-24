@@ -174,6 +174,14 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyListResponse] = function(message,
   if (callback) callback(null, practiceLobbyListResponse);
 };
 
+handlers[Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyResponse] = function(message, callback){
+  var practiceLobbyResponse = dota_gcmessages_client.CMsgPracticeLobbyJoinResponse.parse(message);
+
+  if(this.debug) util.log("Received create/leave response "+JSON.stringify(practiceLobbyResponse));
+  this.emit("practiceLobbyResponse", practiceLobbyResponse.result, practiceLobbyResponse);
+  if(callback) callback(practiceLobbyResponse.result, practiceLobbyResponse);
+};
+
 handlers[Dota2.EDOTAGCMsg.k_EMsgGCFriendPracticeLobbyListResponse] = function(message, callback) {
   var practiceLobbyListResponse = dota_gcmessages_client.CMsgFriendPracticeLobbyListResponse.parse(message);
 

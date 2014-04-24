@@ -277,6 +277,13 @@ Emitted when te GC response to the `matchmakingStatsRequest` method.  The array 
     "PerfectWorldUnicom":   {"matchgroup": "12"}
 ```
 
+### `practiceLobbyResponse`(`result`, `practiceLobbyJoinResponse`)
+* `result` - The result object.
+* `practiceLobbyJoinResponse` - The response.
+
+
+The GC emits a `PracticeLobbyResponse` after you either leave/join/fail to leave/fail to join a lobby, however, the result in the message is usually completely wrong. Generally when creating a lobby it will respond (after a successful creation) with `DOTA_JOIN_RESULT_ALREADY_IN_GAME`. Instead, we now parse a couple other responses to get the lobby ID when creating a lobby, and we correctly parse this response for an actual join. In some cases it might still be useful to subscribe to this response.
+
 ### `practiceLobbyCreateResponse`(`practiceLobbyCreateResponse`, `lobbyID`)
 * `practiceLobbyCreateResponse` - The result object from practiceLobbyCreateResponse.
 * `lobbyID` - The ID of the created lobby.
