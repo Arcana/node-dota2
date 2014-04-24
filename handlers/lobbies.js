@@ -136,6 +136,7 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyListResponse] = function(message,
   }
   else {
     if (this.debug) util.log("Received a bad practiceLobbyListResponse");
+    console.log(practiceLobbyListResponse);
     if (callback) callback(practiceLobbyListResponse.result, practiceLobbyListResponse);
   }
 };
