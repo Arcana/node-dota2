@@ -151,7 +151,7 @@ handlers[24] = function(message, callback){ //k_ESOMsg_CacheSubscribed
   var practiceLobbyCreateResponse = gcsdk_gcmessages.CMsgSOCacheSubscribed.parse(message);
 
   if(this.debug) util.log("Received CMsgSOCacheSubscribed (practice lobby create) response.");
-  id = practiceLobbyCreateResponse.owner_soid.id;
+  id = practiceLobbyCreateResponse.ownerSoid.id;
   if(this.debug) util.log("Interpreted lobby ID "+id);
   
   this.emit("practiceLobbyCreateResponse", practiceLobbyCreateResponse, id);
