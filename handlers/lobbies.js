@@ -126,7 +126,7 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyResponse] = function onPracticeLo
   if (callback) callback(practiceLobbyJoinResponse.result, practiceLobbyJoinResponse);
 };
 
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyList] = function(message, callback) {
+handlers[Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyListResponse] = function(message, callback) {
   var practiceLobbyListResponse = dota_gcmessages_client.CMsgPracticeLobbyListResponse.parse(message);
 
   if (practiceLobbyListResponse.result === 1) {
