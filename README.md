@@ -156,6 +156,14 @@ Sends a message to the Game Coordinator requesting to join a lobby.  Provide a c
 
 Sends a message to the Game Coordinator requesting to create a lobby.  Provide a callback or listen for `practiceLobbyCreateResponse` for the interpreted response. Requires the GC to be ready (listen for the `ready` event before calling).
 
+#### balancedShuffleLobby()
+
+Shuffles the lobby teams.
+
+#### flipLobbyTeams()
+
+Flips the teams in a lobby.
+
 #### configPracticeLobby(id, options, [callback])
 * `id` Lobby ID
 * `options` A set of options to set. All are optional, but send at least one.

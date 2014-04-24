@@ -122,6 +122,33 @@ Dota2.Dota2Client.prototype.balancedShuffleLobby = function(callback){
   this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCBalancedShuffleLobby | protoMask), payload, callback);
 };
 
+/*Todo: figure out the enum for team
+Dota2.Dota2Client.prototype.setLobbyTeamSlot = function(team, slot, callback){
+  callback = callback || null;
+  if (!this._gcReady) {
+    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+    return null;
+  }
+
+  if (this.debug) util.log("Sending flip teams request");
+  var payload = dota_gcmessages_client.CMsgFlipLobbyTeams.serialize({});
+
+  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCFlipLobbyTeams | protoMask), payload, callback);
+};*/
+
+Dota2.Dota2Client.prototype.flipLobbyTeams = function(callback){
+  callback = callback || null;
+  if (!this._gcReady) {
+    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+    return null;
+  }
+
+  if (this.debug) util.log("Sending flip teams request");
+  var payload = dota_gcmessages_client.CMsgFlipLobbyTeams.serialize({});
+
+  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCFlipLobbyTeams | protoMask), payload, callback);
+};
+
 Dota2.Dota2Client.prototype.joinPracticeLobby = function(id, password, callback){
   callback = callback || null;
   if (!this._gcReady) {
