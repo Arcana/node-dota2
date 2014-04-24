@@ -129,14 +129,7 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyResponse] = function onPracticeLo
 handlers[Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyListResponse] = function(message, callback) {
   var practiceLobbyListResponse = dota_gcmessages_client.CMsgPracticeLobbyListResponse.parse(message);
 
-  if (practiceLobbyListResponse.result === 1) {
-    if (this.debug) util.log("Received practice lobby list response " + practiceLobbyJoinResponse.result);
-    this.emit("practiceLobbyListResponse", practiceLobbyListResponse.result, practiceLobbyListResponse);
-    if (callback) callback(null, practiceLobbyListResponse);
-  }
-  else {
-    if (this.debug) util.log("Received a bad practiceLobbyListResponse");
-    console.log(practiceLobbyListResponse);
-    if (callback) callback(practiceLobbyListResponse.result, practiceLobbyListResponse);
-  }
+  if (this.debug) util.log("Received practice lobby list response " + practiceLobbyListResponse);
+  this.emit("practiceLobbyListResponse", null, practiceLobbyListResponse);
+  if (callback) callback(null, practiceLobbyListResponse);
 };
