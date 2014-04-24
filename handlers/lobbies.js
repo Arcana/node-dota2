@@ -34,7 +34,7 @@ Dota2.Dota2Client.prototype.createPracticeLobby = function(game_name, password, 
   this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyCreate | protoMask), payload, callback);
 };
 
-Dota2.Dota2Client.prototype.configPracticeLobby = function(options, callback){
+Dota2.Dota2Client.prototype.configPracticeLobby = function(id, options, callback){
   if (!this._gcReady) {
     if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
     return null;
@@ -42,7 +42,7 @@ Dota2.Dota2Client.prototype.configPracticeLobby = function(options, callback){
 
   var command, option, possibleOptions, type, value;
 
-  command = {};
+  command = {lobby_id: id};
 
   possibleOptions = {
     game_name: "string",

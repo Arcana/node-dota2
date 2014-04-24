@@ -156,7 +156,8 @@ Sends a message to the Game Coordinator requesting to join a lobby.  Provide a c
 
 Sends a message to the Game Coordinator requesting to create a lobby.  Provide a callback or listen for `practiceLobbyCreateResponse` for the interpreted response. Requires the GC to be ready (listen for the `ready` event before calling).
 
-#### configPracticeLobby(options, [callback])
+#### configPracticeLobby(id, options, [callback])
+* `id` Lobby ID
 * `options` A set of options to set. All are optional, but send at least one.
 * * `game_name`: String, lobby title.
 * * `server_region`: Use the server region enum.
