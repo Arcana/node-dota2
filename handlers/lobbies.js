@@ -147,7 +147,7 @@ Dota2.Dota2Client.prototype.leavePracticeLobby = function(callback) {
 var handlers = Dota2.Dota2Client.prototype._handlers;
 
 //Pracitce lobby create response
-handlers[24] = function(message, callback){ //k_ESOMsg_CacheSubscribed
+handlers[Dota2.ESOMsg.k_ESOMsg_CacheSubscribed] = function(message, callback){ //k_ESOMsg_CacheSubscribed
   var practiceLobbyCreateResponse = gcsdk_gcmessages.CMsgSOCacheSubscribed.parse(message);
 
   if(this.debug) util.log("Received CMsgSOCacheSubscribed (practice lobby create) response.");
