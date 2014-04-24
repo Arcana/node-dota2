@@ -8,52 +8,12 @@ var Dota2 = require("../index"),
     protoMask = 0x80000000;
 
 // Methods
-
-// message CMsgPracticeLobbySetDetails {
-//   optional uint64 lobby_id = 1;
-//   optional string game_name = 2;
-//   repeated .CLobbyTeamDetails team_details = 3;
-//   optional uint32 server_region = 4;
-//   optional uint32 game_mode = 5;
-//   optional .DOTA_CM_PICK cm_pick = 6 [default = DOTA_CM_RANDOM];
-//   optional .DOTABotDifficulty bot_difficulty = 9 [default = BOT_DIFFICULTY_MEDIUM];
-//   optional bool allow_cheats = 10;
-//   optional bool fill_with_bots = 11;
-//   optional bool intro_mode = 12;
-//   optional bool allow_spectating = 13;
-//   optional .DOTAGameVersion game_version = 14 [default = GAME_VERSION_CURRENT];
-//   optional string pass_key = 15;
-//   optional uint32 leagueid = 16;
-//   optional uint32 penalty_level_radiant = 17;
-//   optional uint32 penalty_level_dire = 18;
-//   optional uint32 load_game_id = 19;
-//   optional uint32 series_type = 20;
-//   optional uint32 radiant_series_wins = 21;
-//   optional uint32 dire_series_wins = 22;
-//   optional bool allchat = 23 [default = false];
-//   optional .LobbyDotaTVDelay dota_tv_delay = 24 [default = LobbyDotaTV_120];
-// }
-
-// message CMsgPracticeLobbyCreate {
-//   optional string search_key = 1;
-//   optional bool tournament_game = 2;
-//   optional uint32 tournament_game_id = 3;
-//   optional uint32 tournament_id = 4;
-//   optional string pass_key = 5;
-//   optional uint32 client_version = 6;
-//   optional .CMsgPracticeLobbySetDetails lobby_details = 7;
-// }
-// optional uint32 server_region = 4;
-// optional uint32 game_mode = 5;
-
 Dota2.Dota2Client.prototype.createPracticeLobby = function(game_name, password, server_region, game_mode, callback) {
   callback = callback || null;
   password = password || "";
   game_name = game_name || "";
   server_region = server_region || Dota2.ServerRegion.UNSPECIFIED;
   game_mode = game_mode || Dota2.GameMode.DOTA_GAMEMODE_AP;
-
-  /* Sends a message to the Game Coordinator requesting the creation of a practice lobby.  Listen for `practiceLobbyJoinResponse` event for the Game Coordinator's response. */
 
   if (!this._gcReady) {
     if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
@@ -161,15 +121,9 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyResponse] = function onPracticeLo
   callback = callback || null;
   var practiceLobbyJoinResponse = dota_gcmessages_client.CMsgPracticeLobbyJoinResponse.parse(message);
 
-  if (practiceLobbyJoinResponse.result === 1) {
-    if (this.debug) util.log("Received practice lobby join response " + practiceLobbyJoinResponse.result);
-    this.emit("practiceLobbyJoinResponse", practiceLobbyJoinResponse.result, practiceLobbyJoinResponse);
-    if (callback) callback(null, practiceLobbyJoinResponse);
-  }
-  else {
-    if (this.debug) util.log("Received a bad practiceLobbyJoinResponse");
-    if (callback) callback(practiceLobbyJoinResponse.result, practiceLobbyJoinResponse);
-  }
+  if (this.debug) util.log("Received practice lobby join response " + practiceLobbyJoinResponse.result);
+  this.emit("practiceLobbyJoinResponse", practiceLobbyJoinResponse.result, practiceLobbyJoinResponse);
+  if (callback) callback(practiceLobbyJoinResponse.result, practiceLobbyJoinResponse);
 };
 
 handlers[Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyList] = function(message, callback) {
