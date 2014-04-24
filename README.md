@@ -297,6 +297,11 @@ Emitted when the GC responds to `createPracticeLobby` method. Note that this is 
 Emitted when the GC responds to `joinPracticeLobby` method.
 
 
+### `liveLeagueGamesUpdate` (`null`, `liveLeaguesResponse`)
+* `null` - nothing
+* `liveLeaguesResponse` - Integer representing number of live league games.
+
+
 ### `leaguesInMonthResponse` (`result`, `leaguesInMonthResponse`)
 * `result` - The result object from `leaguesInMonthResponse`.
 * `leaguesInMonthResponse` - The raw response object.

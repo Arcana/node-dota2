@@ -52,3 +52,11 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCLeaguesInMonthResponse] = function onLeaguesIn
       if (callback) callback(response.eresult, response);
   }
 };
+
+handlers[Dota2.EDOTAGCMsg.k_EMsgDOTALiveLeagueGameUpdate] = function(message, callback){
+  var response = dota_gcmessages_client.CMsgDOTALiveLeagueGameUpdate.parse(message);
+
+  if(this.debug) util.log("Received live league games update "+JSON.stringify(response)+".");
+  this.emit("liveLeagueGamesUpdate", response.live_league_games);
+  if(callback) callback(null, response.live_league_games);
+};
