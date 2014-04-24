@@ -121,6 +121,18 @@ Dota2.Dota2Client.prototype.configPracticeLobby = function(options, callback){
   this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbySetDetails | protoMask), payload, callback);
 };
 
+Dota2.Dota2Client.prototype.practiceLobbyListRequest = function(callback){
+  if (!this._gcReady) {
+    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+    return null;
+  }
+  
+  if (this.debug) util.log("Sending CMsgPracticeLobbyList request");
+  var payload = dota_gcmessages_client.CMsgPracticeLobbyList.serialize({
+  });
+
+  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyList | protoMask), payload, callback);
+};
 
 Dota2.Dota2Client.prototype.leavePracticeLobby = function(callback) {
   callback = callback || null;
@@ -157,5 +169,19 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyResponse] = function onPracticeLo
   else {
     if (this.debug) util.log("Received a bad practiceLobbyJoinResponse");
     if (callback) callback(practiceLobbyJoinResponse.result, practiceLobbyJoinResponse);
+  }
+};
+
+handlers[Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyList] = function(message, callback) {
+  var practiceLobbyListResponse = dota_gcmessages_client.CMsgPracticeLobbyListResponse.parse(message);
+
+  if (practiceLobbyListResponse.result === 1) {
+    if (this.debug) util.log("Received practice lobby list response " + practiceLobbyJoinResponse.result);
+    this.emit("practiceLobbyListResponse", practiceLobbyListResponse.result, practiceLobbyListResponse);
+    if (callback) callback(null, practiceLobbyListResponse);
+  }
+  else {
+    if (this.debug) util.log("Received a bad practiceLobbyListResponse");
+    if (callback) callback(practiceLobbyListResponse.result, practiceLobbyListResponse);
   }
 };
