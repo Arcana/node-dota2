@@ -157,6 +157,11 @@ handlers[Dota2.ESOMsg.k_ESOMsg_CacheSubscribed] = function(message, callback){ /
   this.emit("practiceLobbyCreateResponse", practiceLobbyCreateResponse, id);
 };
 
+handlers[Dota2.ESOMsg.k_ESOMsg_UpdateMultiple] = function(message, callback){
+  //We don't know how to interpret this yet
+  if(this.debug) util.log("Received ESOMsg_UpdateMultiple - lobby members update.");
+};
+
 handlers[Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyJoinResponse] = function onPracticeLobbyJoinResponse(message, callback) {
   callback = callback || null;
   var practiceLobbyJoinResponse = dota_gcmessages_client.CMsgPracticeLobbyJoinResponse.parse(message);
