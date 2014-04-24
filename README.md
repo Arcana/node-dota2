@@ -18,7 +18,7 @@ var Steam = require('steam'),
 
 ##Properties
 ###AccountID
-The current steam ID of the SteamClient converted to Dota 2 Account ID format.
+The current steam ID of the SteamClient converted to Dota 2 Account ID format. Not available until `launch` is called.
 
 
 ## Methods

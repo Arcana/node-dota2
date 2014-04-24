@@ -14,7 +14,6 @@ var Dota2Client = function Dota2Client(steamClient, debug) {
 
   this.debug = debug || false;
   this._client = steamClient;
-  this.AccountID = this.ToAccountID(steamClient.steamID);
   this._appid = 570;
   this.chatChannels = []; // Map channel names to channel data.
   this._gcReady = false,
@@ -69,6 +68,7 @@ Dota2Client.prototype.ToSteamID = function(accid){
 Dota2Client.prototype.launch = function() {
   /* Reports to Steam that we are running Dota 2. Initiates communication with GC with EMsgGCClientHello */
   if (this.debug) util.log("Launching Dota 2");
+  this.AccountID = this.ToAccountID(this._client.steamID);
   this._client.gamesPlayed([this._appid]);
 
   // Keep knocking on the GCs door until it accepts us.
