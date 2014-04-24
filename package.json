@@ -3,7 +3,8 @@
   "version": "0.4.6",
   "dependencies": {
     "protobuf": "*",
-    "deferred": "*"
+    "deferred": "*",
+    "bignumber.js": "*"
   },
   "peerDependencies": {
     "steam": ">= 0.6.0"

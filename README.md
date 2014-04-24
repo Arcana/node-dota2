@@ -15,6 +15,12 @@ var Steam = require('steam'),
     Dota2 = new dota2.Dota2Client(steamClient, true);
 ```
 
+
+##Properties
+###AccountID
+The current steam ID of the SteamClient converted to Dota 2 Account ID format.
+
+
 ## Methods
 All methods require the SteamClient instance to be logged on.
 
@@ -26,6 +32,14 @@ Reports to Steam that you're playing Dota 2, and then initiates communication wi
 #### exit()
 
 Tells Steam you were feeding.
+
+
+###Utilities
+#### ToAccountID(steamID)
+* Takes an input steam ID in any format and converts it into an int Account ID.
+
+#### ToSteamID(accountID)
+* Takes an input Dota 2 acount ID in any format and converts it into a string steam ID.
 
 
 ### Inventory

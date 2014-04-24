@@ -1,6 +1,7 @@
 var EventEmitter = require('events').EventEmitter,
     fs = require("fs"),
     util = require("util"),
+    bignumber = require("bignumber.js"),
     Schema = require('protobuf').Schema,
     base_gcmessages = new Schema(fs.readFileSync(__dirname + "/generated/base_gcmessages.desc")),
     gcsdk_gcmessages = new Schema(fs.readFileSync(__dirname + "/generated/gcsdk_gcmessages.desc")),
@@ -13,6 +14,7 @@ var Dota2Client = function Dota2Client(steamClient, debug) {
 
   this.debug = debug || false;
   this._client = steamClient;
+  this.AccountID = this.ToAccountID(steamClient.steamID);
   this._appid = 570;
   this.chatChannels = []; // Map channel names to channel data.
   this._gcReady = false,
@@ -56,6 +58,12 @@ require("./generated/messages");
 // Expose enums
 Dota2Client.prototype.ServerRegion = Dota2.ServerRegion;
 Dota2Client.prototype.GameMode = Dota2.GameMode;
+Dota2Client.prototype.ToAccountID = function(accid){
+  return bignumber(accid).minus('76561197960265728')+0;
+};
+Dota2Client.prototype.ToSteamID = function(accid){
+  return bignumber(accid).plus('76561197960265728')+"";
+};
 
 // Methods
 Dota2Client.prototype.launch = function() {
