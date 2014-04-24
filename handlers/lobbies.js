@@ -185,7 +185,7 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyResponse] = function(message, cal
 handlers[Dota2.EDOTAGCMsg.k_EMsgGCFriendPracticeLobbyListResponse] = function(message, callback) {
   var practiceLobbyListResponse = dota_gcmessages_client.CMsgFriendPracticeLobbyListResponse.parse(message);
 
-  if (this.debug) util.log("Received friend practice lobby list response " + practiceLobbyListResponse);
+  if (this.debug) util.log("Received friend practice lobby list response " + JSON.stringify(practiceLobbyListResponse));
   this.emit("friendPracticeLobbyListResponse", null, practiceLobbyListResponse);
   if (callback) callback(null, practiceLobbyListResponse);
 };
