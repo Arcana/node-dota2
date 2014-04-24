@@ -141,6 +141,12 @@ Sends a message to the Game Coordinator requesting some matchmaking stats. Liste
 
 
 ### Lobbies
+### joinPracticeLobby(id, [password], [callback])
+* `[id]` Practice lobby ID
+* `[password]` Practice lobby password
+
+Sends a message to the Game Coordinator requesting to join a lobby.  Provide a callback or listen for `practiceLobbyJoinResponse` for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+
 #### createPracticeLobby([gameName], [password], [serverRegion], [gameMode], [callback])
 * `[gameName]` Display name for the lobby (optional).
 * `[password]` Password to restrict access to the lobby (optional).
@@ -148,7 +154,7 @@ Sends a message to the Game Coordinator requesting some matchmaking stats. Liste
 * `[gameMode]` Gamemode for the lobby` see [GameMode Enum](#Enums)(optional).
 * `[callback]` - optional callback` returns args: `err` response`.
 
-Sends a message to the Game Coordinator requesting to create a lobby.  Provide a callback or listen for `practiceLobbyJoinResponse` for the Game Coordinator's response (Node:  GC seems to erroneously return `DOTA_JOIN_RESULT_ALREADY_IN_GAME`).  Requires the GC to be ready (listen for the `ready` event before calling).
+Sends a message to the Game Coordinator requesting to create a lobby.  Provide a callback or listen for `practiceLobbyCreateResponse` for the interpreted response. Requires the GC to be ready (listen for the `ready` event before calling).
 
 #### configPracticeLobby(options, [callback])
 * `options` A set of options to set. All are optional, but send at least one.
@@ -271,11 +277,17 @@ Emitted when te GC response to the `matchmakingStatsRequest` method.  The array 
     "PerfectWorldUnicom":   {"matchgroup": "12"}
 ```
 
+### `practiceLobbyCreateResponse`(`practiceLobbyCreateResponse`, `lobbyID`)
+* `practiceLobbyCreateResponse` - The result object from practiceLobbyCreateResponse.
+* `lobbyID` - The ID of the created lobby.
+
+Emitted when the GC responds to `createPracticeLobby` method. Note that this is a somewhat hacky and interpreted method. The other method previously used to detect this always returned an error when creating the lobby (even when successful) and was therefore completely useless.
+
 ### `practiceLobbyJoinResponse`(`result` `practiceLobbyJoinResponse`)
 * `result` - The result object from `practiceLobbyJoinResponse`.
 * `practiceLobbyJoinResponse` - The raw response object.
 
-Emitted when the GC responds to `createPracticeLobby` method; erroneously emits "DOTA_JOIN_RESULT_ALREADY_IN_GAME" though` so never trust it. vOv
+Emitted when the GC responds to `joinPracticeLobby` method.
 
 
 ### `leaguesInMonthResponse` (`result`, `leaguesInMonthResponse`)

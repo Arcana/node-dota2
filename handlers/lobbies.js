@@ -107,6 +107,23 @@ Dota2.Dota2Client.prototype.friendPracticeLobbyListRequest = function(callback){
   this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCFriendPracticeLobbyListRequest | protoMask), payload, callback);
 };
 
+Dota2.Dota2Client.prototype.joinPracticeLobby = function(id, password, callback){
+  if (!this._gcReady) {
+    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+    return null;
+  }
+
+  password = password || "";
+
+  if (this.debug) util.log("Sending match CMsgPracticeLobbyJoin request");
+  var payload = dota_gcmessages_client.CMsgPracticeLobbyJoin.serialize({
+    lobby_id: id,
+    pass_key: password
+  });
+
+  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyJoin | protoMask), payload, callback);
+};
+
 Dota2.Dota2Client.prototype.leavePracticeLobby = function(callback) {
   callback = callback || null;
 
@@ -117,7 +134,7 @@ Dota2.Dota2Client.prototype.leavePracticeLobby = function(callback) {
     return null;
   }
 
-  if (this.debug) util.log("Sending match CMsgPracticeLobbyCreate request");
+  if (this.debug) util.log("Sending match CMsgPracticeLobbyLeave request");
   var payload = dota_gcmessages_client.CMsgPracticeLobbyLeave.serialize({
   });
 
@@ -129,8 +146,18 @@ Dota2.Dota2Client.prototype.leavePracticeLobby = function(callback) {
 
 var handlers = Dota2.Dota2Client.prototype._handlers;
 
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyResponse] = function onPracticeLobbyJoinResponse(message, callback) {
-  // TODO:  Always seems to return "DOTA_JOIN_RESULT_ALREADY_IN_GAME", not trustworthy. >:
+//Pracitce lobby create response
+handlers[24] = function(message, callback){ //k_ESOMsg_CacheSubscribed
+  var practiceLobbyCreateResponse = gcsdk_gcmessages.CMsgSOCacheSubscribed.parse(message);
+
+  if(this.debug) util.log("Received CMsgSOCacheSubscribed (practice lobby create) response.");
+  id = practiceLobbyCreateResponse.owner_soid.id;
+  if(this.debug) util.log("Interpreted lobby ID "+id);
+  
+  this.emit("practiceLobbyCreateResponse", practiceLobbyCreateResponse, id);
+};
+
+handlers[Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyJoinResponse] = function onPracticeLobbyJoinResponse(message, callback) {
   callback = callback || null;
   var practiceLobbyJoinResponse = dota_gcmessages_client.CMsgPracticeLobbyJoinResponse.parse(message);
 
