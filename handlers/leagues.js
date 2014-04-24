@@ -57,6 +57,6 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgDOTALiveLeagueGameUpdate] = function(message, ca
   var response = dota_gcmessages_client.CMsgDOTALiveLeagueGameUpdate.parse(message);
 
   if(this.debug) util.log("Received live league games update "+JSON.stringify(response)+".");
-  this.emit("liveLeagueGamesUpdate", response.live_league_games);
-  if(callback) callback(null, response.live_league_games);
+  this.emit("liveLeagueGamesUpdate", response.liveLeagueGames);
+  if(callback) callback(null, response.liveLeagueGames);
 };
