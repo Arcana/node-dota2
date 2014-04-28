@@ -1,6 +1,7 @@
 var EventEmitter = require('events').EventEmitter,
     fs = require("fs"),
     util = require("util"),
+    bignumber = require("bignumber.js"),
     Schema = require('protobuf').Schema,
     base_gcmessages = new Schema(fs.readFileSync(__dirname + "/generated/base_gcmessages.desc")),
     gcsdk_gcmessages = new Schema(fs.readFileSync(__dirname + "/generated/gcsdk_gcmessages.desc")),
@@ -56,11 +57,18 @@ require("./generated/messages");
 // Expose enums
 Dota2Client.prototype.ServerRegion = Dota2.ServerRegion;
 Dota2Client.prototype.GameMode = Dota2.GameMode;
+Dota2Client.prototype.ToAccountID = function(accid){
+  return bignumber(accid).minus('76561197960265728')+0;
+};
+Dota2Client.prototype.ToSteamID = function(accid){
+  return bignumber(accid).plus('76561197960265728')+"";
+};
 
 // Methods
 Dota2Client.prototype.launch = function() {
   /* Reports to Steam that we are running Dota 2. Initiates communication with GC with EMsgGCClientHello */
   if (this.debug) util.log("Launching Dota 2");
+  this.AccountID = this.ToAccountID(this._client.steamID);
   this._client.gamesPlayed([this._appid]);
 
   // Keep knocking on the GCs door until it accepts us.
