@@ -1,3 +1,4 @@
-protoc --descriptor_set_out=base_gcmessages.desc --include_imports --proto_path=/home/rjackson/Desktop/SteamKit/Resources/Protobufs/dota/ /home/rjackson/Desktop/SteamKit/Resources/Protobufs/dota/base_gcmessages.proto
-protoc --descriptor_set_out=gcsdk_gcmessages.desc --include_imports --proto_path=/home/rjackson/Desktop/SteamKit/Resources/Protobufs/dota/ /home/rjackson/Desktop/SteamKit/Resources/Protobufs/dota/gcsdk_gcmessages.proto
-protoc --descriptor_set_out=dota_gcmessages_client.desc --include_imports --proto_path=/home/rjackson/Desktop/SteamKit/Resources/Protobufs/dota/ /home/rjackson/Desktop/SteamKit/Resources/Protobufs/dota/dota_gcmessages_client.proto
+protoc --descriptor_set_out=base_gcmessages.desc --include_imports --proto_path=/home/kidovate/Documents/SteamKit/Resources/Protobufs /home/kidovate/Documents/SteamKit/Resources/Protobufs/dota/base_gcmessages.proto
+protoc --descriptor_set_out=gcsdk_gcmessages.desc --include_imports --proto_path=/home/kidovate/Documents/SteamKit/Resources/Protobufs /home/kidovate/Documents/SteamKit/Resources/Protobufs/dota/gcsdk_gcmessages.proto
+protoc --descriptor_set_out=dota_gcmessages_client.desc --include_imports --proto_path=/home/kidovate/Documents/SteamKit/Resources/Protobufs /home/kidovate/Documents/SteamKit/Resources/Protobufs/dota/dota_gcmessages_client.proto
+protoc --descriptor_set_out=dota_gcmessages_common.desc --include_imports --proto_path=/home/kidovate/Documents/SteamKit/Resources/Protobufs /home/kidovate/Documents/SteamKit/Resources/Protobufs/dota/dota_gcmessages_common.proto
