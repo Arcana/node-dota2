@@ -13,7 +13,7 @@ Dota2.Dota2Client.prototype.leaguesInMonthRequest = function(month, year, callba
   callback = callback || null;
 
   // Month & year default to current time values
-  month = month || (new Date()).getMonth();
+  month = month === undefined ? (new Date()).getMonth() : month;
   year = year || (new Date()).getFullYear();
 
   /* Sends a message to the Game Coordinator requesting the data on the given month's leagues.
@@ -51,4 +51,12 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCLeaguesInMonthResponse] = function onLeaguesIn
       if (this.debug) util.log("Received a bad leaguesInMonthResponse");
       if (callback) callback(response.eresult, response);
   }
+};
+
+handlers[Dota2.EDOTAGCMsg.k_EMsgDOTALiveLeagueGameUpdate] = function(message, callback){
+  var response = dota_gcmessages_client.CMsgDOTALiveLeagueGameUpdate.parse(message);
+
+  if(this.debug) util.log("Live league games: "+response.liveLeagueGames+".");
+  this.emit("liveLeagueGamesUpdate", response.liveLeagueGames);
+  if(callback) callback(null, response.liveLeagueGames);
 };
