@@ -207,7 +207,7 @@ Returns a list of current ongoing matches (from live games tab).
 
 Default filterOptions:
 
-```
+```javascript
 {
     searchKey: '',
     start: 0,           // offset
