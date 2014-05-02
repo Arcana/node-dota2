@@ -183,6 +183,16 @@ Flips the teams in a lobby.
 
 Sends a message to the Game Coordinator requesting to configure some options of the active lobby. Requires the GC to be ready (listen for the `ready` event before calling).
 
+#### launchPracticeLobby()
+
+Sends a message to the GC requesting the currrent lobby be started (server found and game begins). You will receive updates in the `practiceLobbyUpdate` response.
+
+
+#### practiceLobbyKick(accountid, [callback])
+* `accountid` The ID of the player you want to kick.
+
+Asks to kick someone from your current practice lobby.
+
 #### leavePracticeLobby()
 
 Sends a message to the Game Coordinator requesting to leave the current lobby.  Requires the GC to be ready (listen for the `ready` event before calling).
@@ -300,6 +310,13 @@ The GC emits a `PracticeLobbyResponse` after you either leave/join/fail to leave
 * `lobbyID` - The ID of the created lobby.
 
 Emitted when the GC responds to `createPracticeLobby` method. Note that this is a somewhat hacky and interpreted method. The other method previously used to detect this always returned an error when creating the lobby (even when successful) and was therefore completely useless.
+
+### `practiceLobbyUpdate `(`response` `practiceLobbyInfo`)
+* `response` - The full `CMsgSOMultipleObjects` object.
+* `practiceLobbyInfo` - The information about the lobby.
+
+Emitted when the GC sends a lobby update event.
+
 
 ### `practiceLobbyJoinResponse`(`result` `practiceLobbyJoinResponse`)
 * `result` - The result object from `practiceLobbyJoinResponse`.
