@@ -136,7 +136,7 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCGuildInviteData] = function onGuildInviteData(
   // Break if it is just info, and not invitation.
   if (!guildInviteData.invitedToGuild) return;
 
-  if (this.debug) util.log("Recevied invitation to guild: " + guildInviteData.guildName);
+  if (this.debug) util.log("Received invitation to guild: " + guildInviteData.guildName);
   this.emit("guildInvite", guildInviteData.guildId, guildInviteData.guildName, guildInviteData.inviter, guildInviteData);
 };
 

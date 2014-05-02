@@ -53,13 +53,13 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCMatchDetailsResponse] = function onMatchDetail
   var matchDetailsResponse = dota_gcmessages_client.CMsgGCMatchDetailsResponse.parse(message);
 
   if (matchDetailsResponse.result === 1) {
-    if (this.debug) util.log("Recevied match data for: " + matchDetailsResponse.match.matchId);
+    if (this.debug) util.log("Received match data for: " + matchDetailsResponse.match.matchId);
     this.emit("matchData", matchDetailsResponse.match.matchId, matchDetailsResponse);
     if (callback) callback(null, matchDetailsResponse);
   }
-  else if (this.debug) {
-    util.log("Received a bad matchDetailsResponse");
-    if (callback) callback(matchDetailsResponse.result, matchDetailsResponse);
+  else {
+      if (this.debug) util.log("Received a bad matchDetailsResponse");
+      if (callback) callback(matchDetailsResponse.result, matchDetailsResponse);
   }
 };
 
@@ -69,6 +69,6 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCMatchmakingStatsResponse] = function onMatchma
   // Is not Job ID based - can't do callbacks.
   var matchmakingStatsResponse = dota_gcmessages_client.CMsgDOTAMatchmakingStatsResponse.parse(message);
 
-  if (this.debug) util.log("Recevied matchmaking stats");
+  if (this.debug) util.log("Received matchmaking stats");
   this.emit("matchmakingStatsData", matchmakingStatsResponse.waitTimesByGroup, matchmakingStatsResponse.searchingPlayersByGroup, matchmakingStatsResponse.disabledGroups, matchmakingStatsResponse);
 };

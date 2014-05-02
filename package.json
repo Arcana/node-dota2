@@ -1,9 +1,10 @@
 {
   "name": "dota2",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "dependencies": {
     "protobuf": "*",
-    "deferred": "*"
+    "deferred": "*",
+    "bignumber.js": "*"
   },
   "peerDependencies": {
     "steam": ">= 0.6.0"
