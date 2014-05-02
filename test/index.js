@@ -122,6 +122,11 @@ var onSteamLogOn = function onSteamLogOn(){
             //     console.log('Found ' + data.leagues.length + ' leagues full of schedule data :D');
             // });
 
+            /* SOURCETV */
+            // Dota2.findSourceTVGames({}, function(data) {    // May 2015
+            //   console.log('Successfully received SourceTVGames: ' + data.games);
+            // })
+
 
         });
 

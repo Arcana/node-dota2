@@ -196,6 +196,31 @@ Sends a message to the Game Coordinator requesting to leave the current lobby.  
 Sends a message to the Game Coordinator requesting data on leagues being played in the given month.  Provide a callback or listen for `leaguesInMonthResponse` for the Game Coordinator's response.  Requires the GC to be ready (listen for the `ready` event before calling).
 
 
+### SourceTV
+
+#### findSourceTVGames([filterOption], [callback])
+
+* `[filterOption]` - Object to override the default filters
+* `[callback]` - callback to be executed, return args: `response`
+
+Returns a list of current ongoing matches (from live games tab).
+
+Default filterOptions:
+
+```
+{
+    searchKey: '',
+    start: 0,           // offset
+    numGames: 6,
+    leagueid: 0,
+    heroid: 0,
+    teamGame: false,    // only show team games (team matchmaking)
+    customGameId: 0,
+}
+```
+
+> __Important:__ The only working parameters are `start`, `leagueid` and `teamGame`. Changing the other parameters will result in no response at all (e.g. `numGames` > 6)
+
 ## Events
 ### `ready`
 Emitted when the GC is ready to receive messages.  Be careful not to declare anonymous functions as event handlers here, as you'll need to be able to invalidate event handlers on an `unready` event.
@@ -395,3 +420,7 @@ There is no automated test suite for node-dota2 (I've no idea how I'd make one f
 * Create a blank file named 'sentry' in the tests directory.
 * Attempt to log-in, you'll receive Error 63 - which means you need to provide a Steam Guard code.
 * Set the Steam Guard code in `config.js` and launch again.
+
+### Extending
+
+Read the blog entry https://blog.rjackson.me/extending-node-dota2/ for how to contribute and expand the function set.

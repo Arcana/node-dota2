@@ -4,7 +4,8 @@
   "dependencies": {
     "protobuf": "*",
     "deferred": "*",
-    "bignumber.js": "*"
+    "bignumber.js": "*",
+    "merge": ">= 0.0.2"
   },
   "peerDependencies": {
     "steam": ">= 0.6.0"
