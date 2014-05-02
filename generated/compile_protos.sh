@@ -2,7 +2,7 @@
 
 #
 # This file will checkout the latest SteamKit repo and regenerate the dota 2 protobufs, no config required
-# Requirement: https://code.google.com/p/protobuf/downloads/list
+# Installation of Protobuf library required: https://code.google.com/p/protobuf/downloads/list
 #
 TMP_FOLDER="/tmp/SteamKit"
 DOTA_PROTOS_PATH="$TMP_FOLDER/Resources/Protobufs/dota"
