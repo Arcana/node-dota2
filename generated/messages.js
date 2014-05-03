@@ -39,6 +39,8 @@ Dota2.GCConnectionStatus = {
 Dota2.EDOTAGCMsg = {
     k_EMsgGCJoinChatChannel: 7009,
     k_EMsgGCJoinChatChannelResponse: 7010,
+    k_EMsgGCFindSourceTVGames: 7031,
+    k_EMsgGCSourceTVGamesResponse: 7032,
     k_EMsgGCLeaveChatChannel: 7272,
     k_EMsgGCOtherJoinedChannel: 7013,
     k_EMsgGCOtherLeftChannel: 7014,

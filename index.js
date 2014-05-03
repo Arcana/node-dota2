@@ -149,3 +149,4 @@ require("./handlers/community");
 require("./handlers/match");
 require("./handlers/lobbies");
 require("./handlers/leagues");
+require("./handlers/sourcetv");

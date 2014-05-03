@@ -43,7 +43,7 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCLeaguesInMonthResponse] = function onLeaguesIn
   var response = dota_gcmessages_client.CMsgDOTALeaguesInMonthResponse.parse(message);
 
   if (response.eresult === 1) {
-    if (this.debug) util.log("Received practice lobby join response " + response.eresult);
+    if (this.debug) util.log("Received leagues in month response " + response.eresult);
     this.emit("leaguesInMonthResponse", response.eresult, response);
     if (callback) callback(null, response);
   }
