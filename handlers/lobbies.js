@@ -2,6 +2,7 @@ var Dota2 = require("../index"),
     fs = require("fs"),
     util = require("util"),
     Schema = require('protobuf').Schema,
+    dota_gcmessages_common = new Schema(fs.readFileSync(__dirname+"/../generated/dota_gcmessages_common.desc")),
     base_gcmessages = new Schema(fs.readFileSync(__dirname + "/../generated/base_gcmessages.desc")),
     gcsdk_gcmessages = new Schema(fs.readFileSync(__dirname + "/../generated/gcsdk_gcmessages.desc")),
     dota_gcmessages_client = new Schema(fs.readFileSync(__dirname + "/../generated/dota_gcmessages_client.desc")),
@@ -149,6 +150,23 @@ Dota2.Dota2Client.prototype.flipLobbyTeams = function(callback){
   this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCFlipLobbyTeams | protoMask), payload, callback);
 };
 
+Dota2.Dota2Client.prototype.practiceLobbyKick = function(accountid, callback){
+  callback = callback || null;
+  if (!this._gcReady) {
+    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+    return null;
+  }
+
+  accountid = accountid || "";
+
+  if (this.debug) util.log("Sending match CMsgPracticeLobbyJoin request");
+  var payload = dota_gcmessages_client.CMsgPracticeLobbyKick.serialize({
+    account_id: accountid
+  });
+
+  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyKick | protoMask), payload, callback);
+};
+
 Dota2.Dota2Client.prototype.joinPracticeLobby = function(id, password, callback){
   callback = callback || null;
   if (!this._gcReady) {
@@ -165,6 +183,21 @@ Dota2.Dota2Client.prototype.joinPracticeLobby = function(id, password, callback)
   });
 
   this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyJoin | protoMask), payload, callback);
+};
+
+Dota2.Dota2Client.prototype.startPracticeLobby = function(callback){
+  callback = callback || null;
+
+  if (!this._gcReady) {
+    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+    return null;
+  }
+
+  if (this.debug) util.log("Sending match CMsgPracticeLobbyLeave request");
+  var payload = dota_gcmessages_client.CMsgPracticeLobbyLeave.serialize({
+  });
+
+  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyLeave | protoMask), payload, callback);
 };
 
 Dota2.Dota2Client.prototype.leavePracticeLobby = function(callback) {
@@ -184,6 +217,23 @@ Dota2.Dota2Client.prototype.leavePracticeLobby = function(callback) {
   this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyLeave | protoMask), payload, callback);
 };
 
+Dota2.Dota2Client.prototype.launchPracticeLobby = function(callback) {
+  callback = callback || null;
+
+  /* Sends a message to the Game Coordinator requesting lobby start. */
+
+  if (!this._gcReady) {
+    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+    return null;
+  }
+
+  if (this.debug) util.log("Sending match CMsgPracticeLobbyLaunch request");
+  var payload = dota_gcmessages_client.CMsgPracticeLobbyLaunch.serialize({
+  });
+
+  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyLaunch | protoMask), payload, callback);
+};
+
 
 // Handlers
 
@@ -196,7 +246,7 @@ handlers[Dota2.ESOMsg.k_ESOMsg_CacheSubscribed] = function(message, callback){ /
   if(this.debug) util.log("Received CMsgSOCacheSubscribed (practice lobby create) response.");
   id = practiceLobbyCreateResponse.ownerSoid.id;
   if(this.debug) util.log("Interpreted lobby ID "+id);
-  
+
   this.emit("practiceLobbyCreateResponse", practiceLobbyCreateResponse, id);
 };
 
@@ -206,10 +256,10 @@ handlers[Dota2.ESOMsg.k_ESOMsg_Create] = function(message, callback){
 
 handlers[Dota2.ESOMsg.k_ESOMsg_UpdateMultiple] = function(message, callback){
   var response = gcsdk_gcmessages.CMsgSOMultipleObjects.parse(message);
+  var lobby = dota_gcmessages_common.CSODOTALobby.parse(response.objectsModified[0].objectData);
   //We don't know how to interpret this yet
   if(this.debug) util.log("Received lobby member update.");
-  //if(this.debug) util.log(JSON.stringify(response));
-  this.emit("practiceLobbyMembersUpdate");
+  this.emit("practiceLobbyUpdate", response, lobby);
 };
 
 handlers[Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyJoinResponse] = function(message, callback) {
