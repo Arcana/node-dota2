@@ -3,6 +3,8 @@ node-dota2
 
 A node-steam plugin for Dota 2, consider it in alpha state.
 
+Check out my blog post (my only blog post), [Extending node-dota2](https://blog.rjackson.me/extending-node-dota2/), for a rough overview of adding new functionality to the library.
+
 ## Initializing
 Parameters:
 * `steamClient` - Pass a SteamClient instance to use to send & receive GC messages.
@@ -181,6 +183,16 @@ Flips the teams in a lobby.
 
 Sends a message to the Game Coordinator requesting to configure some options of the active lobby. Requires the GC to be ready (listen for the `ready` event before calling).
 
+#### launchPracticeLobby()
+
+Sends a message to the GC requesting the currrent lobby be started (server found and game begins). You will receive updates in the `practiceLobbyUpdate` response.
+
+
+#### practiceLobbyKick(accountid, [callback])
+* `accountid` The ID of the player you want to kick.
+
+Asks to kick someone from your current practice lobby.
+
 #### leavePracticeLobby()
 
 Sends a message to the Game Coordinator requesting to leave the current lobby.  Requires the GC to be ready (listen for the `ready` event before calling).
@@ -324,6 +336,13 @@ The GC emits a `PracticeLobbyResponse` after you either leave/join/fail to leave
 
 Emitted when the GC responds to `createPracticeLobby` method. Note that this is a somewhat hacky and interpreted method. The other method previously used to detect this always returned an error when creating the lobby (even when successful) and was therefore completely useless.
 
+### `practiceLobbyUpdate `(`response` `practiceLobbyInfo`)
+* `response` - The full `CMsgSOMultipleObjects` object.
+* `practiceLobbyInfo` - The information about the lobby.
+
+Emitted when the GC sends a lobby update event.
+
+
 ### `practiceLobbyJoinResponse`(`result` `practiceLobbyJoinResponse`)
 * `result` - The result object from `practiceLobbyJoinResponse`.
 * `practiceLobbyJoinResponse` - The raw response object.
@@ -420,7 +439,3 @@ There is no automated test suite for node-dota2 (I've no idea how I'd make one f
 * Create a blank file named 'sentry' in the tests directory.
 * Attempt to log-in, you'll receive Error 63 - which means you need to provide a Steam Guard code.
 * Set the Steam Guard code in `config.js` and launch again.
-
-### Extending
-
-Read the blog entry https://blog.rjackson.me/extending-node-dota2/ for how to contribute and expand the function set.
