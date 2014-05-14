@@ -8,7 +8,7 @@
     "merge": ">= 0.0.2"
   },
   "peerDependencies": {
-    "steam": ">= 0.6.0"
+    "steam": ">= 0.6.6"
   },
   "readmeFilename": "README.md",
   "description": "A node-steam plugin for Dota 2.",
