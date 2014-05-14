@@ -95,6 +95,10 @@ Dota2.EDOTAGCMsg = {
     k_EMsgGCBalancedShuffleLobby: 7188,
     k_EMsgGCFlipLobbyTeams: 7320,
 
+    k_EMsgDOTAGetEventPoints: 7387,
+    k_EMsgDOTAGetEventPointsResponse: 7388,
+    k_EMsgGCCompendiumDataRequest: 7406,
+    k_EMsgGCCompendiumDataResponse: 7407,
 
     k_EMsgGCLeagueScheduleRequest: 7191,
     k_EMsgGCLeagueScheduleResponse: 7192,
