@@ -85,7 +85,8 @@ Dota2Client.prototype.exit = function() {
       this._gcClientHelloIntervalId = null;
   }
   this._gcReady = false;
-  this._client.gamesPlayed([]);
+  
+  if(this._client.loggedOn) this._client.gamesPlayed([]);
 };
 
 
