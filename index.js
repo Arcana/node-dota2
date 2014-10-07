@@ -58,7 +58,7 @@ require("./generated/messages");
 Dota2Client.prototype.ServerRegion = Dota2.ServerRegion;
 Dota2Client.prototype.GameMode = Dota2.GameMode;
 Dota2Client.prototype.ToAccountID = function(accid){
-  return bignumber(accid).minus('76561197960265728')+0;
+  return bignumber(accid).minus('76561197960265728')-0;
 };
 Dota2Client.prototype.ToSteamID = function(accid){
   return bignumber(accid).plus('76561197960265728')+"";
