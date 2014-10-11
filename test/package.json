@@ -6,7 +6,7 @@
     "start": "node index"
   },
   "dependencies": {
-    "steam": "0.6.1",
+    "steam": ">= 0.6.6",
     "vdf": "*",
     "deferred": "*"
   }
