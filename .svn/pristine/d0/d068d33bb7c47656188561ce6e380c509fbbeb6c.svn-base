@@ -1,0 +1,13 @@
+{
+  "name": "dota2-tests",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node index"
+  },
+  "dependencies": {
+    "steam": "0.6.1",
+    "vdf": "*",
+    "deferred": "*"
+  }
+}
