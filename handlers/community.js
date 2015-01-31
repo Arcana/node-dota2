@@ -23,7 +23,7 @@ Dota2.Dota2Client.prototype.getPlayerMatchHistory = function(accountId, matchId,
         "startAtMatchId": matchId,
         "matchesRequested": 13,
         "heroId": 0,
-        "requestId": 0
+        "requestId": accountId
     });
 
     this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgDOTAGetPlayerMatchHistory | protoMask), payload, callback);
@@ -84,7 +84,7 @@ Dota2.Dota2Client.prototype.hallOfFameRequest = function(week, callback) {
 
 var handlers = Dota2.Dota2Client.prototype._handlers;
 
-handlers[Dota2.EDOTAGCMsg.k_EMsgDOTAGetPlayerMatchHistoryResponse] = function onProfileResponse(message, callback) {
+handlers[Dota2.EDOTAGCMsg.k_EMsgDOTAGetPlayerMatchHistoryResponse] = function onPlayerMatchHistoryResponse(message, callback) {
     callback = callback || null;
     var profileResponse = dota_gcmessages_client.CMsgDOTAGetPlayerMatchHistoryResponse.parse(message);
 
