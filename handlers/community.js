@@ -86,16 +86,16 @@ var handlers = Dota2.Dota2Client.prototype._handlers;
 
 handlers[Dota2.EDOTAGCMsg.k_EMsgDOTAGetPlayerMatchHistoryResponse] = function onPlayerMatchHistoryResponse(message, callback) {
     callback = callback || null;
-    var profileResponse = dota_gcmessages_client.CMsgDOTAGetPlayerMatchHistoryResponse.parse(message);
+    var matchHistoryResponse = dota_gcmessages_client.CMsgDOTAGetPlayerMatchHistoryResponse.parse(message);
 
-    if (profileResponse.result === 1) {
+    if (typeof matchHistoryResponse.matches != "undefined") {
         if (this.debug) util.log("Received player match history data");
-        this.emit("playerMatchHistoryData", profileResponse.requestId, profileResponse);
-        if (callback) callback(null, profileResponse);
+        this.emit("playerMatchHistoryData", matchHistoryResponse.requestId, matchHistoryResponse);
+        if (callback) callback(null, matchHistoryResponse);
     }
     else {
         if (this.debug) util.log("Received a bad GetPlayerMatchHistoryResponse");
-        if (callback) callback(profileResponse.result, profileResponse);
+        if (callback) callback(matchHistoryResponse.result, matchHistoryResponse);
     }
 };
 
