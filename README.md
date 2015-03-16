@@ -1,9 +1,13 @@
 node-dota2
 ========
 
-A node-steam plugin for Dota 2, consider it in alpha state.
+A node-steam plugin for Dota 2.
 
-Check out my blog post (my only blog post), [Extending node-dota2](https://blog.rjackson.me/extending-node-dota2/), for a rough overview of adding new functionality to the library.
+This is based on RJackson's work but has since been reworked to be 100% javascript. This is in preparation for the overhauled DOTA 2 Replay Manager (D2RM) release.
+
+This package now requires node-steam v0.6.8+ and node v0.12.0+.
+
+Check out RJackson's blog post, [Extending node-dota2](https://blog.rjackson.me/extending-node-dota2/), for a rough overview of adding new functionality to the library (keep in mind it is not 100% compatible with this version).
 
 ## Initializing
 Parameters:
