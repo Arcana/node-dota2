@@ -1,10 +1,5 @@
 var Dota2 = require("../index"),
-    fs = require("fs"),
     util = require("util"),
-    Schema = require('protobuf').Schema,
-    base_gcmessages = new Schema(fs.readFileSync(__dirname + "/../generated/base_gcmessages.desc")),
-    gcsdk_gcmessages = new Schema(fs.readFileSync(__dirname + "/../generated/gcsdk_gcmessages.desc")),
-    dota_gcmessages_client = new Schema(fs.readFileSync(__dirname + "/../generated/dota_gcmessages_client.desc")),
     protoMask = 0x80000000;
 
 // Methods
@@ -25,12 +20,12 @@ Dota2.Dota2Client.prototype.leaguesInMonthRequest = function(month, year, callba
   }
 
   if (this.debug) util.log("Sending CMsgDOTALeaguesInMonthRequest");
-  var payload = dota_gcmessages_client.CMsgDOTALeaguesInMonthRequest.serialize({
+  var payload = new Dota2.schema.CMsgDOTALeaguesInMonthRequest({
     month: month,
     year: year
   });
 
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCLeaguesInMonthRequest | protoMask), payload, callback);
+  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCLeaguesInMonthRequest | protoMask), payload.toBuffer(), callback);
 };
 
 
@@ -40,7 +35,7 @@ var handlers = Dota2.Dota2Client.prototype._handlers;
 
 handlers[Dota2.EDOTAGCMsg.k_EMsgGCLeaguesInMonthResponse] = function onLeaguesInMonthResponse(message, callback) {
   callback = callback || null;
-  var response = dota_gcmessages_client.CMsgDOTALeaguesInMonthResponse.parse(message);
+  var response = Dota2.schema.CMsgDOTALeaguesInMonthResponse.decode(message);
 
   if (response.eresult === 1) {
     if (this.debug) util.log("Received leagues in month response " + response.eresult);
@@ -54,7 +49,7 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCLeaguesInMonthResponse] = function onLeaguesIn
 };
 
 handlers[Dota2.EDOTAGCMsg.k_EMsgDOTALiveLeagueGameUpdate] = function(message, callback){
-  var response = dota_gcmessages_client.CMsgDOTALiveLeagueGameUpdate.parse(message);
+  var response = Dota2.schema.CMsgDOTALiveLeagueGameUpdate.decode(message);
 
   if(this.debug) util.log("Live league games: "+response.liveLeagueGames+".");
   this.emit("liveLeagueGamesUpdate", response.liveLeagueGames);

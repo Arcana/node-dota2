@@ -1,10 +1,5 @@
 var Dota2 = require("../index"),
-    fs = require("fs"),
     util = require("util"),
-    Schema = require('protobuf').Schema,
-    base_gcmessages = new Schema(fs.readFileSync(__dirname + "/../generated/base_gcmessages.desc")),
-    gcsdk_gcmessages = new Schema(fs.readFileSync(__dirname + "/../generated/gcsdk_gcmessages.desc")),
-    dota_gcmessages_client = new Schema(fs.readFileSync(__dirname + "/../generated/dota_gcmessages_client.desc")),
     protoMask = 0x80000000;
 
 // Methods
@@ -18,9 +13,9 @@ Dota2.Dota2Client.prototype.setItemPositions = function(itemPositions) {
 
   if (this.debug) util.log("Setting item positions.");
   var payloadItemPositions = itemPositions.map(function(item){ return {"itemId": item[0], "position": item[1]}; }),
-    payload = base_gcmessages.CMsgSetItemPositions.serialize({"itemPositions": payloadItemPositions});
+    payload = new Dota2.schema.CMsgSetItemPositions({"itemPositions": payloadItemPositions});
 
-  this._client.toGC(this._appid, (Dota2.EGCItemMsg.k_EMsgGCSetItemPositions | protoMask), payload);
+  this._client.toGC(this._appid, (Dota2.EGCItemMsg.k_EMsgGCSetItemPositions | protoMask), payload.toBuffer());
 };
 
 Dota2.Dota2Client.prototype.deleteItem = function(itemid) {
