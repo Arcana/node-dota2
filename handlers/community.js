@@ -11,6 +11,7 @@ var Dota2 = require("../index"),
 
 Dota2.Dota2Client.prototype.profileRequest = function(accountId, requestName, callback) {
   callback = callback || null;
+
   /* Sends a message to the Game Coordinator requesting `accountId`'s profile data.  Listen for `profileData` event for Game Coordinator's response. */
   if (!this._gcReady) {
     if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");

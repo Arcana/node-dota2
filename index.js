@@ -41,6 +41,12 @@ var Dota2Client = function Dota2Client(steamClient, debug) {
   });
 
   this._sendClientHello = function() {
+    if(this._gcClientHelloCount > 10)
+    {
+      if(self.debug) util.log("ClientHello has taken longer than 30 seconds! Reporting timeout...");
+      this._gcClientHelloCount = 0;
+      this.emit("hellotimeout");
+    }
     if (self.debug) util.log("Sending ClientHello");
     if (!self._client) {
       util.log("Where the fuck is _client?");
@@ -48,6 +54,7 @@ var Dota2Client = function Dota2Client(steamClient, debug) {
     else {
       self._client.toGC(self._appid, (Dota2.EGCBaseClientMsg.k_EMsgGCClientHello | protoMask), gcsdk_gcmessages.CMsgClientHello.serialize({}));
     }
+    this._gcClientHelloCount++;
   };
 };
 util.inherits(Dota2Client, EventEmitter);
@@ -72,6 +79,7 @@ Dota2Client.prototype.launch = function() {
   this._client.gamesPlayed([this._appid]);
 
   // Keep knocking on the GCs door until it accepts us.
+  this._gcClientHelloCount = 0;
   this._gcClientHelloIntervalId = setInterval(this._sendClientHello, 2500);
 };
 
