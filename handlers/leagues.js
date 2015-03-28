@@ -56,7 +56,7 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCLeaguesInMonthResponse] = function onLeaguesIn
 handlers[Dota2.EDOTAGCMsg.k_EMsgDOTALiveLeagueGameUpdate] = function(message, callback){
   var response = dota_gcmessages_client.CMsgDOTALiveLeagueGameUpdate.parse(message);
 
-  if(this.debug) util.log("Live league games: "+response.liveLeagueGames+".");
+  if(this.debugMore) util.log("Live league games: "+response.liveLeagueGames+".");
   this.emit("liveLeagueGamesUpdate", response.liveLeagueGames);
   if(callback) callback(null, response.liveLeagueGames);
 };

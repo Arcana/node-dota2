@@ -9,10 +9,11 @@ var EventEmitter = require('events').EventEmitter,
     protoMask = 0x80000000,
     Dota2 = exports;
 
-var Dota2Client = function Dota2Client(steamClient, debug) {
+var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
   EventEmitter.call(this);
 
   this.debug = debug || false;
+  this.debugMore = debugMore || false;
   this._client = steamClient;
   this._appid = 570;
   this.chatChannels = []; // Map channel names to channel data.
@@ -25,7 +26,7 @@ var Dota2Client = function Dota2Client(steamClient, debug) {
     callback = callback || null;
 
     var kMsg = type & ~protoMask;
-    if (self.debug) util.log("Dota2 fromGC: " + [app, kMsg].join(", "));  // TODO:  Turn type-protoMask into key name.
+    if (self.debugMore) util.log("Dota2 fromGC: " + [app, kMsg].join(", "));  // TODO:  Turn type-protoMask into key name.
 
     if (kMsg in self._handlers) {
       if (callback) {
