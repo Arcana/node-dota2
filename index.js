@@ -19,7 +19,7 @@ var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
   this.chatChannels = []; // Map channel names to channel data.
   this._gcReady = false,
   this._gcClientHelloIntervalId = null;
-  this._gcConnectionStatus = Dota2.GCConnectionStatus_NO_SESSION;
+  this._gcConnectionStatus = Dota2.GCConnectionStatus.GCConnectionStatus_NO_SESSION;
 
   var self = this;
   this._client.on("fromGC", function fromGC(app, type, message, callback) {
@@ -43,7 +43,7 @@ var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
   });
 
   this._sendClientHello = function() {
-    if(self._gcConnectionStatus == Dota2.GCConnectionStatus_GC_GOING_DOWN || self._gcConnectionStatus == Dota2.GCConnectionStatus_SUSPENDED || self._gcConnectionStatus == Dota2.GCConnectionStatus_NO_STEAM)
+    if(self._gcConnectionStatus == Dota2.GCConnectionStatus.GCConnectionStatus_GC_GOING_DOWN || self._gcConnectionStatus == Dota2.GCConnectionStatus.GCConnectionStatus_SUSPENDED || self._gcConnectionStatus == Dota2.GCConnectionStatus.GCConnectionStatus_NO_STEAM)
     {
       if(self.debug) util.log("Postponing ClientHello as GC status is "+self._gcConnectionStatus);
       self._gcClientHelloCount = 0;
@@ -94,7 +94,7 @@ Dota2Client.prototype.launch = function() {
   this._gcClientHelloIntervalId = setInterval(this._sendClientHello, 6000);
 
   //Also immediately send clienthello
-  setInterval(this._sendClientHello, 1000);
+  setTimeout(this._sendClientHello, 1000);
 };
 
 Dota2Client.prototype.exit = function() {
@@ -134,7 +134,7 @@ handlers[Dota2.EGCBaseClientMsg.k_EMsgGCClientConnectionStatus] = function gcCli
   /* Catch and handle changes in connection status, cuz reasons u know. */
 
   var status = gcsdk_gcmessages.CMsgConnectionStatus.parse(message).status;
-  this._gcConnectionStatus = status;
+  if(status) this._gcConnectionStatus = status;
 
   switch (status) {
     case Dota2.GCConnectionStatus.GCConnectionStatus_HAVE_SESSION:
