@@ -43,17 +43,17 @@ var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
   });
 
   this._sendClientHello = function() {
-    if(this._gcConnectionStatus == Dota2.GCConnectionStatus_GC_GOING_DOWN || this._gcConnectionStatus == Dota2.GCConnectionStatus_SUSPENDED || this._gcConnectionStatus == Dota2.GCConnectionStatus_NO_STEAM)
+    if(self._gcConnectionStatus == Dota2.GCConnectionStatus_GC_GOING_DOWN || self._gcConnectionStatus == Dota2.GCConnectionStatus_SUSPENDED || self._gcConnectionStatus == Dota2.GCConnectionStatus_NO_STEAM)
     {
-      if(self.debug) util.log("Postponing ClientHello as GC status is "+this._gcConnectionStatus);
-      this._gcClientHelloCount = 0;
+      if(self.debug) util.log("Postponing ClientHello as GC status is "+self._gcConnectionStatus);
+      self._gcClientHelloCount = 0;
       return;
     }
-    if(this._gcClientHelloCount > 10)
+    if(self._gcClientHelloCount > 10)
     {
       if(self.debug) util.log("ClientHello has taken longer than 30 seconds! Reporting timeout...");
-      this._gcClientHelloCount = 0;
-      this.emit("hellotimeout");
+      self._gcClientHelloCount = 0;
+      self.emit("hellotimeout");
     }
     if (self.debug) util.log("Sending ClientHello");
     if (!self._client) {
@@ -62,7 +62,7 @@ var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
     else {
       self._client.toGC(self._appid, (Dota2.EGCBaseClientMsg.k_EMsgGCClientHello | protoMask), gcsdk_gcmessages.CMsgClientHello.serialize({}));
     }
-    this._gcClientHelloCount++;
+    self._gcClientHelloCount++;
   };
 };
 util.inherits(Dota2Client, EventEmitter);
