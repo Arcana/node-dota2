@@ -19,6 +19,7 @@ var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
   this.chatChannels = []; // Map channel names to channel data.
   this._gcReady = false,
   this._gcClientHelloIntervalId = null;
+  this._gcConnectionStatus = Dota2.GCConnectionStatus_NO_SESSION;
 
   var self = this;
   this._client.on("fromGC", function fromGC(app, type, message, callback) {
