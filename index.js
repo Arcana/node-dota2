@@ -42,6 +42,12 @@ var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
   });
 
   this._sendClientHello = function() {
+    if(this._gcConnectionStatus == Dota2.GCConnectionStatus_GC_GOING_DOWN || this._gcConnectionStatus == Dota2.GCConnectionStatus_SUSPENDED || this._gcConnectionStatus == Dota2.GCConnectionStatus_NO_STEAM)
+    {
+      if(self.debug) util.log("Postponing ClientHello as GC status is "+this._gcConnectionStatus);
+      this._gcClientHelloCount = 0;
+      return;
+    }
     if(this._gcClientHelloCount > 10)
     {
       if(self.debug) util.log("ClientHello has taken longer than 30 seconds! Reporting timeout...");
@@ -80,8 +86,14 @@ Dota2Client.prototype.launch = function() {
   this._client.gamesPlayed([this._appid]);
 
   // Keep knocking on the GCs door until it accepts us.
+  // This is very bad practice and quite trackable.
+  // The real client tends to send only one of these.
+  // Really we should just send one when the connection status is GC online
   this._gcClientHelloCount = 0;
-  this._gcClientHelloIntervalId = setInterval(this._sendClientHello, 2500);
+  this._gcClientHelloIntervalId = setInterval(this._sendClientHello, 6000);
+
+  //Also immediately send clienthello
+  setInterval(this._sendClientHello, 1000);
 };
 
 Dota2Client.prototype.exit = function() {
@@ -121,6 +133,7 @@ handlers[Dota2.EGCBaseClientMsg.k_EMsgGCClientConnectionStatus] = function gcCli
   /* Catch and handle changes in connection status, cuz reasons u know. */
 
   var status = gcsdk_gcmessages.CMsgConnectionStatus.parse(message).status;
+  this._gcConnectionStatus = status;
 
   switch (status) {
     case Dota2.GCConnectionStatus.GCConnectionStatus_HAVE_SESSION:
@@ -141,7 +154,7 @@ handlers[Dota2.EGCBaseClientMsg.k_EMsgGCClientConnectionStatus] = function gcCli
 
       // Only execute if !_gcClientHelloIntervalID, otherwise it's already been handled (and we don't want to emit multiple 'unready');
       if (!this._gcClientHelloIntervalId) {
-        this._gcClientHelloIntervalId = setInterval(this._sendClientHello, 2500); // Continually try regain GC session
+        this._gcClientHelloIntervalId = setInterval(this._sendClientHello, 5000); // Continually try regain GC session
 
         this._gcReady = false;
         this.emit("unready");
