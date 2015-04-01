@@ -43,10 +43,13 @@ var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
   });
 
   this._sendClientHello = function() {
-    if(self._gcConnectionStatus == Dota2.GCConnectionStatus.GCConnectionStatus_GC_GOING_DOWN || self._gcConnectionStatus == Dota2.GCConnectionStatus.GCConnectionStatus_SUSPENDED || self._gcConnectionStatus == Dota2.GCConnectionStatus.GCConnectionStatus_NO_STEAM)
+    if(self._gcReady)
     {
-      if(self.debug) util.log("Postponing ClientHello as GC status is "+self._gcConnectionStatus);
-      self._gcClientHelloCount = 0;
+      if(self._gcClientHelloIntervalId)
+      {
+        clearInterval(self._gcClientHelloIntervalId);
+        self._gcClientHelloIntervalId = null;
+      }
       return;
     }
     if(self._gcClientHelloCount > 10)
@@ -55,6 +58,7 @@ var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
       self._gcClientHelloCount = 0;
       self.emit("hellotimeout");
     }
+
     if (self.debug) util.log("Sending ClientHello");
     if (!self._client) {
       util.log("Where the fuck is _client?");
@@ -62,6 +66,7 @@ var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
     else {
       self._client.toGC(self._appid, (Dota2.EGCBaseClientMsg.k_EMsgGCClientHello | protoMask), gcsdk_gcmessages.CMsgClientHello.serialize({}));
     }
+
     self._gcClientHelloCount++;
   };
 };
