@@ -89,6 +89,9 @@ Dota2Client.prototype.launch = function() {
   /* Reports to Steam that we are running Dota 2. Initiates communication with GC with EMsgGCClientHello */
   if (this.debug) util.log("Launching Dota 2");
   this.AccountID = this.ToAccountID(this._client.steamID);
+  this.Party = null;
+  this.Lobby = null;
+  this.PartyInvite = null;
   this._client.gamesPlayed([this._appid]);
 
   // Keep knocking on the GCs door until it accepts us.
@@ -121,18 +124,21 @@ Dota2Client.prototype.exit = function() {
 
 var handlers = Dota2Client.prototype._handlers = {};
 
-handlers[Dota2.EGCBaseClientMsg.k_EMsgGCClientWelcome] = function clientWelcomeHandler() {
+handlers[Dota2.EGCBaseClientMsg.k_EMsgGCClientWelcome] = function clientWelcomeHandler(message) {
   /* Response to our k_EMsgGCClientHello, now we can execute other GC commands. */
 
   // Only execute if _gcClientHelloIntervalID, otherwise it's already been handled (and we don't want to emit multiple 'ready');
   if (this._gcClientHelloIntervalId) {
     clearInterval(this._gcClientHelloIntervalId);
     this._gcClientHelloIntervalId = null;
-
-    if (this.debug) util.log("Received client welcome.");
-    this._gcReady = true;
-    this.emit("ready");
   }
+
+  if (this.debug) util.log("Received client welcome.");
+
+  // Parse any caches
+  this._gcReady = true;
+  this._handleWelcomeCaches(message);
+  this.emit("ready");
 };
 
 handlers[Dota2.EGCBaseClientMsg.k_EMsgGCClientConnectionStatus] = function gcClientConnectionStatus(message) {
@@ -171,11 +177,13 @@ handlers[Dota2.EGCBaseClientMsg.k_EMsgGCClientConnectionStatus] = function gcCli
 
 Dota2.Dota2Client = Dota2Client;
 
+require("./handlers/cache");
 require("./handlers/inventory");
 require("./handlers/chat");
 require("./handlers/guild");
 require("./handlers/community");
 require("./handlers/match");
 require("./handlers/lobbies");
+require("./handlers/parties");
 require("./handlers/leagues");
 require("./handlers/sourcetv");
