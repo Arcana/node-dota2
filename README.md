@@ -22,6 +22,14 @@ var Steam = require('steam'),
 ###AccountID
 The current steam ID of the SteamClient converted to Dota 2 Account ID format. Not available until `launch` is called.
 
+###Lobby
+The current lobby object (see CSODOTALobby). Null if the bot is not in a lobby.
+
+###Party
+The current party object (see CSODOTAParty). Null if the bot is not in a party.
+
+###PartyInvite
+The current party invite object (see CSODOTAPartyInvite). Null if the bot does not have an active incoming party invite.
 
 ## Methods
 All methods require the SteamClient instance to be logged on.
@@ -139,7 +147,41 @@ Note:  There is a server-side rate-limit of 100 requests per 24 hours on this me
 
 #### matchmakingStatsRequest()
 
-Sends a message to the Game Coordinator requesting some matchmaking stats. Listen for the `matchmakingStatsData` event for the Game Coordinator's response (cannot take a callback because of Steam's backend, or RJackson's incompetence; not sure which). Rqeuired the GC to be ready (listen for the `ready` event before calling).
+Sends a message to the Game Coordinator requesting some matchmaking stats. Listen for the `matchmakingStatsData` event for the Game Coordinator's response (cannot take a callback because of Steam's backend, or RJackson's incompetence; not sure which). Requires the GC to be ready (listen for the `ready` event before calling).
+
+
+### Parties
+
+### respondPartyInvite(id, accept)
+* `[id]` Number, party ID.
+* `[accept]` Accept or decline the invite.
+
+Responds to an incoming party invite. See the `PartyInvite` property.
+
+
+### inviteToParty(id)
+* `[id]` The steam ID to invite.
+
+Invites a player to a party. This will create a new party if you aren't
+in one.
+
+
+### kickFromParty(id)
+* `[id]` The steam ID to kick.
+
+Kicks a player from the party. This will create a new party if you aren't
+in one.
+
+
+### setPartyCoach(coach)
+* `[coach]` Boolean, if the bot wants to be coach or not.
+
+Set the bot's status as a coach.
+
+
+### leaveParty()
+
+Leaves the current party. See the `Party` property.
 
 
 ### Lobbies
@@ -323,24 +365,16 @@ Emitted when te GC response to the `matchmakingStatsRequest` method.  The array 
     "PerfectWorldUnicom":   {"matchgroup": "12"}
 ```
 
-### `practiceLobbyResponse`(`result`, `practiceLobbyJoinResponse`)
-* `result` - The result object.
-* `practiceLobbyJoinResponse` - The response.
+### `practiceLobbyUpdate` (`lobby`)
+* `lobby` - The full lobby object (see CSODOTALobby).
 
 
-The GC emits a `PracticeLobbyResponse` after you either leave/join/fail to leave/fail to join a lobby, however, the result in the message is usually completely wrong. Generally when creating a lobby it will respond (after a successful creation) with `DOTA_JOIN_RESULT_ALREADY_IN_GAME`. Instead, we now parse a couple other responses to get the lobby ID when creating a lobby, and we correctly parse this response for an actual join. In some cases it might still be useful to subscribe to this response.
-
-### `practiceLobbyCreateResponse`(`practiceLobbyCreateResponse`, `lobbyID`)
-* `practiceLobbyCreateResponse` - The result object from practiceLobbyCreateResponse.
-* `lobbyID` - The ID of the created lobby.
-
-Emitted when the GC responds to `createPracticeLobby` method. Note that this is a somewhat hacky and interpreted method. The other method previously used to detect this always returned an error when creating the lobby (even when successful) and was therefore completely useless.
-
-### `practiceLobbyUpdate `(`response` `practiceLobbyInfo`)
-* `response` - The full `CMsgSOMultipleObjects` object.
-* `practiceLobbyInfo` - The information about the lobby.
-
-Emitted when the GC sends a lobby update event.
+Emitted when the GC sends a lobby snapshot. The GC is incredibly
+inefficient and will send the entire object even if it's a minor update.
+You can use this to detect when a lobby has been entered / created
+successfully as well. Note that the `Lobby` property will be the old
+value until after this event completes to allow comparison between the
+two.
 
 
 ### `practiceLobbyJoinResponse`(`result` `practiceLobbyJoinResponse`)
@@ -348,6 +382,52 @@ Emitted when the GC sends a lobby update event.
 * `practiceLobbyJoinResponse` - The raw response object.
 
 Emitted when the GC responds to `joinPracticeLobby` method.
+
+
+### `practiceLobbyCleared` ()
+
+
+Emitted when leaving a lobby (aka, the lobby is cleared). This can
+happen when kicked, upon leaving a lobby, etc. There are other callbacks
+to tell when the bot has been kicked.
+
+
+### `partyUpdate` (`party`)
+* `party` - The full party object (see CSODOTAParty).
+
+
+Emitted when the GC sends a party snapshot. The GC is incredibly
+inefficient and will send the entire object even if it's a minor update.
+You can use this to detect when a party has been entered / created
+successfully as well. Note that the `Party` property will be the old
+value until after this event completes to allow comparison between the
+two.
+
+
+### `partyCleared` ()
+
+
+Emitted when leaving a party (aka, the party is cleared). This can
+happen when kicked, upon leaving a party, etc. There are other callbacks
+to tell when the bot has been kicked.
+
+
+### `partyInviteUpdate` (`party`)
+* `partyInvite` - The full party invite object (see CSODOTAPartyInvite).
+
+
+Emitted when the GC sends a party invite snapshot. The GC is incredibly
+inefficient and will send the entire object even if it's a minor update.
+You can use this to detect when an incoming party invite has been sent.
+Note that the `PartyInvite` property will be the old
+value until after this event completes to allow comparison between the two.
+
+
+### `partyInviteCleared` ()
+
+
+Emitted when the Party Invite is cleared, for example when
+accepting/rejecting it or when the party is closed.
 
 
 ### `liveLeagueGamesUpdate` (`null`, `liveLeaguesResponse`)
@@ -425,7 +505,7 @@ Use this to pass valid server region data to `createPracticeLobby`.
 * `DOTA_GAMEMODE_LP: 12` - Least Played
 * `DOTA_GAMEMODE_POOL1: 13` - Limited Heroes
 * `DOTA_GAMEMODE_FH: 14` - Compendium
-* `DOTA_GAMEMODE_CUSTOM: 15` - Unknown
+* `DOTA_GAMEMODE_CUSTOM: 15` - Unknown, probably ti4 techies reveal.
 
 Use this to pass valid game mode data to `createPracticeLobby`.
 

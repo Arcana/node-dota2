@@ -7,7 +7,7 @@
 TMP_FOLDER="/tmp/SteamKit"
 DOTA_PROTOS_PATH="$TMP_FOLDER/Resources/Protobufs/dota"
 
-git clone https://github.com/SteamRE/SteamKit.git $TMP_FOLDER
+git clone https://github.com/paralin/Dota2.git $TMP_FOLDER
 
 # this will link the necessary google protos
 ln -s $DOTA_PROTOS_PATH/../google $DOTA_PROTOS_PATH/

@@ -9,15 +9,17 @@ var EventEmitter = require('events').EventEmitter,
     protoMask = 0x80000000,
     Dota2 = exports;
 
-var Dota2Client = function Dota2Client(steamClient, debug) {
+var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
   EventEmitter.call(this);
 
   this.debug = debug || false;
+  this.debugMore = debugMore || false;
   this._client = steamClient;
   this._appid = 570;
   this.chatChannels = []; // Map channel names to channel data.
   this._gcReady = false,
   this._gcClientHelloIntervalId = null;
+  this._gcConnectionStatus = Dota2.GCConnectionStatus.GCConnectionStatus_NO_SESSION;
 
   var self = this;
   this._client.on("fromGC", function fromGC(app, type, message, callback) {
@@ -25,7 +27,7 @@ var Dota2Client = function Dota2Client(steamClient, debug) {
     callback = callback || null;
 
     var kMsg = type & ~protoMask;
-    if (self.debug) util.log("Dota2 fromGC: " + [app, kMsg].join(", "));  // TODO:  Turn type-protoMask into key name.
+    if (self.debugMore) util.log("Dota2 fromGC: " + [app, kMsg].join(", "));  // TODO:  Turn type-protoMask into key name.
 
     if (kMsg in self._handlers) {
       if (callback) {
@@ -41,6 +43,22 @@ var Dota2Client = function Dota2Client(steamClient, debug) {
   });
 
   this._sendClientHello = function() {
+    if(self._gcReady)
+    {
+      if(self._gcClientHelloIntervalId)
+      {
+        clearInterval(self._gcClientHelloIntervalId);
+        self._gcClientHelloIntervalId = null;
+      }
+      return;
+    }
+    if(self._gcClientHelloCount > 10)
+    {
+      if(self.debug) util.log("ClientHello has taken longer than 30 seconds! Reporting timeout...");
+      self._gcClientHelloCount = 0;
+      self.emit("hellotimeout");
+    }
+
     if (self.debug) util.log("Sending ClientHello");
     if (!self._client) {
       util.log("Where the fuck is _client?");
@@ -48,6 +66,8 @@ var Dota2Client = function Dota2Client(steamClient, debug) {
     else {
       self._client.toGC(self._appid, (Dota2.EGCBaseClientMsg.k_EMsgGCClientHello | protoMask), gcsdk_gcmessages.CMsgClientHello.serialize({}));
     }
+
+    self._gcClientHelloCount++;
   };
 };
 util.inherits(Dota2Client, EventEmitter);
@@ -69,10 +89,20 @@ Dota2Client.prototype.launch = function() {
   /* Reports to Steam that we are running Dota 2. Initiates communication with GC with EMsgGCClientHello */
   if (this.debug) util.log("Launching Dota 2");
   this.AccountID = this.ToAccountID(this._client.steamID);
+  this.Party = null;
+  this.Lobby = null;
+  this.PartyInvite = null;
   this._client.gamesPlayed([this._appid]);
 
   // Keep knocking on the GCs door until it accepts us.
-  this._gcClientHelloIntervalId = setInterval(this._sendClientHello, 2500);
+  // This is very bad practice and quite trackable.
+  // The real client tends to send only one of these.
+  // Really we should just send one when the connection status is GC online
+  this._gcClientHelloCount = 0;
+  this._gcClientHelloIntervalId = setInterval(this._sendClientHello, 6000);
+
+  //Also immediately send clienthello
+  setTimeout(this._sendClientHello, 1000);
 };
 
 Dota2Client.prototype.exit = function() {
@@ -94,24 +124,28 @@ Dota2Client.prototype.exit = function() {
 
 var handlers = Dota2Client.prototype._handlers = {};
 
-handlers[Dota2.EGCBaseClientMsg.k_EMsgGCClientWelcome] = function clientWelcomeHandler() {
+handlers[Dota2.EGCBaseClientMsg.k_EMsgGCClientWelcome] = function clientWelcomeHandler(message) {
   /* Response to our k_EMsgGCClientHello, now we can execute other GC commands. */
 
   // Only execute if _gcClientHelloIntervalID, otherwise it's already been handled (and we don't want to emit multiple 'ready');
   if (this._gcClientHelloIntervalId) {
     clearInterval(this._gcClientHelloIntervalId);
     this._gcClientHelloIntervalId = null;
-
-    if (this.debug) util.log("Received client welcome.");
-    this._gcReady = true;
-    this.emit("ready");
   }
+
+  if (this.debug) util.log("Received client welcome.");
+
+  // Parse any caches
+  this._gcReady = true;
+  this._handleWelcomeCaches(message);
+  this.emit("ready");
 };
 
 handlers[Dota2.EGCBaseClientMsg.k_EMsgGCClientConnectionStatus] = function gcClientConnectionStatus(message) {
   /* Catch and handle changes in connection status, cuz reasons u know. */
 
   var status = gcsdk_gcmessages.CMsgConnectionStatus.parse(message).status;
+  if(status) this._gcConnectionStatus = status;
 
   switch (status) {
     case Dota2.GCConnectionStatus.GCConnectionStatus_HAVE_SESSION:
@@ -132,7 +166,7 @@ handlers[Dota2.EGCBaseClientMsg.k_EMsgGCClientConnectionStatus] = function gcCli
 
       // Only execute if !_gcClientHelloIntervalID, otherwise it's already been handled (and we don't want to emit multiple 'unready');
       if (!this._gcClientHelloIntervalId) {
-        this._gcClientHelloIntervalId = setInterval(this._sendClientHello, 2500); // Continually try regain GC session
+        this._gcClientHelloIntervalId = setInterval(this._sendClientHello, 5000); // Continually try regain GC session
 
         this._gcReady = false;
         this.emit("unready");
@@ -143,11 +177,13 @@ handlers[Dota2.EGCBaseClientMsg.k_EMsgGCClientConnectionStatus] = function gcCli
 
 Dota2.Dota2Client = Dota2Client;
 
+require("./handlers/cache");
 require("./handlers/inventory");
 require("./handlers/chat");
 require("./handlers/guild");
 require("./handlers/community");
 require("./handlers/match");
 require("./handlers/lobbies");
+require("./handlers/parties");
 require("./handlers/leagues");
 require("./handlers/sourcetv");
