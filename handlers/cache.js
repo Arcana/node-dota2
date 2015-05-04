@@ -51,6 +51,7 @@ Dota2.Dota2Client.prototype._handleWelcomeCaches = function handleWelcomeCaches(
 {
   var welcome = gcsdk_gcmessages.CMsgClientWelcome.parse(message);
   var _self = this;
+
   if(welcome.outofdate_subscribed_caches)
     welcome.outofdate_subscribed_caches.forEach(function(cache){
       cache.objects.forEach(function(obj){
@@ -66,11 +67,17 @@ handlers[Dota2.ESOMsg.k_ESOMsg_CacheSubscribed] = function onCacheSubscribed(mes
   var subscribe = gcsdk_gcmessages.CMsgSOCacheSubscribed.parse(message);
   var _self = this;
 
-  if(this.debug) util.log("Cache subscribed, "+subscribe.owner_soid.id);
+  if(this.debug){
+    if(subscribe.owner_soid)
+      util.log("Cache subscribed, "+subscribe.owner_soid.id);
+    else
+      util.log("Cache subscribed, unknown owner_soid.");
+  }
 
-  subscribe.objects.forEach(function(obj){
-    handleSubscribedType.call(_self, obj);
-  });
+  if(subscribe.owner_soid)
+    subscribe.objects.forEach(function(obj){
+      handleSubscribedType.call(_self, obj);
+    });
 };
 
 handlers[Dota2.ESOMsg.k_ESOMsg_CacheUnsubscribed] = function onCacheUnsubscribed(message) {
