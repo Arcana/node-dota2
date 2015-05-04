@@ -78,6 +78,16 @@ handlers[Dota2.ESOMsg.k_ESOMsg_CacheSubscribed] = function onCacheSubscribed(mes
     });
 };
 
+handlers[Dota2.ESOMsg.k_ESOMsg_UpdateMultiple] = function onCacheSubscribed(message) {
+  var multi = gcsdk_gcmessages.CMsgSOMultipleObjects.parse(message);
+  var _self = this;
+
+  if(multi.objects_modified)
+    multi.objects_modified.forEach(function(obj){
+      handleSubscribedType.call(_self, obj);
+    });
+};
+
 handlers[Dota2.ESOMsg.k_ESOMsg_CacheUnsubscribed] = function onCacheUnsubscribed(message) {
   var unsubscribe = gcsdk_gcmessages.CMsgSOCacheUnsubscribed.parse(message);
   var _self = this;
