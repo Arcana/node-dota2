@@ -14,8 +14,6 @@ var cacheTypeIDs = {
 };
 
 // Handlers
-//XXX: Implement handler for Welcome, parse outofdate_subscribed_caches
-
 function handleSubscribedType(obj)
 {
   switch(obj.type_id)
