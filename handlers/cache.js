@@ -66,16 +66,12 @@ handlers[Dota2.ESOMsg.k_ESOMsg_CacheSubscribed] = function onCacheSubscribed(mes
   var _self = this;
 
   if(this.debug){
-    if(subscribe.owner_soid)
-      util.log("Cache subscribed, "+subscribe.owner_soid.id);
-    else
-      util.log("Cache subscribed, unknown owner_soid.");
+    util.log("Cache subscribed, type "+subscribe.objects[0].type_id);
   }
 
-  if(subscribe.owner_soid)
-    subscribe.objects.forEach(function(obj){
-      handleSubscribedType.call(_self, obj);
-    });
+  subscribe.objects.forEach(function(obj){
+    handleSubscribedType.call(_self, obj);
+  });
 };
 
 handlers[Dota2.ESOMsg.k_ESOMsg_UpdateMultiple] = function onCacheSubscribed(message) {
