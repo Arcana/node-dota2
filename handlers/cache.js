@@ -92,17 +92,17 @@ handlers[Dota2.ESOMsg.k_ESOMsg_CacheUnsubscribed] = function onCacheUnsubscribed
   var unsubscribe = gcsdk_gcmessages.CMsgSOCacheUnsubscribed.parse(message);
   var _self = this;
 
-  if(this.debug) util.log("Cache unsubscribed, "+unsubscribe.owner_soid.id);
+  if(this.debug) util.log("Cache unsubscribed, "+unsubscribe.owner_soid);
 
-  if(this.Lobby && unsubscribe.owner_soid.id === this.Lobby.lobby_id)
+  if(this.Lobby && unsubscribe.owner_soid === this.Lobby.lobby_id)
   {
     this.Lobby = null;
     this.emit("practiceLobbyCleared");
-  }else if(this.Party && unsubscribe.owner_soid.id === this.Party.party_id)
+  }else if(this.Party && unsubscribe.owner_soid === this.Party.party_id)
   {
     this.Party = null;
     this.emit("partyCleared");
-  }else if(this.PartyInvite && unsubscribe.owner_soid.id === this.PartyInvite.group_id)
+  }else if(this.PartyInvite && unsubscribe.owner_soid === this.PartyInvite.group_id)
   {
     this.PartyInvite = null;
     this.emit("partyInviteCleared");
