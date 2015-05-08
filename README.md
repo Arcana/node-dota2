@@ -191,14 +191,13 @@ Leaves the current party. See the `Party` property.
 
 Sends a message to the Game Coordinator requesting to join a lobby.  Provide a callback or listen for `practiceLobbyJoinResponse` for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
-#### createPracticeLobby([gameName], [password], [serverRegion], [gameMode], [callback])
+#### createPracticeLobby([gameName], [password], [serverRegion], [gameMode])
 * `[gameName]` Display name for the lobby (optional).
 * `[password]` Password to restrict access to the lobby (optional).
 * `[serverRegion]` Server region for the lobby` see [ServerRegion Enum](#Enums) (optional).
 * `[gameMode]` Gamemode for the lobby` see [GameMode Enum](#Enums)(optional).
-* `[callback]` - optional callback` returns args: `err` response`.
 
-Sends a message to the Game Coordinator requesting to create a lobby.  Provide a callback or listen for `practiceLobbyCreateResponse` for the interpreted response. Requires the GC to be ready (listen for the `ready` event before calling).
+Sends a message to the Game Coordinator requesting to create a lobby.  Listen for `practiceLobbyUpdate`  response for a snapshot-update of the newly created lobby. Requires the GC to be ready (listen for the `ready` event before calling).
 
 #### balancedShuffleLobby()
 

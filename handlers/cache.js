@@ -66,16 +66,12 @@ handlers[Dota2.ESOMsg.k_ESOMsg_CacheSubscribed] = function onCacheSubscribed(mes
   var _self = this;
 
   if(this.debug){
-    if(subscribe.owner_soid)
-      util.log("Cache subscribed, "+subscribe.owner_soid.id);
-    else
-      util.log("Cache subscribed, unknown owner_soid.");
+    util.log("Cache subscribed, type "+subscribe.objects[0].type_id);
   }
 
-  if(subscribe.owner_soid)
-    subscribe.objects.forEach(function(obj){
-      handleSubscribedType.call(_self, obj);
-    });
+  subscribe.objects.forEach(function(obj){
+    handleSubscribedType.call(_self, obj);
+  });
 };
 
 handlers[Dota2.ESOMsg.k_ESOMsg_UpdateMultiple] = function onCacheSubscribed(message) {
@@ -92,17 +88,17 @@ handlers[Dota2.ESOMsg.k_ESOMsg_CacheUnsubscribed] = function onCacheUnsubscribed
   var unsubscribe = gcsdk_gcmessages.CMsgSOCacheUnsubscribed.parse(message);
   var _self = this;
 
-  if(this.debug) util.log("Cache unsubscribed, "+unsubscribe.owner_soid.id);
+  if(this.debug) util.log("Cache unsubscribed, "+unsubscribe.owner_soid);
 
-  if(this.Lobby && unsubscribe.owner_soid.id === this.Lobby.lobby_id)
+  if(this.Lobby && unsubscribe.owner_soid === this.Lobby.lobby_id)
   {
     this.Lobby = null;
     this.emit("practiceLobbyCleared");
-  }else if(this.Party && unsubscribe.owner_soid.id === this.Party.party_id)
+  }else if(this.Party && unsubscribe.owner_soid === this.Party.party_id)
   {
     this.Party = null;
     this.emit("partyCleared");
-  }else if(this.PartyInvite && unsubscribe.owner_soid.id === this.PartyInvite.group_id)
+  }else if(this.PartyInvite && unsubscribe.owner_soid === this.PartyInvite.group_id)
   {
     this.PartyInvite = null;
     this.emit("partyInviteCleared");
