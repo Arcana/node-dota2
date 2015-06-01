@@ -1,16 +1,16 @@
 #!/bin/sh
 
 #
-# This file will checkout the latest SteamKit repo and regenerate the dota 2 protobufs, no config required
+# This file will checkout the latest Dota2 repo and regenerate the dota 2 protobufs, no config required
 # Installation of Protobuf library required: https://code.google.com/p/protobuf/downloads/list
 #
-TMP_FOLDER="/tmp/SteamKit"
+TMP_FOLDER="/tmp/Dota2"
 DOTA_PROTOS_PATH="$TMP_FOLDER/Resources/Protobufs/dota"
 
 git clone https://github.com/paralin/Dota2.git $TMP_FOLDER
 
 # this will link the necessary google protos
-ln -s $DOTA_PROTOS_PATH/../google $DOTA_PROTOS_PATH/
+ln -s $DOTA_PROTOS_PATH/../google $DOTA_PROTOS_PATH
 
 # list of files to be generated
 for FILENAME in base_gcmessages gcsdk_gcmessages dota_gcmessages_client dota_gcmessages_common
