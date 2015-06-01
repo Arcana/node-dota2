@@ -19,6 +19,6 @@ do
 	echo "generated $FILENAME"
 done
 
-#rm -rf $TMP_FOLDER
+rm -rf $TMP_FOLDER
 
 echo "done!"
