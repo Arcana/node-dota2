@@ -33,6 +33,21 @@ Dota2.Dota2Client.prototype.leaguesInMonthRequest = function(month, year, callba
   this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCLeaguesInMonthRequest | protoMask), payload, callback);
 };
 
+Dota2.Dota2Client.prototype.leagueInfo = function(callback) {
+  callback = callback || null;
+
+  /* Request all available official leagues */
+
+  if (!this._gcReady) {
+    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+    return null;
+  }
+
+  if (this.debug) util.log("Sending CMsgRequestLeagueInfo");
+  var payload = dota_gcmessages_client.CMsgRequestLeagueInfo.serialize({});
+
+  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgRequestLeagueInfo | protoMask), payload, callback);
+};
 
 // Handlers
 
@@ -60,3 +75,17 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgDOTALiveLeagueGameUpdate] = function(message, ca
   this.emit("liveLeagueGamesUpdate", response.liveLeagueGames);
   if(callback) callback(null, response.liveLeagueGames);
 };
+
+handlers[Dota2.EDOTAGCMsg.k_EMsgResponseLeagueInfo] = function onLeagueInfoResponse(message, callback) {
+  callback = callback || null;
+  var response = dota_gcmessages_client.CMsgResponseLeagueInfo.parse(message);
+
+  if (response.leagues.length > 0) {
+    if (this.debug) util.log("Received information for " + response.leagues.length + " leagues");
+    this.emit("leagueInfo", response);
+    if (callback) callback(null, response);
+  } else {
+    if (this.debug) util.log("Received a bad leagueInfo response", response);
+    if (callback) callback(response);
+  }
+}
