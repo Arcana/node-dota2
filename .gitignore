@@ -4,3 +4,5 @@ node_modules
 test/node_modules
 *.swp
 .idea
+sentry
+servers

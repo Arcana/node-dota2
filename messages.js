@@ -1,4 +1,4 @@
-var Dota2 = require("../index");
+var Dota2 = require("./index");
 
 // TODO: Autogenerate these from SteamRE resources, in to seperate file.
 // Warning:  These values can change with Dota 2 updates.
