@@ -1,13 +1,11 @@
 {
   "name": "dota2",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "dependencies": {
-    "protobufjs": "4.0.0-b2",
-    "deferred": "0.7.2",
-    "bignumber.js": "2.0.5",
-    "merge": ">= 1.2.0"
-  },
-  "peerDependencies": {
+    "bignumber.js": "2.0.7",
+    "deferred": "^0.7.2",
+    "merge": ">= 1.2.0",
+    "protobufjs": "^4.0.0",
     "steam": ">= 0.6.8"
   },
   "readmeFilename": "README.md",
