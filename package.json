@@ -4,9 +4,9 @@
   "dependencies": {
     "bignumber.js": "2.0.7",
     "deferred": "^0.7.2",
-    "merge": ">= 1.2.0",
+    "merge": "^1.2.0",
     "protobufjs": "^4.0.0",
-    "steam": ">= 0.6.8"
+    "steam": "0.6.8"
   },
   "readmeFilename": "README.md",
   "description": "A node-steam plugin for Dota 2.",
