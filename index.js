@@ -38,7 +38,7 @@ var Dota2Client = function Dota2Client(steamUser, debug, debugMore) {
   this.protoBufHeader = {
     "msg":    "",
     "proto":  {
-      "client_steam_id": this.ToSteamID(this._client.steamID),
+      "client_steam_id": this._client.steamID,
       "source_app_id":  this._appid
     }
   };
