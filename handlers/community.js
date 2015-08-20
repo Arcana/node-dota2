@@ -1,27 +1,29 @@
 var Dota2 = require("../index"),
-    util = require("util"),
-    protoMask = 0x80000000;
+    util = require("util");
 
 // Methods
 
 Dota2.Dota2Client.prototype.getPlayerMatchHistory = function(accountId, matchId, callback) {
-    callback = callback || null;
-    /* Sends a message to the Game Coordinator requesting `accountId`'s player match history.  Listen for `playerMatchHistoryData` event for Game Coordinator's response. */
-    if (!this._gcReady) {
-        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-        return null;
-    }
+  callback = callback || null;
+  /* Sends a message to the Game Coordinator requesting `accountId`'s player match history.  Listen for `playerMatchHistoryData` event for Game Coordinator's response. */
+  if (!this._gcReady) {
+      if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+      return null;
+  }
 
-    if (this.debug) util.log("Sending player match history request");
-    var payload = new Dota2.schema.CMsgDOTAGetPlayerMatchHistory({
-        "accountId": accountId,
-        "startAtMatchId": matchId,
-        "matchesRequested": 13,
-        "heroId": 0,
-        "requestId": accountId
-    });
-
-    this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgDOTAGetPlayerMatchHistory | protoMask), payload.toBuffer(), callback);
+  if (this.debug) util.log("Sending player match history request");
+  var payload = new Dota2.schema.CMsgDOTAGetPlayerMatchHistory({
+      "accountId": accountId,
+      "startAtMatchId": matchId,
+      "matchesRequested": 13,
+      "heroId": 0,
+      "requestId": accountId
+  });
+  this.protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgDOTAGetPlayerMatchHistory;
+  this._gc.send(this.protoBufHeader,
+                payload.toBuffer(),
+                callback
+  );
 };
 
 Dota2.Dota2Client.prototype.profileRequest = function(accountId, requestName, callback) {
@@ -38,8 +40,11 @@ Dota2.Dota2Client.prototype.profileRequest = function(accountId, requestName, ca
     "accountId": accountId,
     "requestName": requestName
   });
-
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCProfileRequest | protoMask), payload.toBuffer(), callback);
+  this.protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCProfileRequest;
+  this._gc.send(this.protoBufHeader,
+                payload.toBuffer(),
+                callback
+  );
 };
 
 Dota2.Dota2Client.prototype.passportDataRequest = function(accountId, callback) {
@@ -53,8 +58,11 @@ Dota2.Dota2Client.prototype.passportDataRequest = function(accountId, callback) 
 
   if (this.debug) util.log("Sending passport data request");
   var payload = new Dota2.schema.CMsgPassportDataRequest({"accountId": accountId});
-
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCPassportDataRequest | protoMask), payload.toBuffer(), callback);
+  this.protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCPassportDataRequest;
+  this._gc.send(this.protoBufHeader,
+                payload.toBuffer(),
+                callback
+  );
 };
 
 Dota2.Dota2Client.prototype.hallOfFameRequest = function(week, callback) {
@@ -71,8 +79,11 @@ Dota2.Dota2Client.prototype.hallOfFameRequest = function(week, callback) {
   var payload = new Dota2.schema.CMsgDOTAHallOfFameRequest({
     "week": week,
   });
-
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCHallOfFameRequest | protoMask), payload.toBuffer(), callback);
+  this.protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCHallOfFameRequest;
+  this._gc.send(this.protoBufHeader,
+                payload.toBuffer(),
+                callback
+  );
 };
 
 

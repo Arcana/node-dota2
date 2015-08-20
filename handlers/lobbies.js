@@ -1,6 +1,5 @@
 var Dota2 = require("../index"),
-    util = require("util"),
-    protoMask = 0x80000000;
+    util = require("util");
 
 // Methods
 Dota2.Dota2Client.prototype.createPracticeLobby = function(game_name, password, server_region, game_mode, callback) {
@@ -25,8 +24,11 @@ Dota2.Dota2Client.prototype.createPracticeLobby = function(game_name, password, 
     "passKey": password,
     }
   });
-
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyCreate | protoMask), payload.toBuffer(), callback);
+  this.protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyCreate;
+  this._gc.send(this.protoBufHeader,
+                payload.toBuffer(),
+                callback
+  );
 };
 
 Dota2.Dota2Client.prototype.configPracticeLobby = function(id, options, callback){
@@ -73,8 +75,11 @@ Dota2.Dota2Client.prototype.configPracticeLobby = function(id, options, callback
   }
 
   var payload = new Dota2.schema.CMsgPracticeLobbySetDetails(command);
-
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbySetDetails | protoMask), payload.toBuffer(), callback);
+  this.protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbySetDetails;
+  this._gc.send(this.protoBufHeader,
+                payload.toBuffer(),
+                callback
+  );
 };
 
 Dota2.Dota2Client.prototype.practiceLobbyListRequest = function(callback){
@@ -87,8 +92,11 @@ Dota2.Dota2Client.prototype.practiceLobbyListRequest = function(callback){
   if (this.debug) util.log("Sending CMsgPracticeLobbyList request");
   var payload = new Dota2.schema.CMsgPracticeLobbyList({
   });
-
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyList | protoMask), payload.toBuffer(), callback);
+  this.protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyList;
+  this._gc.send(this.protoBufHeader,
+                payload.toBuffer(),
+                callback
+  );
 };
 
 Dota2.Dota2Client.prototype.friendPracticeLobbyListRequest = function(callback){
@@ -101,8 +109,11 @@ Dota2.Dota2Client.prototype.friendPracticeLobbyListRequest = function(callback){
   if (this.debug) util.log("Sending CMsgFriendPracticeLobbyListRequest request");
   var payload = new Dota2.schema.CMsgFriendPracticeLobbyListRequest({
   });
-
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCFriendPracticeLobbyListRequest | protoMask), payload.toBuffer(), callback);
+  this.protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCFriendPracticeLobbyListRequest;
+  this._gc.send(this.protoBufHeader,
+                payload.toBuffer(),
+                callback
+  );
 };
 
 Dota2.Dota2Client.prototype.balancedShuffleLobby = function(callback){
@@ -113,8 +124,11 @@ Dota2.Dota2Client.prototype.balancedShuffleLobby = function(callback){
     return null;
   }
   var payload = new Dota2.schema.CMsgBalancedShuffleLobby({});
-
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCBalancedShuffleLobby | protoMask), payload.toBuffer(), callback);
+  this.protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCBalancedShuffleLobby;
+  this._gc.send(this.protoBufHeader,
+                payload.toBuffer(),
+                callback
+  );
 };
 
 //TODO: figure out the enum for team
@@ -128,8 +142,17 @@ Dota2.Dota2Client.prototype.setLobbyTeamSlot = function(team, slot, callback){
 
   if (this.debug) util.log("Sending flip teams request");
   var payload = Dota2.schema.CMsgFlipLobbyTeams.serialize({});
-
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCFlipLobbyTeams | protoMask), payload, callback);
+  
+  this._gc.send({
+          "msg":    Dota2.EDOTAGCMsg.k_EMsgGCFlipLobbyTeams, 
+          "proto":  {
+            "client_steam_id": this._client.steamID,
+            "source_app_id":  this._appid
+          }
+        },
+        payload.toBuffer(),
+        callback
+  );
 };*/
 
 Dota2.Dota2Client.prototype.flipLobbyTeams = function(callback){
@@ -141,8 +164,11 @@ Dota2.Dota2Client.prototype.flipLobbyTeams = function(callback){
 
   if (this.debug) util.log("Sending flip teams request");
   var payload = new Dota2.schema.CMsgFlipLobbyTeams({});
-
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCFlipLobbyTeams | protoMask), payload.toBuffer(), callback);
+  this.protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCFlipLobbyTeams;
+  this._gc.send(this.protoBufHeader,
+                payload.toBuffer(),
+                callback
+  );
 };
 
 Dota2.Dota2Client.prototype.practiceLobbyKick = function(accountid, callback){
@@ -158,8 +184,11 @@ Dota2.Dota2Client.prototype.practiceLobbyKick = function(accountid, callback){
   var payload = new Dota2.schema.CMsgPracticeLobbyKick({
     account_id: accountid
   });
-
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyKick | protoMask), payload.toBuffer(), callback);
+  this.protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyKick;
+  this._gc.send(this.protoBufHeader,
+                payload.toBuffer(),
+                callback
+  );
 };
 
 Dota2.Dota2Client.prototype.joinPracticeLobby = function(id, password, callback){
@@ -176,23 +205,11 @@ Dota2.Dota2Client.prototype.joinPracticeLobby = function(id, password, callback)
     lobby_id: id,
     pass_key: password
   });
-
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyJoin | protoMask), payload.toBuffer(), callback);
-};
-
-Dota2.Dota2Client.prototype.startPracticeLobby = function(callback){
-  callback = callback || null;
-
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
-
-  if (this.debug) util.log("Sending match CMsgPracticeLobbyLeave request");
-  var payload = new Dota2.schema.CMsgPracticeLobbyLeave({
-  });
-
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyLeave | protoMask), payload.toBuffer(), callback);
+  this.protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyJoin;
+  this._gc.send(this.protoBufHeader,
+                payload.toBuffer(),
+                callback
+  );
 };
 
 Dota2.Dota2Client.prototype.leavePracticeLobby = function(callback) {
@@ -208,8 +225,11 @@ Dota2.Dota2Client.prototype.leavePracticeLobby = function(callback) {
   if (this.debug) util.log("Sending match CMsgPracticeLobbyLeave request");
   var payload = new Dota2.schema.CMsgPracticeLobbyLeave({
   });
-
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyLeave | protoMask), payload.toBuffer(), callback);
+  this.protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyLeave;
+  this._gc.send(this.protoBufHeader,
+                payload.toBuffer(),
+                callback
+  );
 };
 
 Dota2.Dota2Client.prototype.launchPracticeLobby = function(callback) {
@@ -225,8 +245,11 @@ Dota2.Dota2Client.prototype.launchPracticeLobby = function(callback) {
   if (this.debug) util.log("Sending match CMsgPracticeLobbyLaunch request");
   var payload = new Dota2.schema.CMsgPracticeLobbyLaunch({
   });
-
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyLaunch | protoMask), payload.toBuffer(), callback);
+  this.protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyLaunch;
+  this._gc.send(this.protoBufHeader,
+                payload.toBuffer(),
+                callback
+  );
 };
 
 

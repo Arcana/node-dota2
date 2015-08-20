@@ -1,53 +1,69 @@
 require("./messages");
+var steam = require("steam");
+
+const DOTA_APP_ID = 570;
+
 var EventEmitter = require('events').EventEmitter,
     fs = require("fs"),
     path = require("path"),
     util = require("util"),
     bignumber = require("bignumber.js"),
     ProtoBuf = require('protobufjs'),
-    protoMask = 0x80000000,
     Dota2 = exports;
 
 ProtoBuf.convertFieldsToCamelCase = true;
 var builder = ProtoBuf.newBuilder();
 ProtoBuf.loadProtoFile(path.join(__dirname, './proto/base_gcmessages.proto'), builder);
 ProtoBuf.loadProtoFile(path.join(__dirname, './proto/gcsdk_gcmessages.proto'), builder);
+ProtoBuf.loadProtoFile(path.join(__dirname, './proto/dota_gcmessages_client_fantasy.proto'), builder);
 ProtoBuf.loadProtoFile(path.join(__dirname, './proto/dota_gcmessages_client.proto'), builder);
+ProtoBuf.loadProtoFile(path.join(__dirname, './proto/dota_gcmessages_common.proto'), builder);
+ProtoBuf.loadProtoFile(path.join(__dirname, './proto/steammessages.proto'), builder);
 Dota2.schema = builder.build();
 
-var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
+var Dota2Client = function Dota2Client(steamUser, debug, debugMore) {
   EventEmitter.call(this);
 
   this.debug = debug || false;
   this.debugMore = debugMore || false;
-  this._client = steamClient;
-  this._appid = 570;
+  this._user = steamUser;
+  this._client = steamUser._client;
+  this._gc = new steam.SteamGameCoordinator(this._client, DOTA_APP_ID);
+  this._appid = DOTA_APP_ID;
   this.chatChannels = []; // Map channel names to channel data.
   this._gcReady = false;
   this._gcClientHelloIntervalId = null;
   this._gcConnectionStatus = Dota2.GCConnectionStatus.GCConnectionStatus_NO_SESSION;
+  // This should probably be reworked to use a CMsgProtoBufHeader object
+  this.protoBufHeader = {
+    "msg":    "",
+    "proto":  {
+      "client_steam_id": this.ToSteamID(this._client.steamID),
+      "source_app_id":  this._appid
+    }
+  };
 
   var self = this;
-  this._client.on("fromGC", function fromGC(app, type, message, callback) {
+  this._gc.on("message", function fromGC(header, body, callback) {
     /* Routes messages from Game Coordinator to their handlers. */
     callback = callback || null;
 
-    var kMsg = type & ~protoMask;
-    if (self.debugMore) util.log("Dota2 fromGC: " + [app, kMsg].join(", "));  // TODO:  Turn type-protoMask into key name.
+    var kMsg = header.msg;
+    if (self.debugMore) util.log("Dota2 fromGC: " + kMsg);  // TODO:  Turn type-protoMask into key name.
 
     if (kMsg in self._handlers) {
       if (callback) {
-        self._handlers[kMsg].call(self, message, callback);
+        self._handlers[kMsg].call(self, body, callback);
       }
       else {
-        self._handlers[kMsg].call(self, message);
+        self._handlers[kMsg].call(self, body);
       }
     }
     else {
       self.emit("unhandled", kMsg);
     }
   });
-  util.log(steamClient);
+  //util.log(steamUser);
 
   this._sendClientHello = function() {
     if(self._gcReady)
@@ -67,11 +83,19 @@ var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
     }
 
     if (self.debug) util.log("Sending ClientHello");
-    if (!self._client) {
-      util.log("Where the fuck is _client?");
+    if (!self._gc) {
+      util.log("Where the fuck is _gc?");
     }
-    else {
-      self._client.toGC(self._appid, (Dota2.EGCBaseClientMsg.k_EMsgGCClientHello | protoMask), new Dota2.schema.CMsgClientHello({}).toBuffer());
+    else {self._gc.send(
+        {
+          "msg":    Dota2.EGCBaseClientMsg.k_EMsgGCClientHello, 
+          "proto":  {
+            "client_steam_id": self._client.steamID,
+            "source_app_id":  self._appid
+          }
+        }, 
+        new Dota2.schema.CMsgClientHello({}).toBuffer()
+      );
     }
 
     self._gcClientHelloCount++;
@@ -97,7 +121,7 @@ Dota2Client.prototype.launch = function() {
   this.Party = null;
   this.Lobby = null;
   this.PartyInvite = null;
-  this._client.gamesPlayed([this._appid]);
+  this._user.gamesPlayed([{"game_id": this._appid}]);
 
   // Keep knocking on the GCs door until it accepts us.
   // This is very bad practice and quite trackable.

@@ -1,7 +1,6 @@
 var Dota2 = require("../index"),
     merge = require("merge"),
-    util = require("util"),
-    protoMask = 0x80000000;
+    util = require("util");
 
 // Methods
 
@@ -12,9 +11,9 @@ Dota2.Dota2Client.prototype.findSourceTVGames = function(filterOptions, callback
         if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
         return null;
     }
-
+    
     if (this.debug) util.log("Sending find SourceTV games request");
-
+    
     /* Using default params and merging with filterOptions, note: numGames is ignored from GC and > 6 causes no response at all */
     var payload = new Dota2.schema.CMsgFindSourceTVGames(merge({
         searchKey: '',
@@ -25,8 +24,11 @@ Dota2.Dota2Client.prototype.findSourceTVGames = function(filterOptions, callback
         teamGame: false,
         customGameId: 0,
     },filterOptions));
-
-    this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCFindSourceTVGames | protoMask), payload.toBuffer(), callback);
+    this.protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCFindSourceTVGames;
+    this._gc.send(this.protoBufHeader,
+                payload.toBuffer(),
+                callback
+    );
 };
 
 // Handlers

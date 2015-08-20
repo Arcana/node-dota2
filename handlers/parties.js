@@ -5,8 +5,7 @@ var Dota2 = require("../index"),
     dota_gcmessages_common = new Schema(fs.readFileSync(__dirname+"/../generated/dota_gcmessages_common.desc")),
     base_gcmessages = new Schema(fs.readFileSync(__dirname + "/../generated/base_gcmessages.desc")),
     gcsdk_gcmessages = new Schema(fs.readFileSync(__dirname + "/../generated/gcsdk_gcmessages.desc")),
-    dota_gcmessages_client = new Schema(fs.readFileSync(__dirname + "/../generated/dota_gcmessages_client.desc")),
-    protoMask = 0x80000000;
+    dota_gcmessages_client = new Schema(fs.readFileSync(__dirname + "/../generated/dota_gcmessages_client.desc"));
 
 // Methods
 Dota2.Dota2Client.prototype.respondPartyInvite = function(id, accept) {
@@ -33,8 +32,10 @@ Dota2.Dota2Client.prototype.respondPartyInvite = function(id, accept) {
     game_language_enum: 1,
     game_language_name: "english"
   });
-
-  this._client.toGC(this._appid, (Dota2.EGCBaseMsg.k_EMsgGCPartyInviteResponse | protoMask), payload, callback);
+  this.protoBufHeader.msg = Dota2.EGCBaseMsg.k_EMsgGCPartyInviteResponse;
+  this._gc.send(this.protoBufHeader,
+                payload.toBuffer()
+  );
 };
 
 Dota2.Dota2Client.prototype.leaveParty = function() {
@@ -47,8 +48,10 @@ Dota2.Dota2Client.prototype.leaveParty = function() {
 
   var payload = base_gcmessages.CMsgLeaveParty.serialize({});
   this.Party = null;
-
-  this._client.toGC(this._appid, (Dota2.EGCBaseMsg.k_EMsgGCLeaveParty | protoMask), payload, callback);
+  this.protoBufHeader.msg = Dota2.EGCBaseMsg.k_EMsgGCLeaveParty;
+  this._gc.send(this.protoBufHeader,
+                payload.toBuffer()
+  );
 };
 
 Dota2.Dota2Client.prototype.setPartyCoach = function(coach) {
@@ -67,8 +70,10 @@ Dota2.Dota2Client.prototype.setPartyCoach = function(coach) {
   if (this.debug) util.log("Setting coach slot: "+coach);
 
   var payload = dota_gcmessages_common.CMsgDOTAPartyMemberSetCoach.serialize({wants_coach: coach});
-
-  this._client.toGC(this._appid, (Dota2.k_EMsgGCPartyMemberSetCoach | protoMask), payload, callback);
+  this.protoBufHeader.msg = Dota2.k_EMsgGCPartyMemberSetCoach;
+  this._gc.send(this.protoBufHeader,
+                payload.toBuffer()
+  );
 };
 
 Dota2.Dota2Client.prototype.inviteToParty = function(steam_id) {
@@ -89,8 +94,10 @@ Dota2.Dota2Client.prototype.inviteToParty = function(steam_id) {
   var payload = base_gcmessages.CMsgInviteToParty.serialize({
     steam_id: steam_id
   });
-
-  this._client.toGC(this._appid, (Dota2.EGCBaseMsg.k_EMsgGCInviteToParty | protoMask), payload, callback);
+  this.protoBufHeader.msg = Dota2.EGCBaseMsg.k_EMsgGCInviteToParty;
+  this._gc.send(this.protoBufHeader,
+                payload.toBuffer()
+  );
 };
 
 Dota2.Dota2Client.prototype.kickFromParty = function(steam_id) {
@@ -111,8 +118,10 @@ Dota2.Dota2Client.prototype.kickFromParty = function(steam_id) {
   var payload = base_gcmessages.CMsgKickFromParty.serialize({
     steam_id: steam_id
   });
-
-  this._client.toGC(this._appid, (Dota2.EGCBaseMsg.k_EMsgGCKickFromParty | protoMask), payload, callback);
+  this.protoBufHeader.msg = Dota2.EGCBaseMsg.k_EMsgGCKickFromParty;
+  this._gc.send(this.protoBufHeader,
+                payload.toBuffer()
+  );
 };
 
 // Handlers

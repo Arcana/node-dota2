@@ -1,6 +1,5 @@
 var Dota2 = require("../index"),
-    util = require("util"),
-    protoMask = 0x80000000;
+    util = require("util");
 
 // Methods
 
@@ -18,8 +17,11 @@ Dota2.Dota2Client.prototype.matchDetailsRequest = function(matchId, callback) {
   var payload = new Dota2.schema.CMsgGCMatchDetailsRequest({
     "matchId": matchId
   });
-
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCMatchDetailsRequest | protoMask), payload.toBuffer(), callback);
+  this.protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCMatchDetailsRequest;
+  this._gc.send(this.protoBufHeader,
+                payload.toBuffer(),
+                callback
+  );
 };
 
 Dota2.Dota2Client.prototype.matchmakingStatsRequest = function() {
@@ -34,8 +36,11 @@ Dota2.Dota2Client.prototype.matchmakingStatsRequest = function() {
   if (this.debug) util.log("Sending matchmaking stats request");
   var payload = new Dota2.schema.CMsgDOTAMatchmakingStatsRequest({
   });
+  this.protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCMatchmakingStatsRequest;
+  this._gc.send(this.protoBufHeader,
+                payload.toBuffer()
+  );
 
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCMatchmakingStatsRequest | protoMask), payload.toBuffer());
 };
 
 

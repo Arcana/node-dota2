@@ -1,6 +1,5 @@
 var Dota2 = require("../index"),
-    util = require("util"),
-    protoMask = 0x80000000;
+    util = require("util");
 
 
 // Methods
@@ -16,8 +15,10 @@ Dota2.Dota2Client.prototype.requestGuildData = function() {
   var payload = Dota2.schema.CMsgDOTARequestGuildData({
     // Doesn't take anything.
   });
-
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCRequestGuildData | protoMask), payload.toBuffer());
+  this.protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCRequestGuildData;
+  this._gc.send(this.protoBufHeader,
+                payload.toBuffer()
+  );
 };
 
 Dota2.Dota2Client.prototype.inviteToGuild = function(guildId, targetAccountId, callback) {
@@ -34,8 +35,11 @@ Dota2.Dota2Client.prototype.inviteToGuild = function(guildId, targetAccountId, c
     "guildId": guildId,
     "targetAccountId": targetAccountId
   });
-
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCGuildInviteAccountRequest | protoMask), payload.toBuffer(), callback);
+  this.protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCGuildInviteAccountRequest;
+  this._gc.send(this.protoBufHeader,
+                payload.toBuffer(),
+                callback
+  );
 };
 
 Dota2.Dota2Client.prototype.cancelInviteToGuild = function(guildId, targetAccountId, callback) {
@@ -52,8 +56,11 @@ Dota2.Dota2Client.prototype.cancelInviteToGuild = function(guildId, targetAccoun
     "guildId": guildId,
     "targetAccountId": targetAccountId
   });
-
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCGuildCancelInviteRequest | protoMask), payload.toBuffer(), callback);
+  this.protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCGuildCancelInviteRequest;
+  this._gc.send(this.protoBufHeader,
+                payload.toBuffer(),
+                callback
+  );
 };
 
 Dota2.Dota2Client.prototype.setGuildAccountRole = function(guildId, targetAccountId, targetRole, callback) {
@@ -77,8 +84,11 @@ Dota2.Dota2Client.prototype.setGuildAccountRole = function(guildId, targetAccoun
     "targetAccountId": targetAccountId,
     "targetRole": targetRole
   });
-
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCGuildSetAccountRoleRequest | protoMask), payload.toBuffer(), callback);
+  this.protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCGuildSetAccountRoleRequest;
+  this._gc.send(this.protoBufHeader,
+                payload.toBuffer(),
+                callback
+  );
 };
 
 

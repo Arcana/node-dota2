@@ -1,6 +1,5 @@
 var Dota2 = require("../index"),
-    util = require("util"),
-    protoMask = 0x80000000;
+    util = require("util");
 
 // Methods
 
@@ -24,8 +23,11 @@ Dota2.Dota2Client.prototype.leaguesInMonthRequest = function(month, year, callba
     month: month,
     year: year
   });
-
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCLeaguesInMonthRequest | protoMask), payload.toBuffer(), callback);
+  this.protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCLeaguesInMonthRequest;
+  this._gc.send(this.protoBufHeader,
+                payload.toBuffer(),
+                callback
+  );
 };
 
 
