@@ -21,14 +21,16 @@ ProtoBuf.loadProtoFile(path.join(__dirname, './proto/dota_gcmessages_common.prot
 ProtoBuf.loadProtoFile(path.join(__dirname, './proto/steammessages.proto'), builder);
 Dota2.schema = builder.build();
 
-var Dota2Client = function Dota2Client(steamUser, debug, debugMore) {
+var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
   EventEmitter.call(this);
 
   this.debug = debug || false;
   this.debugMore = debugMore || false;
+  
+  var steamUser = new steam.SteamUser(steamClient);
   this._user = steamUser;
-  this._client = steamUser._client;
-  this._gc = new steam.SteamGameCoordinator(this._client, DOTA_APP_ID);
+  this._client = steamClient;
+  this._gc = new steam.SteamGameCoordinator(steamClient, DOTA_APP_ID);
   this._appid = DOTA_APP_ID;
   this.chatChannels = []; // Map channel names to channel data.
   this._gcReady = false;
