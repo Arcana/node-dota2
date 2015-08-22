@@ -5,6 +5,7 @@ var Dota2 = require("../index"),
     base_gcmessages = new Schema(fs.readFileSync(__dirname + "/../generated/base_gcmessages.desc")),
     gcsdk_gcmessages = new Schema(fs.readFileSync(__dirname + "/../generated/gcsdk_gcmessages.desc")),
     dota_gcmessages_client = new Schema(fs.readFileSync(__dirname + "/../generated/dota_gcmessages_client.desc")),
+    dota_gcmessages_common = new Schema(fs.readFileSync(__dirname + "/../generated/dota_gcmessages_common.desc")),
     protoMask = 0x80000000;
 
 var cacheTypeIDs = {

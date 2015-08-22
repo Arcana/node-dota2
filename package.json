@@ -2,26 +2,19 @@
   "name": "dota2",
   "version": "0.7.1",
   "dependencies": {
-    "protobuf": "*",
-    "deferred": "*",
-    "bignumber.js": "2.0.5",
-    "merge": ">= 0.0.2"
-  },
-  "peerDependencies": {
-    "steam": ">= 0.6.6"
+    "bignumber.js": "2.0.7",
+    "deferred": "^0.7.2",
+    "merge": "^1.2.0",
+    "protobufjs": "^4.0.0",
+    "steam": "^1.0.0"
   },
   "readmeFilename": "README.md",
   "description": "A node-steam plugin for Dota 2.",
   "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/RJacksonm1/node-dota2.git"
-  },
   "keywords": [
     "steam",
     "valve",
     "dota"
   ],
-  "author": "Rob Jackson",
   "license": "MIT"
 }
