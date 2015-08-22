@@ -12,9 +12,7 @@ Dota2.Dota2Client.prototype.requestGuildData = function() {
   }
 
   if (this.debug) util.log("Requesting current user guild data. ");
-  var payload = Dota2.schema.CMsgDOTARequestGuildData({
-    // Doesn't take anything.
-  });
+  var payload = new Dota2.schema.CMsgDOTARequestGuildData();
   this.protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCRequestGuildData;
   this._gc.send(this.protoBufHeader,
                 payload.toBuffer()
@@ -31,7 +29,7 @@ Dota2.Dota2Client.prototype.inviteToGuild = function(guildId, targetAccountId, c
   }
 
   if (this.debug) util.log("Inviting person to guild. " + [guildId, targetAccountId].join(", "));
-  var payload = Dota2.schema.CMsgDOTAGuildInviteAccountRequest({
+  var payload = new Dota2.schema.CMsgDOTAGuildInviteAccountRequest({
     "guildId": guildId,
     "targetAccountId": targetAccountId
   });
@@ -52,7 +50,7 @@ Dota2.Dota2Client.prototype.cancelInviteToGuild = function(guildId, targetAccoun
   }
 
   if (this.debug) util.log("Cancelling invite to guild. " + [guildId, targetAccountId].join(", "));
-  var payload = Dota2.schema.CMsgDOTAGuildCancelInviteRequest({
+  var payload = new Dota2.schema.CMsgDOTAGuildCancelInviteRequest({
     "guildId": guildId,
     "targetAccountId": targetAccountId
   });
@@ -79,7 +77,7 @@ Dota2.Dota2Client.prototype.setGuildAccountRole = function(guildId, targetAccoun
   }
 
   if (this.debug) util.log("Setting guild account role. " + [guildId, targetAccountId, targetRole].join(", "));
-  var payload = Dota2.schema.CMsgDOTAGuildSetAccountRoleRequest({
+  var payload = new Dota2.schema.CMsgDOTAGuildSetAccountRoleRequest({
     "guildId": guildId,
     "targetAccountId": targetAccountId,
     "targetRole": targetRole
