@@ -101,6 +101,13 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCGuildOpenPartyRefresh] = function onGuildOpenP
   this.emit("guildOpenPartyData", response.guildId, response.openParties, response);
 };
 
+handlers[Dota2.EDOTAGCMsg.k_EMsgGCGuildData] = function onGuildData(message) {
+  /* Second response from requestGuildData containing general info on the guild (id, members, invitation, ...) */
+  var response = Dota2.schema.CMsgDOTAGuildSDO.decode(message);
+  if (this.debug) util.log("Got guild data");
+  this.emit("guildData", response.guildId, response.members, response);
+};
+
 handlers[Dota2.EDOTAGCMsg.k_EMsgGCGuildInviteAccountResponse] = function onGuildInviteResponse(message, callback) {
   callback = callback || null;
   /* Response to inviting another player to a guild.
