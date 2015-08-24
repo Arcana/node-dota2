@@ -1,11 +1,5 @@
 var Dota2 = require("../index"),
-    fs = require("fs"),
-    util = require("util"),
-    Schema = require('protobuf').Schema,
-    base_gcmessages = new Schema(fs.readFileSync(__dirname + "/../generated/base_gcmessages.desc")),
-    gcsdk_gcmessages = new Schema(fs.readFileSync(__dirname + "/../generated/gcsdk_gcmessages.desc")),
-    dota_gcmessages_client = new Schema(fs.readFileSync(__dirname + "/../generated/dota_gcmessages_client.desc")),
-    protoMask = 0x80000000;
+    util = require("util");
 
 // Methods
 
@@ -18,9 +12,11 @@ Dota2.Dota2Client.prototype.setItemPositions = function(itemPositions) {
 
   if (this.debug) util.log("Setting item positions.");
   var payloadItemPositions = itemPositions.map(function(item){ return {"itemId": item[0], "position": item[1]}; }),
-    payload = base_gcmessages.CMsgSetItemPositions.serialize({"itemPositions": payloadItemPositions});
-
-  this._client.toGC(this._appid, (Dota2.EGCItemMsg.k_EMsgGCSetItemPositions | protoMask), payload);
+    payload = new Dota2.schema.CMsgSetItemPositions({"itemPositions": payloadItemPositions});
+  this.protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCSetItemPositions;
+  this._gc.send(this.protoBufHeader,
+                payload.toBuffer()
+  );
 };
 
 Dota2.Dota2Client.prototype.deleteItem = function(itemid) {
@@ -30,6 +26,10 @@ Dota2.Dota2Client.prototype.deleteItem = function(itemid) {
     return null;
   }
   var buffer = new Buffer(8);
-  buffer.writeUInt64LE(itemid);
-  this._client.toGC(this._appid, Dota2.EGCItemMsg.k_EMsgGCDelete, buffer);
+  buffer.writeUInt64LE(itemid); 
+  this._gc.send({
+          "msg":    Dota2.EGCItemMsg.k_EMsgGCDelete
+        },
+        buffer
+  );
 };
