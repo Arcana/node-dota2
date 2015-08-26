@@ -8,13 +8,22 @@ var Dota2 = require("../index"),
     dota_gcmessages_client = new Schema(fs.readFileSync(__dirname + "/../generated/dota_gcmessages_client.desc")),
     protoMask = 0x80000000;
 
-// Methods
-Dota2.Dota2Client.prototype.createPracticeLobby = function(game_name, password, server_region, game_mode, callback) {
+Dota2.Dota2Client.prototype.createPracticeLobby = function(game_name, password, server_region, game_mode, leagueid, game_version, allow_cheats, fill_with_bots, allchat, allow_spectating, series_type, radiant_series_wins, dire_series_wins, dota_tv_delay, callback) {
   callback = callback || null;
   password = password || "";
   game_name = game_name || "";
   server_region = server_region || Dota2.ServerRegion.UNSPECIFIED;
   game_mode = game_mode || Dota2.GameMode.DOTA_GAMEMODE_AP;
+  leagueid = leagueid || 0;
+  game_version = game_version || 0;
+  allow_cheats = allow_cheats || false;
+  fill_with_bots = fill_with_bots || false;
+  allchat = allchat || false;
+  allow_spectating = allow_spectating || true;
+  series_type = series_type || 0;
+  radiant_series_wins = radiant_series_wins || 0;
+  dire_series_wins = dire_series_wins || 0;
+  dota_tv_delay = dota_tv_delay || 2;
 
   if (!this._gcReady) {
     if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
@@ -24,11 +33,20 @@ Dota2.Dota2Client.prototype.createPracticeLobby = function(game_name, password, 
   if (this.debug) util.log("Sending match CMsgPracticeLobbyCreate request");
   var payload = dota_gcmessages_client.CMsgPracticeLobbyCreate.serialize({
     "lobbyDetails": {
-      // TODO:  Add ability to set some settings here.
-      "gameName": game_name,
-    "serverRegion": server_region,
-    "gameMode": game_mode,
-    "passKey": password,
+		"gameName": game_name,
+		"passKey": password,
+		"serverRegion": server_region,
+		"gameMode": game_mode,
+		"leagueId": leagueid,
+		"gameVersion": game_version,
+		"allowCheats": allow_cheats,
+		"fillWithBots": fill_with_bots,
+		"allChat": allchat,
+		"allowSpectating": allow_spectating,
+		"seriesType": series_type,
+		"seriesRadiantWins": radiant_series_wins,
+		"seriesDireWins": dire_series_wins,
+		"DotaTVDelay": dota_tv_delay
     }
   });
 
