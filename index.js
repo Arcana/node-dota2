@@ -208,7 +208,7 @@ handlers[Dota2.EGCBaseClientMsg.k_EMsgGCClientConnectionStatus] = function gcCli
 
 Dota2.Dota2Client = Dota2Client;
 
-//require("./handlers/cache");
+require("./handlers/cache");
 require("./handlers/inventory");
 require("./handlers/chat");
 require("./handlers/guild");
