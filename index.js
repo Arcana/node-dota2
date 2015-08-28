@@ -11,7 +11,6 @@ var EventEmitter = require('events').EventEmitter,
     ProtoBuf = require('protobufjs'),
     Dota2 = exports;
 
-ProtoBuf.convertFieldsToCamelCase = true;
 var builder = ProtoBuf.newBuilder();
 ProtoBuf.loadProtoFile(path.join(__dirname, './proto/base_gcmessages.proto'), builder);
 ProtoBuf.loadProtoFile(path.join(__dirname, './proto/gcsdk_gcmessages.proto'), builder);
@@ -37,7 +36,7 @@ var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
   this._gcClientHelloIntervalId = null;
   this._gcConnectionStatus = Dota2.GCConnectionStatus.GCConnectionStatus_NO_SESSION;
   // This should probably be reworked to use a CMsgProtoBufHeader object
-  this.protoBufHeader = {
+  this._protoBufHeader = {
     "msg":    "",
     "proto":  {
       "client_steam_id": this._client.steamID,
@@ -65,7 +64,6 @@ var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
       self.emit("unhandled", kMsg);
     }
   });
-  //util.log(steamUser);
 
   this._sendClientHello = function() {
     if(self._gcReady)
@@ -88,15 +86,12 @@ var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
     if (!self._gc) {
       util.log("Where the fuck is _gc?");
     }
-    else {self._gc.send(
-        {
-          "msg":    Dota2.EGCBaseClientMsg.k_EMsgGCClientHello, 
-          "proto":  {
-            "client_steam_id": self._client.steamID,
-            "source_app_id":  self._appid
-          }
-        }, 
-        new Dota2.schema.CMsgClientHello({}).toBuffer()
+    else {
+      self.protoBufHeader.msg = Dota2.EGCBaseClientMsg.k_EMsgGCClientHello;
+      var payload = new Dota2.schema.CMsgClientHello({});
+      self._gc.send(
+        self.protoBufHeader,
+        payload.toBuffer()
       );
     }
 

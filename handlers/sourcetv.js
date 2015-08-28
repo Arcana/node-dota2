@@ -4,7 +4,7 @@ var Dota2 = require("../index"),
 
 // Methods
 
-Dota2.Dota2Client.prototype.findSourceTVGames = function(filterOptions, callback) {
+Dota2.Dota2Client.prototype.findSourceTVGames = function(filter_options, callback) {
     callback = callback || null;
     /* Sends a message to the Game Coordinator requesting `accountId`'s profile data.  Listen for `profileData` event for Game Coordinator's response. */
     if (!this._gcReady) {
@@ -14,18 +14,18 @@ Dota2.Dota2Client.prototype.findSourceTVGames = function(filterOptions, callback
     
     if (this.debug) util.log("Sending find SourceTV games request");
     
-    /* Using default params and merging with filterOptions, note: numGames is ignored from GC and > 6 causes no response at all */
+    /* Using default params and merging with filter_options, note: numGames is ignored from GC and > 6 causes no response at all */
     var payload = new Dota2.schema.CMsgFindSourceTVGames(merge({
-        searchKey: '',
-        start: 0,
-        numGames: 6,
-        leagueid: 0,
-        heroid: 0,
-        teamGame: false,
-        customGameId: 0,
-    },filterOptions));
-    this.protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCFindSourceTVGames;
-    this._gc.send(this.protoBufHeader,
+        "searchKey": '',
+        "start": 0,
+        "numGames": 6,
+        "leagueid": 0,
+        "heroid": 0,
+        "teamGame": false,
+        "customGameId": 0,
+    },filter_options));
+    this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCFindSourceTVGames;
+    this._gc.send(this._protoBufHeader,
                 payload.toBuffer(),
                 callback
     );

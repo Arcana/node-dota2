@@ -23,8 +23,8 @@ Dota2.Dota2Client.prototype.leaguesInMonthRequest = function(month, year, callba
     month: month,
     year: year
   });
-  this.protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCLeaguesInMonthRequest;
-  this._gc.send(this.protoBufHeader,
+  this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCLeaguesInMonthRequest;
+  this._gc.send(this._protoBufHeader,
                 payload.toBuffer(),
                 callback
   );
@@ -53,7 +53,7 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCLeaguesInMonthResponse] = function onLeaguesIn
 handlers[Dota2.EDOTAGCMsg.k_EMsgDOTALiveLeagueGameUpdate] = function(message, callback){
   var response = Dota2.schema.CMsgDOTALiveLeagueGameUpdate.decode(message);
 
-  if(this.debugMore) util.log("Live league games: "+response.liveLeagueGames+".");
-  this.emit("liveLeagueGamesUpdate", response.liveLeagueGames);
-  if(callback) callback(null, response.liveLeagueGames);
+  if(this.debugMore) util.log("Live league games: "+response.live_league_games+".");
+  this.emit("liveLeagueGamesUpdate", response.live_league_games);
+  if(callback) callback(null, response.live_league_games);
 };
