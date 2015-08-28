@@ -87,10 +87,10 @@ var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
       util.log("Where the fuck is _gc?");
     }
     else {
-      self.protoBufHeader.msg = Dota2.EGCBaseClientMsg.k_EMsgGCClientHello;
+      self._protoBufHeader.msg = Dota2.EGCBaseClientMsg.k_EMsgGCClientHello;
       var payload = new Dota2.schema.CMsgClientHello({});
       self._gc.send(
-        self.protoBufHeader,
+        self._protoBufHeader,
         payload.toBuffer()
       );
     }
