@@ -5,7 +5,7 @@ var Dota2 = require("../index"),
 
 Dota2.Dota2Client.prototype.matchDetailsRequest = function(match_id, callback) {
   callback = callback || null;
-
+  var self = this;
   /* Sends a message to the Game Coordinator requesting `match_id`'s match details.  Listen for `matchData` event for Game Coordinator's response. */
 
   if (!this._gcReady) {
@@ -20,7 +20,9 @@ Dota2.Dota2Client.prototype.matchDetailsRequest = function(match_id, callback) {
   this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCMatchDetailsRequest;
   this._gc.send(this._protoBufHeader,
                 payload.toBuffer(),
-                callback
+                function (header, body) {
+                  onMatchDetailsResponse.call(self, body, callback);
+                }
   );
 };
 
@@ -48,12 +50,12 @@ Dota2.Dota2Client.prototype.matchmakingStatsRequest = function() {
 
 var handlers = Dota2.Dota2Client.prototype._handlers;
 
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCMatchDetailsResponse] = function onMatchDetailsResponse(message, callback) {
+var onMatchDetailsResponse = function onMatchDetailsResponse(message, callback) {
   callback = callback || null;
   var matchDetailsResponse = Dota2.schema.CMsgGCMatchDetailsResponse.decode(message);
 
   if (matchDetailsResponse.result === 1) {
-    if (this.debug) util.log("Received match data for: " + matchDetailsResponse.match.match_id);
+    /*if (this.debug)*/ util.log("Received match data for: " + matchDetailsResponse.match.match_id);
     this.emit("matchData", matchDetailsResponse.match.match_id, matchDetailsResponse);
     if (callback) callback(null, matchDetailsResponse);
   }
@@ -62,13 +64,13 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCMatchDetailsResponse] = function onMatchDetail
       if (callback) callback(matchDetailsResponse.result, matchDetailsResponse);
   }
 };
+handlers[Dota2.EDOTAGCMsg.k_EMsgGCMatchDetailsResponse] = onMatchDetailsResponse;
 
-
-
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCMatchmakingStatsResponse] = function onMatchmakingStatsResponse(message) {
+var onMatchMakingStatsResponse = function onMatchmakingStatsResponse(message) {
   // Is not Job ID based - can't do callbacks.
   var matchmakingStatsResponse = Dota2.schema.CMsgDOTAMatchmakingStatsResponse.decode(message);
 
   if (this.debug) util.log("Received matchmaking stats");
   this.emit("matchmakingStatsData", matchmakingStatsResponse.wait_times_by_group, matchmakingStatsResponse.searching_players_by_group, matchmakingStatsResponse.disabled_groups, matchmakingStatsResponse);
 };
+handlers[Dota2.EDOTAGCMsg.k_EMsgGCMatchmakingStatsResponse] = onMatchMakingStatsResponse;
