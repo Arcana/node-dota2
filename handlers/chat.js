@@ -88,13 +88,14 @@ Dota2.Dota2Client.prototype.requestChatChannels = function() {
 
 var handlers = Dota2.Dota2Client.prototype._handlers;
 
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCJoinChatChannelResponse] = function onJoinChatChannelResponse(message) {
+var onJoinChatChannelResponse = function onJoinChatChannelResponse(message) {
   /* Channel data after we sent k_EMsgGCJoinChatChannel */
   var channelData = Dota2.schema.CMsgDOTAJoinChatChannelResponse.decode(message);
   this.chatChannels.push(channelData);
 };
+handlers[Dota2.EDOTAGCMsg.k_EMsgGCJoinChatChannelResponse] = onJoinChatChannelResponse;
 
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCChatMessage] = function onChatMessage(message) {
+var onChatMessage = function onChatMessage(message) {
   /* Chat channel message from another user. */
   var chatData = Dota2.schema.CMsgDOTAChatMessage.decode(message);
   this.emit("chatMessage",
@@ -103,18 +104,22 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCChatMessage] = function onChatMessage(message)
     chatData.text,
     chatData);
 };
+handlers[Dota2.EDOTAGCMsg.k_EMsgGCChatMessage] = onChatMessage;
 
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCOtherJoinedChannel] = function onOtherJoinedChannel(message) {
+var onOtherJoinedChannel = function onOtherJoinedChannel(message) {
   // TODO;
   util.log("Other joined channel");
 };
+handlers[Dota2.EDOTAGCMsg.k_EMsgGCOtherJoinedChannel] = onOtherJoinedChannel;
 
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCOtherLeftChannel] = function onOtherLeftChannel(message) {
+var onOtherLeftChannel = function onOtherLeftChannel(message) {
   // TODO;
   util.log("Other left channel");
 };
+handlers[Dota2.EDOTAGCMsg.k_EMsgGCOtherLeftChannel] = onOtherLeftChannel;
 
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCRequestChatChannelListResponse] = function onRequestChatChannelListResponse(message) {
+var onRequestChatChannelListResponse = function onRequestChatChannelListResponse(message) {
   var channels = Dota2.schema.CMsgDOTARequestChatChannelListResponse.decode(message).channels;
   this.emit("chatChannelsReceived", channels)
-}
+};
+handlers[Dota2.EDOTAGCMsg.k_EMsgGCRequestChatChannelListResponse] = onRequestChatChannelListResponse;

@@ -122,26 +122,29 @@ Dota2.Dota2Client.prototype.kickFromParty = function(steam_id) {
 
 var handlers = Dota2.Dota2Client.prototype._handlers;
 
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyListResponse] = function(message, callback) {
+var onPracticeLobbyListResponse = function onPracticeLobbyListResponse(message, callback) {
   var practiceLobbyListResponse = Dota2.schema.CMsgPracticeLobbyListResponse.decode(message);
 
   if (this.debug) util.log("Received practice lobby list response " + practiceLobbyListResponse);
   this.emit("practiceLobbyListResponse", null, practiceLobbyListResponse);
   if (callback) callback(null, practiceLobbyListResponse);
 };
+handlers[Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyListResponse] = onPracticeLobbyListResponse;
 
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyResponse] = function(message, callback){
+var onPracticeLobbyResponse = function onPracticeLobbyResponse(message, callback){
   var practiceLobbyResponse = Dota2.schema.CMsgPracticeLobbyJoinResponse.decode(message);
 
   if(this.debug) util.log("Received create/leave response "+JSON.stringify(practiceLobbyResponse));
   this.emit("practiceLobbyResponse", practiceLobbyResponse.result, practiceLobbyResponse);
   if(callback) callback(practiceLobbyResponse.result, practiceLobbyResponse);
 };
+handlers[Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyResponse] = onPracticeLobbyResponse;
 
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCFriendPracticeLobbyListResponse] = function(message, callback) {
+var onFriendPracticeLobbyListResponse = function onFriendPracticeLobbyListResponse(message, callback) {
   var practiceLobbyListResponse = Dota2.schema.CMsgFriendPracticeLobbyListResponse.decode(message);
 
   if (this.debug) util.log("Received friend practice lobby list response " + JSON.stringify(practiceLobbyListResponse));
   this.emit("friendPracticeLobbyListResponse", null, practiceLobbyListResponse);
   if (callback) callback(null, practiceLobbyListResponse);
 };
+handlers[Dota2.EDOTAGCMsg.k_EMsgGCFriendPracticeLobbyListResponse] = onFriendPracticeLobbyListResponse;

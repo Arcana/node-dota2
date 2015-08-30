@@ -5,6 +5,7 @@ var Dota2 = require("../index"),
 
 Dota2.Dota2Client.prototype.leaguesInMonthRequest = function(month, year, callback) {
   callback = callback || null;
+  var _self = this;
 
   // Month & year default to current time values
   month = month === undefined ? (new Date()).getMonth() : month;
@@ -26,7 +27,9 @@ Dota2.Dota2Client.prototype.leaguesInMonthRequest = function(month, year, callba
   this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCLeaguesInMonthRequest;
   this._gc.send(this._protoBufHeader,
                 payload.toBuffer(),
-                callback
+                function (header, body) {
+                  onLeaguesInMonthResponse.call(_self, body, callback);
+                }
   );
 };
 
@@ -35,7 +38,7 @@ Dota2.Dota2Client.prototype.leaguesInMonthRequest = function(month, year, callba
 
 var handlers = Dota2.Dota2Client.prototype._handlers;
 
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCLeaguesInMonthResponse] = function onLeaguesInMonthResponse(message, callback) {
+var onLeaguesInMonthResponse = function onLeaguesInMonthResponse(message, callback) {
   callback = callback || null;
   var response = Dota2.schema.CMsgDOTALeaguesInMonthResponse.decode(message);
 
@@ -49,11 +52,13 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCLeaguesInMonthResponse] = function onLeaguesIn
       if (callback) callback(response.eresult, response);
   }
 };
+handlers[Dota2.EDOTAGCMsg.k_EMsgGCLeaguesInMonthResponse] = onLeaguesInMonthResponse;
 
-handlers[Dota2.EDOTAGCMsg.k_EMsgDOTALiveLeagueGameUpdate] = function(message, callback){
+var onLiveLeagueGameUpdate = function onLiveLeagueGameUpdate(message, callback){
   var response = Dota2.schema.CMsgDOTALiveLeagueGameUpdate.decode(message);
 
   if(this.debugMore) util.log("Live league games: "+response.live_league_games+".");
   this.emit("liveLeagueGamesUpdate", response.live_league_games);
   if(callback) callback(null, response.live_league_games);
 };
+handlers[Dota2.EDOTAGCMsg.k_EMsgDOTALiveLeagueGameUpdate] = onLiveLeagueGameUpdate;

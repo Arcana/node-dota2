@@ -6,6 +6,7 @@ var Dota2 = require("../index"),
 
 Dota2.Dota2Client.prototype.findSourceTVGames = function(filter_options, callback) {
     callback = callback || null;
+    var _self = this;
     /* Sends a message to the Game Coordinator requesting `accountId`'s profile data.  Listen for `profileData` event for Game Coordinator's response. */
     if (!this._gcReady) {
         if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
@@ -27,7 +28,9 @@ Dota2.Dota2Client.prototype.findSourceTVGames = function(filter_options, callbac
     this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCFindSourceTVGames;
     this._gc.send(this._protoBufHeader,
                 payload.toBuffer(),
-                callback
+                function (header, body) {
+                  onSourceTVGamesResponse.call(_self, body, callback);
+                }
     );
 };
 
@@ -35,7 +38,7 @@ Dota2.Dota2Client.prototype.findSourceTVGames = function(filter_options, callbac
 
 var handlers = Dota2.Dota2Client.prototype._handlers;
 
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCSourceTVGamesResponse] = function onSourceTVGamesResponse(message, callback) {
+var onSourceTVGamesResponse = function onSourceTVGamesResponse(message, callback) {
     callback = callback || null;
 
     var sourceTVGamesResponse = Dota2.schema.CMsgSourceTVGamesResponse.decode(message);
@@ -49,3 +52,4 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCSourceTVGamesResponse] = function onSourceTVGa
         if (callback) callback(sourceTVGamesResponse.result, sourceTVGamesResponse);
     }
 };
+handlers[Dota2.EDOTAGCMsg.k_EMsgGCSourceTVGamesResponse] = onSourceTVGamesResponse;

@@ -5,7 +5,7 @@ var Dota2 = require("../index"),
 
 Dota2.Dota2Client.prototype.matchDetailsRequest = function(match_id, callback) {
   callback = callback || null;
-  var self = this;
+  var _self = this;
   /* Sends a message to the Game Coordinator requesting `match_id`'s match details.  Listen for `matchData` event for Game Coordinator's response. */
 
   if (!this._gcReady) {
@@ -21,7 +21,7 @@ Dota2.Dota2Client.prototype.matchDetailsRequest = function(match_id, callback) {
   this._gc.send(this._protoBufHeader,
                 payload.toBuffer(),
                 function (header, body) {
-                  onMatchDetailsResponse.call(self, body, callback);
+                  onMatchDetailsResponse.call(_self, body, callback);
                 }
   );
 };

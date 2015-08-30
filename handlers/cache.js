@@ -54,8 +54,7 @@ Dota2.Dota2Client.prototype._handleWelcomeCaches = function handleWelcomeCaches(
 
 var handlers = Dota2.Dota2Client.prototype._handlers;
 
-
-handlers[Dota2.ESOMsg.k_ESOMsg_CacheSubscribed] = function onCacheSubscribed(message) {
+var onCacheSubscribed = function onCacheSubscribed(message) {
   var subscribe = Dota2.schema.CMsgSOCacheSubscribed.decode(message);
   var _self = this;
 
@@ -67,8 +66,9 @@ handlers[Dota2.ESOMsg.k_ESOMsg_CacheSubscribed] = function onCacheSubscribed(mes
     handleSubscribedType.call(_self, obj.type_id, obj.object_data[0]);
   });
 };
+handlers[Dota2.ESOMsg.k_ESOMsg_CacheSubscribed] = onCacheSubscribed;
 
-handlers[Dota2.ESOMsg.k_ESOMsg_UpdateMultiple] = function onUpdateMultiple(message) {
+var onUpdateMultiple = function onUpdateMultiple(message) {
   var multi = Dota2.schema.CMsgSOMultipleObjects.decode(message);
   var _self = this;
 
@@ -77,8 +77,9 @@ handlers[Dota2.ESOMsg.k_ESOMsg_UpdateMultiple] = function onUpdateMultiple(messa
       handleSubscribedType.call(_self, obj.type_id, obj.object_data[0]);
     });
 };
+handlers[Dota2.ESOMsg.k_ESOMsg_UpdateMultiple] = onUpdateMultiple;
 
-handlers[Dota2.ESOMsg.k_ESOMsg_Create] = function onCreate(message) {
+var onCreate = function onCreate(message) {
   var single = Dota2.schema.CMsgSOSingleObject.decode(message);
   var _self = this;
   
@@ -87,8 +88,9 @@ handlers[Dota2.ESOMsg.k_ESOMsg_Create] = function onCreate(message) {
   }
   handleSubscribedType.call(_self, single.type_id, single.object_data);
 }
+handlers[Dota2.ESOMsg.k_ESOMsg_Create] = onCreate;
 
-handlers[Dota2.ESOMsg.k_ESOMsg_CacheUnsubscribed] = function onCacheUnsubscribed(message) {
+var onCacheUnsubscribed = function onCacheUnsubscribed(message) {
   var unsubscribe = Dota2.schema.CMsgSOCacheUnsubscribed.decode(message);
   var _self = this;
 
@@ -108,8 +110,9 @@ handlers[Dota2.ESOMsg.k_ESOMsg_CacheUnsubscribed] = function onCacheUnsubscribed
     this.emit("partyInviteCleared");
   }
 };
+handlers[Dota2.ESOMsg.k_ESOMsg_CacheUnsubscribed] = onCacheUnsubscribed;
 
-handlers[Dota2.ESOMsg.k_ESOMsg_CacheDestroy] = function onCacheDestroy(message) {
+var onCacheDestroy = function onCacheDestroy(message) {
   var destroy = Dota2.schema.CMsgSOSingleObject.decode(message);
   var _self = this;
 
@@ -121,3 +124,4 @@ handlers[Dota2.ESOMsg.k_ESOMsg_CacheDestroy] = function onCacheDestroy(message) 
     this.emit("partyInviteCleared");
   }
 };
+handlers[Dota2.ESOMsg.k_ESOMsg_CacheDestroy] = onCacheDestroy;
