@@ -43,6 +43,22 @@ Dota2.Dota2Client.prototype.matchmakingStatsRequest = function() {
   this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCMatchmakingStatsRequest | protoMask), payload);
 };
 
+Dota2.Dota2Client.prototype.matchRequest = function(criteria, callback) {
+  callback = callback || null;
+
+  /* Sends a message to the Game Coordinator requesting a list of matches based on the given criteria. Similar to the possible webapi query. */
+
+  if (!this._gcReady) {
+    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+    return null;
+  }
+
+  if (this.debug) util.log("Sending match request");
+  var payload = dota_gcmessages_client.CMsgDOTARequestMatches.serialize(criteria);
+
+  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCRequestMatches | protoMask), payload, callback);
+};
+
 
 // Handlers
 
@@ -63,6 +79,19 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCMatchDetailsResponse] = function onMatchDetail
   }
 };
 
+handlers[Dota2.EDOTAGCMsg.k_EMsgGCRequestMatchesResponse] = function onMatchResponse(message, callback) {
+  callback = callback || null;
+  var matchResponse = dota_gcmessages_client.CMsgDOTARequestMatchesResponse.parse(message);
+
+  if (matchResponse.totalResults > 1) {
+    if (this.debug) util.log("Reveived listing for matches");
+    this.emit("matches", matchResponse);
+    if (callback) callback(null, matchResponse);
+  } else {
+      if (this.debug) util.log("Received a bad matchesResponse");
+      if (callback) callback(1, matchResponse);
+  }
+};
 
 
 handlers[Dota2.EDOTAGCMsg.k_EMsgGCMatchmakingStatsResponse] = function onMatchmakingStatsResponse(message) {
