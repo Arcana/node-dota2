@@ -33,6 +33,26 @@ Dota2.Dota2Client.prototype.leaguesInMonthRequest = function(month, year, callba
   );
 };
 
+Dota2.Dota2Client.prototype.requestLeagueInfo = function(){
+  var _self = this;
+  /* Sends a message to the Game Coordinator request the info on all available official leagues */
+  
+  if (!this._gcReady) {
+    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+    return null;
+  }
+  
+  if (this.debug) util.log("Sending CMsgRequestLeagueInfo");
+  var payload = new Dota2.schema.CMsgRequestLeagueInfo({});
+  this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgRequestLeagueInfo;
+  this._gc.send(this._protoBufHeader,
+                payload.toBuffer(),
+                function (header, body) {
+                  onResponseLeagueInfo.call(_self, body);
+                }
+  );
+  
+};
 
 // Handlers
 
@@ -54,7 +74,8 @@ var onLeaguesInMonthResponse = function onLeaguesInMonthResponse(message, callba
 };
 handlers[Dota2.EDOTAGCMsg.k_EMsgGCLeaguesInMonthResponse] = onLeaguesInMonthResponse;
 
-var onLiveLeagueGameUpdate = function onLiveLeagueGameUpdate(message, callback){
+var onLiveLeagueGameUpdate = function onLiveLeagueGameUpdate(message, callback) {
+  callback = callback || null;
   var response = Dota2.schema.CMsgDOTALiveLeagueGameUpdate.decode(message);
 
   if(this.debugMore) util.log("Live league games: "+response.live_league_games+".");
@@ -62,3 +83,16 @@ var onLiveLeagueGameUpdate = function onLiveLeagueGameUpdate(message, callback){
   if(callback) callback(null, response.live_league_games);
 };
 handlers[Dota2.EDOTAGCMsg.k_EMsgDOTALiveLeagueGameUpdate] = onLiveLeagueGameUpdate;
+
+var onResponseLeagueInfo = function onResponseLeagueInfo(message) {
+  var response = Dota2.schema.CMsgResponseLeagueInfo.decode(message);
+  
+  if (response.leagues.length > 0) {
+    if (this.debug) util.log("Received information for " + response.leagues.length + " leagues");
+    this.emit("leagueInfo", response.leagues);
+  } else {
+    if (this.debug) util.log("Received a bad leagueInfo response", response);
+  }
+  
+};
+handlers[Dota2.EDOTAGCMsg.k_EMsgResponseLeagueInfo] = onResponseLeagueInfo;
