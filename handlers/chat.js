@@ -124,7 +124,6 @@ var onOtherJoinedChannel = function onOtherJoinedChannel(message) {
                                   steam_id: otherJoined.steam_id,
                                   persona_name: otherJoined.persona_name
                                 }));
-  util.log(this.chatChannels[0].members);
 };
 handlers[Dota2.EDOTAGCMsg.k_EMsgGCOtherJoinedChannel] = onOtherJoinedChannel;
 
