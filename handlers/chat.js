@@ -102,7 +102,7 @@ var onChatMessage = function onChatMessage(message) {
   var chatData = Dota2.schema.CMsgDOTAChatMessage.decode(message);
   if(this.debug) util.log("Received chat message from "+chatData.persona_name+" in "+chatData.channel_id);
   this.emit("chatMessage",
-    this.chatChannels.filter(function (item) {if (item.channel_id === chatData.channel_id) return true; }).map(function (item) { return item.channel_name; })[0],
+    this.chatChannels.filter(function (item) {if (""+item.channel_id === ""+chatData.channel_id) return true; }).map(function (item) { return item.channel_name; })[0],
     chatData.persona_name,
     chatData.text,
     chatData);
