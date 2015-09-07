@@ -31,7 +31,7 @@ Dota2.Dota2Client.prototype.leaveChat = function(channel) {
   }
 
   if (this.debug) util.log("Leaving chat channel: " + channel);
-  var channelId = this.chatChannels.filter(function (item) {if (item.channel_name == channel) return true; }).map(function (item) { return item.channel_id; })[0]
+  var channelId = this.chatChannels.filter(function (item) {return (item.channel_name == channel); }).map(function (item) { return item.channel_id; })[0]
   if (channelId === undefined) {
     if (this.debug) util.log("Cannot leave a channel you have not joined.");
     return;
@@ -54,7 +54,7 @@ Dota2.Dota2Client.prototype.sendMessage = function(channel, message) {
   }
 
   if (this.debug) util.log("Sending message to " + channel);
-  var channelId = this.chatChannels.filter(function (item) {if (item.channel_name == channel) return true; }).map(function (item) { return item.channel_id; })[0]
+  var channelId = this.chatChannels.filter(function (item) {return (item.channel_name == channel);}).map(function (item) { return item.channel_id; })[0]
   if (channelId === undefined) {
     if (this.debug) util.log("Cannot send message to a channel you have not joined.");
     return;
@@ -102,7 +102,8 @@ var onChatMessage = function onChatMessage(message) {
   var chatData = Dota2.schema.CMsgDOTAChatMessage.decode(message);
   if(this.debug) util.log("Received chat message from "+chatData.persona_name+" in "+chatData.channel_id);
   this.emit("chatMessage",
-    this.chatChannels.filter(function (item) {if (""+item.channel_id === ""+chatData.channel_id) return true; }).map(function (item) { return item.channel_name; })[0],
+    // channel_id is a uint64 which is a compound object. Using '===' or '==' doesn't work to check the equality necessitating the cast to String
+    this.chatChannels.filter(function (item) {return (""+item.channel_id === ""+chatData.channel_id); }).map(function (item) { return item.channel_name; })[0],
     chatData.persona_name,
     chatData.text,
     chatData);
@@ -119,7 +120,8 @@ var onOtherJoinedChannel = function onOtherJoinedChannel(message) {
             otherJoined.steam_id,
             otherJoined);
   // Add member to cached chatChannels
-  this.chatChannels.filter(function (item) {if (""+item.channel_id === ""+otherJoined.channel_id) return true; })[0]
+  // channel_id is a uint64 which is a compound object. Using '===' or '==' doesn't work to check the equality necessitating the cast to String
+  this.chatChannels.filter(function (item) {return (""+item.channel_id === ""+otherJoined.channel_id); })[0]
                     .members.push(new Dota2.schema.CMsgDOTAChatMember({
                                   steam_id: otherJoined.steam_id,
                                   persona_name: otherJoined.persona_name
@@ -136,8 +138,9 @@ var onOtherLeftChannel = function onOtherLeftChannel(message) {
             otherLeft.steam_id,
             otherLeft);
   // Delete member from cached chatChannel
-  var chatChannel = this.chatChannels.filter(function (item) {if (""+item.channel_id === ""+otherLeft.channel_id) return true; })[0];
-  chatChannel.members = chatChannel.members.filter(function (item) {if (""+item.steam_id !== ""+otherLeft.steam_id) return true; });
+  // channel_id is a uint64 which is a compound object. Using '===' or '==' doesn't work to check the equality necessitating the cast to String
+  var chatChannel = this.chatChannels.filter(function (item) {return (""+item.channel_id === ""+otherLeft.channel_id); })[0];
+  chatChannel.members = chatChannel.members.filter(function (item) {return (""+item.steam_id !== ""+otherLeft.steam_id); });
 };
 handlers[Dota2.EDOTAGCMsg.k_EMsgGCOtherLeftChannel] = onOtherLeftChannel;
 
