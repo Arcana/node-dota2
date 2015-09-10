@@ -611,3 +611,8 @@ Dota2.GameMode = {
     DOTA_GAMEMODE_FH: 14,
     DOTA_GAMEMODE_CUSTOM: 15
 };
+
+Dota2.SourceEngine = {
+  Source1: 0,
+  Source2: 1
+};
