@@ -24,11 +24,11 @@ Dota2.Dota2Client.prototype.createPracticeLobby = function(game_name, password, 
   if (this.debug) util.log("Sending match CMsgPracticeLobbyCreate request");
   var payload = dota_gcmessages_client.CMsgPracticeLobbyCreate.serialize({
     "lobbyDetails": {
-      // TODO:  Add ability to set some settings here.
+      // TODO:  This should allow more details to be set.
       "gameName": game_name,
-    "serverRegion": server_region,
-    "gameMode": game_mode,
-    "passKey": password,
+      "serverRegion": server_region,
+      "gameMode": game_mode,
+      "passKey": password
     }
   });
 

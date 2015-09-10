@@ -64,7 +64,7 @@ var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
       util.log("Where the fuck is _client?");
     }
     else {
-      self._client.toGC(self._appid, (Dota2.EGCBaseClientMsg.k_EMsgGCClientHello | protoMask), gcsdk_gcmessages.CMsgClientHello.serialize({}));
+      self._client.toGC(self._appid, (Dota2.EGCBaseClientMsg.k_EMsgGCClientHello | protoMask), gcsdk_gcmessages.CMsgClientHello.serialize({engine: Dota2.SourceEngine.Source2, secret_key: "", client_session_need: 104}));
     }
 
     self._gcClientHelloCount++;
