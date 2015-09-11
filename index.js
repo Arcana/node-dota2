@@ -216,3 +216,4 @@ require("./handlers/lobbies");
 //require("./handlers/parties");
 require("./handlers/leagues");
 require("./handlers/sourcetv");
+require("./handlers/helper");
