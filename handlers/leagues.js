@@ -3,7 +3,7 @@ var Dota2 = require("../index"),
 
 // Methods
 
-Dota2.Dota2Client.prototype.leaguesInMonthRequest = function(month, year, callback) {
+Dota2.Dota2Client.prototype.requestLeaguesInMonth = function(month, year, callback) {
   callback = callback || null;
   var _self = this;
 
@@ -48,7 +48,7 @@ Dota2.Dota2Client.prototype.requestLeagueInfo = function(){
   this._gc.send(this._protoBufHeader,
                 payload.toBuffer(),
                 function (header, body) {
-                  onResponseLeagueInfo.call(_self, body);
+                  onLeagueInfoResponse.call(_self, body);
                 }
   );
   
@@ -64,7 +64,7 @@ var onLeaguesInMonthResponse = function onLeaguesInMonthResponse(message, callba
 
   if (response.eresult === 1) {
     if (this.debug) util.log("Received leagues in month response " + response.eresult);
-    this.emit("leaguesInMonthResponse", response.eresult, response);
+    this.emit("leaguesInMonthData", response.eresult, response);
     if (callback) callback(null, response);
   }
   else {
@@ -84,15 +84,15 @@ var onLiveLeagueGameUpdate = function onLiveLeagueGameUpdate(message, callback) 
 };
 handlers[Dota2.EDOTAGCMsg.k_EMsgDOTALiveLeagueGameUpdate] = onLiveLeagueGameUpdate;
 
-var onResponseLeagueInfo = function onResponseLeagueInfo(message) {
+var onLeagueInfoResponse = function onLeagueInfoResponse(message) {
   var response = Dota2.schema.CMsgResponseLeagueInfo.decode(message);
   
   if (response.leagues.length > 0) {
     if (this.debug) util.log("Received information for " + response.leagues.length + " leagues");
-    this.emit("leagueInfo", response.leagues);
+    this.emit("leagueData", response.leagues);
   } else {
     if (this.debug) util.log("Received a bad leagueInfo response", response);
   }
   
 };
-handlers[Dota2.EDOTAGCMsg.k_EMsgResponseLeagueInfo] = onResponseLeagueInfo;
+handlers[Dota2.EDOTAGCMsg.k_EMsgResponseLeagueInfo] = onLeagueInfoResponse;

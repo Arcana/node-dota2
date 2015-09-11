@@ -4,7 +4,7 @@ var Dota2 = require("../index"),
 
 // Methods
 
-Dota2.Dota2Client.prototype.findSourceTVGames = function(filter_options, callback) {
+Dota2.Dota2Client.prototype.requestSourceTVGames = function(filter_options, callback) {
     callback = callback || null;
     var _self = this;
     /* Sends a message to the Game Coordinator requesting `accountId`'s profile data.  Listen for `profileData` event for Game Coordinator's response. */
@@ -45,6 +45,7 @@ var onSourceTVGamesResponse = function onSourceTVGamesResponse(message, callback
 
     if (typeof sourceTVGamesResponse.games !== "undefined" && sourceTVGamesResponse.games.length > 0) {
         if (this.debug) util.log("Received SourceTV games data");
+        this.emit("sourceTVGamesData", sourceTVGamesResponse.num_total_games, sourceTVGamesResponse.games);
         if (callback) callback(sourceTVGamesResponse);
     }
     else {

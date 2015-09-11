@@ -3,7 +3,7 @@ var Dota2 = require("../index"),
 
 // Methods
 
-Dota2.Dota2Client.prototype.getPlayerMatchHistory = function(account_id, match_id, callback) {
+Dota2.Dota2Client.prototype.requestPlayerMatchHistory = function(account_id, match_id, callback) {
   callback = callback || null;
   var _self = this;
   /* Sends a message to the Game Coordinator requesting `accountId`'s player match history.  Listen for `playerMatchHistoryData` event for Game Coordinator's response. */
@@ -29,7 +29,7 @@ Dota2.Dota2Client.prototype.getPlayerMatchHistory = function(account_id, match_i
   );
 };
 
-Dota2.Dota2Client.prototype.profileRequest = function(account_id, request_name, callback) {
+Dota2.Dota2Client.prototype.requestProfile = function(account_id, request_name, callback) {
   callback = callback || null;
   var _self = this;
   /* Sends a message to the Game Coordinator requesting `accountId`'s profile data.  Listen for `profileData` event for Game Coordinator's response. */
@@ -52,7 +52,7 @@ Dota2.Dota2Client.prototype.profileRequest = function(account_id, request_name, 
   );
 };
 
-Dota2.Dota2Client.prototype.passportDataRequest = function(account_id, callback) {
+Dota2.Dota2Client.prototype.requestPassportData = function(account_id, callback) {
   callback = callback || null;
   var _self = this;
   /* Sends a message to the Game Coordinator requesting `accountId`'s passport data.  Listen for `passportData` event for Game Coordinator's response. */
@@ -72,7 +72,7 @@ Dota2.Dota2Client.prototype.passportDataRequest = function(account_id, callback)
   );
 };
 
-Dota2.Dota2Client.prototype.hallOfFameRequest = function(week, callback) {
+Dota2.Dota2Client.prototype.requestHallOfFame = function(week, callback) {
   week = week || null;
   callback = callback || null;
   var _self = this;

@@ -144,8 +144,8 @@ var onOtherLeftChannel = function onOtherLeftChannel(message) {
 };
 handlers[Dota2.EDOTAGCMsg.k_EMsgGCOtherLeftChannel] = onOtherLeftChannel;
 
-var onRequestChatChannelListResponse = function onRequestChatChannelListResponse(message) {
+var onChatChannelsResponse = function onChatChannelsResponse(message) {
   var channels = Dota2.schema.CMsgDOTARequestChatChannelListResponse.decode(message).channels;
-  this.emit("chatChannelsReceived", channels)
+  this.emit("chatChannelsData", channels)
 };
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCRequestChatChannelListResponse] = onRequestChatChannelListResponse;
+handlers[Dota2.EDOTAGCMsg.k_EMsgGCRequestChatChannelListResponse] = onChatChannelsResponse;
