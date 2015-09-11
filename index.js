@@ -90,6 +90,8 @@ var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
       self._protoBufHeader.msg = Dota2.EGCBaseClientMsg.k_EMsgGCClientHello;
       var payload = new Dota2.schema.CMsgClientHello({});
       payload.engine = 1;
+      payload.secret_key= "";
+      payload.client_session_need= 104;
       self._gc.send(
         self._protoBufHeader,
         payload.toBuffer()
