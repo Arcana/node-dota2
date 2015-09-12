@@ -110,13 +110,13 @@ var onGuildOpenPartyRefresh = function onGuildOpenPartyRefresh(message) {
 };
 handlers[Dota2.EDOTAGCMsg.k_EMsgGCGuildOpenPartyRefresh] = onGuildOpenPartyRefresh;
 
-var onGuildData = function onGuildData(message) {
+var onGuildDataResponse = function onGuildDataResponse(message) {
   /* Second response from requestGuildData containing general info on the guild (id, members, invitation, ...) */
   var response = Dota2.schema.CMsgDOTAGuildSDO.decode(message);
   if (this.debug) util.log("Got guild data");
   this.emit("guildData", response.guild_id, response.members, response);
 };
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCGuildData] = onGuildData;
+handlers[Dota2.EDOTAGCMsg.k_EMsgGCGuildData] = onGuildDataResponse;
 
 var onGuildInviteResponse = function onGuildInviteResponse(message, callback) {
   callback = callback || null;
@@ -159,7 +159,7 @@ var onGuildInviteData = function onGuildInviteData(message) {
   if (!guildInviteData.invitedToGuild) return;
 
   if (this.debug) util.log("Received invitation to guild: " + guildInviteData.guild_name);
-  this.emit("guildInvite", guildInviteData.guild_id, guildInviteData.guild_name, guildInviteData.inviter, guildInviteData);
+  this.emit("guildInviteData", guildInviteData.guild_id, guildInviteData.guild_name, guildInviteData.inviter, guildInviteData);
 };
 handlers[Dota2.EDOTAGCMsg.k_EMsgGCGuildInviteData] = onGuildInviteData;
 

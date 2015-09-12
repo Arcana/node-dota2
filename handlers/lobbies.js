@@ -89,7 +89,7 @@ Dota2.Dota2Client.prototype.configPracticeLobby = function(id, options, callback
   );
 };
 // callback to onPracticeLobbyListResponse
-Dota2.Dota2Client.prototype.practiceLobbyListRequest = function(callback){
+Dota2.Dota2Client.prototype.requestPracticeLobbyList = function(callback){
   callback = callback || null;
   var _self = this;
   if (!this._gcReady) {
@@ -109,7 +109,7 @@ Dota2.Dota2Client.prototype.practiceLobbyListRequest = function(callback){
   );
 };
 // callback to onFriendPracticeLobbyListResponse
-Dota2.Dota2Client.prototype.friendPracticeLobbyListRequest = function(callback){
+Dota2.Dota2Client.prototype.requestFriendPracticeLobbyList = function(callback){
   callback = callback || null;
   var _self = this;
   if (!this._gcReady) {
@@ -301,7 +301,7 @@ var onPracticeLobbyListResponse = function onPracticeLobbyListResponse(message, 
   var practiceLobbyListResponse = Dota2.schema.CMsgPracticeLobbyListResponse.decode(message);
 
   if (this.debug) util.log("Received practice lobby list response " + practiceLobbyListResponse);
-  this.emit("practiceLobbyListResponse", null, practiceLobbyListResponse);
+  this.emit("practiceLobbyListData", null, practiceLobbyListResponse);
   if (callback) callback(null, practiceLobbyListResponse);
 };
 handlers[Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyListResponse] = onPracticeLobbyListResponse;
@@ -319,7 +319,8 @@ var onFriendPracticeLobbyListResponse = function onFriendPracticeLobbyListRespon
   var practiceLobbyListResponse = Dota2.schema.CMsgFriendPracticeLobbyListResponse.decode(message);
 
   if (this.debug) util.log("Received friend practice lobby list response " + JSON.stringify(practiceLobbyListResponse));
-  this.emit("friendPracticeLobbyListResponse", null, practiceLobbyListResponse);
+  this.emit("friendPracticeLobbyListData", null, practiceLobbyListResponse);
   if (callback) callback(null, practiceLobbyListResponse);
 };
 handlers[Dota2.EDOTAGCMsg.k_EMsgGCFriendPracticeLobbyListResponse] = onFriendPracticeLobbyListResponse;
+
