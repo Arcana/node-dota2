@@ -1,10 +1,17 @@
 var Dota2 = require("../index"),
     util = require("util");
 
-// Methods
+Dota2._playerHistoryOptions = {
+    start_at_match_id: "number",
+    matches_requested: "number",
+    hero_id: "number",
+    request_id: "number"
+  };
 
-Dota2.Dota2Client.prototype.requestPlayerMatchHistory = function(account_id, match_id, callback) {
+// Methods
+Dota2.Dota2Client.prototype.requestPlayerMatchHistory = function(account_id, filter, callback) {
   callback = callback || null;
+  filter = filter || null;
   var _self = this;
   /* Sends a message to the Game Coordinator requesting `accountId`'s player match history.  Listen for `playerMatchHistoryData` event for Game Coordinator's response. */
   if (!this._gcReady) {
@@ -13,13 +20,11 @@ Dota2.Dota2Client.prototype.requestPlayerMatchHistory = function(account_id, mat
   }
 
   if (this.debug) util.log("Sending player match history request");
-  var payload = new Dota2.schema.CMsgDOTAGetPlayerMatchHistory({
-      "account_id": account_id,
-      "start_at_match_id": match_id,
-      "matches_requested": 13,
-      "hero_id": 0,
-      "request_id": account_id
-  });
+  var command = Dota2._parseOptions(filter, Dota2._playerHistoryOptions);
+  command.account_id = account_id;
+  command.matches_requested = command.matches_requested || 1;
+  command.request_id = command.request_id || account_id;
+  var payload = new Dota2.schema.CMsgDOTAGetPlayerMatchHistory(command);
   this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgDOTAGetPlayerMatchHistory;
   this._gc.send(this._protoBufHeader,
                 payload.toBuffer(),
@@ -76,7 +81,7 @@ Dota2.Dota2Client.prototype.requestHallOfFame = function(week, callback) {
   week = week || null;
   callback = callback || null;
   var _self = this;
-  
+
   /* Sends a message to the Game Coordinator requesting `accountId`'s passport data.  Listen for `passportData` event for Game Coordinator's response. */
   if (!this._gcReady) {
     if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");

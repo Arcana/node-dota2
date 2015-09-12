@@ -1,31 +1,61 @@
 var Dota2 = require("../index"),
     util = require("util");
 
-// Methods
-// callback to onPracticeLobbyResponse
-Dota2.Dota2Client.prototype.createPracticeLobby = function(game_name, password, server_region, game_mode, callback) {
-  callback = callback || null;
-  password = password || "";
-  game_name = game_name || "";
-  server_region = server_region || Dota2.ServerRegion.UNSPECIFIED;
-  game_mode = game_mode || Dota2.GameMode.DOTA_GAMEMODE_AP;
-  var _self = this;
+Dota2._lobbyOptions = {
+    game_name: "string",
+    server_region: "number",
+    game_mode: "number",
+    game_version: "number",
+    allow_cheats: "boolean",
+    fill_with_bots: "boolean",
+    allow_spectating: "boolean",
+    pass_key: "string",
+    series_type: "number",
+    radiant_series_wins: "number",
+    dire_series_wins: "number",
+    allchat: "boolean",
+    leagueid: "number",
+    dota_tv_delay: "number",
+    custom_game_mode: "string",
+    custom_map_name: "string",
+    custom_difficulty: "number",
+    custom_game_id: "number",
+  };
 
+// Methods
+Dota2.Dota2Client.prototype.createPracticeLobby = function(pass_key, options, callback) {
+  callback = callback || null;
+  this.createTournamentLobby(pass_key, -1, -1, options, callback);
+}
+// callback to onPracticeLobbyResponse
+Dota2.Dota2Client.prototype.createTournamentLobby = function(pass_key, tournament_game_id, tournament_id, options, callback) {
+  callback = callback || null;
+  pass_key = pass_key || "";
+  tournament_game_id = tournament_game_id || -1;
+  tournament_id = tournament_id || -1;
+  var _self = this;
+  
   if (!this._gcReady) {
     if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
     return null;
   }
 
   if (this.debug) util.log("Sending match CMsgPracticeLobbyCreate request");
-  var payload = new Dota2.schema.CMsgPracticeLobbyCreate({
-    "lobby_details": {
-      // TODO:  Add ability to set some settings here.
-      "game_name": game_name,
-      "server_region": server_region,
-      "game_mode": game_mode,
-      "pass_key": password,
-    }
-  });
+  
+  var lobby_details = Dota2._parseOptions(options, Dota2._lobbyOptions);
+  lobby_details.pass_key = pass_key;
+  var command = {
+    "lobby_details": lobby_details,
+    "pass_key": pass_key
+  };
+  
+  if (tournament_game_id > 0) {
+    command["tournament_game"] = true;
+    command["tournament_game_id"] = tournament_game_id;
+    command["tournament_id"] = tournament_id;
+  }
+  var payload = new Dota2.schema.CMsgPracticeLobbyCreate(command);
+
   this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyCreate;
   this._gc.send(this._protoBufHeader,
                 payload.toBuffer(),
@@ -43,41 +73,8 @@ Dota2.Dota2Client.prototype.configPracticeLobby = function(id, options, callback
     return null;
   }
 
-  var command, option, possibleOptions, type, value;
-
-  command = {lobby_id: id};
-
-  possibleOptions = {
-    game_name: "string",
-    server_region: "number",
-    game_mode: "number",
-    allow_cheats: "boolean",
-    fill_with_bots: "boolean",
-    allow_spectating: "boolean",
-    pass_key: "string",
-    series_type: "number",
-    radiant_series_wins: "number",
-    dire_series_wins: "number",
-    allchat: "boolean"
-  };
-
-  for (option in options) {
-    value = options[option];
-    type = possibleOptions[option];
-    if (type == null) {
-      if (this.debug) {
-        util.log("Lobby option " + option + " is not possible.");
-      }
-      continue;
-    }
-    if (typeof value !== type) {
-      if (this.debug) {
-        util.log("Lobby option " + option + " must be a " + type + ".");
-      }
-      continue;
-    }
-    command[option] = value;
-  }
+  var command = Dota2._parseOptions(options);
+  command["lobby_id"] = id;
 
   var payload = new Dota2.schema.CMsgPracticeLobbySetDetails(command);
   this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbySetDetails;
