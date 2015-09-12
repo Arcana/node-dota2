@@ -25,7 +25,7 @@ var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
 
   this.debug = debug || false;
   this.debugMore = debugMore || false;
-  
+
   var steamUser = new steam.SteamUser(steamClient);
   this._user = steamUser;
   this._client = steamClient;
@@ -144,7 +144,7 @@ Dota2Client.prototype.exit = function() {
       this._gcClientHelloIntervalId = null;
   }
   this._gcReady = false;
-  
+
   if(this._client.loggedOn) this._client.gamesPlayed([]);
 };
 
@@ -216,4 +216,3 @@ require("./handlers/lobbies");
 //require("./handlers/parties");
 require("./handlers/leagues");
 require("./handlers/sourcetv");
-require("./handlers/helper");

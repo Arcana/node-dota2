@@ -23,32 +23,32 @@ Dota2._lobbyOptions = {
   };
 
 // Methods
-Dota2.Dota2Client.prototype.createPracticeLobby = function(pass_key, options, callback) {
+Dota2.Dota2Client.prototype.createPracticeLobby = function(password, options, callback) {
   callback = callback || null;
-  this.createTournamentLobby(pass_key, -1, -1, options, callback);
+  this.createTournamentLobby(password, -1, -1, options, callback);
 }
 // callback to onPracticeLobbyResponse
-Dota2.Dota2Client.prototype.createTournamentLobby = function(pass_key, tournament_game_id, tournament_id, options, callback) {
+Dota2.Dota2Client.prototype.createTournamentLobby = function(password, tournament_game_id, tournament_id, options, callback) {
   callback = callback || null;
-  pass_key = pass_key || "";
+  password = password || "";
   tournament_game_id = tournament_game_id || -1;
   tournament_id = tournament_id || -1;
   var _self = this;
-  
+
   if (!this._gcReady) {
     if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
     return null;
   }
 
   if (this.debug) util.log("Sending match CMsgPracticeLobbyCreate request");
-  
+
   var lobby_details = Dota2._parseOptions(options, Dota2._lobbyOptions);
-  lobby_details.pass_key = pass_key;
+  lobby_details.pass_key = password;
   var command = {
     "lobby_details": lobby_details,
-    "pass_key": pass_key
+    "pass_key": password
   };
-  
+
   if (tournament_game_id > 0) {
     command["tournament_game"] = true;
     command["tournament_game_id"] = tournament_game_id;
@@ -65,7 +65,7 @@ Dota2.Dota2Client.prototype.createTournamentLobby = function(pass_key, tournamen
   );
 };
 // callback to onPracticeLobbyResponse
-Dota2.Dota2Client.prototype.configPracticeLobby = function(id, options, callback){
+Dota2.Dota2Client.prototype.configPracticeLobby = function(lobby_id, options, callback){
   callback = callback || null;
   var _self = this;
   if (!this._gcReady) {
@@ -74,7 +74,7 @@ Dota2.Dota2Client.prototype.configPracticeLobby = function(id, options, callback
   }
 
   var command = Dota2._parseOptions(options);
-  command["lobby_id"] = id;
+  command["lobby_id"] = lobby_id;
 
   var payload = new Dota2.schema.CMsgPracticeLobbySetDetails(command);
   this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbySetDetails;
@@ -93,7 +93,7 @@ Dota2.Dota2Client.prototype.requestPracticeLobbyList = function(callback){
     if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
     return null;
   }
-  
+
   if (this.debug) util.log("Sending CMsgPracticeLobbyList request");
   var payload = new Dota2.schema.CMsgPracticeLobbyList({
   });
@@ -113,7 +113,7 @@ Dota2.Dota2Client.prototype.requestFriendPracticeLobbyList = function(callback){
     if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
     return null;
   }
-  
+
   if (this.debug) util.log("Sending CMsgFriendPracticeLobbyListRequest request");
   var payload = new Dota2.schema.CMsgFriendPracticeLobbyListRequest({
   });
@@ -155,9 +155,9 @@ Dota2.Dota2Client.prototype.setLobbyTeamSlot = function(team, slot, callback){
 
   if (this.debug) util.log("Sending flip teams request");
   var payload = Dota2.schema.CMsgFlipLobbyTeams.serialize({});
-  
+
   this._gc.send({
-          "msg":    Dota2.EDOTAGCMsg.k_EMsgGCFlipLobbyTeams, 
+          "msg":    Dota2.EDOTAGCMsg.k_EMsgGCFlipLobbyTeams,
           "proto":  {
             "client_steam_id": this._client.steamID,
             "source_app_id":  this._appid

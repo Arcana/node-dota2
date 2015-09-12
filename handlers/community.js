@@ -9,9 +9,9 @@ Dota2._playerHistoryOptions = {
   };
 
 // Methods
-Dota2.Dota2Client.prototype.requestPlayerMatchHistory = function(account_id, filter, callback) {
+Dota2.Dota2Client.prototype.requestPlayerMatchHistory = function(account_id, options, callback) {
   callback = callback || null;
-  filter = filter || null;
+  options = options || null;
   var _self = this;
   /* Sends a message to the Game Coordinator requesting `accountId`'s player match history.  Listen for `playerMatchHistoryData` event for Game Coordinator's response. */
   if (!this._gcReady) {
@@ -20,7 +20,7 @@ Dota2.Dota2Client.prototype.requestPlayerMatchHistory = function(account_id, fil
   }
 
   if (this.debug) util.log("Sending player match history request");
-  var command = Dota2._parseOptions(filter, Dota2._playerHistoryOptions);
+  var command = Dota2._parseOptions(options, Dota2._playerHistoryOptions);
   command.account_id = account_id;
   command.matches_requested = command.matches_requested || 1;
   command.request_id = command.request_id || account_id;
