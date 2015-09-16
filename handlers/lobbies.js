@@ -209,6 +209,37 @@ Dota2.Dota2Client.prototype.practiceLobbyKick = function(account_id, callback){
                 }
   );
 };
+
+// callback to onInvitationCreated
+// note: uses steam_id, not account_id
+Dota2.Dota2Client.prototype.inviteToLobby = function(steam_id, callback){
+  callback = callback || null;
+  var _self = this;
+  if (!this._gcReady) {
+    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+    return null;
+  }
+
+  steam_id = steam_id || 0;
+
+  if (this.debug) util.log("Sending match CMsgInviteToLobby request");
+  var payload = new Dota2.schema.CMsgInviteToLobby({
+    "steam_id": steam_id
+  });
+
+  // todo: implement UDSInviteToGame
+  this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCInviteToLobby;
+  this._gc.send(this._protoBufHeader,
+                payload.toBuffer(),
+                function (header, body) {
+                  // Don't call this, it's automatically sent by the GC
+                  // But then, where is 'callback' stored?
+                  // todo
+                  invitationCreated.call(_self, body, callback);
+                }
+  );
+};
+
 // callback to onPracticeLobbyJoinResponse
 Dota2.Dota2Client.prototype.joinPracticeLobby = function(id, password, callback){
   callback = callback || null;
@@ -311,6 +342,15 @@ var onPracticeLobbyResponse = function onPracticeLobbyResponse(message, callback
   if(callback) callback(practiceLobbyResponse.result, practiceLobbyResponse);
 };
 handlers[Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyResponse] = onPracticeLobbyResponse;
+
+var onInvitationCreated = function onInvitationCreated(message, callback){
+  var invitationCreated = Dota2.schema.CMsgInvitationCreated.decode(message);
+
+  if(this.debug) util.log("Received invitation created response "+JSON.stringify(invitationCreated));
+  this.emit("invitationCreated", invitationCreated.result, invitationCreated);
+  if(callback) callback(invitationCreated.result, invitationCreated);
+};
+handlers[Dota2.EGCBaseMsg.k_EMsgGCInvitationCreated] = onInvitationCreated;
 
 var onFriendPracticeLobbyListResponse = function onFriendPracticeLobbyListResponse(message, callback) {
   var practiceLobbyListResponse = Dota2.schema.CMsgFriendPracticeLobbyListResponse.decode(message);
