@@ -6,10 +6,7 @@ var Dota2 = require("../index"),
 
 Dota2.Dota2Client.prototype.requestGuildData = function() {
   /* Asks the GC for info on the users current guilds. Expect k_EMsgGCGuildOpenPartyRefresh and k_EMsgGCGuildData from GC for guild ids. */
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
+  if (!this.isGCReady()) return null;
 
   if (this.debug) util.log("Requesting current user guild data. ");
   var payload = new Dota2.schema.CMsgDOTARequestGuildData();
@@ -24,10 +21,7 @@ Dota2.Dota2Client.prototype.inviteToGuild = function(guild_id, target_account_id
   var _self = this;
   
   /* Attempts to invite target_account_id to a guild.  Expect k_EMsgGCGuildInviteAccountResponse from GC. */
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
+  if (!this.isGCReady()) return null;
 
   if (this.debug) util.log("Inviting person to guild. " + [guild_id, target_account_id].join(", "));
   var payload = new Dota2.schema.CMsgDOTAGuildInviteAccountRequest({
@@ -48,10 +42,7 @@ Dota2.Dota2Client.prototype.cancelInviteToGuild = function(guild_id, target_acco
   var _self = this;
   
   /* Attempts to cancel target_account_id's invitation to a guild.  Expect k_EMsgGCGuildCancelInviteAccountResponse from GC. */
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
+  if (!this.isGCReady()) return null;
 
   if (this.debug) util.log("Cancelling invite to guild. " + [guild_id, target_account_id].join(", "));
   var payload = new Dota2.schema.CMsgDOTAGuildCancelInviteRequest({
@@ -77,10 +68,7 @@ Dota2.Dota2Client.prototype.setGuildAccountRole = function(guild_id, target_acco
      - 2: Officer
      - 3: Member
   */
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
+  if (!this.isGCReady()) return null;
 
   if (this.debug) util.log("Setting guild account role. " + [guild_id, target_account_id, target_role].join(", "));
   var payload = new Dota2.schema.CMsgDOTAGuildSetAccountRoleRequest({

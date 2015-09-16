@@ -6,10 +6,7 @@ Dota2.Dota2Client.prototype.respondPartyInvite = function(id, accept) {
   id = id || null;
   accept = accept || false;
 
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
+  if (!this.isGCReady()) return null;
 
   if (id == null) {
     if (this.debug) util.log("Party ID required to respond to an invite.");
@@ -33,10 +30,7 @@ Dota2.Dota2Client.prototype.respondPartyInvite = function(id, accept) {
 };
 
 Dota2.Dota2Client.prototype.leaveParty = function() {
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
+  if (!this.isGCReady()) return null;
 
   if (this.debug) util.log("Leaving party.");
 
@@ -51,10 +45,7 @@ Dota2.Dota2Client.prototype.leaveParty = function() {
 Dota2.Dota2Client.prototype.setPartyCoach = function(coach) {
   coach = coach || false;
 
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
+  if (!this.isGCReady()) return null;
 
   if(this.Party == null) {
     if(this.debug) util.log("setPartyCoach called when not in a party!");
@@ -73,10 +64,7 @@ Dota2.Dota2Client.prototype.setPartyCoach = function(coach) {
 Dota2.Dota2Client.prototype.inviteToParty = function(steam_id) {
   steam_id = steam_id || null;
 
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
+  if (!this.isGCReady()) return null;
 
   if (steam_id == null) {
     if (this.debug) util.log("Steam ID required to create a party invite.");
@@ -97,10 +85,7 @@ Dota2.Dota2Client.prototype.inviteToParty = function(steam_id) {
 Dota2.Dota2Client.prototype.kickFromParty = function(steam_id) {
   steam_id = steam_id || null;
 
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
+  if (!this.isGCReady()) return null;
 
   if (steam_id == null) {
     if (this.debug) util.log("Steam ID required to kick from the party.");

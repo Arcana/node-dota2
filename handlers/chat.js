@@ -7,10 +7,7 @@ Dota2.Dota2Client.prototype.joinChat = function(channel, type) {
   type = type || Dota2.DOTAChatChannelType_t.DOTAChannelType_Custom;
 
   /* Attempts to join a chat channel.  Expect k_EMsgGCJoinChatChannelResponse from GC */
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
+  if (!this.isGCReady()) return null;
 
   if (this.debug) util.log("Joining chat channel: " + channel);
   var payload = new Dota2.schema.CMsgDOTAJoinChatChannel({
@@ -25,10 +22,7 @@ Dota2.Dota2Client.prototype.joinChat = function(channel, type) {
 
 Dota2.Dota2Client.prototype.leaveChat = function(channel) {
   /* Attempts to leave a chat channel. GC does not send a response. */
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
+  if (!this.isGCReady()) return null;
 
   if (this.debug) util.log("Leaving chat channel: " + channel);
   var channelId = this.chatChannels.filter(function (item) {return (item.channel_name == channel); }).map(function (item) { return item.channel_id; })[0]
@@ -48,10 +42,7 @@ Dota2.Dota2Client.prototype.leaveChat = function(channel) {
 
 Dota2.Dota2Client.prototype.sendMessage = function(channel, message) {
   /* Attempts to send a message to a chat channel. GC does not send a response. */
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
+  if (!this.isGCReady()) return null;
 
   if (this.debug) util.log("Sending message to " + channel);
   var channelId = this.chatChannels.filter(function (item) {return (item.channel_name == channel);}).map(function (item) { return item.channel_id; })[0]
@@ -71,10 +62,7 @@ Dota2.Dota2Client.prototype.sendMessage = function(channel, message) {
 
 Dota2.Dota2Client.prototype.requestChatChannels = function() {
   /* Requests a list of chat channels from the GC. */
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
+  if (!this.isGCReady()) return null;
 
   if (this.debug) util.log("Requesting channel list");
   var payload = new Dota2.schema.CMsgDOTARequestChatChannelList({
