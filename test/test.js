@@ -155,11 +155,11 @@ var logOnDetails = {
     "account_name": global.config.steam_user,
     "password": global.config.steam_pass,
 };
-if (global.config.steam_guard_code) logOnDetails.authCode = global.config.steam_guard_code;
+if (global.config.steam_guard_code) logOnDetails.auth_code = global.config.steam_guard_code;
 
 try {
     var sentry = fs.readFileSync('sentry');
-    if (sentry.length) logOnDetails.shaSentryfile = sentry;
+    if (sentry.length) logOnDetails.sha_sentryfile = sentry;
 }
 catch (beef){
     util.log("Cannae load the sentry. " + beef);
