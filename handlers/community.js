@@ -14,10 +14,7 @@ Dota2.Dota2Client.prototype.requestPlayerMatchHistory = function(account_id, opt
   options = options || null;
   var _self = this;
   /* Sends a message to the Game Coordinator requesting `accountId`'s player match history.  Listen for `playerMatchHistoryData` event for Game Coordinator's response. */
-  if (!this._gcReady) {
-      if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-      return null;
-  }
+  if (!this.isGCReady()) return null;
 
   if (this.debug) util.log("Sending player match history request");
   var command = Dota2._parseOptions(options, Dota2._playerHistoryOptions);
@@ -38,10 +35,7 @@ Dota2.Dota2Client.prototype.requestProfile = function(account_id, request_name, 
   callback = callback || null;
   var _self = this;
   /* Sends a message to the Game Coordinator requesting `accountId`'s profile data.  Listen for `profileData` event for Game Coordinator's response. */
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
+  if (!this.isGCReady()) return null;
 
   if (this.debug) util.log("Sending profile request");
   var payload = new Dota2.schema.CMsgDOTAProfileRequest({
@@ -61,10 +55,7 @@ Dota2.Dota2Client.prototype.requestPassportData = function(account_id, callback)
   callback = callback || null;
   var _self = this;
   /* Sends a message to the Game Coordinator requesting `accountId`'s passport data.  Listen for `passportData` event for Game Coordinator's response. */
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
+  if (!this.isGCReady()) return null;
 
   if (this.debug) util.log("Sending passport data request");
   var payload = new Dota2.schema.CMsgPassportDataRequest({"account_id": account_id});
@@ -83,10 +74,7 @@ Dota2.Dota2Client.prototype.requestHallOfFame = function(week, callback) {
   var _self = this;
 
   /* Sends a message to the Game Coordinator requesting `accountId`'s passport data.  Listen for `passportData` event for Game Coordinator's response. */
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
+  if (!this.isGCReady()) return null;
 
   if (this.debug) util.log("Sending hall of fame request.");
   var payload = new Dota2.schema.CMsgDOTAHallOfFameRequest({

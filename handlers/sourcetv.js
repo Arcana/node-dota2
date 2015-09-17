@@ -8,10 +8,7 @@ Dota2.Dota2Client.prototype.requestSourceTVGames = function(filter_options, call
     callback = callback || null;
     var _self = this;
     /* Sends a message to the Game Coordinator requesting `accountId`'s profile data.  Listen for `profileData` event for Game Coordinator's response. */
-    if (!this._gcReady) {
-        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-        return null;
-    }
+    if (!this.isGCReady()) return null;
     
     if (this.debug) util.log("Sending find SourceTV games request");
     

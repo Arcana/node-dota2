@@ -148,6 +148,11 @@ Dota2Client.prototype.exit = function() {
   if(this._client.loggedOn) this._client.gamesPlayed([]);
 };
 
+// Helper function for returning gc status and debug log message if gc not ready.
+Dota2Client.prototype.isGCReady = function() {
+  if (!this._gcReady && this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+  return this._gcReady;
+}
 
 // Handlers
 
