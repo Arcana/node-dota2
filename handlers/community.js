@@ -14,20 +14,14 @@ Dota2.Dota2Client.prototype.requestPlayerMatchHistory = function(account_id, opt
   options = options || null;
   var _self = this;
   /* Sends a message to the Game Coordinator requesting `accountId`'s player match history.  Listen for `playerMatchHistoryData` event for Game Coordinator's response. */
-  if (!this._gcReady) {
-      if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-      return null;
-  }
-
   if (this.debug) util.log("Sending player match history request");
   var command = Dota2._parseOptions(options, Dota2._playerHistoryOptions);
   command.account_id = account_id;
   command.matches_requested = command.matches_requested || 1;
   command.request_id = command.request_id || account_id;
   var payload = new Dota2.schema.CMsgDOTAGetPlayerMatchHistory(command);
-  this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgDOTAGetPlayerMatchHistory;
-  this._gc.send(this._protoBufHeader,
-                payload.toBuffer(),
+  this.sendToGC(Dota2.EDOTAGCMsg.k_EMsgDOTAGetPlayerMatchHistory,
+                payload,
                 function (header, body) {
                   onPlayerMatchHistoryResponse.call(_self, body, callback);
                 }
@@ -38,19 +32,13 @@ Dota2.Dota2Client.prototype.requestProfile = function(account_id, request_name, 
   callback = callback || null;
   var _self = this;
   /* Sends a message to the Game Coordinator requesting `accountId`'s profile data.  Listen for `profileData` event for Game Coordinator's response. */
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
-
   if (this.debug) util.log("Sending profile request");
   var payload = new Dota2.schema.CMsgDOTAProfileRequest({
     "account_id": account_id,
     "request_name": request_name
   });
-  this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCProfileRequest;
-  this._gc.send(this._protoBufHeader,
-                payload.toBuffer(),
+  this.sendToGC(Dota2.EDOTAGCMsg.k_EMsgGCProfileRequest,
+                payload,
                 function (header, body) {
                   onProfileResponse.call(_self, body, callback);
                 }
@@ -61,16 +49,10 @@ Dota2.Dota2Client.prototype.requestPassportData = function(account_id, callback)
   callback = callback || null;
   var _self = this;
   /* Sends a message to the Game Coordinator requesting `accountId`'s passport data.  Listen for `passportData` event for Game Coordinator's response. */
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
-
   if (this.debug) util.log("Sending passport data request");
   var payload = new Dota2.schema.CMsgPassportDataRequest({"account_id": account_id});
-  this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCPassportDataRequest;
-  this._gc.send(this._protoBufHeader,
-                payload.toBuffer(),
+  this.sendToGC(Dota2.EDOTAGCMsg.k_EMsgGCPassportDataRequest,
+                payload,
                 function (header, body) {
                   onPassportDataResponse.call(_self, body, callback);
                 }
@@ -83,18 +65,12 @@ Dota2.Dota2Client.prototype.requestHallOfFame = function(week, callback) {
   var _self = this;
 
   /* Sends a message to the Game Coordinator requesting `accountId`'s passport data.  Listen for `passportData` event for Game Coordinator's response. */
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
-
   if (this.debug) util.log("Sending hall of fame request.");
   var payload = new Dota2.schema.CMsgDOTAHallOfFameRequest({
     "week": week
   });
-  this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCHallOfFameRequest;
-  this._gc.send(this._protoBufHeader,
-                payload.toBuffer(),
+  this.sendToGC(Dota2.EDOTAGCMsg.k_EMsgGCHallOfFameRequest,
+                payload,
                 function (header, body) {
                   onHallOfFameResponse.call(_self, body, callback);
                 }
