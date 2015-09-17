@@ -148,6 +148,14 @@ Dota2Client.prototype.exit = function() {
   if(this._client.loggedOn) this._client.gamesPlayed([]);
 };
 
+Dota2Client.prototype.sendToGC = function(type, payload, callback) {
+  if (!this._gcReady) {
+    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+    return null;
+  }
+  this._protoBufHeader.msg = type;
+  this._gc.send(this._protoBufHeader, payload.toBuffer(), callback);
+}
 
 // Handlers
 

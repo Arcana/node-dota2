@@ -7,29 +7,17 @@ Dota2.Dota2Client.prototype.joinChat = function(channel, type) {
   type = type || Dota2.DOTAChatChannelType_t.DOTAChannelType_Custom;
 
   /* Attempts to join a chat channel.  Expect k_EMsgGCJoinChatChannelResponse from GC */
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
-
   if (this.debug) util.log("Joining chat channel: " + channel);
   var payload = new Dota2.schema.CMsgDOTAJoinChatChannel({
     "channel_name": channel,
     "channel_type": type
   });
-  this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCJoinChatChannel;
-  this._gc.send(this._protoBufHeader,
-                payload.toBuffer()
-  );
+
+  this.sendToGC(Dota2.EDOTAGCMsg.k_EMsgGCJoinChatChannel, payload);
 };
 
 Dota2.Dota2Client.prototype.leaveChat = function(channel) {
   /* Attempts to leave a chat channel. GC does not send a response. */
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
-
   if (this.debug) util.log("Leaving chat channel: " + channel);
   var channelId = this.chatChannels.filter(function (item) {return (item.channel_name == channel); }).map(function (item) { return item.channel_id; })[0]
   if (channelId === undefined) {
@@ -39,20 +27,12 @@ Dota2.Dota2Client.prototype.leaveChat = function(channel) {
   var payload = new Dota2.schema.CMsgDOTALeaveChatChannel({
     "channel_id": channelId
   });
-  this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCLeaveChatChannel;
-  this._gc.send(this._protoBufHeader,
-                payload.toBuffer()
-  );
+  this.sendToGC(Dota2.EDOTAGCMsg.k_EMsgGCLeaveChatChannel, payload);
   this.chatChannels = this.chatChannels.filter(function (item) {if (item.channel_name == channel) return true; });
 };
 
 Dota2.Dota2Client.prototype.sendMessage = function(channel, message) {
   /* Attempts to send a message to a chat channel. GC does not send a response. */
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
-
   if (this.debug) util.log("Sending message to " + channel);
   var channelId = this.chatChannels.filter(function (item) {return (item.channel_name == channel);}).map(function (item) { return item.channel_id; })[0]
   if (channelId === undefined) {
@@ -63,26 +43,15 @@ Dota2.Dota2Client.prototype.sendMessage = function(channel, message) {
     "channel_id": channelId,
     "text": message
   });
-  this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCChatMessage;
-  this._gc.send(this._protoBufHeader,
-                payload.toBuffer()
-  );
+  this.sendToGC(Dota2.EDOTAGCMsg.k_EMsgGCChatMessage, payload);
 };
 
 Dota2.Dota2Client.prototype.requestChatChannels = function() {
   /* Requests a list of chat channels from the GC. */
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
-
   if (this.debug) util.log("Requesting channel list");
   var payload = new Dota2.schema.CMsgDOTARequestChatChannelList({
   });
-  this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCRequestChatChannelList;
-  this._gc.send(this._protoBufHeader,
-                payload.toBuffer()
-  );
+  this.sendToGC(Dota2.EDOTAGCMsg.k_EMsgGCRequestChatChannelList, payload);
 };
 
 // Handlers

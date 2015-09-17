@@ -35,11 +35,6 @@ Dota2.Dota2Client.prototype.createTournamentLobby = function(password, tournamen
   tournament_id = tournament_id || -1;
   var _self = this;
 
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
-
   if (this.debug) util.log("Sending match CMsgPracticeLobbyCreate request");
 
   var lobby_details = Dota2._parseOptions(options, Dota2._lobbyOptions);
@@ -56,9 +51,8 @@ Dota2.Dota2Client.prototype.createTournamentLobby = function(password, tournamen
   }
   var payload = new Dota2.schema.CMsgPracticeLobbyCreate(command);
 
-  this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyCreate;
-  this._gc.send(this._protoBufHeader,
-                payload.toBuffer(),
+  this.sendToGC(Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyCreate,
+                payload,
                 function (header, body) {
                   onPracticeLobbyResponse.call(_self, body, callback);
                 }
@@ -68,18 +62,12 @@ Dota2.Dota2Client.prototype.createTournamentLobby = function(password, tournamen
 Dota2.Dota2Client.prototype.configPracticeLobby = function(lobby_id, options, callback){
   callback = callback || null;
   var _self = this;
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
-
   var command = Dota2._parseOptions(options);
   command["lobby_id"] = lobby_id;
 
   var payload = new Dota2.schema.CMsgPracticeLobbySetDetails(command);
-  this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbySetDetails;
-  this._gc.send(this._protoBufHeader,
-                payload.toBuffer(),
+  this.sendToGC(Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbySetDetails,
+                payload,
                 function (header, body) {
                   onPracticeLobbyResponse.call(_self, body, callback);
                 }
@@ -89,17 +77,11 @@ Dota2.Dota2Client.prototype.configPracticeLobby = function(lobby_id, options, ca
 Dota2.Dota2Client.prototype.requestPracticeLobbyList = function(callback){
   callback = callback || null;
   var _self = this;
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
-
   if (this.debug) util.log("Sending CMsgPracticeLobbyList request");
   var payload = new Dota2.schema.CMsgPracticeLobbyList({
   });
-  this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyList;
-  this._gc.send(this._protoBufHeader,
-                payload.toBuffer(),
+  this.sendToGC(Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyList,
+                payload,
                 function (header, body) {
                   onPracticeLobbyListResponse.call(_self, body, callback);
                 }
@@ -109,17 +91,11 @@ Dota2.Dota2Client.prototype.requestPracticeLobbyList = function(callback){
 Dota2.Dota2Client.prototype.requestFriendPracticeLobbyList = function(callback){
   callback = callback || null;
   var _self = this;
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
-
   if (this.debug) util.log("Sending CMsgFriendPracticeLobbyListRequest request");
   var payload = new Dota2.schema.CMsgFriendPracticeLobbyListRequest({
   });
-  this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCFriendPracticeLobbyListRequest;
-  this._gc.send(this._protoBufHeader,
-                payload.toBuffer(),
+  this.sendToGC(Dota2.EDOTAGCMsg.k_EMsgGCFriendPracticeLobbyListRequest,
+                payload,
                 function (header, body) {
                   onFriendPracticeLobbyListResponse.call(_self, body, callback);
                 }
@@ -130,14 +106,9 @@ Dota2.Dota2Client.prototype.balancedShuffleLobby = function(callback){
   callback = callback || null;
   var _self = this;
 
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
   var payload = new Dota2.schema.CMsgBalancedShuffleLobby({});
-  this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCBalancedShuffleLobby;
-  this._gc.send(this._protoBufHeader,
-                payload.toBuffer(),
+  this.sendToGC(Dota2.EDOTAGCMsg.k_EMsgGCBalancedShuffleLobby,
+                payload,
                 function (header, body) {
                   onPracticeLobbyResponse.call(_self, body, callback);
                 }
@@ -148,39 +119,19 @@ Dota2.Dota2Client.prototype.balancedShuffleLobby = function(callback){
 /*
 Dota2.Dota2Client.prototype.setLobbyTeamSlot = function(team, slot, callback){
   callback = callback || null;
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
-
   if (this.debug) util.log("Sending flip teams request");
   var payload = Dota2.schema.CMsgFlipLobbyTeams.serialize({});
 
-  this._gc.send({
-          "msg":    Dota2.EDOTAGCMsg.k_EMsgGCFlipLobbyTeams,
-          "proto":  {
-            "client_steam_id": this._client.steamID,
-            "source_app_id":  this._appid
-          }
-        },
-        payload.toBuffer(),
-        callback
-  );
+  this.sendToGC(Dota2.EDOTAGCMsg.k_EMsgGCFlipLobbyTeams, payload, callback);
 };*/
 // callback to onPracticeLobbyResponse
 Dota2.Dota2Client.prototype.flipLobbyTeams = function(callback){
   callback = callback || null;
   var _self = this;
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
-
   if (this.debug) util.log("Sending flip teams request");
   var payload = new Dota2.schema.CMsgFlipLobbyTeams({});
-  this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCFlipLobbyTeams;
-  this._gc.send(this._protoBufHeader,
-                payload.toBuffer(),
+  this.sendToGC(Dota2.EDOTAGCMsg.k_EMsgGCFlipLobbyTeams,
+                payload,
                 function (header, body) {
                   onPracticeLobbyResponse.call(_self, body, callback);
                 }
@@ -190,20 +141,14 @@ Dota2.Dota2Client.prototype.flipLobbyTeams = function(callback){
 Dota2.Dota2Client.prototype.practiceLobbyKick = function(account_id, callback){
   callback = callback || null;
   var _self = this;
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
-
   account_id = account_id || "";
 
   if (this.debug) util.log("Sending match CMsgPracticeLobbyKick request");
   var payload = new Dota2.schema.CMsgPracticeLobbyKick({
     "account_id": account_id
   });
-  this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyKick;
-  this._gc.send(this._protoBufHeader,
-                payload.toBuffer(),
+  this.sendToGC(Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyKick,
+                payload,
                 function (header, body) {
                   onPracticeLobbyResponse.call(_self, body, callback);
                 }
@@ -213,11 +158,6 @@ Dota2.Dota2Client.prototype.practiceLobbyKick = function(account_id, callback){
 Dota2.Dota2Client.prototype.joinPracticeLobby = function(id, password, callback){
   callback = callback || null;
   var _self = this;
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
-
   password = password || "";
 
   if (this.debug) util.log("Sending match CMsgPracticeLobbyJoin request");
@@ -225,9 +165,8 @@ Dota2.Dota2Client.prototype.joinPracticeLobby = function(id, password, callback)
     "lobby_id": id,
     "pass_key": password
   });
-  this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyJoin;
-  this._gc.send(this._protoBufHeader,
-                payload.toBuffer(),
+  this.sendToGC(Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyJoin,
+                payload,
                 function (header, body) {
                   onPracticeLobbyJoinResponse.call(_self, body, callback);
                 }
@@ -240,17 +179,11 @@ Dota2.Dota2Client.prototype.leavePracticeLobby = function(callback) {
 
   /* Sends a message to the Game Coordinator requesting `matchId`'s match details.  Listen for `matchData` event for Game Coordinator's response. */
 
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
-
   if (this.debug) util.log("Sending match CMsgPracticeLobbyLeave request");
   var payload = new Dota2.schema.CMsgPracticeLobbyLeave({
   });
-  this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyLeave;
-  this._gc.send(this._protoBufHeader,
-                payload.toBuffer(),
+  this.sendToGC(Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyLeave,
+                payload,
                 function (header, body) {
                   onPracticeLobbyResponse.call(_self, body, callback);
                 }
@@ -262,17 +195,11 @@ Dota2.Dota2Client.prototype.launchPracticeLobby = function(callback) {
   var _self = this;
   /* Sends a message to the Game Coordinator requesting lobby start. */
 
-  if (!this._gcReady) {
-    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-    return null;
-  }
-
   if (this.debug) util.log("Sending match CMsgPracticeLobbyLaunch request");
   var payload = new Dota2.schema.CMsgPracticeLobbyLaunch({
   });
-  this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyLaunch;
-  this._gc.send(this._protoBufHeader,
-                payload.toBuffer(),
+  this.sendToGC(Dota2.EDOTAGCMsg.k_EMsgGCPracticeLobbyLaunch,
+                payload,
                 function (header, body) {
                   onPracticeLobbyResponse.call(_self, body, callback);
                 }
