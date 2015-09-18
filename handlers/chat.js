@@ -92,7 +92,7 @@ var handlers = Dota2.Dota2Client.prototype._handlers;
 var onJoinChatChannelResponse = function onJoinChatChannelResponse(message) {
   /* Channel data after we sent k_EMsgGCJoinChatChannel */
   var channelData = Dota2.schema.CMsgDOTAJoinChatChannelResponse.decode(message);
-  util.log("Chat channel "+channelData.channel_name+ " has "+channelData.members.length+" person(s) online");
+  if (this.debug) util.log("Chat channel "+channelData.channel_name+ " has "+channelData.members.length+" person(s) online");
   this.chatChannels.push(channelData);
 };
 handlers[Dota2.EDOTAGCMsg.k_EMsgGCJoinChatChannelResponse] = onJoinChatChannelResponse;
