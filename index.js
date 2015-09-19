@@ -32,7 +32,6 @@ Dota2.ServerRegion = {
     PERFECTWORLDTELECOM: 12,
     PERFECTWORLDUNICOM: 13
 };
-Dota2.schema.GameMode = Dota2.schema.DOTA_GameMode;
 
 var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
   EventEmitter.call(this);

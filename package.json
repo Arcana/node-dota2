@@ -9,7 +9,7 @@
     "steam": "^1.0.0"
   },
   "scripts": {
-    "update": "bash update_proto.sh && node generate.js"
+    "update": "bash update_proto.sh"
   },
   "readmeFilename": "README.md",
   "description": "A node-steam plugin for Dota 2.",
