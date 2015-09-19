@@ -1,10 +1,17 @@
 var Dota2 = require("../index"),
     util = require("util");
 
-// Methods
+Dota2._playerHistoryOptions = {
+    start_at_match_id: "number",
+    matches_requested: "number",
+    hero_id: "number",
+    request_id: "number"
+  };
 
-Dota2.Dota2Client.prototype.getPlayerMatchHistory = function(account_id, match_id, callback) {
+// Methods
+Dota2.Dota2Client.prototype.requestPlayerMatchHistory = function(account_id, options, callback) {
   callback = callback || null;
+  options = options || null;
   var _self = this;
   /* Sends a message to the Game Coordinator requesting `accountId`'s player match history.  Listen for `playerMatchHistoryData` event for Game Coordinator's response. */
   if (!this._gcReady) {
@@ -13,13 +20,11 @@ Dota2.Dota2Client.prototype.getPlayerMatchHistory = function(account_id, match_i
   }
 
   if (this.debug) util.log("Sending player match history request");
-  var payload = new Dota2.schema.CMsgDOTAGetPlayerMatchHistory({
-      "account_id": account_id,
-      "start_at_match_id": match_id,
-      "matches_requested": 13,
-      "hero_id": 0,
-      "request_id": account_id
-  });
+  var command = Dota2._parseOptions(options, Dota2._playerHistoryOptions);
+  command.account_id = account_id;
+  command.matches_requested = command.matches_requested || 1;
+  command.request_id = command.request_id || account_id;
+  var payload = new Dota2.schema.CMsgDOTAGetPlayerMatchHistory(command);
   this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgDOTAGetPlayerMatchHistory;
   this._gc.send(this._protoBufHeader,
                 payload.toBuffer(),
@@ -29,7 +34,7 @@ Dota2.Dota2Client.prototype.getPlayerMatchHistory = function(account_id, match_i
   );
 };
 
-Dota2.Dota2Client.prototype.profileRequest = function(account_id, request_name, callback) {
+Dota2.Dota2Client.prototype.requestProfile = function(account_id, request_name, callback) {
   callback = callback || null;
   var _self = this;
   /* Sends a message to the Game Coordinator requesting `accountId`'s profile data.  Listen for `profileData` event for Game Coordinator's response. */
@@ -52,7 +57,7 @@ Dota2.Dota2Client.prototype.profileRequest = function(account_id, request_name, 
   );
 };
 
-Dota2.Dota2Client.prototype.passportDataRequest = function(account_id, callback) {
+Dota2.Dota2Client.prototype.requestPassportData = function(account_id, callback) {
   callback = callback || null;
   var _self = this;
   /* Sends a message to the Game Coordinator requesting `accountId`'s passport data.  Listen for `passportData` event for Game Coordinator's response. */
@@ -72,11 +77,11 @@ Dota2.Dota2Client.prototype.passportDataRequest = function(account_id, callback)
   );
 };
 
-Dota2.Dota2Client.prototype.hallOfFameRequest = function(week, callback) {
+Dota2.Dota2Client.prototype.requestHallOfFame = function(week, callback) {
   week = week || null;
   callback = callback || null;
   var _self = this;
-  
+
   /* Sends a message to the Game Coordinator requesting `accountId`'s passport data.  Listen for `passportData` event for Game Coordinator's response. */
   if (!this._gcReady) {
     if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");

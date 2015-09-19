@@ -7,9 +7,9 @@ var steam = require("steam"),
     steamUser = new steam.SteamUser(steamClient),
     steamFriends = new steam.SteamFriends(steamClient),
     Dota2 = new dota2.Dota2Client(steamClient, true);
-    
+
 // Load config
-global.config = require("./config");    
+global.config = require("./config");
 
 /* Steam logic */
 var onSteamLogOn = function onSteamLogOn(logonResp) {
@@ -155,9 +155,15 @@ var logOnDetails = {
     "account_name": global.config.steam_user,
     "password": global.config.steam_pass,
 };
-if (global.config.steam_guard_code) logOnDetails.authCode = global.config.steam_guard_code;
-var sentry = fs.readFileSync('sentry');
-if (sentry.length) logOnDetails.shaSentryfile = sentry;
+if (global.config.steam_guard_code) logOnDetails.auth_code = global.config.steam_guard_code;
+
+try {
+    var sentry = fs.readFileSync('sentry');
+    if (sentry.length) logOnDetails.sha_sentryfile = sentry;
+}
+catch (beef){
+    util.log("Cannae load the sentry. " + beef);
+}
 
 steamClient.connect();
 steamClient.on('connected', function() {

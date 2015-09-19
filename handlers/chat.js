@@ -70,7 +70,7 @@ Dota2.Dota2Client.prototype.sendMessage = function(channel, message) {
 };
 
 Dota2.Dota2Client.prototype.requestChatChannels = function() {
-  /* Attempts to send a message to a chat channel. GC does not send a response. */
+  /* Requests a list of chat channels from the GC. */
   if (!this._gcReady) {
     if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
     return null;
@@ -114,7 +114,7 @@ var onOtherJoinedChannel = function onOtherJoinedChannel(message) {
   /* Someone joined a chat channel you're in. */
   var otherJoined = Dota2.schema.CMsgDOTAOtherJoinedChatChannel.decode(message);
   if(this.debug) util.log(otherJoined.steam_id+" joined channel "+otherJoined.channel_id);
-  this.emit("chatJoin", 
+  this.emit("chatJoin",
             otherJoined.channel_id,
             otherJoined.persona_name,
             otherJoined.steam_id,
@@ -133,7 +133,7 @@ var onOtherLeftChannel = function onOtherLeftChannel(message) {
   /* Someone left a chat channel you're in. */
   var otherLeft = Dota2.schema.CMsgDOTAOtherLeftChatChannel.decode(message);
   if(this.debug) util.log(otherLeft.steam_id+" left channel");
-  this.emit("chatLeave", 
+  this.emit("chatLeave",
             otherLeft.channel_id,
             otherLeft.steam_id,
             otherLeft);
@@ -144,8 +144,8 @@ var onOtherLeftChannel = function onOtherLeftChannel(message) {
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCOtherLeftChannel] = onOtherLeftChannel;
 
-var onRequestChatChannelListResponse = function onRequestChatChannelListResponse(message) {
+var onChatChannelsResponse = function onChatChannelsResponse(message) {
   var channels = Dota2.schema.CMsgDOTARequestChatChannelListResponse.decode(message).channels;
-  this.emit("chatChannelsReceived", channels)
+  this.emit("chatChannelsData", channels)
 };
-handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCRequestChatChannelListResponse] = onRequestChatChannelListResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCRequestChatChannelListResponse] = onChatChannelsResponse;

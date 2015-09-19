@@ -38,7 +38,7 @@ var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
 
   this.debug = debug || false;
   this.debugMore = debugMore || false;
-  
+
   var steamUser = new steam.SteamUser(steamClient);
   this._user = steamUser;
   this._client = steamClient;
@@ -103,6 +103,8 @@ var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
       self._protoBufHeader.msg = Dota2.schema.EGCBaseClientMsg.k_EMsgGCClientHello;
       var payload = new Dota2.schema.CMsgClientHello({});
       payload.engine = 1;
+      payload.secret_key= "";
+      payload.client_session_need= 104;
       self._gc.send(
         self._protoBufHeader,
         payload.toBuffer()
@@ -154,7 +156,7 @@ Dota2Client.prototype.exit = function() {
       this._gcClientHelloIntervalId = null;
   }
   this._gcReady = false;
-  
+
   if(this._client.loggedOn) this._client.gamesPlayed([]);
 };
 
