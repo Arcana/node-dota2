@@ -66,7 +66,7 @@ Attempts to delete an item. Requires the GC to be ready (listen for the `ready` 
 ### Chat
 #### joinChat(channel, [type])
 * `channel` - A string for the channel name.
-* `[type]` - The type of the channel being joined.  Defaults to `dota2.DOTAChatChannelType_t.DOTAChannelType_Custom`.
+* `[type]` - The type of the channel being joined.  Defaults to `Dota2.schema.DOTAChatChannelType_t.DOTAChannelType_Custom`.
 
 Joins a chat channel.  Listen for the `chatMessage` event for other people's chat messages.
 

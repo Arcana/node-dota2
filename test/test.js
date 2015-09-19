@@ -91,12 +91,12 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
                 // });
                 // Doing chat stuffs.
                 // var guildChannelName = util.format("Guild_%s", guildId);
-                // Dota2.joinChat(guildChannelName, dota2.DOTAChatChannelType_t.DOTAChannelType_Guild);
+                // Dota2.joinChat(guildChannelName, Dota2.schema.DOTAChatChannelType_t.DOTAChannelType_Guild);
                 // setTimeout(function(){ Dota2.sendMessage(guildChannelName, "wowoeagnaeigniaeg"); }, 5000);
                 // setTimeout(function(){ Dota2.leaveChat(guildChannelName); }, 10000);
                 // });
                 /* LOBBIES */
-                // Dota2.createPracticeLobby("Techies cheese", "boop", Dota2.ServerRegion.PERFECTWORLDTELECOM, Dota2.GameMode.DOTA_GAMEMODE_AR, function(err, body){
+                // Dota2.createPracticeLobby("Techies cheese", "boop", Dota2.ServerRegion.PERFECTWORLDTELECOM, Dota2.schema.GameMode.DOTA_GAMEMODE_AR, function(err, body){
                 //     console.log(JSON.stringify(body));
                 // });
                 // setTimeout(function(){

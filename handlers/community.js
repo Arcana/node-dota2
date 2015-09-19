@@ -20,7 +20,7 @@ Dota2.Dota2Client.prototype.getPlayerMatchHistory = function(account_id, match_i
       "hero_id": 0,
       "request_id": account_id
   });
-  this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgDOTAGetPlayerMatchHistory;
+  this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgDOTAGetPlayerMatchHistory;
   this._gc.send(this._protoBufHeader,
                 payload.toBuffer(),
                 function (header, body) {
@@ -43,7 +43,7 @@ Dota2.Dota2Client.prototype.profileRequest = function(account_id, request_name, 
     "account_id": account_id,
     "request_name": request_name
   });
-  this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCProfileRequest;
+  this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCProfileRequest;
   this._gc.send(this._protoBufHeader,
                 payload.toBuffer(),
                 function (header, body) {
@@ -63,7 +63,7 @@ Dota2.Dota2Client.prototype.passportDataRequest = function(account_id, callback)
 
   if (this.debug) util.log("Sending passport data request");
   var payload = new Dota2.schema.CMsgPassportDataRequest({"account_id": account_id});
-  this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCPassportDataRequest;
+  this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCPassportDataRequest;
   this._gc.send(this._protoBufHeader,
                 payload.toBuffer(),
                 function (header, body) {
@@ -87,7 +87,7 @@ Dota2.Dota2Client.prototype.hallOfFameRequest = function(week, callback) {
   var payload = new Dota2.schema.CMsgDOTAHallOfFameRequest({
     "week": week
   });
-  this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCHallOfFameRequest;
+  this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCHallOfFameRequest;
   this._gc.send(this._protoBufHeader,
                 payload.toBuffer(),
                 function (header, body) {
@@ -115,7 +115,7 @@ var onPlayerMatchHistoryResponse = function onPlayerMatchHistoryResponse(message
         if (callback) callback(matchHistoryResponse.result, matchHistoryResponse);
     }
 };
-handlers[Dota2.EDOTAGCMsg.k_EMsgDOTAGetPlayerMatchHistoryResponse] = onPlayerMatchHistoryResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgDOTAGetPlayerMatchHistoryResponse] = onPlayerMatchHistoryResponse;
 
 var onProfileResponse = function onProfileResponse(message, callback) {
   callback = callback || null;
@@ -131,7 +131,7 @@ var onProfileResponse = function onProfileResponse(message, callback) {
     if (callback) callback(profileResponse.result, profileResponse);
   }
 };
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCProfileResponse] = onProfileResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCProfileResponse] = onProfileResponse;
 
 var onPassportDataResponse = function onPassportDataResponse(message, callback) {
   callback = callback || null;
@@ -141,7 +141,7 @@ var onPassportDataResponse = function onPassportDataResponse(message, callback) 
   this.emit("passportData", passportDataResponse.account_id, passportDataResponse);
   if (callback) callback(null, passportDataResponse);
 };
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCPassportDataResponse] = onPassportDataResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCPassportDataResponse] = onPassportDataResponse;
 
 var onHallOfFameResponse = function onHallOfFameResponse(message, callback) {
   callback = callback || null;
@@ -157,4 +157,4 @@ var onHallOfFameResponse = function onHallOfFameResponse(message, callback) {
       if (callback) callback(hallOfFameResponse.result, hallOfFameResponse);
   }
 };
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCHallOfFameResponse] = onHallOfFameResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCHallOfFameResponse] = onHallOfFameResponse;
