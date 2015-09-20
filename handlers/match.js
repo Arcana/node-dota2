@@ -53,7 +53,7 @@ Dota2.Dota2Client.prototype.requestMatches = function(criteria, callback) {
   }
 
   var payload = new Dota2.schema.CMsgDOTARequestMatches(config);
-  this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCRequestMatches;
+  this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCRequestMatches;
   this._gc.send(this._protoBufHeader,
                 payload.toBuffer(),
                 function (header, body) {
@@ -77,7 +77,7 @@ Dota2.Dota2Client.prototype.requestMatchDetails = function(match_id, callback) {
   var payload = new Dota2.schema.CMsgGCMatchDetailsRequest({
     "match_id": match_id
   });
-  this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCMatchDetailsRequest;
+  this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCMatchDetailsRequest;
   this._gc.send(this._protoBufHeader,
                 payload.toBuffer(),
                 function (header, body) {
@@ -98,7 +98,7 @@ Dota2.Dota2Client.prototype.requestMatchmakingStats = function() {
   if (this.debug) util.log("Sending matchmaking stats request");
   var payload = new Dota2.schema.CMsgDOTAMatchmakingStatsRequest({
   });
-  this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCMatchmakingStatsRequest;
+  this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCMatchmakingStatsRequest;
   this._gc.send(this._protoBufHeader,
                 payload.toBuffer()
   );
@@ -127,7 +127,7 @@ var onMatchesResponse = function onMatchesResponse(message, callback) {
       if (callback) callback(matchResponse.result, matchResponse);
   }
 };
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCRequestMatchesResponse] = onMatchesResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCRequestMatchesResponse] = onMatchesResponse;
 
 var onMatchDetailsResponse = function onMatchDetailsResponse(message, callback) {
   callback = callback || null;
@@ -145,7 +145,7 @@ var onMatchDetailsResponse = function onMatchDetailsResponse(message, callback) 
       if (callback) callback(matchDetailsResponse.result, matchDetailsResponse);
   }
 };
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCMatchDetailsResponse] = onMatchDetailsResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCMatchDetailsResponse] = onMatchDetailsResponse;
 
 var onMatchmakingStatsResponse = function onMatchmakingStatsResponse(message) {
   // Is not Job ID based - can't do callbacks.
@@ -158,4 +158,4 @@ var onMatchmakingStatsResponse = function onMatchmakingStatsResponse(message) {
             matchmakingStatsResponse.disabled_groups,
             matchmakingStatsResponse);
 };
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCMatchmakingStatsResponse] = onMatchmakingStatsResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCMatchmakingStatsResponse] = onMatchmakingStatsResponse;

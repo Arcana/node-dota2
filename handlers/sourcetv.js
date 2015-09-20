@@ -25,7 +25,7 @@ Dota2.Dota2Client.prototype.requestSourceTVGames = function(filter_options, call
         "teamGame": false,
         "customGameId": 0,
     },filter_options));
-    this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCFindSourceTVGames;
+    this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCFindSourceTVGames;
     this._gc.send(this._protoBufHeader,
                 payload.toBuffer(),
                 function (header, body) {
@@ -53,4 +53,4 @@ var onSourceTVGamesResponse = function onSourceTVGamesResponse(message, callback
         if (callback) callback(sourceTVGamesResponse.result, sourceTVGamesResponse);
     }
 };
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCSourceTVGamesResponse] = onSourceTVGamesResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCSourceTVGamesResponse] = onSourceTVGamesResponse;
