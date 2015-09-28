@@ -99,7 +99,7 @@ var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
       util.log("Where the fuck is _gc?");
     }
     else {
-      self._protoBufHeader.msg = Dota2.schema.k_EMsgGCClientHello;
+      self._protoBufHeader.msg = Dota2.schema.EGCBaseClientMsg.k_EMsgGCClientHello;
       var payload = new Dota2.schema.CMsgClientHello({});
       payload.engine = 1;
       payload.secret_key= "";
@@ -222,6 +222,7 @@ require("./handlers/inventory");
 require("./handlers/chat");
 require("./handlers/guild");
 require("./handlers/community");
+require("./handlers/helper");
 require("./handlers/match");
 require("./handlers/lobbies");
 require("./handlers/parties");
