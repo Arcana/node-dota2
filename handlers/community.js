@@ -120,7 +120,7 @@ var onPlayerMatchHistoryResponse = function onPlayerMatchHistoryResponse(message
         if (callback) callback(matchHistoryResponse.result, matchHistoryResponse);
     }
 };
-handlers[Dota2.schema.k_EMsgDOTAGetPlayerMatchHistoryResponse] = onPlayerMatchHistoryResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgDOTAGetPlayerMatchHistoryResponse] = onPlayerMatchHistoryResponse;
 
 var onProfileResponse = function onProfileResponse(message, callback) {
   callback = callback || null;
@@ -136,7 +136,7 @@ var onProfileResponse = function onProfileResponse(message, callback) {
     if (callback) callback(profileResponse.result, profileResponse);
   }
 };
-handlers[Dota2.schema.k_EMsgGCProfileResponse] = onProfileResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCProfileResponse] = onProfileResponse;
 
 var onPassportDataResponse = function onPassportDataResponse(message, callback) {
   callback = callback || null;
@@ -146,7 +146,7 @@ var onPassportDataResponse = function onPassportDataResponse(message, callback) 
   this.emit("passportData", passportDataResponse.account_id, passportDataResponse);
   if (callback) callback(null, passportDataResponse);
 };
-handlers[Dota2.schema.k_EMsgGCPassportDataResponse] = onPassportDataResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCPassportDataResponse] = onPassportDataResponse;
 
 var onHallOfFameResponse = function onHallOfFameResponse(message, callback) {
   callback = callback || null;
@@ -162,4 +162,4 @@ var onHallOfFameResponse = function onHallOfFameResponse(message, callback) {
       if (callback) callback(hallOfFameResponse.result, hallOfFameResponse);
   }
 };
-handlers[Dota2.schema.k_EMsgGCHallOfFameResponse] = onHallOfFameResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCHallOfFameResponse] = onHallOfFameResponse;

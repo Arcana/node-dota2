@@ -291,7 +291,7 @@ var onPracticeLobbyJoinResponse = function onPracticeLobbyJoinResponse(message, 
   this.emit("practiceLobbyJoinResponse", practiceLobbyJoinResponse.result, practiceLobbyJoinResponse);
   if (callback) callback(practiceLobbyJoinResponse.result, practiceLobbyJoinResponse);
 };
-handlers[Dota2.schema.k_EMsgGCPracticeLobbyJoinResponse] = onPracticeLobbyJoinResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCPracticeLobbyJoinResponse] = onPracticeLobbyJoinResponse;
 
 var onPracticeLobbyListResponse = function onPracticeLobbyListResponse(message, callback) {
   var practiceLobbyListResponse = Dota2.schema.CMsgPracticeLobbyListResponse.decode(message);
@@ -300,7 +300,7 @@ var onPracticeLobbyListResponse = function onPracticeLobbyListResponse(message, 
   this.emit("practiceLobbyListData", null, practiceLobbyListResponse);
   if (callback) callback(null, practiceLobbyListResponse);
 };
-handlers[Dota2.schema.k_EMsgGCPracticeLobbyListResponse] = onPracticeLobbyListResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCPracticeLobbyListResponse] = onPracticeLobbyListResponse;
 
 var onPracticeLobbyResponse = function onPracticeLobbyResponse(message, callback){
   var practiceLobbyResponse = Dota2.schema.CMsgPracticeLobbyJoinResponse.decode(message);
@@ -309,7 +309,7 @@ var onPracticeLobbyResponse = function onPracticeLobbyResponse(message, callback
   this.emit("practiceLobbyResponse", practiceLobbyResponse.result, practiceLobbyResponse);
   if(callback) callback(practiceLobbyResponse.result, practiceLobbyResponse);
 };
-handlers[Dota2.schema.k_EMsgGCPracticeLobbyResponse] = onPracticeLobbyResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCPracticeLobbyResponse] = onPracticeLobbyResponse;
 
 var onFriendPracticeLobbyListResponse = function onFriendPracticeLobbyListResponse(message, callback) {
   var practiceLobbyListResponse = Dota2.schema.CMsgFriendPracticeLobbyListResponse.decode(message);
@@ -318,4 +318,4 @@ var onFriendPracticeLobbyListResponse = function onFriendPracticeLobbyListRespon
   this.emit("friendPracticeLobbyListData", null, practiceLobbyListResponse);
   if (callback) callback(null, practiceLobbyListResponse);
 };
-handlers[Dota2.schema.k_EMsgGCFriendPracticeLobbyListResponse] = onFriendPracticeLobbyListResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCFriendPracticeLobbyListResponse] = onFriendPracticeLobbyListResponse;

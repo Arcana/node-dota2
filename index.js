@@ -11,9 +11,9 @@ var EventEmitter = require('events').EventEmitter,
     Dota2 = exports;
 
 var builder = ProtoBuf.newBuilder();
-var folder = fs.readdirSync('./proto');
+var folder = fs.readdirSync(__dirname+'/proto');
 folder.forEach(function(f){
-    ProtoBuf.loadProtoFile('./proto/'+f, builder);
+    ProtoBuf.loadProtoFile(__dirname+'/proto/'+f, builder);
 });
 Dota2.schema = builder.build();
 Dota2.ServerRegion = {
@@ -99,7 +99,7 @@ var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
       util.log("Where the fuck is _gc?");
     }
     else {
-      self._protoBufHeader.msg = Dota2.schema.EGCBaseClientMsg.k_EMsgGCClientHello;
+      self._protoBufHeader.msg = Dota2.schema.k_EMsgGCClientHello;
       var payload = new Dota2.schema.CMsgClientHello({});
       payload.engine = 1;
       payload.secret_key= "";
@@ -164,7 +164,7 @@ Dota2Client.prototype.exit = function() {
 
 var handlers = Dota2Client.prototype._handlers = {};
 
-handlers[Dota2.schema.k_EMsgGCClientWelcome] = function clientWelcomeHandler(message) {
+handlers[Dota2.schema.EGCBaseClientMsg.k_EMsgGCClientWelcome] = function clientWelcomeHandler(message) {
   /* Response to our k_EMsgGCClientHello, now we can execute other GC commands. */
 
   // Only execute if _gcClientHelloIntervalID, otherwise it's already been handled (and we don't want to emit multiple 'ready');
@@ -181,7 +181,7 @@ handlers[Dota2.schema.k_EMsgGCClientWelcome] = function clientWelcomeHandler(mes
   this.emit("ready");
 };
 
-handlers[Dota2.schema.k_EMsgGCClientConnectionStatus] = function gcClientConnectionStatus(message) {
+handlers[Dota2.schema.EGCBaseClientMsg.k_EMsgGCClientConnectionStatus] = function gcClientConnectionStatus(message) {
   /* Catch and handle changes in connection status, cuz reasons u know. */
 
   var status = Dota2.schema.CMsgConnectionStatus.decode(message).status;

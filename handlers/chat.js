@@ -95,7 +95,7 @@ var onJoinChatChannelResponse = function onJoinChatChannelResponse(message) {
   if (this.debug) util.log("Chat channel "+channelData.channel_name+ " has "+channelData.members.length+" person(s) online");
   this.chatChannels.push(channelData);
 };
-handlers[Dota2.schema.k_EMsgGCJoinChatChannelResponse] = onJoinChatChannelResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCJoinChatChannelResponse] = onJoinChatChannelResponse;
 
 var onChatMessage = function onChatMessage(message) {
   /* Chat channel message from another user. */
@@ -108,7 +108,7 @@ var onChatMessage = function onChatMessage(message) {
     chatData.text,
     chatData);
 };
-handlers[Dota2.schema.k_EMsgGCChatMessage] = onChatMessage;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCChatMessage] = onChatMessage;
 
 var onOtherJoinedChannel = function onOtherJoinedChannel(message) {
   /* Someone joined a chat channel you're in. */
@@ -127,7 +127,7 @@ var onOtherJoinedChannel = function onOtherJoinedChannel(message) {
                                   persona_name: otherJoined.persona_name
                                 }));
 };
-handlers[Dota2.schema.k_EMsgGCOtherJoinedChannel] = onOtherJoinedChannel;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCOtherJoinedChannel] = onOtherJoinedChannel;
 
 var onOtherLeftChannel = function onOtherLeftChannel(message) {
   /* Someone left a chat channel you're in. */
@@ -142,10 +142,10 @@ var onOtherLeftChannel = function onOtherLeftChannel(message) {
   var chatChannel = this.chatChannels.filter(function (item) {return (""+item.channel_id === ""+otherLeft.channel_id); })[0];
   chatChannel.members = chatChannel.members.filter(function (item) {return (""+item.steam_id !== ""+otherLeft.steam_id); });
 };
-handlers[Dota2.schema.k_EMsgGCOtherLeftChannel] = onOtherLeftChannel;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCOtherLeftChannel] = onOtherLeftChannel;
 
 var onChatChannelsResponse = function onChatChannelsResponse(message) {
   var channels = Dota2.schema.CMsgDOTARequestChatChannelListResponse.decode(message).channels;
   this.emit("chatChannelsData", channels)
 };
-handlers[Dota2.schema.k_EMsgGCRequestChatChannelListResponse] = onChatChannelsResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCRequestChatChannelListResponse] = onChatChannelsResponse;

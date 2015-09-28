@@ -53,4 +53,4 @@ var onSourceTVGamesResponse = function onSourceTVGamesResponse(message, callback
         if (callback) callback(sourceTVGamesResponse.result, sourceTVGamesResponse);
     }
 };
-handlers[Dota2.schema.k_EMsgGCSourceTVGamesResponse] = onSourceTVGamesResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCSourceTVGamesResponse] = onSourceTVGamesResponse;
