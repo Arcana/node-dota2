@@ -127,7 +127,7 @@ var onMatchesResponse = function onMatchesResponse(message, callback) {
       if (callback) callback(matchResponse.result, matchResponse);
   }
 };
-handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCRequestMatchesResponse] = onMatchesResponse;
+handlers[Dota2.schema.k_EMsgGCRequestMatchesResponse] = onMatchesResponse;
 
 var onMatchDetailsResponse = function onMatchDetailsResponse(message, callback) {
   callback = callback || null;
@@ -145,7 +145,7 @@ var onMatchDetailsResponse = function onMatchDetailsResponse(message, callback) 
       if (callback) callback(matchDetailsResponse.result, matchDetailsResponse);
   }
 };
-handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCMatchDetailsResponse] = onMatchDetailsResponse;
+handlers[Dota2.schema.k_EMsgGCMatchDetailsResponse] = onMatchDetailsResponse;
 
 var onMatchmakingStatsResponse = function onMatchmakingStatsResponse(message) {
   // Is not Job ID based - can't do callbacks.
@@ -158,4 +158,4 @@ var onMatchmakingStatsResponse = function onMatchmakingStatsResponse(message) {
             matchmakingStatsResponse.disabled_groups,
             matchmakingStatsResponse);
 };
-handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCMatchmakingStatsResponse] = onMatchmakingStatsResponse;
+handlers[Dota2.schema.k_EMsgGCMatchmakingStatsResponse] = onMatchmakingStatsResponse;

@@ -164,7 +164,7 @@ Dota2Client.prototype.exit = function() {
 
 var handlers = Dota2Client.prototype._handlers = {};
 
-handlers[Dota2.schema.EGCBaseClientMsg.k_EMsgGCClientWelcome] = function clientWelcomeHandler(message) {
+handlers[Dota2.schema.k_EMsgGCClientWelcome] = function clientWelcomeHandler(message) {
   /* Response to our k_EMsgGCClientHello, now we can execute other GC commands. */
 
   // Only execute if _gcClientHelloIntervalID, otherwise it's already been handled (and we don't want to emit multiple 'ready');
@@ -181,7 +181,7 @@ handlers[Dota2.schema.EGCBaseClientMsg.k_EMsgGCClientWelcome] = function clientW
   this.emit("ready");
 };
 
-handlers[Dota2.schema.EGCBaseClientMsg.k_EMsgGCClientConnectionStatus] = function gcClientConnectionStatus(message) {
+handlers[Dota2.schema.k_EMsgGCClientConnectionStatus] = function gcClientConnectionStatus(message) {
   /* Catch and handle changes in connection status, cuz reasons u know. */
 
   var status = Dota2.schema.CMsgConnectionStatus.decode(message).status;

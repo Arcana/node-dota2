@@ -108,7 +108,7 @@ var onGuildOpenPartyRefresh = function onGuildOpenPartyRefresh(message) {
   if (this.debug) util.log("Got guild open party data");
   this.emit("guildOpenPartyData", response.guild_id, response.open_parties, response);
 };
-handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCGuildOpenPartyRefresh] = onGuildOpenPartyRefresh;
+handlers[Dota2.schema.k_EMsgGCGuildOpenPartyRefresh] = onGuildOpenPartyRefresh;
 
 var onGuildDataResponse = function onGuildDataResponse(message) {
   /* Second response from requestGuildData containing general info on the guild (id, members, invitation, ...) */
@@ -117,7 +117,7 @@ var onGuildDataResponse = function onGuildDataResponse(message) {
   this.emit("guildData", response.guild_id, response.members, response);
 };
 
-handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCGuildData] = onGuildDataResponse;
+handlers[Dota2.schema.k_EMsgGCGuildData] = onGuildDataResponse;
 
 var onGuildInviteResponse = function onGuildInviteResponse(message, callback) {
   callback = callback || null;
@@ -136,7 +136,7 @@ var onGuildInviteResponse = function onGuildInviteResponse(message, callback) {
   if (this.debug) util.log("Guild invite account response: " + response.result);
   if (callback) callback(null, response);
 };
-handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCGuildInviteAccountResponse] = onGuildInviteResponse;
+handlers[Dota2.schema.k_EMsgGCGuildInviteAccountResponse] = onGuildInviteResponse;
 
 var onGuildCancelInviteResponse = function onGuildCancelInviteResponse(message, callback) {
   callback = callback || null;
@@ -150,7 +150,7 @@ var onGuildCancelInviteResponse = function onGuildCancelInviteResponse(message, 
   if (this.debug) util.log("Guild cancel invite response: " + response.result);
   if (callback) callback(null, response);
 };
-handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCGuildCancelInviteResponse] = onGuildCancelInviteResponse;
+handlers[Dota2.schema.k_EMsgGCGuildCancelInviteResponse] = onGuildCancelInviteResponse;
 
 var onGuildInviteData = function onGuildInviteData(message) {
   /* Received an invitation to a guild */
@@ -162,7 +162,7 @@ var onGuildInviteData = function onGuildInviteData(message) {
   if (this.debug) util.log("Received invitation to guild: " + guildInviteData.guild_name);
   this.emit("guildInviteData", guildInviteData.guild_id, guildInviteData.guild_name, guildInviteData.inviter, guildInviteData);
 };
-handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCGuildInviteData] = onGuildInviteData;
+handlers[Dota2.schema.k_EMsgGCGuildInviteData] = onGuildInviteData;
 
 var onGuildSetAccountRoleResponse = function onGuildSetAccountRoleResponse(message, callback) {
   callback = callback || null;
@@ -179,4 +179,4 @@ var onGuildSetAccountRoleResponse = function onGuildSetAccountRoleResponse(messa
   if (this.debug) util.log("Guild setAccountRole response: " + setAccountRoleData.result);
   if (callback) callback(null, setAccountRoleData);
 };
-handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCGuildSetAccountRoleResponse] = onGuildSetAccountRoleResponse;
+handlers[Dota2.schema.k_EMsgGCGuildSetAccountRoleResponse] = onGuildSetAccountRoleResponse;
