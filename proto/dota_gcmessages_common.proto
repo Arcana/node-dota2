@@ -570,7 +570,6 @@ enum EDOTAGCMsg {
 	k_EMsgClientToGCGetProfileCardStatsResponse = 8035;
 	k_EMsgClientToGCTopLeagueMatchesRequest = 8036;
 	k_EMsgClientToGCTopFriendMatchesRequest = 8037;
-	k_EMsgGCToClientTopMatchesResponse = 8038;
 	k_EMsgGCToClientProfileCardStatsUpdated = 8040;
 	k_EMsgServerToGCRealtimeStats = 8041;
 	k_EMsgGCToServerRealtimeStatsStartStop = 8042;
@@ -590,6 +589,8 @@ enum EDOTAGCMsg {
 	k_EMsgGCToGCGetAccountFlags = 8058;
 	k_EMsgGCToGCGetAccountFlagsResponse = 8059;
 	k_EMsgSignOutWagerStats = 8060;
+	k_EMsgGCToClientTopLeagueMatchesResponse = 8061;
+	k_EMsgGCToClientTopFriendMatchesResponse = 8062;
 }
 
 enum DOTA_GameMode {

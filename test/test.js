@@ -7,9 +7,9 @@ var steam = require("steam"),
     steamUser = new steam.SteamUser(steamClient),
     steamFriends = new steam.SteamFriends(steamClient),
     Dota2 = new dota2.Dota2Client(steamClient, true);
-    
+
 // Load config
-global.config = require("./config");    
+global.config = require("./config");
 
 /* Steam logic */
 var onSteamLogOn = function onSteamLogOn(logonResp) {
@@ -91,12 +91,12 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
                 // });
                 // Doing chat stuffs.
                 // var guildChannelName = util.format("Guild_%s", guildId);
-                // Dota2.joinChat(guildChannelName, dota2.DOTAChatChannelType_t.DOTAChannelType_Guild);
+                // Dota2.joinChat(guildChannelName, Dota2.schema.DOTAChatChannelType_t.DOTAChannelType_Guild);
                 // setTimeout(function(){ Dota2.sendMessage(guildChannelName, "wowoeagnaeigniaeg"); }, 5000);
                 // setTimeout(function(){ Dota2.leaveChat(guildChannelName); }, 10000);
                 // });
                 /* LOBBIES */
-                // Dota2.createPracticeLobby("Techies cheese", "boop", Dota2.ServerRegion.PERFECTWORLDTELECOM, Dota2.GameMode.DOTA_GAMEMODE_AR, function(err, body){
+                // Dota2.createPracticeLobby("Techies cheese", "boop", Dota2.ServerRegion.PERFECTWORLDTELECOM, Dota2.schema.GameMode.DOTA_GAMEMODE_AR, function(err, body){
                 //     console.log(JSON.stringify(body));
                 // });
                 // setTimeout(function(){
@@ -155,9 +155,15 @@ var logOnDetails = {
     "account_name": global.config.steam_user,
     "password": global.config.steam_pass,
 };
-if (global.config.steam_guard_code) logOnDetails.authCode = global.config.steam_guard_code;
-var sentry = fs.readFileSync('sentry');
-if (sentry.length) logOnDetails.shaSentryfile = sentry;
+if (global.config.steam_guard_code) logOnDetails.auth_code = global.config.steam_guard_code;
+
+try {
+    var sentry = fs.readFileSync('sentry');
+    if (sentry.length) logOnDetails.sha_sentryfile = sentry;
+}
+catch (beef){
+    util.log("Cannae load the sentry. " + beef);
+}
 
 steamClient.connect();
 steamClient.on('connected', function() {

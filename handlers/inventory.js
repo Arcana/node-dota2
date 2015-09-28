@@ -13,7 +13,7 @@ Dota2.Dota2Client.prototype.setItemPositions = function(item_positions) {
   if (this.debug) util.log("Setting item positions.");
   var payloadItemPositions = item_positions.map(function(item){ return {"itemId": item[0], "position": item[1]}; }),
     payload = new Dota2.schema.CMsgSetItemPositions({"itemPositions": payloadItemPositions});
-  this._protoBufHeader.msg = Dota2.EDOTAGCMsg.k_EMsgGCSetItemPositions;
+  this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCSetItemPositions;
   this._gc.send(this._protoBufHeader,
                 payload.toBuffer()
   );
@@ -28,7 +28,7 @@ Dota2.Dota2Client.prototype.deleteItem = function(item_id) {
   var buffer = new Buffer(8);
   buffer.writeUInt64LE(item_id); 
   this._gc.send({
-          "msg":    Dota2.EGCItemMsg.k_EMsgGCDelete
+          "msg":    Dota2.schema.EGCItemMsg.k_EMsgGCDelete
         },
         buffer
   );
