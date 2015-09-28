@@ -1,4 +1,3 @@
-require("./messages");
 var steam = require("steam");
 
 const DOTA_APP_ID = 570;
