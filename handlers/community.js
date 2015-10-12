@@ -46,7 +46,8 @@ Dota2.Dota2Client.prototype.requestProfile = function(account_id, request_name, 
   if (this.debug) util.log("Sending profile request");
   var payload = new Dota2.schema.CMsgDOTAProfileRequest({
     "account_id": account_id,
-    "request_name": request_name
+    "request_name": request_name,
+    "engine": 1
   });
   this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCProfileRequest;
   this._gc.send(this._protoBufHeader,
