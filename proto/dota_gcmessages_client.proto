@@ -118,6 +118,8 @@ message CSourceTVGameSmall {
 	optional uint32 sort_score = 17;
 	optional float last_update_time = 18;
 	optional int32 radiant_lead = 19;
+	optional uint32 radiant_score = 20;
+	optional uint32 dire_score = 21;
 }
 
 message CMsgClientToGCFindTopSourceTVGames {

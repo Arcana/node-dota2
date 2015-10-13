@@ -70,6 +70,7 @@ enum EGCItemMsg {
 	k_EMsgGC_IncrementKillCountResponse = 1075;
 	k_EMsgGCApplyPennantUpgrade = 1076;
 	k_EMsgGCSetItemPositions = 1077;
+	k_EMsgGCSetItemPositions_RateLimited = 1096;
 	k_EMsgGCApplyEggEssence = 1078;
 	k_EMsgGCNameEggEssenceResponse = 1079;
 	k_EMsgGCFulfillDynamicRecipeComponent = 1082;
