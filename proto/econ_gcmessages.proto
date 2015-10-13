@@ -70,6 +70,7 @@ enum EGCItemMsg {
 	k_EMsgGC_IncrementKillCountResponse = 1075;
 	k_EMsgGCApplyPennantUpgrade = 1076;
 	k_EMsgGCSetItemPositions = 1077;
+	k_EMsgGCSetItemPositions_RateLimited = 1096;
 	k_EMsgGCApplyEggEssence = 1078;
 	k_EMsgGCNameEggEssenceResponse = 1079;
 	k_EMsgGCFulfillDynamicRecipeComponent = 1082;
@@ -84,6 +85,8 @@ enum EGCItemMsg {
 	k_EMsgGCResetStrangeGemCount = 1091;
 	k_EMsgGCRequestCrateItems = 1092;
 	k_EMsgGCRequestCrateItemsResponse = 1093;
+	k_EMsgGCExtractGemsResponse = 1094;
+	k_EMsgGCResetStrangeGemCountResponse = 1095;
 	k_EMsgGCServerUseItemRequest = 1103;
 	k_EMsgGCAddGiftItem = 1104;
 	k_EMsgGCRemoveItemGiftMessage = 1105;
