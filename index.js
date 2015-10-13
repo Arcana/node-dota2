@@ -1,4 +1,3 @@
-require("./messages");
 var steam = require("steam");
 
 const DOTA_APP_ID = 570;
@@ -12,9 +11,9 @@ var EventEmitter = require('events').EventEmitter,
     Dota2 = exports;
 
 var builder = ProtoBuf.newBuilder();
-var folder = fs.readdirSync('./proto');
+var folder = fs.readdirSync(__dirname+'/proto');
 folder.forEach(function(f){
-    ProtoBuf.loadProtoFile('./proto/'+f, builder);
+    ProtoBuf.loadProtoFile(__dirname+'/proto/'+f, builder);
 });
 Dota2.schema = builder.build();
 Dota2.ServerRegion = {
@@ -223,6 +222,7 @@ require("./handlers/inventory");
 require("./handlers/chat");
 require("./handlers/guild");
 require("./handlers/community");
+require("./handlers/helper");
 require("./handlers/match");
 require("./handlers/lobbies");
 require("./handlers/parties");
