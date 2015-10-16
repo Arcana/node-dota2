@@ -58,6 +58,28 @@ Dota2.Dota2Client.prototype.requestProfile = function(account_id, request_name, 
   );
 };
 
+Dota2.Dota2Client.prototype.requestProfileCard = function(account_id, callback) {
+  callback = callback || null;
+  var _self = this;
+  /* Sends a message to the Game Coordinator requesting `accountId`'s profile card.  Listen for `profileCardData` event for Game Coordinator's response. */
+  if (!this._gcReady) {
+    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+    return null;
+  }
+
+  if (this.debug) util.log("Sending profile request");
+  var payload = new Dota2.schema.CMsgClientToGCGetProfileCard({
+    "account_id": account_id
+  });
+  this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCGetProfileCard;
+  this._gc.send(this._protoBufHeader,
+                payload.toBuffer(),
+                function (header, body) {
+                  onProfileCardResponse.call(_self, body, callback);
+                }
+  );
+};
+
 Dota2.Dota2Client.prototype.requestPassportData = function(account_id, callback) {
   callback = callback || null;
   var _self = this;
@@ -138,6 +160,22 @@ var onProfileResponse = function onProfileResponse(message, callback) {
   }
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCProfileResponse] = onProfileResponse;
+
+var onProfileCardResponse = function onProfileCardResponse(message, callback) {
+  callback = callback || null;
+  var profileCardResponse = Dota2.schema.CMsgDOTAProfileCard.decode(message);
+
+  if (profileCardResponse.result === 1) {
+    if (this.debug) util.log("Received profile data for: " + profileCardResponse.game_account_client.account_id);
+    this.emit("profileCardData", profileCardResponse.game_account_client.account_id, profileCardResponse);
+    if (callback) callback(null, profileCardResponse);
+  }
+  else {
+    if (this.debug) util.log("Received a bad profileResponse");
+    if (callback) callback(profileCardResponse.result, profileCardResponse);
+  }
+};
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCGetProfileCardResponse] = onProfileCardResponse;
 
 var onPassportDataResponse = function onPassportDataResponse(message, callback) {
   callback = callback || null;
