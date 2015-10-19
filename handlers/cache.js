@@ -72,9 +72,9 @@ var onUpdateMultiple = function onUpdateMultiple(message) {
   var multi = Dota2.schema.CMsgSOMultipleObjects.decode(message);
   var _self = this;
 
-  if(multi.objectsModified)
-    multi.objectsModified.forEach(function(obj){
-      handleSubscribedType.call(_self, obj.type_id, obj.object_data[0]);
+  if(multi.objects_modified)
+    multi.objects_modified.forEach(function(obj){
+      handleSubscribedType.call(_self, obj.type_id, obj.object_data);
     });
 };
 handlers[Dota2.schema.ESOMsg.k_ESOMsg_UpdateMultiple] = onUpdateMultiple;
@@ -82,7 +82,7 @@ handlers[Dota2.schema.ESOMsg.k_ESOMsg_UpdateMultiple] = onUpdateMultiple;
 var onCreate = function onCreate(message) {
   var single = Dota2.schema.CMsgSOSingleObject.decode(message);
   var _self = this;
-  
+
   if(this.debug){
     util.log("Create, type "+single.type_id);
   }
