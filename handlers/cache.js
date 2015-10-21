@@ -72,8 +72,8 @@ var onUpdateMultiple = function onUpdateMultiple(message) {
   var multi = Dota2.schema.CMsgSOMultipleObjects.decode(message);
   var _self = this;
 
-  if(multi.objectsModified)
-    multi.objectsModified.forEach(function(obj){
+  if(multi.objects_modified)
+    multi.objects_modified.forEach(function(obj){
       handleSubscribedType.call(_self, obj.type_id, obj.object_data[0]);
     });
 };
@@ -95,16 +95,16 @@ var onCacheUnsubscribed = function onCacheUnsubscribed(message) {
   var _self = this;
 
   if(this.debug) util.log("Cache unsubscribed, "+unsubscribe.owner_soid.id);
-
-  if(this.Lobby && unsubscribe.owner_soid.id === this.Lobby.lobby_id)
+  
+  if(this.Lobby && ""+unsubscribe.owner_soid.id === ""+this.Lobby.lobby_id)
   {
     this.Lobby = null;
     this.emit("practiceLobbyCleared");
-  }else if(this.Party && unsubscribe.owner_soid.id === this.Party.party_id)
+  }else if(this.Party && ""+unsubscribe.owner_soid.id === ""+this.Party.party_id)
   {
     this.Party = null;
     this.emit("partyCleared");
-  }else if(this.PartyInvite && unsubscribe.owner_soid.id === this.PartyInvite.group_id)
+  }else if(this.PartyInvite && ""+unsubscribe.owner_soid.id === ""+this.PartyInvite.group_id)
   {
     this.PartyInvite = null;
     this.emit("partyInviteCleared");
