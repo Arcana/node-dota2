@@ -5,6 +5,40 @@ A node-steam plugin for Dota 2, consider it in alpha state.
 
 Check out my blog post (my only blog post), [Extending node-dota2](https://blog.rjackson.me/extending-node-dota2/), for a rough overview of adding new functionality to the library.
 
+## Upgrade guide
+
+### `<= 0.7.*` to `1.0.0`
+
+A few backwards imcompatible API changes were included with version 1.0.0.
+
+The following methods were renamed:
+
+Old method name                | New method name
+----                           | ----
+getPlayerMatchHistory          | requestPlayerMatchHistory
+profileRequest                 | requestProfile
+passportDataRequest            | requestPassportData
+hallOfFameRequest              | requestHallOfFame
+leaguesInMonthRequest          | requestLeaguesInMonth
+practiceLobbyListRequest       | requestPracticeLobbyList
+friendPracticeLobbyListRequest | requestFriendPracticeLobbyList
+matchDetailsRequest            | requestMatchDetails
+matchmakingStatsRequest        | requestMatchmakingStats
+findSourceTVGames              | requestSourceTVGames
+
+And the following events were renamed:
+
+Old event name                  | New event name
+----                            | ----
+chatChannelsReceived            | chatChannelsData
+guildInvite                     | guildInviteData
+leaguesInMonthResponse          | leaguesInMonthData
+leagueInfo                      | leagueData
+practiceLobbyListResponse       | practiceLobbyListData
+friendPracticeLobbyListResponse | friendPracticeLobbyListData
+matches                         | matchesData
+matchData                       | matchDetailsData
+
 ## Initializing
 Parameters:
 * `steamClient` - Pass a SteamClient instance to use to send & receive GC messages.
@@ -134,11 +168,17 @@ Requests the given player's match history. The responses are paginated, but you 
 Provide a callback or listne for the `playerMatchHistoryData` for the GC's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
 #### requestProfile(account_id, request_name, [callback])
-* `account_id` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose passport data you wish to view.
+* `account_id` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose profile data you wish to view.
 * `request_name` - Boolean, whether you want the GC to return the accounts current display name.
 * `[callback]` - optional callback, returns args: `err, response`.
 
 Sends a message to the Game Coordinator requesting `account_id`'s profile data. Provide a callback or listen for `profileData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+
+#### requestProfileCard (account_id, [callback])
+* `account_id` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose profile card you wish to view.
+* `[callback]` - optional callback, returns args: `err, response`.
+
+Sends a message to the Game Coordinator requesting `account_id`'s profile card. Provide a callback or listen for `profileCardData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
 #### requestPassportData(account_id, [callback])
 * `account_id` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose passport data you wish to view.
@@ -278,6 +318,10 @@ Sends a message to the Game Coordinator requesting to configure some options of 
 
 Sends a message to the GC requesting the currrent lobby be started (server found and game begins). You will receive updates in the `practiceLobbyUpdate` response.
 
+#### inviteToLobby(steam_id)
+* `steam_id` The Steam ID of the player you want to invite.
+
+Asks to invite a player to your lobby. This creates a new default lobby when you are not already in one.
 
 #### practiceLobbyKick(account_id, [callback])
 * `account_id` The ID of the player you want to kick.
@@ -407,7 +451,15 @@ You can respond with `cancelInviteToGuild` or `setGuildAccountRole`.
 
 Emitted when GC responds to the `requestProfile` method.
 
-See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages.proto#2261) for `profileData`'s object structure.
+See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_common.proto#L1584) for `profileData`'s object structure.
+
+### `profileCardData` (`account_id`, `profileCardData`)
+* `account_id` - Account ID whom the data is associated with.
+* `profileData` - The raw profileCard object.
+
+Emitted when GC responds to the `requestProfileCard` method.
+
+See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client.proto#L1592) for `profileData`'s object structure.
 
 ### `playerMatchHistoryData` (`request_id`, `matchHistoryResponse`)
 
@@ -419,7 +471,7 @@ TODO
 
 Emitted when GC responds to the `requestPassportData` method.
 
-See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages.proto#L2993) for `passportData`'s object structure.
+See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client_fantasy.proto#L961) for `passportData`'s object structure.
 
 ### `hallOfFameData` (`week`, `featuredPlayers`, `featuredFarmer`, `hallOfFameResponse`)
 * `week` - Week the data is associated with.
@@ -439,7 +491,7 @@ TODO
 
 Emitted when GC responds to the `requestmatchDetails` method.
 
-See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages.proto#L2250) for `matchDetailsData`'s object structure.
+See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client.proto#L1571) for `matchDetailsData`'s object structure.
 
 ### `matchmakingStatsData` (`waitTimesByGroup`, `searchingPlayersByGroup`, `disabledGroups`, `matchmakingStatsResponse`)
 * `waitTimesByGroup` - Current average matchmaking waiting times, in seconds, per group.
@@ -499,7 +551,13 @@ TODO
 
 TODO
 
+### `inviteCreated` (`steam_id`, `group_id`, `is_online`)
+* `steam_id` - The steam ID of the person the invite was sent to
+* `group_id` - The group ID of the person the invite was sent to
+* `is_online` - Whether or not the person the invite was sent to is online
 
+Emitted when the GC has created the invitation. The invitation is only sent when
+the invitee is online.
 
 ### `partyUpdate` (`party`)
 * `party` - The full party object (see CSODOTAParty).
@@ -631,38 +689,4 @@ There is no automated test suite for node-dota2 (I've no idea how I'd make one f
 * Run the test script: `node test.js`
 * If you receive Error 63 you need to provide a Steam Guard code by setting the Steam Guard code in `config.js` and launching again.
 
-
-## Upgrade guide
-
-### `<= 0.7.*` to `1.0.0`
-
-A few backwards imcompatible API changes were included with version 1.0.0.
-
-The following methods were renamed:
-
-Old method name                | New method name
-----                           | ----
-getPlayerMatchHistory          | requestPlayerMatchHistory
-profileRequest                 | requestProfile
-passportDataRequest            | requestPassportData
-hallOfFameRequest              | requestHallOfFame
-leaguesInMonthRequest          | requestLeaguesInMonth
-practiceLobbyListRequest       | requestPracticeLobbyList
-friendPracticeLobbyListRequest | requestFriendPracticeLobbyList
-matchDetailsRequest            | requestMatchDetails
-matchmakingStatsRequest        | requestMatchmakingStats
-findSourceTVGames              | requestSourceTVGames
-
-And the following events were renamed:
-
-Old event name                  | New event name
-----                            | ----
-chatChannelsReceived            | chatChannelsData
-guildInvite                     | guildInviteData
-leaguesInMonthResponse          | leaguesInMonthData
-leagueInfo                      | leagueData
-practiceLobbyListResponse       | practiceLobbyListData
-friendPracticeLobbyListResponse | friendPracticeLobbyListData
-matches                         | matchesData
-matchData                       | matchDetailsData
 

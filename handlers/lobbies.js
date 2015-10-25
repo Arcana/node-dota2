@@ -185,6 +185,31 @@ Dota2.Dota2Client.prototype.flipLobbyTeams = function(callback){
                 }
   );
 };
+
+Dota2.Dota2Client.prototype.inviteToLobby = function(steam_id){
+  steam_id = steam_id || null;
+
+  if (!this._gcReady) {
+    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+    return null;
+  }
+
+  if (steam_id == null) {
+    if (this.debug) util.log("Steam ID required to create a lobby invite.");
+    return null;
+  }
+
+  if (this.debug) util.log("Inviting "+steam_id+" to a lobby.");
+  // todo: set client version here?
+  var payload = new Dota2.schema.CMsgInviteToLobby({
+    "steam_id": steam_id
+  });
+  this._protoBufHeader.msg = Dota2.schema.EGCBaseMsg.k_EMsgGCInviteToLobby;
+  this._gc.send(this._protoBufHeader,
+                payload.toBuffer()
+  );
+  
+};
 // callback to onPracticeLobbyResponse
 Dota2.Dota2Client.prototype.practiceLobbyKick = function(account_id, callback){
   callback = callback || null;
@@ -319,3 +344,13 @@ var onFriendPracticeLobbyListResponse = function onFriendPracticeLobbyListRespon
   if (callback) callback(null, practiceLobbyListResponse);
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCFriendPracticeLobbyListResponse] = onFriendPracticeLobbyListResponse;
+
+var onInviteCreated = function onInviteCreated(message) {
+  var inviteCreated = Dota2.schema.CMsgInvitationCreated.decode(message);
+  var is_online = !inviteCreated.user_offline;
+
+  if (this.debug && is_online) util.log("Created invitation to online user " + this.ToAccountID(inviteCreated.steam_id));
+  if (this.debug && !is_online) util.log("Created invitation to offline user " + this.Dota2Client.ToAccountID(inviteCreated.steam_id));
+  this.emit("inviteCreated", inviteCreated.steam_id, inviteCreated.group_id, is_online);
+}
+handlers[Dota2.schema.EGCBaseMsg.k_EMsgGCInvitationCreated] = onInviteCreated;
