@@ -144,10 +144,10 @@ Attempts to cancel a user's guild invitation; use this on your own account ID to
 * `guild_id` - ID of a guild.
 * `target_account_id` - Account ID (lower 32-bits of a 64-bit steam id) of user whoms guild invite you wish to cancel.
 * `target_role` - Role in guild to have.
-* * `0` - Kick member from guild.
-* * `1` - Leader.
-* * `2` - Officer.
-* * `3` - Member.
+  * `0` - Kick member from guild.
+  * `1` - Leader.
+  * `2` - Officer.
+  * `3` - Member.
 * `[callback]` - optional callback, returns args: `err, response`.
 
 Attempts to set a user's role within a guild; use this with your own account ID and the 'Member' role to accept guild invitations. Requires the GC to be ready (listen for the `ready` event before calling).
@@ -157,10 +157,10 @@ Attempts to set a user's role within a guild; use this with your own account ID 
 #### requestPlayerMatchHistory(account_id, [options], [callback])
 * `account_id` - Account ID of the user whose match history you wish to retrieve.
 * `[options]` - A mapping of options for the query he results:
-** `[start_at_match_id]` - Which match ID to start searching at (pagination)
-** `[matches_requested]` - How many matches to retrieve
-** `[hero_id]` - The ID of the hero the given account ID had played
-** `[request_id]` - I have no idea.
+  * `[start_at_match_id]` - Which match ID to start searching at (pagination)
+  * `[matches_requested]` - How many matches to retrieve
+  * `[hero_id]` - The ID of the hero the given account ID had played
+  * `[request_id]` - I have no idea.
 * `[callback]` - optional callback, returns args: `err, response`.
 
 Requests the given player's match history. The responses are paginated, but you can use the `start_at_match_id` and `matches_requested` options to loop through them.
@@ -173,6 +173,8 @@ Provide a callback or listne for the `playerMatchHistoryData` for the GC's respo
 * `[callback]` - optional callback, returns args: `err, response`.
 
 Sends a message to the Game Coordinator requesting `account_id`'s profile data. Provide a callback or listen for `profileData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+
+**This functionality is currently disabled by Valve**
 
 #### requestProfileCard (account_id, [callback])
 * `account_id` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose profile card you wish to view.
@@ -196,18 +198,18 @@ Sends a message to the Game Coordinator requesting the Hall of Fame data for `we
 ### Matches
 #### requestMatches(criteria, [callback])
 * `[criteria]` - The options available for searching matches:
-** `[hero_id]`
-** `[game_mode]`
-** `[date_min]`
-** `[date_max]`
-** `[matches_requested]`
-** `[start_at_match_id]`
-** `[min_players]`
-** `[tournament_games_only]`
-** `[account_id]`
-** `[league_id]`
-** `[skill]`
-** `[team_id]` -
+  * `[hero_id]`
+  * `[game_mode]` 
+  * `[date_min]`
+  * `[date_max]`
+  * `[matches_requested]`
+  * `[start_at_match_id]`
+  * `[min_players]`
+  * `[tournament_games_only]`
+  * `[account_id]`
+  * `[league_id]`
+  * `[skill]`
+  * `[team_id]` -
 * `[callback]` - optional callback, returns args: `err, response`.
 
 Requests matches from the GC matching the given criteria.  Provide a callback or listen for the `matchesData` event for teh Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
@@ -269,24 +271,24 @@ Sends a message to the Game Coordinator requesting to join a lobby.  Provide a c
 #### createPracticeLobby([password], [options], [callback])
 * `[password]` - Password to restrict access to the lobby (optional).
 * `[options]` - Options available for the lobby. All are optional, but send at least one.
-* * `game_name`: String, lobby title.
-* * `server_region`: Use the server region enum.
-* * `game_mode`: Use the game mode enum.
-* * `game_version`: Use the game version enum.
-* * `allow_cheats`: Boolean, allow cheats.
-* * `fill_with_bots`: Boolean, fill available slots with bots?
-* * `allow_spectating`: Boolean, allow spectating?
-* * `pass_key`: Password.
-* * `series_type`: Use the series type enum.
-* * `radiant_series_wins`: # of games won so far, e.g. for a Bo3 or Bo5.
-* * `dire_series_wins`: # of games won so far, e.g. for a Bo3 or Bo5.
-* * `allchat`: Enable all chat?
-* * `league_id`: The league this lobby is being created for. Optional
-* * `dota_tv_delay`: TODO.
-* * `custom_game_mode`: TODO.
-* * `custom_map_name`: TODO.
-* * `custom_difficulty`: TODO.
-* * `custom_game_id`: TODO.
+  * `game_name`: String, lobby title.
+  * `server_region`: Use the server region enum.
+  * `game_mode`: Use the game mode enum.
+  * `game_version`: Use the game version enum.
+  * `allow_cheats`: Boolean, allow cheats.
+  * `fill_with_bots`: Boolean, fill available slots with bots?
+  * `allow_spectating`: Boolean, allow spectating?
+  * `pass_key`: Password.
+  * `series_type`: Use the series type enum.
+  * `radiant_series_wins`: # of games won so far, e.g. for a Bo3 or Bo5.
+  * `dire_series_wins`: # of games won so far, e.g. for a Bo3 or Bo5.
+  * `allchat`: Enable all chat?
+  * `league_id`: The league this lobby is being created for. Optional
+  * `dota_tv_delay`: TODO.
+  * `custom_game_mode`: TODO.
+  * `custom_map_name`: TODO.
+  * `custom_difficulty`: TODO.
+  * `custom_game_id`: TODO.
 * `[callback]` - optional callback, returns args: `err, response`.
 
 Sends a message to the Game Coordinator requesting to create a lobby.  Listen for `practiceLobbyUpdate`  response for a snapshot-update of the newly created lobby. Requires the GC to be ready (listen for the `ready` event before calling).
@@ -411,28 +413,31 @@ Emitted when another user leaves a chat channel you are in.
 
 ### `chatChannelsData` (`channels`)
 * `channels` - An array of ChatChannel objects, each with the following properties:
-** `channel_name`
-** `num_members`
-** `channel_type`
+  * `channel_name`
+  * `num_members`
+  * `channel_type`
 
 The GC's response to a requestChatChannels call.
 
 ### `guildOpenPartyData` (`guild_id`, `openParties`)
 * `guild_id` - ID of the guild.
 * `openParties` - Array containing information about open guild parties.  Each object has the following properties:
-* * `partyId` - Unique ID of the party.
-* * `member_account_ids` - Array of account ids.
-* * `time_created` - Something about Back to the Future.
-* * `description` - A user-inputted string.  Do not trust.
+  * `partyId` - Unique ID of the party.
+  * `member_account_ids` - Array of account ids.
+  * `time_created` - Something about Back to the Future.
+  * `description` - A user-inputted string.  Do not trust.
 
 Emitted for each guild the bot's account is a member of, containing information on open parties for each guild.  Also exposes guild_id's, which is handy.
 
 ### `guildData` (`guild_id`, `members`, `guildDataObject`)
 * `guild_id` - ID of the guild.
 * `members` - A list of members in the guild. Each object has the following properties:
-* * `account_id` - Account ID of the member.
-* * `time_joined` - Timestamp of when this user joined the guild.
-* * `role` - TODO
+  * `account_id` - Account ID of the member.
+  * `time_joined` - Timestamp of when this user joined the guild.
+  * `role` - Role of the member withing the guild
+    * `1` - Leader
+    * `2` - Officer
+    * `3` - Member
 * `guildDataObject` - The raw `CMsgDOTAGuildSDO` object.
 
 Emitted when information on a particular guild is retrieved.
