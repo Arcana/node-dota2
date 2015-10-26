@@ -102,7 +102,12 @@ Attempts to delete an item. Requires the GC to be ready (listen for the `ready` 
 * `channel` - A string for the channel name.
 * `[type]` - The type of the channel being joined.  Defaults to `Dota2.schema.DOTAChatChannelType_t.DOTAChannelType_Custom`.
 
-Joins a chat channel.  Listen for the `chatMessage` event for other people's chat messages.
+Joins a chat channel. If the chat channel with the given name doesn't exist, it 
+is created. Listen for the `chatMessage` event for other people's chat messages.
+
+Notable channels:
+* `Guild_##########` - The chat channel of the guild with guild_id = ##########
+* `Lobby_##########` - The chat channel of the lobby with lobby_id = ##########
 
 #### leaveChat(channel)
 * `channel` - A string for the channel name.
@@ -165,7 +170,7 @@ Attempts to set a user's role within a guild; use this with your own account ID 
 
 Requests the given player's match history. The responses are paginated, but you can use the `start_at_match_id` and `matches_requested` options to loop through them.
 
-Provide a callback or listne for the `playerMatchHistoryData` for the GC's response. Requires the GC to be ready (listen for the `ready` event before calling).
+Provide a callback or listen for the `playerMatchHistoryData` for the GC's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
 #### requestProfile(account_id, request_name, [callback])
 * `account_id` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose profile data you wish to view.
@@ -504,7 +509,10 @@ See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resour
 * `disabledGroups` - I don't know how the data is formatted here, I've only observed it to be zero.
 * `matchmakingStatsResponse` - Raw response object.
 
-Emitted when te GC response to the `requestMatchmakingStats` method.  The array order dictates which matchmaking groups the figure belongs to, the groups are discoverable through `regions.txt` in Dota 2's game files.  Here are the groups at the time of this sentence being written (with unecessary data trimmed out):
+Emitted when te GC response to the `requestMatchmakingStats` method.  The array order dictates which matchmaking groups the figure belongs to. 
+The groups are discoverable through `regions.txt` in Dota 2's game files.  We maintain an indicative list *without guarantees* in this README. 
+This list is manually updated only when changes are detected by community members, so it can be out of date. 
+Here are the groups at the time of this sentence being written (with unecessary data trimmed out):
 
 ```
     "USWest":               {"matchgroup": "0"},
@@ -534,7 +542,7 @@ value until after this event completes to allow comparison between the
 two.
 
 
-### `practiceLobbyJoinResponse`(`result` `practiceLobbyJoinResponse`)
+### `practiceLobbyJoinResponse`(`result`, `practiceLobbyJoinResponse`)
 * `result` - The result object from `practiceLobbyJoinResponse`.
 * `practiceLobbyJoinResponse` - The raw response object.
 
@@ -548,9 +556,11 @@ Emitted when leaving a lobby (aka, the lobby is cleared). This can
 happen when kicked, upon leaving a lobby, etc. There are other callbacks
 to tell when the bot has been kicked.
 
-### `practiceLobbyResponse` ()
+### `practiceLobbyResponse` (`result`, `response`)
 
-TODO
+Emitted when an operation changing the state of a lobby was sent to the GC and
+processed. This event only contains the acknowledgement by the GC. The actual 
+update of the lobby state is communicated via `practiceLobbyUpdate` events.
 
 ### `friendPracticeLobbyListData` ()
 
