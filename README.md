@@ -556,7 +556,9 @@ Emitted when leaving a lobby (aka, the lobby is cleared). This can
 happen when kicked, upon leaving a lobby, etc. There are other callbacks
 to tell when the bot has been kicked.
 
-### `practiceLobbyResponse` (`result`, `response`)
+### `practiceLobbyResponse` (`result`, `practiceLobbyResponse`)
+* `result` - The result object from `practiceLobbyJoinResponse`.
+* `practiceLobbyResponse` - The raw response object.
 
 Emitted when an operation changing the state of a lobby was sent to the GC and
 processed. This event only contains the acknowledgement by the GC. The actual 
@@ -700,8 +702,9 @@ There is no automated test suite for node-dota2 (I've no idea how I'd make one f
 
 ### Setting up
 * `npm install steam; npm install` in the repository root (install Steam first to work around a node-steam#222)
-* Copy `config.js.example` to `config.js` and edit appropriat
+* Copy `config.js.example` to `config.js` and edit appropriately
 * Run the test script: `node test.js`
 * If you receive Error 63 you need to provide a Steam Guard code by setting the Steam Guard code in `config.js` and launching again.
+* Make sure to use at least version 0.12 of node js
 
 
