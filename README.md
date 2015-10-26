@@ -5,6 +5,40 @@ A node-steam plugin for Dota 2, consider it in alpha state.
 
 Check out my blog post (my only blog post), [Extending node-dota2](https://blog.rjackson.me/extending-node-dota2/), for a rough overview of adding new functionality to the library.
 
+## Upgrade guide
+
+### `<= 0.7.*` to `1.0.0`
+
+A few backwards imcompatible API changes were included with version 1.0.0.
+
+The following methods were renamed:
+
+Old method name                | New method name
+----                           | ----
+getPlayerMatchHistory          | requestPlayerMatchHistory
+profileRequest                 | requestProfile
+passportDataRequest            | requestPassportData
+hallOfFameRequest              | requestHallOfFame
+leaguesInMonthRequest          | requestLeaguesInMonth
+practiceLobbyListRequest       | requestPracticeLobbyList
+friendPracticeLobbyListRequest | requestFriendPracticeLobbyList
+matchDetailsRequest            | requestMatchDetails
+matchmakingStatsRequest        | requestMatchmakingStats
+findSourceTVGames              | requestSourceTVGames
+
+And the following events were renamed:
+
+Old event name                  | New event name
+----                            | ----
+chatChannelsReceived            | chatChannelsData
+guildInvite                     | guildInviteData
+leaguesInMonthResponse          | leaguesInMonthData
+leagueInfo                      | leagueData
+practiceLobbyListResponse       | practiceLobbyListData
+friendPracticeLobbyListResponse | friendPracticeLobbyListData
+matches                         | matchesData
+matchData                       | matchDetailsData
+
 ## Initializing
 Parameters:
 * `steamClient` - Pass a SteamClient instance to use to send & receive GC messages.
@@ -110,10 +144,10 @@ Attempts to cancel a user's guild invitation; use this on your own account ID to
 * `guild_id` - ID of a guild.
 * `target_account_id` - Account ID (lower 32-bits of a 64-bit steam id) of user whoms guild invite you wish to cancel.
 * `target_role` - Role in guild to have.
-* * `0` - Kick member from guild.
-* * `1` - Leader.
-* * `2` - Officer.
-* * `3` - Member.
+  * `0` - Kick member from guild.
+  * `1` - Leader.
+  * `2` - Officer.
+  * `3` - Member.
 * `[callback]` - optional callback, returns args: `err, response`.
 
 Attempts to set a user's role within a guild; use this with your own account ID and the 'Member' role to accept guild invitations. Requires the GC to be ready (listen for the `ready` event before calling).
@@ -123,10 +157,10 @@ Attempts to set a user's role within a guild; use this with your own account ID 
 #### requestPlayerMatchHistory(account_id, [options], [callback])
 * `account_id` - Account ID of the user whose match history you wish to retrieve.
 * `[options]` - A mapping of options for the query he results:
-** `[start_at_match_id]` - Which match ID to start searching at (pagination)
-** `[matches_requested]` - How many matches to retrieve
-** `[hero_id]` - The ID of the hero the given account ID had played
-** `[request_id]` - I have no idea.
+  * `[start_at_match_id]` - Which match ID to start searching at (pagination)
+  * `[matches_requested]` - How many matches to retrieve
+  * `[hero_id]` - The ID of the hero the given account ID had played
+  * `[request_id]` - I have no idea.
 * `[callback]` - optional callback, returns args: `err, response`.
 
 Requests the given player's match history. The responses are paginated, but you can use the `start_at_match_id` and `matches_requested` options to loop through them.
@@ -134,11 +168,19 @@ Requests the given player's match history. The responses are paginated, but you 
 Provide a callback or listne for the `playerMatchHistoryData` for the GC's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
 #### requestProfile(account_id, request_name, [callback])
-* `account_id` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose passport data you wish to view.
+* `account_id` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose profile data you wish to view.
 * `request_name` - Boolean, whether you want the GC to return the accounts current display name.
 * `[callback]` - optional callback, returns args: `err, response`.
 
 Sends a message to the Game Coordinator requesting `account_id`'s profile data. Provide a callback or listen for `profileData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+
+**This functionality is currently disabled by Valve**
+
+#### requestProfileCard (account_id, [callback])
+* `account_id` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose profile card you wish to view.
+* `[callback]` - optional callback, returns args: `err, response`.
+
+Sends a message to the Game Coordinator requesting `account_id`'s profile card. Provide a callback or listen for `profileCardData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
 #### requestPassportData(account_id, [callback])
 * `account_id` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose passport data you wish to view.
@@ -156,18 +198,18 @@ Sends a message to the Game Coordinator requesting the Hall of Fame data for `we
 ### Matches
 #### requestMatches(criteria, [callback])
 * `[criteria]` - The options available for searching matches:
-** `[hero_id]`
-** `[game_mode]`
-** `[date_min]`
-** `[date_max]`
-** `[matches_requested]`
-** `[start_at_match_id]`
-** `[min_players]`
-** `[tournament_games_only]`
-** `[account_id]`
-** `[league_id]`
-** `[skill]`
-** `[team_id]` -
+  * `[hero_id]`
+  * `[game_mode]` 
+  * `[date_min]`
+  * `[date_max]`
+  * `[matches_requested]`
+  * `[start_at_match_id]`
+  * `[min_players]`
+  * `[tournament_games_only]`
+  * `[account_id]`
+  * `[league_id]`
+  * `[skill]`
+  * `[team_id]` -
 * `[callback]` - optional callback, returns args: `err, response`.
 
 Requests matches from the GC matching the given criteria.  Provide a callback or listen for the `matchesData` event for teh Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
@@ -229,24 +271,24 @@ Sends a message to the Game Coordinator requesting to join a lobby.  Provide a c
 #### createPracticeLobby([password], [options], [callback])
 * `[password]` - Password to restrict access to the lobby (optional).
 * `[options]` - Options available for the lobby. All are optional, but send at least one.
-* * `game_name`: String, lobby title.
-* * `server_region`: Use the server region enum.
-* * `game_mode`: Use the game mode enum.
-* * `game_version`: Use the game version enum.
-* * `allow_cheats`: Boolean, allow cheats.
-* * `fill_with_bots`: Boolean, fill available slots with bots?
-* * `allow_spectating`: Boolean, allow spectating?
-* * `pass_key`: Password.
-* * `series_type`: Use the series type enum.
-* * `radiant_series_wins`: # of games won so far, e.g. for a Bo3 or Bo5.
-* * `dire_series_wins`: # of games won so far, e.g. for a Bo3 or Bo5.
-* * `allchat`: Enable all chat?
-* * `league_id`: The league this lobby is being created for. Optional
-* * `dota_tv_delay`: TODO.
-* * `custom_game_mode`: TODO.
-* * `custom_map_name`: TODO.
-* * `custom_difficulty`: TODO.
-* * `custom_game_id`: TODO.
+  * `game_name`: String, lobby title.
+  * `server_region`: Use the server region enum.
+  * `game_mode`: Use the game mode enum.
+  * `game_version`: Use the game version enum.
+  * `allow_cheats`: Boolean, allow cheats.
+  * `fill_with_bots`: Boolean, fill available slots with bots?
+  * `allow_spectating`: Boolean, allow spectating?
+  * `pass_key`: Password.
+  * `series_type`: Use the series type enum.
+  * `radiant_series_wins`: # of games won so far, e.g. for a Bo3 or Bo5.
+  * `dire_series_wins`: # of games won so far, e.g. for a Bo3 or Bo5.
+  * `allchat`: Enable all chat?
+  * `league_id`: The league this lobby is being created for. Optional
+  * `dota_tv_delay`: TODO.
+  * `custom_game_mode`: TODO.
+  * `custom_map_name`: TODO.
+  * `custom_difficulty`: TODO.
+  * `custom_game_id`: TODO.
 * `[callback]` - optional callback, returns args: `err, response`.
 
 Sends a message to the Game Coordinator requesting to create a lobby.  Listen for `practiceLobbyUpdate`  response for a snapshot-update of the newly created lobby. Requires the GC to be ready (listen for the `ready` event before calling).
@@ -278,6 +320,10 @@ Sends a message to the Game Coordinator requesting to configure some options of 
 
 Sends a message to the GC requesting the currrent lobby be started (server found and game begins). You will receive updates in the `practiceLobbyUpdate` response.
 
+#### inviteToLobby(steam_id)
+* `steam_id` The Steam ID of the player you want to invite.
+
+Asks to invite a player to your lobby. This creates a new default lobby when you are not already in one.
 
 #### practiceLobbyKick(account_id, [callback])
 * `account_id` The ID of the player you want to kick.
@@ -367,28 +413,31 @@ Emitted when another user leaves a chat channel you are in.
 
 ### `chatChannelsData` (`channels`)
 * `channels` - An array of ChatChannel objects, each with the following properties:
-** `channel_name`
-** `num_members`
-** `channel_type`
+  * `channel_name`
+  * `num_members`
+  * `channel_type`
 
 The GC's response to a requestChatChannels call.
 
 ### `guildOpenPartyData` (`guild_id`, `openParties`)
 * `guild_id` - ID of the guild.
 * `openParties` - Array containing information about open guild parties.  Each object has the following properties:
-* * `partyId` - Unique ID of the party.
-* * `member_account_ids` - Array of account ids.
-* * `time_created` - Something about Back to the Future.
-* * `description` - A user-inputted string.  Do not trust.
+  * `partyId` - Unique ID of the party.
+  * `member_account_ids` - Array of account ids.
+  * `time_created` - Something about Back to the Future.
+  * `description` - A user-inputted string.  Do not trust.
 
 Emitted for each guild the bot's account is a member of, containing information on open parties for each guild.  Also exposes guild_id's, which is handy.
 
 ### `guildData` (`guild_id`, `members`, `guildDataObject`)
 * `guild_id` - ID of the guild.
 * `members` - A list of members in the guild. Each object has the following properties:
-* * `account_id` - Account ID of the member.
-* * `time_joined` - Timestamp of when this user joined the guild.
-* * `role` - TODO
+  * `account_id` - Account ID of the member.
+  * `time_joined` - Timestamp of when this user joined the guild.
+  * `role` - Role of the member withing the guild
+    * `1` - Leader
+    * `2` - Officer
+    * `3` - Member
 * `guildDataObject` - The raw `CMsgDOTAGuildSDO` object.
 
 Emitted when information on a particular guild is retrieved.
@@ -407,7 +456,15 @@ You can respond with `cancelInviteToGuild` or `setGuildAccountRole`.
 
 Emitted when GC responds to the `requestProfile` method.
 
-See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages.proto#2261) for `profileData`'s object structure.
+See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_common.proto#L1584) for `profileData`'s object structure.
+
+### `profileCardData` (`account_id`, `profileCardData`)
+* `account_id` - Account ID whom the data is associated with.
+* `profileData` - The raw profileCard object.
+
+Emitted when GC responds to the `requestProfileCard` method.
+
+See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client.proto#L1592) for `profileData`'s object structure.
 
 ### `playerMatchHistoryData` (`request_id`, `matchHistoryResponse`)
 
@@ -419,7 +476,7 @@ TODO
 
 Emitted when GC responds to the `requestPassportData` method.
 
-See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages.proto#L2993) for `passportData`'s object structure.
+See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client_fantasy.proto#L961) for `passportData`'s object structure.
 
 ### `hallOfFameData` (`week`, `featuredPlayers`, `featuredFarmer`, `hallOfFameResponse`)
 * `week` - Week the data is associated with.
@@ -439,7 +496,7 @@ TODO
 
 Emitted when GC responds to the `requestmatchDetails` method.
 
-See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages.proto#L2250) for `matchDetailsData`'s object structure.
+See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client.proto#L1571) for `matchDetailsData`'s object structure.
 
 ### `matchmakingStatsData` (`waitTimesByGroup`, `searchingPlayersByGroup`, `disabledGroups`, `matchmakingStatsResponse`)
 * `waitTimesByGroup` - Current average matchmaking waiting times, in seconds, per group.
@@ -499,7 +556,13 @@ TODO
 
 TODO
 
+### `inviteCreated` (`steam_id`, `group_id`, `is_online`)
+* `steam_id` - The steam ID of the person the invite was sent to
+* `group_id` - The group ID of the person the invite was sent to
+* `is_online` - Whether or not the person the invite was sent to is online
 
+Emitted when the GC has created the invitation. The invitation is only sent when
+the invitee is online.
 
 ### `partyUpdate` (`party`)
 * `party` - The full party object (see CSODOTAParty).
@@ -631,38 +694,4 @@ There is no automated test suite for node-dota2 (I've no idea how I'd make one f
 * Run the test script: `node test.js`
 * If you receive Error 63 you need to provide a Steam Guard code by setting the Steam Guard code in `config.js` and launching again.
 
-
-## Upgrade guide
-
-### `<= 0.7.*` to `1.0.0`
-
-A few backwards imcompatible API changes were included with version 1.0.0.
-
-The following methods were renamed:
-
-Old method name                | New method name
-----                           | ----
-getPlayerMatchHistory          | requestPlayerMatchHistory
-profileRequest                 | requestProfile
-passportDataRequest            | requestPassportData
-hallOfFameRequest              | requestHallOfFame
-leaguesInMonthRequest          | requestLeaguesInMonth
-practiceLobbyListRequest       | requestPracticeLobbyList
-friendPracticeLobbyListRequest | requestFriendPracticeLobbyList
-matchDetailsRequest            | requestMatchDetails
-matchmakingStatsRequest        | requestMatchmakingStats
-findSourceTVGames              | requestSourceTVGames
-
-And the following events were renamed:
-
-Old event name                  | New event name
-----                            | ----
-chatChannelsReceived            | chatChannelsData
-guildInvite                     | guildInviteData
-leaguesInMonthResponse          | leaguesInMonthData
-leagueInfo                      | leagueData
-practiceLobbyListResponse       | practiceLobbyListData
-friendPracticeLobbyListResponse | friendPracticeLobbyListData
-matches                         | matchesData
-matchData                       | matchDetailsData
 
