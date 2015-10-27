@@ -6,7 +6,7 @@
     "deferred": "^0.7.2",
     "merge": "^1.2.0",
     "protobufjs": "^4.0.0",
-    "steam": "^1.0.0"
+    "steam": "^1.2.0"
   },
   "scripts": {
     "update": "bash update_proto.sh"

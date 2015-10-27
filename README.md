@@ -9,7 +9,7 @@ Check out my blog post (my only blog post), [Extending node-dota2](https://blog.
 
 ### `<= 0.7.*` to `1.0.0`
 
-A few backwards imcompatible API changes were included with version 1.0.0.
+A few backwards incompatible API changes were included with version 1.0.0.
 
 The following methods were renamed:
 
