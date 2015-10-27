@@ -39,6 +39,10 @@ friendPracticeLobbyListResponse | friendPracticeLobbyListData
 matches                         | matchesData
 matchData                       | matchDetailsData
 
+Finally we migrated to the 1.x.y version of node-steam. This caused all proto 
+messages to become snake_cased instead of camelCased. As a consequence, many 
+tags in responses and events have changed.
+
 ## Initializing
 Parameters:
 * `steamClient` - Pass a SteamClient instance to use to send & receive GC messages.
