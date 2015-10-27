@@ -350,7 +350,7 @@ var onInviteCreated = function onInviteCreated(message) {
   var is_online = !inviteCreated.user_offline;
 
   if (this.debug && is_online) util.log("Created invitation to online user " + this.ToAccountID(inviteCreated.steam_id));
-  if (this.debug && !is_online) util.log("Created invitation to offline user " + this.Dota2Client.ToAccountID(inviteCreated.steam_id));
+  if (this.debug && !is_online) util.log("Created invitation to offline user " + this.ToAccountID(inviteCreated.steam_id));
   this.emit("inviteCreated", inviteCreated.steam_id, inviteCreated.group_id, is_online);
 }
 handlers[Dota2.schema.EGCBaseMsg.k_EMsgGCInvitationCreated] = onInviteCreated;
