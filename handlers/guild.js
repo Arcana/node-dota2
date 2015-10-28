@@ -1,69 +1,75 @@
 var Dota2 = require("../index"),
-    fs = require("fs"),
-    util = require("util"),
-    Schema = require('protobuf').Schema,
-    base_gcmessages = new Schema(fs.readFileSync(__dirname + "/../generated/base_gcmessages.desc")),
-    gcsdk_gcmessages = new Schema(fs.readFileSync(__dirname + "/../generated/gcsdk_gcmessages.desc")),
-    dota_gcmessages_client = new Schema(fs.readFileSync(__dirname + "/../generated/dota_gcmessages_client.desc")),
-    protoMask = 0x80000000;
+    util = require("util");
 
 
 // Methods
 
 Dota2.Dota2Client.prototype.requestGuildData = function() {
-  /* Asks the GC for info on the users current guilds.  Expect k_EMsgGCGuildOpenPartyRefresh from GC for guild ids. */
+  /* Asks the GC for info on the users current guilds. Expect k_EMsgGCGuildOpenPartyRefresh and k_EMsgGCGuildData from GC for guild ids. */
   if (!this._gcReady) {
     if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
     return null;
   }
 
   if (this.debug) util.log("Requesting current user guild data. ");
-  var payload = dota_gcmessages_client.CMsgDOTARequestGuildData.serialize({
-    // Doesn't take anything.
-  });
-
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCRequestGuildData | protoMask), payload);
+  var payload = new Dota2.schema.CMsgDOTARequestGuildData();
+  this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCRequestGuildData;
+  this._gc.send(this._protoBufHeader,
+                payload.toBuffer()
+  );
 };
 
-Dota2.Dota2Client.prototype.inviteToGuild = function(guildId, targetAccountId, callback) {
+Dota2.Dota2Client.prototype.inviteToGuild = function(guild_id, target_account_id, callback) {
   callback = callback || null;
-
-  /* Attempts to invite targetAccountId to a guild.  Expect k_EMsgGCGuildInviteAccountResponse from GC. */
+  var _self = this;
+  
+  /* Attempts to invite target_account_id to a guild.  Expect k_EMsgGCGuildInviteAccountResponse from GC. */
   if (!this._gcReady) {
     if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
     return null;
   }
 
-  if (this.debug) util.log("Inviting person to guild. " + [guildId, targetAccountId].join(", "));
-  var payload = dota_gcmessages_client.CMsgDOTAGuildInviteAccountRequest.serialize({
-    "guildId": guildId,
-    "targetAccountId": targetAccountId
+  if (this.debug) util.log("Inviting person to guild. " + [guild_id, target_account_id].join(", "));
+  var payload = new Dota2.schema.CMsgDOTAGuildInviteAccountRequest({
+    "guild_id": guild_id,
+    "target_account_id": target_account_id
   });
-
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCGuildInviteAccountRequest | protoMask), payload, callback);
+  this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCGuildInviteAccountRequest;
+  this._gc.send(this._protoBufHeader,
+                payload.toBuffer(),
+                function (header, body) {
+                  onGuildInviteResponse.call(_self, body, callback);
+                }
+  );
 };
 
-Dota2.Dota2Client.prototype.cancelInviteToGuild = function(guildId, targetAccountId, callback) {
+Dota2.Dota2Client.prototype.cancelInviteToGuild = function(guild_id, target_account_id, callback) {
   callback = callback || null;
-
-  /* Attempts to cancel targetAccountId's invitation to a guild.  Expect k_EMsgGCGuildCancelInviteAccountResponse from GC. */
+  var _self = this;
+  
+  /* Attempts to cancel target_account_id's invitation to a guild.  Expect k_EMsgGCGuildCancelInviteAccountResponse from GC. */
   if (!this._gcReady) {
     if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
     return null;
   }
 
-  if (this.debug) util.log("Cancelling invite to guild. " + [guildId, targetAccountId].join(", "));
-  var payload = dota_gcmessages_client.CMsgDOTAGuildCancelInviteRequest.serialize({
-    "guildId": guildId,
-    "targetAccountId": targetAccountId
+  if (this.debug) util.log("Cancelling invite to guild. " + [guild_id, target_account_id].join(", "));
+  var payload = new Dota2.schema.CMsgDOTAGuildCancelInviteRequest({
+    "guild_id": guild_id,
+    "target_account_id": target_account_id
   });
-
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCGuildCancelInviteRequest | protoMask), payload, callback);
+  this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCGuildCancelInviteRequest;
+  this._gc.send(this._protoBufHeader,
+                payload.toBuffer(),
+                function (header, body) {
+                  onGuildCancelInviteResponse.call(_self, body, callback);
+                }
+  );
 };
 
-Dota2.Dota2Client.prototype.setGuildAccountRole = function(guildId, targetAccountId, targetRole, callback) {
+Dota2.Dota2Client.prototype.setGuildAccountRole = function(guild_id, target_account_id, target_role, callback) {
   callback = callback || null;
-
+  var _self = this;
   /* Attempts to change an account's role in a guild. This can be accepting an invitation or promoting/demoting other guild members. Expect k_EMsgGCGuildSetAccountRoleResponse from GC.
      Roles:
      - 0: Kick member from guild.
@@ -76,14 +82,19 @@ Dota2.Dota2Client.prototype.setGuildAccountRole = function(guildId, targetAccoun
     return null;
   }
 
-  if (this.debug) util.log("Setting guild account role. " + [guildId, targetAccountId, targetRole].join(", "));
-  var payload = dota_gcmessages_client.CMsgDOTAGuildSetAccountRoleRequest.serialize({
-    "guildId": guildId,
-    "targetAccountId": targetAccountId,
-    "targetRole": targetRole
+  if (this.debug) util.log("Setting guild account role. " + [guild_id, target_account_id, target_role].join(", "));
+  var payload = new Dota2.schema.CMsgDOTAGuildSetAccountRoleRequest({
+    "guild_id": guild_id,
+    "target_account_id": target_account_id,
+    "target_role": target_role
   });
-
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCGuildSetAccountRoleRequest | protoMask), payload, callback);
+  this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCGuildSetAccountRoleRequest;
+  this._gc.send(this._protoBufHeader,
+                payload.toBuffer(),
+                function (header, body) {
+                  onGuildSetAccountRoleResponse.call(_self, body, callback);
+                }
+  );
 };
 
 
@@ -91,14 +102,24 @@ Dota2.Dota2Client.prototype.setGuildAccountRole = function(guildId, targetAccoun
 
 var handlers = Dota2.Dota2Client.prototype._handlers;
 
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCGuildOpenPartyRefresh] = function onGuildOpenPartyRefresh(message) {
+var onGuildOpenPartyRefresh = function onGuildOpenPartyRefresh(message) {
   /* Response from requestGuildData containing data on open parties, but most notably - it can tell the library what guilds the user is in. */
-  var response = dota_gcmessages_client.CMsgDOTAGuildOpenPartyRefresh.parse(message);
+  var response = Dota2.schema.CMsgDOTAGuildOpenPartyRefresh.decode(message);
   if (this.debug) util.log("Got guild open party data");
-  this.emit("guildOpenPartyData", response.guildId, response.openParties, response);
+  this.emit("guildOpenPartyData", response.guild_id, response.open_parties, response);
+};
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCGuildOpenPartyRefresh] = onGuildOpenPartyRefresh;
+
+var onGuildDataResponse = function onGuildDataResponse(message) {
+  /* Second response from requestGuildData containing general info on the guild (id, members, invitation, ...) */
+  var response = Dota2.schema.CMsgDOTAGuildSDO.decode(message);
+  if (this.debug) util.log("Got guild data");
+  this.emit("guildData", response.guild_id, response.members, response);
 };
 
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCGuildInviteAccountResponse] = function onGuildInviteResponse(message, callback) {
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCGuildData] = onGuildDataResponse;
+
+var onGuildInviteResponse = function onGuildInviteResponse(message, callback) {
   callback = callback || null;
   /* Response to inviting another player to a guild.
   enum EResult {
@@ -111,12 +132,13 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCGuildInviteAccountResponse] = function onGuild
     ERROR_GUILD_TOO_MANY_INVITES = 6;
     ERROR_ACCOUNT_TOO_MANY_GUILDS = 7;
   } */
-  var response = dota_gcmessages_client.CMsgDOTAGuildInviteAccountResponse.parse(message);
+  var response = Dota2.schema.CMsgDOTAGuildInviteAccountResponse.decode(message);
   if (this.debug) util.log("Guild invite account response: " + response.result);
   if (callback) callback(null, response);
 };
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCGuildInviteAccountResponse] = onGuildInviteResponse;
 
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCGuildCancelInviteResponse] = function onGuildCancelInviteResponse(message, callback) {
+var onGuildCancelInviteResponse = function onGuildCancelInviteResponse(message, callback) {
   callback = callback || null;
   /* Response to cancelling another player's invitation to a guild.
   enum EResult {
@@ -124,23 +146,25 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCGuildCancelInviteResponse] = function onGuildC
     ERROR_UNSPECIFIED = 1;
     ERROR_NO_PERMISSION = 2;
   } */
-  var response = dota_gcmessages_client.CMsgDOTAGuildCancelInviteResponse.parse(message);
+  var response = Dota2.schema.CMsgDOTAGuildCancelInviteResponse.decode(message);
   if (this.debug) util.log("Guild cancel invite response: " + response.result);
   if (callback) callback(null, response);
 };
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCGuildCancelInviteResponse] = onGuildCancelInviteResponse;
 
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCGuildInviteData] = function onGuildInviteData(message) {
+var onGuildInviteData = function onGuildInviteData(message) {
   /* Received an invitation to a guild */
-  var guildInviteData = dota_gcmessages_client.CMsgDOTAGuildInviteData.parse(message);
+  var guildInviteData = Dota2.schema.CMsgDOTAGuildInviteData.decode(message);
 
   // Break if it is just info, and not invitation.
   if (!guildInviteData.invitedToGuild) return;
 
-  if (this.debug) util.log("Received invitation to guild: " + guildInviteData.guildName);
-  this.emit("guildInvite", guildInviteData.guildId, guildInviteData.guildName, guildInviteData.inviter, guildInviteData);
+  if (this.debug) util.log("Received invitation to guild: " + guildInviteData.guild_name);
+  this.emit("guildInviteData", guildInviteData.guild_id, guildInviteData.guild_name, guildInviteData.inviter, guildInviteData);
 };
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCGuildInviteData] = onGuildInviteData;
 
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCGuildSetAccountRoleResponse] = function onGuildSetAccountRoleResponse(message, callback) {
+var onGuildSetAccountRoleResponse = function onGuildSetAccountRoleResponse(message, callback) {
   callback = callback || null;
   /* Response to setting account role.
       enum EResult {
@@ -151,7 +175,8 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCGuildSetAccountRoleResponse] = function onGuil
         ERROR_ACCOUNT_TOO_MANY_GUILDS = 4;
         ERROR_GUILD_TOO_MANY_MEMBERS = 5;
       } */
-  var setAccountRoleData = dota_gcmessages_client.CMsgDOTAGuildSetAccountRoleResponse.parse(message);
+  var setAccountRoleData = Dota2.schema.CMsgDOTAGuildSetAccountRoleResponse.decode(message);
   if (this.debug) util.log("Guild setAccountRole response: " + setAccountRoleData.result);
   if (callback) callback(null, setAccountRoleData);
 };
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCGuildSetAccountRoleResponse] = onGuildSetAccountRoleResponse;

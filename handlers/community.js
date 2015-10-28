@@ -1,17 +1,42 @@
 var Dota2 = require("../index"),
-    fs = require("fs"),
-    util = require("util"),
-    Schema = require('protobuf').Schema,
-    base_gcmessages = new Schema(fs.readFileSync(__dirname + "/../generated/base_gcmessages.desc")),
-    gcsdk_gcmessages = new Schema(fs.readFileSync(__dirname + "/../generated/gcsdk_gcmessages.desc")),
-    dota_gcmessages_client = new Schema(fs.readFileSync(__dirname + "/../generated/dota_gcmessages_client.desc")),
-    protoMask = 0x80000000;
+    util = require("util");
+
+Dota2._playerHistoryOptions = {
+    start_at_match_id: "number",
+    matches_requested: "number",
+    hero_id: "number",
+    request_id: "number"
+  };
 
 // Methods
-
-Dota2.Dota2Client.prototype.profileRequest = function(accountId, requestName, callback) {
+Dota2.Dota2Client.prototype.requestPlayerMatchHistory = function(account_id, options, callback) {
   callback = callback || null;
+  options = options || null;
+  var _self = this;
+  /* Sends a message to the Game Coordinator requesting `accountId`'s player match history.  Listen for `playerMatchHistoryData` event for Game Coordinator's response. */
+  if (!this._gcReady) {
+      if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+      return null;
+  }
 
+  if (this.debug) util.log("Sending player match history request");
+  var command = Dota2._parseOptions(options, Dota2._playerHistoryOptions);
+  command.account_id = account_id;
+  command.matches_requested = command.matches_requested || 1;
+  command.request_id = command.request_id || account_id;
+  var payload = new Dota2.schema.CMsgDOTAGetPlayerMatchHistory(command);
+  this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgDOTAGetPlayerMatchHistory;
+  this._gc.send(this._protoBufHeader,
+                payload.toBuffer(),
+                function (header, body) {
+                  onPlayerMatchHistoryResponse.call(_self, body, callback);
+                }
+  );
+};
+
+Dota2.Dota2Client.prototype.requestProfile = function(account_id, request_name, callback) {
+  callback = callback || null;
+  var _self = this;
   /* Sends a message to the Game Coordinator requesting `accountId`'s profile data.  Listen for `profileData` event for Game Coordinator's response. */
   if (!this._gcReady) {
     if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
@@ -19,17 +44,45 @@ Dota2.Dota2Client.prototype.profileRequest = function(accountId, requestName, ca
   }
 
   if (this.debug) util.log("Sending profile request");
-  var payload = dota_gcmessages_client.CMsgDOTAProfileRequest.serialize({
-    "accountId": accountId,
-    "requestName": requestName
+  var payload = new Dota2.schema.CMsgDOTAProfileRequest({
+    "account_id": account_id,
+    "request_name": request_name,
+    "engine": 1
   });
-
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCProfileRequest | protoMask), payload, callback);
+  this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCProfileRequest;
+  this._gc.send(this._protoBufHeader,
+                payload.toBuffer(),
+                function (header, body) {
+                  onProfileResponse.call(_self, body, callback);
+                }
+  );
 };
 
-Dota2.Dota2Client.prototype.passportDataRequest = function(accountId, callback) {
+Dota2.Dota2Client.prototype.requestProfileCard = function(account_id, callback) {
   callback = callback || null;
+  var _self = this;
+  /* Sends a message to the Game Coordinator requesting `accountId`'s profile card.  Listen for `profileCardData` event for Game Coordinator's response. */
+  if (!this._gcReady) {
+    if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+    return null;
+  }
 
+  if (this.debug) util.log("Sending profile request");
+  var payload = new Dota2.schema.CMsgClientToGCGetProfileCard({
+    "account_id": account_id
+  });
+  this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCGetProfileCard;
+  this._gc.send(this._protoBufHeader,
+                payload.toBuffer(),
+                function (header, body) {
+                  onProfileCardResponse.call(_self, body, callback);
+                }
+  );
+};
+
+Dota2.Dota2Client.prototype.requestPassportData = function(account_id, callback) {
+  callback = callback || null;
+  var _self = this;
   /* Sends a message to the Game Coordinator requesting `accountId`'s passport data.  Listen for `passportData` event for Game Coordinator's response. */
   if (!this._gcReady) {
     if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
@@ -37,14 +90,20 @@ Dota2.Dota2Client.prototype.passportDataRequest = function(accountId, callback) 
   }
 
   if (this.debug) util.log("Sending passport data request");
-  var payload = dota_gcmessages_client.CMsgPassportDataRequest.serialize({"accountId": accountId});
-
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCPassportDataRequest | protoMask), payload, callback);
+  var payload = new Dota2.schema.CMsgPassportDataRequest({"account_id": account_id});
+  this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCPassportDataRequest;
+  this._gc.send(this._protoBufHeader,
+                payload.toBuffer(),
+                function (header, body) {
+                  onPassportDataResponse.call(_self, body, callback);
+                }
+  );
 };
 
-Dota2.Dota2Client.prototype.hallOfFameRequest = function(week, callback) {
+Dota2.Dota2Client.prototype.requestHallOfFame = function(week, callback) {
   week = week || null;
   callback = callback || null;
+  var _self = this;
 
   /* Sends a message to the Game Coordinator requesting `accountId`'s passport data.  Listen for `passportData` event for Game Coordinator's response. */
   if (!this._gcReady) {
@@ -53,11 +112,16 @@ Dota2.Dota2Client.prototype.hallOfFameRequest = function(week, callback) {
   }
 
   if (this.debug) util.log("Sending hall of fame request.");
-  var payload = dota_gcmessages_client.CMsgDOTAHallOfFameRequest.serialize({
-    "week": week,
+  var payload = new Dota2.schema.CMsgDOTAHallOfFameRequest({
+    "week": week
   });
-
-  this._client.toGC(this._appid, (Dota2.EDOTAGCMsg.k_EMsgGCHallOfFameRequest | protoMask), payload, callback);
+  this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCHallOfFameRequest;
+  this._gc.send(this._protoBufHeader,
+                payload.toBuffer(),
+                function (header, body) {
+                  onHallOfFameResponse.call(_self, body, callback);
+                }
+  );
 };
 
 
@@ -65,13 +129,29 @@ Dota2.Dota2Client.prototype.hallOfFameRequest = function(week, callback) {
 
 var handlers = Dota2.Dota2Client.prototype._handlers;
 
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCProfileResponse] = function onProfileResponse(message, callback) {
+var onPlayerMatchHistoryResponse = function onPlayerMatchHistoryResponse(message, callback) {
+    callback = callback || null;
+    var matchHistoryResponse = Dota2.schema.CMsgDOTAGetPlayerMatchHistoryResponse.decode(message);
+
+    if (typeof matchHistoryResponse.matches != "undefined") {
+        if (this.debug) util.log("Received player match history data");
+        this.emit("playerMatchHistoryData", matchHistoryResponse.requestId, matchHistoryResponse);
+        if (callback) callback(null, matchHistoryResponse);
+    }
+    else {
+        if (this.debug) util.log("Received a bad GetPlayerMatchHistoryResponse");
+        if (callback) callback(matchHistoryResponse.result, matchHistoryResponse);
+    }
+};
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgDOTAGetPlayerMatchHistoryResponse] = onPlayerMatchHistoryResponse;
+
+var onProfileResponse = function onProfileResponse(message, callback) {
   callback = callback || null;
-  var profileResponse = dota_gcmessages_client.CMsgDOTAProfileResponse.parse(message);
+  var profileResponse = Dota2.schema.CMsgDOTAProfileResponse.decode(message);
 
   if (profileResponse.result === 1) {
-    if (this.debug) util.log("Received profile data for: " + profileResponse.gameAccountClient.accountId);
-    this.emit("profileData", profileResponse.gameAccountClient.accountId, profileResponse);
+    if (this.debug) util.log("Received profile data for: " + profileResponse.game_account_client.account_id);
+    this.emit("profileData", profileResponse.game_account_client.account_id, profileResponse);
     if (callback) callback(null, profileResponse);
   }
   else {
@@ -79,23 +159,41 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCProfileResponse] = function onProfileResponse(
     if (callback) callback(profileResponse.result, profileResponse);
   }
 };
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCProfileResponse] = onProfileResponse;
 
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCPassportDataResponse] = function onPassportDataResponse(message, callback) {
+var onProfileCardResponse = function onProfileCardResponse(message, callback) {
   callback = callback || null;
-  var passportDataResponse = dota_gcmessages_client.CMsgPassportDataResponse.parse(message);
+  var profileCardResponse = Dota2.schema.CMsgDOTAProfileCard.decode(message);
 
-  if (this.debug) util.log("Received passport data for: " + passportDataResponse.accountId);
-  this.emit("passportData", passportDataResponse.accountId, passportDataResponse);
+  if (profileCardResponse.result === 1) {
+    if (this.debug) util.log("Received profile data for: " + profileCardResponse.game_account_client.account_id);
+    this.emit("profileCardData", profileCardResponse.game_account_client.account_id, profileCardResponse);
+    if (callback) callback(null, profileCardResponse);
+  }
+  else {
+    if (this.debug) util.log("Received a bad profileResponse");
+    if (callback) callback(profileCardResponse.result, profileCardResponse);
+  }
+};
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCGetProfileCardResponse] = onProfileCardResponse;
+
+var onPassportDataResponse = function onPassportDataResponse(message, callback) {
+  callback = callback || null;
+  var passportDataResponse = Dota2.schema.CMsgPassportDataResponse.decode(message);
+
+  if (this.debug) util.log("Received passport data for: " + passportDataResponse.account_id);
+  this.emit("passportData", passportDataResponse.account_id, passportDataResponse);
   if (callback) callback(null, passportDataResponse);
 };
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCPassportDataResponse] = onPassportDataResponse;
 
-handlers[Dota2.EDOTAGCMsg.k_EMsgGCHallOfFameResponse] = function onHallOfFameResponse(message, callback) {
+var onHallOfFameResponse = function onHallOfFameResponse(message, callback) {
   callback = callback || null;
-  var hallOfFameResponse = dota_gcmessages_client.CMsgDOTAHallOfFameResponse.parse(message);
+  var hallOfFameResponse = Dota2.schema.CMsgDOTAHallOfFameResponse.decode(message);
 
   if (hallOfFameResponse.eresult === 1) {
-    if (this.debug) util.log("Received hall of fame response for week: " + hallOfFameResponse.hallOfFame.week);
-    this.emit("hallOfFameData", hallOfFameResponse.hallOfFame.week, hallOfFameResponse.hallOfFame.featuredPlayers, hallOfFameResponse.hallOfFame.featuredFarmer, hallOfFameResponse);
+    if (this.debug) util.log("Received hall of fame response for week: " + hallOfFameResponse.hall_of_fame.week);
+    this.emit("hallOfFameData", hallOfFameResponse.hall_of_fame.week, hallOfFameResponse.hall_of_fame.featured_players, hallOfFameResponse.hall_of_fame.featured_farmer, hallOfFameResponse);
     if (callback) callback(null, hallOfFameResponse);
   }
   else {
@@ -103,3 +201,4 @@ handlers[Dota2.EDOTAGCMsg.k_EMsgGCHallOfFameResponse] = function onHallOfFameRes
       if (callback) callback(hallOfFameResponse.result, hallOfFameResponse);
   }
 };
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCHallOfFameResponse] = onHallOfFameResponse;
