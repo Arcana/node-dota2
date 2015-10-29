@@ -165,15 +165,9 @@ var onProfileCardResponse = function onProfileCardResponse(message, callback) {
   callback = callback || null;
   var profileCardResponse = Dota2.schema.CMsgDOTAProfileCard.decode(message);
 
-  if (profileCardResponse.result === 1) {
-    if (this.debug) util.log("Received profile data for: " + profileCardResponse.game_account_client.account_id);
-    this.emit("profileCardData", profileCardResponse.game_account_client.account_id, profileCardResponse);
-    if (callback) callback(null, profileCardResponse);
-  }
-  else {
-    if (this.debug) util.log("Received a bad profileResponse");
-    if (callback) callback(profileCardResponse.result, profileCardResponse);
-  }
+  if (this.debug) util.log("Received profile card data for: " + profileCardResponse.game_account_client.account_id);
+  this.emit("profileCardData", profileCardResponse.game_account_client.account_id, profileCardResponse);
+  if (callback) callback(null, profileCardResponse);
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCGetProfileCardResponse] = onProfileCardResponse;
 
