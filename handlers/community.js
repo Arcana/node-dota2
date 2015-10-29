@@ -67,7 +67,7 @@ Dota2.Dota2Client.prototype.requestProfileCard = function(account_id, callback) 
     return null;
   }
 
-  if (this.debug) util.log("Sending profile request");
+  if (this.debug) util.log("Sending profile card request");
   var payload = new Dota2.schema.CMsgClientToGCGetProfileCard({
     "account_id": account_id
   });
