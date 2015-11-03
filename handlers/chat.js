@@ -143,7 +143,6 @@ var onOtherJoinedChannel = function onOtherJoinedChannel(message) {
             otherJoined.steam_id,
             otherJoined);
   // Add member to cached chatChannels
-  // channel_id is a uint64 which is a compound object. Using '===' or '==' doesn't work to check the equality necessitating the cast to String
   channel.members.push(new Dota2.schema.CMsgDOTAChatMember({
                                   steam_id: otherJoined.steam_id,
                                   persona_name: otherJoined.persona_name
