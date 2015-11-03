@@ -3,7 +3,7 @@ var Dota2 = require("../index"),
 
 // Methods
 Dota2.Dota2Client.prototype._getChannelByName = function(channel_name) {
-  // Returns the channel_name correspondig to the given channel_id
+  // Returns the channel corresponding to the given channel_name
   if (this.chatChannels) {
     return this.chatChannels.filter(
         function (item) { return (item.channel_name === channel_name); }
@@ -14,7 +14,7 @@ Dota2.Dota2Client.prototype._getChannelByName = function(channel_name) {
 }
 
 Dota2.Dota2Client.prototype._getChannelById = function(channel_id) {
-  // Returns the channel_name correspondig to the given channel_id
+  // Returns the channel corresponding to the given channel_id
   if (this.chatChannels) {
     return this.chatChannels.filter(
         // channel_id is a uint64 which is a compound object. Using '===' or '==' doesn't work to check the equality necessitating the cast to String
