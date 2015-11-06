@@ -1,6 +1,6 @@
 {
   "name": "dota2",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "dependencies": {
     "bignumber.js": "2.0.7",
     "deferred": "^0.7.2",
