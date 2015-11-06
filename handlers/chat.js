@@ -43,7 +43,7 @@ Dota2.Dota2Client.prototype.leaveChat = function(channel) {
   this._gc.send(this._protoBufHeader,
                 payload.toBuffer()
   );
-  this.chatChannels = this.chatChannels.filter(function (item) {if (item.channel_name == channel) return true; });
+  this.chatChannels = this.chatChannels.filter(function (item) {if (item.channel_name == channel) return false; });
 };
 
 Dota2.Dota2Client.prototype.sendMessage = function(channel, message) {
