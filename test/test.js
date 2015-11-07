@@ -144,9 +144,11 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
     };
 
 steamUser.on('updateMachineAuth', function(sentry, callback) {
-        fs.writeFileSync('sentry', sentry.bytes)
-        util.log("sentryfile saved");
-    callback({ sha_file: crypto.createHash('sha1').update(sentry.bytes).digest() });
+    fs.writeFileSync('sentry', sentry.bytes)
+    util.log("sentryfile saved");
+    callback({
+        sha_file: crypto.createHash('sha1').update(sentry.bytes).digest()
+    });
 });
 
 
@@ -160,14 +162,13 @@ if (global.config.steam_guard_code) logOnDetails.auth_code = global.config.steam
 try {
     var sentry = fs.readFileSync('sentry');
     if (sentry.length) logOnDetails.sha_sentryfile = sentry;
-}
-catch (beef){
+} catch (beef) {
     util.log("Cannae load the sentry. " + beef);
 }
 
 steamClient.connect();
 steamClient.on('connected', function() {
-  steamUser.logOn(logOnDetails);
+    steamUser.logOn(logOnDetails);
 });
 steamClient.on('logOnResponse', onSteamLogOn);
 steamClient.on('loggedOff', onSteamLogOff);
