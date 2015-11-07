@@ -50,7 +50,7 @@ Dota2.Dota2Client.prototype.leaveChat = function(channel) {
         payload.toBuffer()
     );
     this.chatChannels = this.chatChannels.filter(function(item) {
-        if (item.channel_name == channel) return false;
+        if (item.channel_name == channel) return true;
     });
 };
 
