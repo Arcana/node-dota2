@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 pushd proto
 rm *.proto
 wget https://raw.githubusercontent.com/SteamDatabase/GameTracking/master/Protobufs/dota/base_gcmessages.proto
