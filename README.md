@@ -7,41 +7,11 @@ Check out my blog post (my only blog post), [Extending node-dota2](https://blog.
 
 ## Upgrade guide
 
-### `<= 0.7.*` to `1.0.0`
+### `1.*.*` to `2.0.0`
 
-A few backwards incompatible API changes were included with version 1.0.0.
+A few backwards incompatible API changes were included with version 2.0.0.
 
-The following methods were renamed:
-
-Old method name                | New method name
-----                           | ----
-getPlayerMatchHistory          | requestPlayerMatchHistory
-profileRequest                 | requestProfile
-passportDataRequest            | requestPassportData
-hallOfFameRequest              | requestHallOfFame
-leaguesInMonthRequest          | requestLeaguesInMonth
-practiceLobbyListRequest       | requestPracticeLobbyList
-friendPracticeLobbyListRequest | requestFriendPracticeLobbyList
-matchDetailsRequest            | requestMatchDetails
-matchmakingStatsRequest        | requestMatchmakingStats
-findSourceTVGames              | requestSourceTVGames
-
-And the following events were renamed:
-
-Old event name                  | New event name
-----                            | ----
-chatChannelsReceived            | chatChannelsData
-guildInvite                     | guildInviteData
-leaguesInMonthResponse          | leaguesInMonthData
-leagueInfo                      | leagueData
-practiceLobbyListResponse       | practiceLobbyListData
-friendPracticeLobbyListResponse | friendPracticeLobbyListData
-matches                         | matchesData
-matchData                       | matchDetailsData
-
-Finally we migrated to the 1.x.y version of node-steam. This caused all proto 
-messages to become snake_cased instead of camelCased. As a consequence, many 
-tags in responses and events have changed.
+* The `chatJoin` and `chatLeave` events were changed to return the channel name instead of the id. All debug logs pertaining chat channels will now mention chat channel instead of IDs.
 
 ## Initializing
 Parameters:
@@ -405,16 +375,16 @@ Emitted when the connection status to the GC changes, and renders the library un
 
 Emitted for chat messages received from Dota 2 chat channels
 
-### `chatJoin` (`channel_id`, `joiner_name`, `joiner_steam_id`, `otherJoined_object`)
-* `channel_id`
+### `chatJoin` (`channel`, `joiner_name`, `joiner_steam_id`, `otherJoined_object`)
+* `channel` - Channel name.
 * `joiner_name` - Persona name of user who joined.
 * `joiner_steam_id` - Steam ID of the user who joined.
 * `otherJoined_object` - The raw `CMsgDOTAOtherJoinedChatChannel` object for you to do with as you wish.
 
 Emitted when another user joins a chat channel you are in.
 
-### `chatLeave` (`channel_id`, `leaver_steam_id`, `otherLeft_object`)
-* `channel_id`
+### `chatLeave` (`channel`, `leaver_steam_id`, `otherLeft_object`)
+* `channel` - Channel name.
 * `leaver_steam_id` - Steam ID of the user who left.
 * `otherLeft_object` - The raw `CMsgDOTAOtherLeftChatChannel` object for you to do with as you wish.
 
