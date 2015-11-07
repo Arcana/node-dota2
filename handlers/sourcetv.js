@@ -12,9 +12,9 @@ Dota2.Dota2Client.prototype.requestSourceTVGames = function(filter_options, call
         if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
         return null;
     }
-    
+
     if (this.debug) util.log("Sending find SourceTV games request");
-    
+
     /* Using default params and merging with filter_options, note: numGames is ignored from GC and > 6 causes no response at all */
     var payload = new Dota2.schema.CMsgFindSourceTVGames(merge({
         "searchKey": '',
@@ -24,13 +24,14 @@ Dota2.Dota2Client.prototype.requestSourceTVGames = function(filter_options, call
         "heroid": 0,
         "teamGame": false,
         "customGameId": 0,
-    },filter_options));
+    }, filter_options));
     this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCFindSourceTVGames;
-    this._gc.send(this._protoBufHeader,
-                payload.toBuffer(),
-                function (header, body) {
-                  onSourceTVGamesResponse.call(_self, body, callback);
-                }
+    this._gc.send(
+        this._protoBufHeader,
+        payload.toBuffer(),
+        function(header, body) {
+            onSourceTVGamesResponse.call(_self, body, callback);
+        }
     );
 };
 
@@ -47,8 +48,7 @@ var onSourceTVGamesResponse = function onSourceTVGamesResponse(message, callback
         if (this.debug) util.log("Received SourceTV games data");
         this.emit("sourceTVGamesData", sourceTVGamesResponse.num_total_games, sourceTVGamesResponse.games);
         if (callback) callback(sourceTVGamesResponse);
-    }
-    else {
+    } else {
         if (this.debug) util.log("Received a bad SourceTV games response");
         if (callback) callback(sourceTVGamesResponse.result, sourceTVGamesResponse);
     }
