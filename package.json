@@ -9,7 +9,8 @@
     "steam": "^1.2.0"
   },
   "scripts": {
-    "update": "bash update_proto.sh"
+    "update": "bash update_proto.sh",
+    "test": "./node_modules/mocha/bin/mocha"
   },
   "readmeFilename": "README.md",
   "description": "A node-steam plugin for Dota 2.",
@@ -23,5 +24,8 @@
     "valve",
     "dota"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^2.3.3"
+  }
 }
