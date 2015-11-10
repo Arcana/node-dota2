@@ -143,6 +143,12 @@ Requests the authenticated user's team data.
 
 Requests the profile for a given team.
 
+#### requestTeamIDByName(team_name, [callback])
+* `team_name` - Name of a team
+* `[callback]` - optional callback, returns args: `err, response`.
+
+Requests the ID for a given team name.
+
 ### Community
 #### requestPlayerMatchHistory(account_id, [options], [callback])
 * `account_id` - Account ID of the user whose match history you wish to retrieve.
@@ -457,7 +463,6 @@ Emitted when GC responds to the `requestMyTeams` method.
 
 See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client.proto#L776) for `team`'s object structure.
 
-
 ### `teamProfile` (`team_id`, `team_info`)
 * `team_id` - ID of the team.
 * `team_info` - Info about the team. This contains among others:
@@ -472,6 +477,11 @@ See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resour
 Emitted when GC responds to the `requestTeamProfile` method.
 
 See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client.proto#L776) for `team_info`'s object structure.
+
+### `teamID` (`team_id`)
+* `team_id` - ID of the team. Null if none was found.
+
+Emitted when GC responds to the `requestTeamIDByName` method.
 
 ### `profileData` (`account_id`, `profileData`)
 * `account_id` - Account ID whom the data is associated with.

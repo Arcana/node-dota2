@@ -46,6 +46,30 @@ Dota2.Dota2Client.prototype.requestTeamProfile = function requestTeamProfile(tea
     );
 }
 
+Dota2.Dota2Client.prototype.requestTeamIDByName = function requestTeamIDByName(team_name, callback) {
+    // Request the profile of a given team
+    callback = callback || null;
+    
+    var _self = this;
+    if (!this._gcReady) {
+        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+        return null;
+    }
+
+    if (this.debug) util.log("Sending team ID by name request");
+    var payload = new Dota2.schema.CMsgDOTATeamIDByNameRequest({
+        "name": team_name
+    });
+    this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCTeamIDByNameRequest;
+    this._gc.send(
+        this._protoBufHeader,
+        payload.toBuffer(),
+        function(header, body) {
+            onTeamIDByNameResponse.call(_self, body, callback);
+        }
+    );
+}
+
 
 var handlers = Dota2.Dota2Client.prototype._handlers;
 
@@ -63,7 +87,6 @@ var onTeamDataResponse = function onTeamDataResponse(message, callback) {
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCRequestTeamDataResponse] = onTeamDataResponse;
 
-
 var onTeamProfileResponse = function onTeamProfileResponse(message, callback) {
     var teamProfileResponse = Dota2.schema.CMsgDOTATeamProfileResponse.decode(message);
     
@@ -77,3 +100,18 @@ var onTeamProfileResponse = function onTeamProfileResponse(message, callback) {
     }
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCTeamProfileResponse] = onTeamProfileResponse;
+
+var onTeamIDByNameResponse = function onTeamIDByNameResponse(message, callback) {
+    var teamID = Dota2.schema.CMsgDOTATeamIDByNameResponse.decode(message);
+    
+    if (teamID.eresult === 1) {
+        if (this.debug) util.log("Received team ID " + teamID.team_id);
+        this.emit("teamID", teamID.team_id);
+        if (callback) callback(null, teamID);
+    } else {
+        if (this.debug) util.log("Couldn't find team ID " + JSON.stringify(teamID));
+        this.emit("teamID", null);
+        if (callback) callback(teamID.eresult, teamID);
+    }
+};
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCTeamIDByNameResponse] = onTeamIDByNameResponse;
