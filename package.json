@@ -26,6 +26,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "mocha": "^2.3.3"
+    "mocha": "^2.3.3",
+    "should": "^7.1.1"
   }
 }

@@ -702,7 +702,8 @@ Use this to pass valid server region data to `createPracticeLobby`.
 Use this to pass valid game mode data to `createPracticeLobby`.
 
 ## Testing
-There is no automated test suite for node-dota2 (I've no idea how I'd make one for the stuff this does :o), however there the `test` directory does contain a Steam bot with commented-out dota2 methods; you can use this bot to test the library.
+
+We have a suite of Mocha tests for node-dota2. Coverage isn't at 100% yet, but all of the core logic should be covered.  Run `npm test` to run these test suites, passing in account credentials via environmental variables (e.g. `STEAM_USERNAME="bob" STEAM_PASSWORD="notbob" npm test`).  We also have TravisCI integration that will run the tests on any pull-requests opened up.
 
 ### Setting up
 * `npm install steam; npm install` in the repository root (install Steam first to work around a node-steam#222)
