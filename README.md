@@ -143,6 +143,12 @@ Requests the authenticated user's team data.
 
 Requests the profile for a given team.
 
+#### requestTeamMemberProfile(steam_id, [callback])
+* `steam_id` - Steam ID of the user whose team profile you want
+* `[callback]` - optional callback, returns args: `err, response`.
+
+Requests the profile of the team a given user belongs to.
+
 #### requestTeamIDByName(team_name, [callback])
 * `team_name` - Name of a team
 * `[callback]` - optional callback, returns args: `err, response`.
@@ -474,7 +480,7 @@ See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resour
   * `rank` - Team MMR
   * ...
 
-Emitted when GC responds to the `requestTeamProfile` method.
+Emitted when GC responds to the `requestTeamProfile` and `requestTeamMemberProfile` method.
 
 See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client.proto#L776) for `team_info`'s object structure.
 

@@ -47,7 +47,7 @@ Dota2.Dota2Client.prototype.requestTeamProfile = function requestTeamProfile(tea
 }
 
 Dota2.Dota2Client.prototype.requestTeamIDByName = function requestTeamIDByName(team_name, callback) {
-    // Request the profile of a given team
+    // Request the ID of a given team
     callback = callback || null;
     
     var _self = this;
@@ -70,6 +70,29 @@ Dota2.Dota2Client.prototype.requestTeamIDByName = function requestTeamIDByName(t
     );
 }
 
+Dota2.Dota2Client.prototype.requestTeamMemberProfile = function requestTeamMemberProfile(steam_id, callback) {
+    // Request the profile of a given team member
+    callback = callback || null;
+    
+    var _self = this;
+    if (!this._gcReady) {
+        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+        return null;
+    }
+
+    if (this.debug) util.log("Sending team member profile request");
+    var payload = new Dota2.schema.CMsgDOTATeamMemberProfileRequest({
+        "steam_id": steam_id
+    });
+    this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCTeamMemberProfileRequest;
+    this._gc.send(
+        this._protoBufHeader,
+        payload.toBuffer(),
+        function(header, body) {
+            onTeamProfileResponse.call(_self, body, callback);
+        }
+    );
+}
 
 var handlers = Dota2.Dota2Client.prototype._handlers;
 
@@ -95,7 +118,7 @@ var onTeamProfileResponse = function onTeamProfileResponse(message, callback) {
         this.emit("teamProfile", teamProfileResponse.team.team_id, teamProfileResponse.team);
         if (callback) callback(null, teamProfileResponse);
     } else {
-        if (this.debug) util.log("Received a bad team profile response " + JSON.stringify(teamProfileResponse));
+        if (this.debug) util.log("Couldn't find team profile " + JSON.stringify(teamProfileResponse));
         if (callback) callback(teamProfileResponse.eresult, teamProfileResponse);
     }
 };
