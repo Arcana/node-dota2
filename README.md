@@ -155,6 +155,11 @@ Requests the profile of the team a given user belongs to.
 
 Requests the ID for a given team name.
 
+#### requestProTeamList([callback])
+* `[callback]` - optional callback, returns args: `err, response`.
+
+Requests the list of pro teams
+
 ### Community
 #### requestPlayerMatchHistory(account_id, [options], [callback])
 * `account_id` - Account ID of the user whose match history you wish to retrieve.
@@ -488,6 +493,17 @@ See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resour
 * `team_id` - ID of the team. Null if none was found.
 
 Emitted when GC responds to the `requestTeamIDByName` method.
+
+### `proTeamListData` (`teams`)
+* `teams` - List of team entries
+  * `team_id` - ID of the team
+  * `tag` - Tag of the team
+  * `time_created` - Timestamp when the team was created
+  * `logo` - Logo of the team
+  * `country_code` - 2 letter country code
+  * `member_count`- Number of team members in this team
+
+Emitted when GC responds to the `requestProTeamList` method.
 
 ### `profileData` (`account_id`, `profileData`)
 * `account_id` - Account ID whom the data is associated with.

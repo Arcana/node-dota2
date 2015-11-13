@@ -94,6 +94,28 @@ Dota2.Dota2Client.prototype.requestTeamMemberProfile = function requestTeamMembe
     );
 }
 
+Dota2.Dota2Client.prototype.requestProTeamList = function requestProTeamList(callback) {
+    // Request the list of pro teams
+    callback = callback || null;
+    var _self = this;
+    if (!this._gcReady) {
+        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+        return null;
+    }
+
+    if (this.debug) util.log("Requesting list of pro teams");
+    var payload = new Dota2.schema.CMsgDOTAProTeamListRequest({});
+    this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCProTeamListRequest;
+    this._gc.send(
+        this._protoBufHeader,
+        payload.toBuffer(),
+        function(header, body) {
+            onProTeamListResponse.call(_self, body, callback);
+        }
+    );
+}
+
+
 var handlers = Dota2.Dota2Client.prototype._handlers;
 
 var onTeamDataResponse = function onTeamDataResponse(message, callback) {
@@ -138,3 +160,18 @@ var onTeamIDByNameResponse = function onTeamIDByNameResponse(message, callback) 
     }
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCTeamIDByNameResponse] = onTeamIDByNameResponse;
+
+var onProTeamListResponse = function onProTeamListResponse(message, callback) {
+    var teams = Dota2.schema.CMsgDOTAProTeamListResponse.decode(message);
+    
+    if (teams.eresult === 1) {
+        if (this.debug) util.log("Received pro team list");
+        this.emit("proTeamListData", teams.teams);
+        if (callback) callback(null, teams);
+    } else {
+        if (this.debug) util.log("Bad pro team list response " + JSON.stringify(teams));
+        this.emit("proTeamListData", null);
+        if (callback) callback(teams.eresult, teams);
+    }
+};
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCProTeamListResponse] = onProTeamListResponse;
