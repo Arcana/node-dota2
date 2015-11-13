@@ -131,6 +131,34 @@ Attempts to cancel a user's guild invitation; use this on your own account ID to
 
 Attempts to set a user's role within a guild; use this with your own account ID and the 'Member' role to accept guild invitations. Requires the GC to be ready (listen for the `ready` event before calling).
 
+### Team
+#### requestMyTeams([callback])
+* `[callback]` - optional callback, returns args: `err, response`.
+
+Requests the authenticated user's team data. 
+
+#### requestTeamProfile(team_id, [callback])
+* `team_id` - ID of a team
+* `[callback]` - optional callback, returns args: `err, response`.
+
+Requests the profile for a given team.
+
+#### requestTeamMemberProfile(steam_id, [callback])
+* `steam_id` - Steam ID of the user whose team profile you want
+* `[callback]` - optional callback, returns args: `err, response`.
+
+Requests the profile of the team a given user belongs to.
+
+#### requestTeamIDByName(team_name, [callback])
+* `team_name` - Name of a team
+* `[callback]` - optional callback, returns args: `err, response`.
+
+Requests the ID for a given team name.
+
+#### requestProTeamList([callback])
+* `[callback]` - optional callback, returns args: `err, response`.
+
+Requests the list of pro teams
 
 ### Community
 #### requestPlayerMatchHistory(account_id, [options], [callback])
@@ -429,6 +457,54 @@ Emitted when information on a particular guild is retrieved.
 
 You can respond with `cancelInviteToGuild` or `setGuildAccountRole`.
 
+### `teamData` (`teams`)
+* `teams` - Array containing the teams the user is in or which are featured on the user's profile. Each object has the following properties:
+  * `on_team` - Whether or not the user is on this team
+  * `profile_team` - Whether or not this is a team featured on the user's profile
+  * `team` - Info about the team. This contains among others:
+  * `name` - Name of the team
+  * `members` - Account ID and time joined for all members
+  * `wins` - All wins
+  * `losses` - All losses
+  * `gamesplayed` - Total amount of games played
+  * `rank` - Team MMR
+  * ...
+
+Emitted when GC responds to the `requestMyTeams` method.
+
+See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client.proto#L776) for `team`'s object structure.
+
+### `teamProfile` (`team_id`, `team_info`)
+* `team_id` - ID of the team.
+* `team_info` - Info about the team. This contains among others:
+  * `name` - Name of the team
+  * `members` - Account ID and time joined for all members
+  * `wins` - All wins
+  * `losses` - All losses
+  * `gamesplayed` - Total amount of games played
+  * `rank` - Team MMR
+  * ...
+
+Emitted when GC responds to the `requestTeamProfile` and `requestTeamMemberProfile` method.
+
+See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client.proto#L776) for `team_info`'s object structure.
+
+### `teamID` (`team_id`)
+* `team_id` - ID of the team. Null if none was found.
+
+Emitted when GC responds to the `requestTeamIDByName` method.
+
+### `proTeamListData` (`teams`)
+* `teams` - List of team entries
+  * `team_id` - ID of the team
+  * `tag` - Tag of the team
+  * `time_created` - Timestamp when the team was created
+  * `logo` - Logo of the team
+  * `country_code` - 2 letter country code
+  * `member_count`- Number of team members in this team
+
+Emitted when GC responds to the `requestProTeamList` method.
+
 ### `profileData` (`account_id`, `profileData`)
 * `account_id` - Account ID whom the data is associated with.
 * `profileData` - The raw profile data object.
@@ -439,11 +515,11 @@ See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resour
 
 ### `profileCardData` (`account_id`, `profileCardData`)
 * `account_id` - Account ID whom the data is associated with.
-* `profileData` - The raw profileCard object.
+* `profileCardData` - The raw profileCard object.
 
 Emitted when GC responds to the `requestProfileCard` method.
 
-See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client.proto#L1592) for `profileData`'s object structure.
+See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client.proto#L1592) for `profileCardData`'s object structure.
 
 ### `playerMatchHistoryData` (`request_id`, `matchHistoryResponse`)
 
