@@ -131,6 +131,35 @@ Dota2.Dota2Client.prototype.requestHallOfFame = function(week, callback) {
     );
 };
 
+Dota2.Dota2Client.prototype.requestPlayerInfo = function(account_ids) {
+    // This one doesn't support callbacks
+    account_ids = account_ids || [];
+    account_ids = Array.isArray(account_ids) ? account_ids : [account_ids];
+
+    var _self = this;
+
+    if (account_ids.length == 0) {
+        if (this.debug) util.log("Account ids must be a populated list or a single id.");
+        return null;
+    }
+
+    if (!this._gcReady) {
+        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+        return null;
+    }
+
+    if (this.debug) util.log("Sending player info request.");
+
+    var payload = new Dota2.schema.CMsgGCPlayerInfoRequest({
+        account_ids: account_ids
+    });
+
+    this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCPlayerInfoRequest;
+    this._gc.send(
+        this._protoBufHeader,
+        payload.toBuffer()
+    );
+};
 
 // Handlers
 
@@ -200,3 +229,11 @@ var onHallOfFameResponse = function onHallOfFameResponse(message, callback) {
     }
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCHallOfFameResponse] = onHallOfFameResponse;
+
+var onPlayerInfoResponse = function onPlayerInfoResponse(message) {
+    var playerInfoResponse = Dota2.schema.CMsgGCPlayerInfo.decode(message);
+
+    if (this.debug) util.log("Received new player info data");
+    this.emit("playerInfoData", playerInfoResponse);
+};
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCPlayerInfo] = onPlayerInfoResponse;
