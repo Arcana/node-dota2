@@ -28,10 +28,7 @@ Dota2.Dota2Client.prototype.requestSourceTVGames = function(filter_options) {
     this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCFindTopSourceTVGames;
     this._gc.send(
         this._protoBufHeader,
-        payload.toBuffer(),
-        function (header, body) {
-            onNewSourceTVGamesResponse.call(_self, body);
-        }
+        payload.toBuffer()
     );
 };
 
