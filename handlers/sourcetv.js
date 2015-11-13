@@ -64,4 +64,4 @@ var onSourceTVGamesResponse = function onSourceTVGamesResponse(message) {
         */
     }
 };
-handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCSourceTVGamesResponse] = onSourceTVGamesResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCToClientFindTopSourceTVGamesResponse] = onSourceTVGamesResponse;
