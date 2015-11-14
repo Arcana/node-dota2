@@ -234,6 +234,6 @@ var onPlayerInfoResponse = function onPlayerInfoResponse(message) {
     var playerInfoResponse = Dota2.schema.CMsgGCPlayerInfo.decode(message);
 
     if (this.debug) util.log("Received new player info data");
-    this.emit("playerInfoData", playerInfoResponse);
+    this.emit("playerInfoData", playerInfoResponse.account_id, playerInfoResponse);
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCPlayerInfo] = onPlayerInfoResponse;
