@@ -201,6 +201,10 @@ Sends a message to the Game Coordinator requesting `account_id`'s passport data.
 
 Sends a message to the Game Coordinator requesting the Hall of Fame data for `week`. Provide a callback or listen for the `hallOfFameData` event for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
+#### requestPlayerInfo(account_ids)
+* `account_ids` - Either a single or array of Account IDs (lower 32-bits of a 64-bit Steam ID) of desired user(s) player info.  
+
+Sends a message to the Game Coordinator requesting one or multiple `account_ids` player information. This includes their display name, country code, team info and sponsor, fantasy role, official information lock status, and if the user is marked as a pro player. Requesting multiple ids will result in multiple events being emitted. Listen for the `playerInfoData` event for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
 ### Matches
 #### requestMatches(criteria, [callback])
@@ -364,10 +368,9 @@ Requests info on all available official leagues from the GC. Listen for `leagueD
 
 ### SourceTV
 
-#### requestSourceTVGames([filterOption], [callback])
+#### requestSourceTVGames([filterOption])
 
 * `[filterOption]` - Object to override the default filters
-* `[callback]` - callback to be executed, return args: `response`
 
 Returns a list of current ongoing matches (from live games tab).
 
@@ -375,17 +378,16 @@ Default filterOptions:
 
 ```javascript
 {
-    searchKey: '',
-    start: 0,           // offset
-    numGames: 6,
-    leagueid: 0,
-    heroid: 0,
-    teamGame: false,    // only show team games (team matchmaking)
-    customGameId: 0,
+    search_key: '',
+    league_id: 0,
+    hero_id: 0,
+    start_game: 0, // This is not the game offset, only values in [0, 10, 20, ... 90] are valid, and yield [1,2,3 ... 10] responses
+    game_list_index: 0,
+    lobby_ids: [], // This is for getting player specific matches (pro player) games on the live games list, but where the lobby_ids are derived from is unknown.
 }
 ```
 
-> __Important:__ The only working parameters are `start`, `leagueid` and `teamGame`. Changing the other parameters will result in no response at all (e.g. `numGames` > 6)
+> __Important:__ The useful parameters are `league_id`, `hero_id`, and `start_game`.  The rest have unclear usage conditions.
 
 ## Events
 ### `ready`
@@ -520,6 +522,14 @@ See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resour
 Emitted when GC responds to the `requestProfileCard` method.
 
 See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client.proto#L1592) for `profileCardData`'s object structure.
+
+### `playerInfoData` (`account_id`, `playerInfoData`)
+* `account_id` - Account ID whom the data is associated with.
+* `playerInfoData` - The raw playerInfo object.
+
+Emitted when GC responds to the `requestPlayerInfo` method.
+
+See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client_fantasy.proto#L159) for `playerInfoData`'s object structure.
 
 ### `playerMatchHistoryData` (`request_id`, `matchHistoryResponse`)
 
@@ -708,6 +718,21 @@ The response object is visualized as follows:
 ### `leagueData` ()
 
 TODO
+
+### `sourceTVGamesData` (`sourceTVGamesResponse`)
+* `sourceTVGamesResponse` - The raw response object
+  * `account_id` - The Account ID of the requested user.
+  * `name` - The display name for the user.
+  * `country_code` - The abbreviated country code for the user, i.e. `us`, `cn`, etc...
+  * `fantasy_role` - The role of the player, either core or support, `1` and `2` respectively.
+  * `team_id` - The numerical id of the user's team.
+  * `team_name` - The name of the team the user is on, ex: `Cloud9`
+  * `team_tag` - The abbreviated tag of a team prepended to a player's name, ex: `C9`
+  * `sponsor` - The sponsor listed in the player's official info, ex: `HyperX`  
+  * `is_locked` - Whether or not the user's official player info has been locked from editing, `true` or `false`.
+  * `is_pro` - Whether the player is considered a pro player by Valve, `true` or `false`.
+
+Emitted when the GC responds to the `requestSourceTVGames` method.  Multiple events are emitted when `requestSourceTVGames` is passed with `start_game` > 0 or with one or more `lobby_id`s.  
 
 ## Enums
 ### ServerRegion
