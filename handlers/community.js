@@ -139,7 +139,7 @@ Dota2.Dota2Client.prototype.requestPlayerInfo = function(account_ids) {
     var _self = this;
 
     if (account_ids.length == 0) {
-        if (this.debug) util.log("Account ids must be a populated list or a single id.");
+        if (this.debug) util.log("Account ids must be a single id or array of ids.");
         return null;
     }
 
@@ -234,6 +234,6 @@ var onPlayerInfoResponse = function onPlayerInfoResponse(message) {
     var playerInfoResponse = Dota2.schema.CMsgGCPlayerInfo.decode(message);
 
     if (this.debug) util.log("Received new player info data");
-    this.emit("playerInfoData", playerInfoResponse.account_id, playerInfoResponse);
+    this.emit("playerInfoData", playerInfoResponse);
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCPlayerInfo] = onPlayerInfoResponse;

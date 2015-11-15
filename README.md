@@ -204,7 +204,7 @@ Sends a message to the Game Coordinator requesting the Hall of Fame data for `we
 #### requestPlayerInfo(account_ids)
 * `account_ids` - Either a single or array of Account IDs (lower 32-bits of a 64-bit Steam ID) of desired user(s) player info.  
 
-Sends a message to the Game Coordinator requesting one or multiple `account_ids` player information. This includes their display name, country code, team info and sponsor, fantasy role, official information lock status, and if the user is marked as a pro player. Requesting multiple ids will result in multiple events being emitted. Listen for the `playerInfoData` event for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+Sends a message to the Game Coordinator requesting one or multiple `account_ids` player information. This includes their display name, country code, team info and sponsor, fantasy role, official information lock status, and if the user is marked as a pro player. Listen for the `playerInfoData` event for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
 ### Matches
 #### requestMatches(criteria, [callback])
@@ -523,9 +523,8 @@ Emitted when GC responds to the `requestProfileCard` method.
 
 See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client.proto#L1592) for `profileCardData`'s object structure.
 
-### `playerInfoData` (`account_id`, `playerInfoData`)
-* `account_id` - Account ID whom the data is associated with.
-* `playerInfoData` - The raw playerInfo object.
+### `playerInfoData` (`playerInfoResponse`)
+* `playerInfoResponse` - The raw playerInfo object.
 
 Emitted when GC responds to the `requestPlayerInfo` method.
 
