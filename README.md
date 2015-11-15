@@ -525,6 +525,18 @@ See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resour
 
 ### `playerInfoData` (`playerInfoResponse`)
 * `playerInfoResponse` - The raw playerInfo object.
+  * `leaderboards` - Empty array, details unknown.
+  * `player_infos` - List of player information
+    * `account_id` - The Account ID of the requested user.
+    * `name` - The display name for the user.
+    * `country_code` - The abbreviated country code for the user, i.e. `us`, `cn`, etc...
+    * `fantasy_role` - The role of the player, either core or support, `1` and `2` respectively.
+    * `team_id` - The numerical id of the user's team.
+    * `team_name` - The name of the team the user is on, ex: `Cloud9`
+    * `team_tag` - The abbreviated tag of a team prepended to a player's name, ex: `C9`
+    * `sponsor` - The sponsor listed in the player's official info, ex: `HyperX`  
+    * `is_locked` - Whether or not the user's official player info has been locked from editing, `true` or `false`.
+    * `is_pro` - Whether the player is considered a pro player by Valve, `true` or `false`.
 
 Emitted when GC responds to the `requestPlayerInfo` method.
 
@@ -720,16 +732,6 @@ TODO
 
 ### `sourceTVGamesData` (`sourceTVGamesResponse`)
 * `sourceTVGamesResponse` - The raw response object
-  * `account_id` - The Account ID of the requested user.
-  * `name` - The display name for the user.
-  * `country_code` - The abbreviated country code for the user, i.e. `us`, `cn`, etc...
-  * `fantasy_role` - The role of the player, either core or support, `1` and `2` respectively.
-  * `team_id` - The numerical id of the user's team.
-  * `team_name` - The name of the team the user is on, ex: `Cloud9`
-  * `team_tag` - The abbreviated tag of a team prepended to a player's name, ex: `C9`
-  * `sponsor` - The sponsor listed in the player's official info, ex: `HyperX`  
-  * `is_locked` - Whether or not the user's official player info has been locked from editing, `true` or `false`.
-  * `is_pro` - Whether the player is considered a pro player by Valve, `true` or `false`.
 
 Emitted when the GC responds to the `requestSourceTVGames` method.  Multiple events are emitted when `requestSourceTVGames` is passed with `start_game` > 0 or with one or more `lobby_id`s.  
 
