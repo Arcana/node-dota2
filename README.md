@@ -521,7 +521,7 @@ See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resour
 
 Emitted when GC responds to the `requestProfileCard` method.
 
-See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_common.proto#L1510) for `profileCardData`'s object structure.
+See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_common.proto#L1584) for `profileCardData`'s object structure.
 
 ### `playerInfoData` (`playerInfoResponse`)
 * `playerInfoResponse` - The raw playerInfo object.
