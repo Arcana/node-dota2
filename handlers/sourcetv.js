@@ -44,7 +44,7 @@ var onSourceTVGamesResponse = function onSourceTVGamesResponse(message) {
         this.emit("sourceTVGamesData", sourceTVGamesResponse);
     } else {
         if (this.debug) util.log("Received a bad new SourceTV games response");
-        this.emit("sourceTVGamesData", sourceTVGamesResponse);
+        this.emit("sourceTVGamesData", null);
         /*
 
         A "bad" response will look like this.
