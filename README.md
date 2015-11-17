@@ -353,6 +353,12 @@ TODO
 
 TODO
 
+### Custom games
+#### requestJoinableCustomGameModes([server_region])
+* `[region]` - Enum for the server region, defaults to Dota2.ServerRegion.UNSPECIFIED
+
+Sends a message to the Game Coordinator requesting a list of joinable custom games for a given region.
+
 ### Leagues
 #### requestLeaguesInMonth([month], [year], [callback])
 * `[month]` - Int for the month (MM) you want to query data for.  Defaults to current month. **IMPORTANT NOTE**:  Month is zero-aligned, not one-aligned; so Jan = 00, Feb = 01, etc.
@@ -622,7 +628,6 @@ Emitted when the GC responds to `joinPracticeLobby` method.
 
 ### `practiceLobbyCleared` ()
 
-
 Emitted when leaving a lobby (aka, the lobby is cleared). This can
 happen when kicked, upon leaving a lobby, etc. There are other callbacks
 to tell when the bot has been kicked.
@@ -638,6 +643,14 @@ update of the lobby state is communicated via `practiceLobbyUpdate` events.
 ### `friendPracticeLobbyListData` ()
 
 TODO
+
+### `joinableCustomGameModes` (`game_modes`)
+* `game_modes` - List of custom game modes that are available in a given server region
+  * `custom_game_id` - ID corresponding to a custom game mode
+  * `lobby_count` - Number of lobbies available for the game mode
+  * `player_count` - Number of players playing this game mode
+
+Emitted when the GC responds to `requestJoinableCustomGameModes`. Never seems to return more then ten results.
 
 ### `inviteCreated` (`steam_id`, `group_id`, `is_online`)
 * `steam_id` - The steam ID of the person the invite was sent to

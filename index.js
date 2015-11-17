@@ -225,3 +225,4 @@ require("./handlers/parties");
 require("./handlers/leagues");
 require("./handlers/sourcetv");
 require("./handlers/team");
+require("./handlers/custom");
