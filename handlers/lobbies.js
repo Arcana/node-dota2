@@ -347,10 +347,13 @@ var onPracticeLobbyResponse = function onPracticeLobbyResponse(message, callback
 
     if (this.debug) util.log("Received create/flip/shuffle/kick/launch/leave response " + JSON.stringify(practiceLobbyResponse));
     this.emit("practiceLobbyResponse", practiceLobbyResponse.result, practiceLobbyResponse);
-    if (practiceLobbyResponse.result === 1) {
-        if (callback) callback(null, practiceLobbyResponse); 
-    } else {
-        if (callback) callback(practiceLobbyResponse.result, practiceLobbyResponse); 
+    
+    if (callback) {
+        if (practiceLobbyResponse.result === 1) {
+            callback(null, practiceLobbyResponse); 
+        } else {
+            callback(practiceLobbyResponse.result, practiceLobbyResponse); 
+        }
     }
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCPracticeLobbyResponse] = onPracticeLobbyResponse;
