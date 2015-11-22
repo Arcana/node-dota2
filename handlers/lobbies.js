@@ -1,6 +1,12 @@
 var Dota2 = require("../index"),
     util = require("util");
 
+Dota2.SeriesType = {
+    NONE: 0,
+    BEST_OF_THREE: 1,
+    BEST_OF_FIVE: 2
+};
+
 Dota2._lobbyOptions = {
     game_name: "string",
     server_region: "number",
