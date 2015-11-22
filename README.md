@@ -283,9 +283,10 @@ Sends a message to the Game Coordinator requesting to join a lobby.  Provide a c
 * `[password]` - Password to restrict access to the lobby (optional).
 * `[options]` - Options available for the lobby. All are optional, but send at least one.
   * `game_name`: String, lobby title.
-  * `server_region`: Use the server region enum.
-  * `game_mode`: Use the game mode enum.
+  * `server_region`: Use the ServerRegion enum.
+  * `game_mode`: Use the DOTA_GameMode enum.
   * `game_version`: Use the game version enum.
+  * `cm_pick`: Use the DOTA_CM_PICK enum.
   * `allow_cheats`: Boolean, allow cheats.
   * `fill_with_bots`: Boolean, fill available slots with bots?
   * `allow_spectating`: Boolean, allow spectating?

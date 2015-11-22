@@ -6,6 +6,7 @@ Dota2._lobbyOptions = {
     server_region: "number",
     game_mode: "number",
     game_version: "number",
+    cm_pick: "number",
     allow_cheats: "boolean",
     fill_with_bots: "boolean",
     allow_spectating: "boolean",
