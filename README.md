@@ -72,6 +72,8 @@ Attempts to delete an item. Requires the GC to be ready (listen for the `ready` 
 
 
 ### Chat
+**_Limited Steam accounts cannot interact with chat!_**
+
 #### joinChat(channel, [type])
 * `channel` - A string for the channel name.
 * `[type]` - The type of the channel being joined.  Defaults to `Dota2.schema.DOTAChatChannelType_t.DOTAChannelType_Custom`.
