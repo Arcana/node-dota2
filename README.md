@@ -72,7 +72,7 @@ Attempts to delete an item. Requires the GC to be ready (listen for the `ready` 
 
 
 ### Chat
-**__Limited Steam accounts cannot interact with chat!__**
+**_Limited Steam accounts cannot interact with chat!_**
 
 #### joinChat(channel, [type])
 * `channel` - A string for the channel name.
