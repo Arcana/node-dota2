@@ -13,7 +13,7 @@ A few backwards incompatible API changes were included with version 2.0.0.
 
 * The `chatJoin` and `chatLeave` events were changed to return the channel name instead of the id. All debug logs pertaining chat channels will now mention chat channel instead of IDs.
 
-* The `disabledGroups` argument in the `matchmakingStatsData` event has been removed.
+* The `waitTimesByGroup` argument in the `matchmakingStatsData` event has been removed.
 
 ## Initializing
 Parameters:
@@ -619,8 +619,8 @@ Here are the groups at the time of this sentence being written (with unecessary 
     "Shanghai":                     {"matchgroup": "4"},
     "Brazil":                       {"matchgroup": "5"},
     "Korea":                        {"matchgroup": "6"},
-    "Austria":                      {"matchgroup": "8"},
     "Stockholm":                    {"matchgroup": "7"},
+    "Austria":                      {"matchgroup": "8"},
     "Australia":                    {"matchgroup": "9"},
     "SouthAfrica":                  {"matchgroup": "10"},
     "PerfectWorldTelecom":          {"matchgroup": "11"},
