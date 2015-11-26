@@ -1,11 +1,18 @@
 var Dota2 = require("../index"),
     util = require("util");
 
+Dota2.SeriesType = {
+    NONE: 0,
+    BEST_OF_THREE: 1,
+    BEST_OF_FIVE: 2
+};
+
 Dota2._lobbyOptions = {
     game_name: "string",
     server_region: "number",
     game_mode: "number",
     game_version: "number",
+    cm_pick: "number",
     allow_cheats: "boolean",
     fill_with_bots: "boolean",
     allow_spectating: "boolean",
@@ -322,7 +329,14 @@ var onPracticeLobbyJoinResponse = function onPracticeLobbyJoinResponse(message, 
 
     if (this.debug) util.log("Received practice lobby join response " + practiceLobbyJoinResponse.result);
     this.emit("practiceLobbyJoinResponse", practiceLobbyJoinResponse.result, practiceLobbyJoinResponse);
-    if (callback) callback(practiceLobbyJoinResponse.result, practiceLobbyJoinResponse);
+    
+    if (callback) {
+        if (practiceLobbyJoinResponse.result === Dota2.schema.DOTAJoinLobbyResult.DOTA_JOIN_RESULT_SUCCESS) {
+            callback(null, practiceLobbyJoinResponse);
+        } else {
+            callback(practiceLobbyJoinResponse.result, practiceLobbyJoinResponse);
+        }
+    }
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCPracticeLobbyJoinResponse] = onPracticeLobbyJoinResponse;
 
@@ -340,7 +354,14 @@ var onPracticeLobbyResponse = function onPracticeLobbyResponse(message, callback
 
     if (this.debug) util.log("Received create/flip/shuffle/kick/launch/leave response " + JSON.stringify(practiceLobbyResponse));
     this.emit("practiceLobbyResponse", practiceLobbyResponse.result, practiceLobbyResponse);
-    if (callback) callback(practiceLobbyResponse.result, practiceLobbyResponse);
+    
+    if (callback) {
+        if (practiceLobbyResponse.result === 1) {
+            callback(null, practiceLobbyResponse); 
+        } else {
+            callback(practiceLobbyResponse.result, practiceLobbyResponse); 
+        }
+    }
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCPracticeLobbyResponse] = onPracticeLobbyResponse;
 

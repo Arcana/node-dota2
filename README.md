@@ -72,6 +72,8 @@ Attempts to delete an item. Requires the GC to be ready (listen for the `ready` 
 
 
 ### Chat
+**_Limited Steam accounts cannot interact with chat!_**
+
 #### joinChat(channel, [type])
 * `channel` - A string for the channel name.
 * `[type]` - The type of the channel being joined.  Defaults to `Dota2.schema.DOTAChatChannelType_t.DOTAChannelType_Custom`.
@@ -283,9 +285,10 @@ Sends a message to the Game Coordinator requesting to join a lobby.  Provide a c
 * `[password]` - Password to restrict access to the lobby (optional).
 * `[options]` - Options available for the lobby. All are optional, but send at least one.
   * `game_name`: String, lobby title.
-  * `server_region`: Use the server region enum.
-  * `game_mode`: Use the game mode enum.
+  * `server_region`: Use the ServerRegion enum.
+  * `game_mode`: Use the DOTA_GameMode enum.
   * `game_version`: Use the game version enum.
+  * `cm_pick`: Use the DOTA_CM_PICK enum.
   * `allow_cheats`: Boolean, allow cheats.
   * `fill_with_bots`: Boolean, fill available slots with bots?
   * `allow_spectating`: Boolean, allow spectating?
@@ -352,6 +355,12 @@ TODO
 #### requestFriendPractiseLobbyList
 
 TODO
+
+### Custom games
+#### requestJoinableCustomGameModes([server_region])
+* `[region]` - Enum for the server region, defaults to Dota2.ServerRegion.UNSPECIFIED
+
+Sends a message to the Game Coordinator requesting a list of joinable custom games for a given region.
 
 ### Leagues
 #### requestLeaguesInMonth([month], [year], [callback])
@@ -622,7 +631,6 @@ Emitted when the GC responds to `joinPracticeLobby` method.
 
 ### `practiceLobbyCleared` ()
 
-
 Emitted when leaving a lobby (aka, the lobby is cleared). This can
 happen when kicked, upon leaving a lobby, etc. There are other callbacks
 to tell when the bot has been kicked.
@@ -638,6 +646,14 @@ update of the lobby state is communicated via `practiceLobbyUpdate` events.
 ### `friendPracticeLobbyListData` ()
 
 TODO
+
+### `joinableCustomGameModes` (`game_modes`)
+* `game_modes` - List of custom game modes that are available in a given server region
+  * `custom_game_id` - ID corresponding to a custom game mode
+  * `lobby_count` - Number of lobbies available for the game mode
+  * `player_count` - Number of players playing this game mode
+
+Emitted when the GC responds to `requestJoinableCustomGameModes`. Never seems to return more then ten results.
 
 ### `inviteCreated` (`steam_id`, `group_id`, `is_online`)
 * `steam_id` - The steam ID of the person the invite was sent to
