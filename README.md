@@ -314,6 +314,22 @@ Sends a message to the Game Coordinator requesting to create a lobby.  Listen fo
 * `[options]` - See paramter description in [#createPracticeLobby]
 * `[callback]` - optional callback, returns args: `err, response`.
 
+Sends a message to the Game Coordinator requesting to create a tournament lobby. Listen for `practiceLobbyUpdate`  response for a snapshot-update of the newly created lobby. Requires the GC to be ready (listen for the `ready` event before calling).
+
+#### joinPracticeLobbyTeam(slot, team, [callback])
+* `slot` - The slot you want to fill (1-10)
+* `team` - The team you want to be on. Use the `GOTA_GC_TEAM` enum
+* `[callback]` - optional callback, returns args: `err, response`.
+
+Sends a message to the Game Coordinator requesting to join a particular team in the lobby. Provide a callback or listen for `practiceLobbyResponse` for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+
+#### addBotToPracticeLobby(slot, team, bot_difficulty, [callback])
+* `slot` - The slot you want to fill (1-10)
+* `team` - The team you want to be on. Use the `DOTA_GC_TEAM` enum
+* `bot_difficulty` - The difficulty setting of the bot. Use the `DOTABotDifficulty`enum
+* `[callback]` - optional callback, returns args: `err, response`.
+
+Sends a message to the Game Coordinator requesting to add a bot to the given team in the lobby. Provide a callback or listen for `practiceLobbyResponse` for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
 #### balancedShuffleLobby()
 
