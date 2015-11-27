@@ -13,6 +13,8 @@ A few backwards incompatible API changes were included with version 2.0.0.
 
 * The `chatJoin` and `chatLeave` events were changed to return the channel name instead of the id. All debug logs pertaining chat channels will now mention chat channel instead of IDs.
 
+* The `waitTimesByGroup` argument in the `matchmakingStatsData` event has been removed.
+
 ## Initializing
 Parameters:
 * `steamClient` - Pass a SteamClient instance to use to send & receive GC messages.
@@ -599,10 +601,9 @@ Emitted when GC responds to the `requestmatchDetails` method.
 
 See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client.proto#L1571) for `matchDetailsData`'s object structure.
 
-### `matchmakingStatsData` (`waitTimesByGroup`, `searchingPlayersByGroup`, `disabledGroups`, `matchmakingStatsResponse`)
-* `waitTimesByGroup` - Current average matchmaking waiting times, in seconds, per group.
+### `matchmakingStatsData` (`searchingPlayersByGroup`, `disabledGroups`, `matchmakingStatsResponse`)
 * `searchingPlayersByGroup` - Current players searching for matches per group.
-* `disabledGroups` - I don't know how the data is formatted here, I've only observed it to be zero.
+* `disabledGroups` - Bitmask corresponding to groups in `searchingPlayersByGroup`. Groups marked as disabled will have a value of 0.
 * `matchmakingStatsResponse` - Raw response object.
 
 Emitted when te GC response to the `requestMatchmakingStats` method.  The array order dictates which matchmaking groups the figure belongs to. 
@@ -611,19 +612,26 @@ This list is manually updated only when changes are detected by community member
 Here are the groups at the time of this sentence being written (with unecessary data trimmed out):
 
 ```
-    "USWest":               {"matchgroup": "0"},
-    "USEast":               {"matchgroup": "1"},
-    "Europe":               {"matchgroup": "2"},
-    "Singapore":            {"matchgroup": "3"},
-    "Shanghai":             {"matchgroup": "4"},
-    "Brazil":               {"matchgroup": "5"},
-    "Korea":                {"matchgroup": "6"},
-    "Austria":              {"matchgroup": "8"},
-    "Stockholm":            {"matchgroup": "7"},
-    "Australia":            {"matchgroup": "9"},
-    "SouthAfrica":          {"matchgroup": "10"},
-    "PerfectWorldTelecom":  {"matchgroup": "11"},
-    "PerfectWorldUnicom":   {"matchgroup": "12"}
+    "USWest":                       {"matchgroup": "0"},
+    "USEast":                       {"matchgroup": "1"},
+    "Europe":                       {"matchgroup": "2"},
+    "Singapore":                    {"matchgroup": "3"},
+    "Shanghai":                     {"matchgroup": "4"},
+    "Brazil":                       {"matchgroup": "5"},
+    "Korea":                        {"matchgroup": "6"},
+    "Stockholm":                    {"matchgroup": "7"},
+    "Austria":                      {"matchgroup": "8"},
+    "Australia":                    {"matchgroup": "9"},
+    "SouthAfrica":                  {"matchgroup": "10"},
+    "PerfectWorldTelecom":          {"matchgroup": "11"},
+    "PerfectWorldUnicom":           {"matchgroup": "12"},
+    "Dubai":                        {"matchgroup": "13"},
+    "Chile":                        {"matchgroup": "14"},
+    "Peru":                         {"matchgroup": "15"},
+    "India":                        {"matchgroup": "16"},
+    "PerfectWorldTelecomGuangdong": {"matchgroup": "17"},
+    "PerfectWorldTelecomZhejiang":  {"matchgroup": "18"},
+    "Japan":                        {"matchgroup": "19"}
 ```
 
 ### `practiceLobbyUpdate` (`lobby`)

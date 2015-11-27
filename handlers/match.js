@@ -157,9 +157,8 @@ var onMatchmakingStatsResponse = function onMatchmakingStatsResponse(message) {
 
     if (this.debug) util.log("Received matchmaking stats");
     this.emit("matchmakingStatsData",
-        matchmakingStatsResponse.wait_times_by_group,
-        matchmakingStatsResponse.searching_players_by_group,
-        matchmakingStatsResponse.disabled_groups,
+        matchmakingStatsResponse.searching_players_by_group_source2,
+        matchmakingStatsResponse.disabled_groups_source2,
         matchmakingStatsResponse);
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCMatchmakingStatsResponse] = onMatchmakingStatsResponse;
