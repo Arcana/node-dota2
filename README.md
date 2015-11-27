@@ -603,7 +603,7 @@ See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resour
 
 ### `matchmakingStatsData` (`searchingPlayersByGroup`, `disabledGroups`, `matchmakingStatsResponse`)
 * `searchingPlayersByGroup` - Current players searching for matches per group.
-* `disabledGroups` - Bitmask corresponding to groups in `searchingPlayersByGroup`. These values will be 0.
+* `disabledGroups` - Bitmask corresponding to groups in `searchingPlayersByGroup`. Groups marked as disabled will have a value of 0.
 * `matchmakingStatsResponse` - Raw response object.
 
 Emitted when te GC response to the `requestMatchmakingStats` method.  The array order dictates which matchmaking groups the figure belongs to. 
