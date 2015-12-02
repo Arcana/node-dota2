@@ -96,7 +96,19 @@ Leaves a chat channel.
 * `channel` - A string for the channel name.
 * `message` - The message you want to send.
 
-Sends a message to the specified chat channel, won't send if you're not in the channel you try to send to.
+Sends a message to the specified chat channel. Won't send if you're not in the channel you try to send to.
+
+#### flipCoin(channel)
+* `channel` - A string for the channel name.
+
+Sends a coin flip to the specified chat channel. Won't send if you're not in the channel you try to send to.
+
+#### rollDice(channel, min, max)
+* `channel` - A string for the channel name.
+* `min` - Lower bound of the dice roll.
+* `max` - Upper bound of the dice roll.
+
+Sends a dice roll to the specified chat channel. Won't send if you're not in the channel you try to send to.
 
 #### requestChatChannels()
 
