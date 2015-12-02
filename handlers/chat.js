@@ -97,6 +97,57 @@ Dota2.Dota2Client.prototype.sendMessage = function(channel, message) {
     );
 };
 
+Dota2.Dota2Client.prototype.flipCoin = function(channel) {
+    /* Attempts to send a coin flip to a chat channel. Expect a chatmessage in response. */
+    if (!this._gcReady) {
+        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+        return null;
+    }
+
+    if (this.debug) util.log("Sending coin flip to " + channel);
+    var cache = this._getChannelByName(channel);
+    if (cache === undefined) {
+        if (this.debug) util.log("Cannot send message to a channel you have not joined.");
+        return;
+    }
+    var payload = new Dota2.schema.CMsgDOTAChatMessage({
+        "channel_id": cache.channel_id,
+        "coin_flip": true
+    });
+    this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCChatMessage;
+    this._gc.send(
+        this._protoBufHeader,
+        payload.toBuffer()
+    );
+};
+
+Dota2.Dota2Client.prototype.rollDice = function(channel, min, max) {
+    /* Attempts to send a dice roll to a chat channel. Expect a chatmessage in response. */
+    if (!this._gcReady) {
+        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+        return null;
+    }
+
+    if (this.debug) util.log("Sending dice roll to " + channel);
+    var cache = this._getChannelByName(channel);
+    if (cache === undefined) {
+        if (this.debug) util.log("Cannot send message to a channel you have not joined.");
+        return;
+    }
+    var payload = new Dota2.schema.CMsgDOTAChatMessage({
+        "channel_id": cache.channel_id,
+        "dice_roll": {
+            "roll_min": min,
+            "roll_max": max
+        }
+    });
+    this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCChatMessage;
+    this._gc.send(
+        this._protoBufHeader,
+        payload.toBuffer()
+    );
+};
+
 Dota2.Dota2Client.prototype.requestChatChannels = function() {
     /* Requests a list of chat channels from the GC. */
     if (!this._gcReady) {
