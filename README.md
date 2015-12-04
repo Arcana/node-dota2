@@ -222,6 +222,12 @@ Sends a message to the Game Coordinator requesting the Hall of Fame data for `we
 
 Sends a message to the Game Coordinator requesting one or multiple `account_ids` player information. This includes their display name, country code, team info and sponsor, fantasy role, official information lock status, and if the user is marked as a pro player. Listen for the `playerInfoData` event for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
+#### requestTrophyList(account_id, [callback])
+* `account_id` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose trophy data you wish to view.
+* `[callback]` - optional callback, returns args: `err, response`.
+
+Sends a message to the Game Coordinator requesting `account_id`'s trophy data. Provide a callback or listen for `trophyListData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling). Notably, this data contains the `profile_name` field, which is the user's name displayed on their profile page in dota.
+
 ### Matches
 #### requestMatches(criteria, [callback])
 * `[criteria]` - The options available for searching matches:
@@ -580,6 +586,16 @@ See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resour
 Emitted when GC responds to the `requestPlayerInfo` method.
 
 See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client_fantasy.proto#L159) for `playerInfoData`'s object structure.
+
+### `trophyListData` (`trophyListResponse`)
+* `trophyListResponse` - The raw trophyListResponse object.
+  * `profile_name` - The name displayed on the user's dota profile page and profile card.
+  * `trophies` - List of trophies owned by the user. The following values are all integers.
+    *  `trophy_id` - Id of the trophy.
+    *  `trophy_score` - The score this trophy has counted.  This is usually a level, but can represent other things, like number of challenges completed, or coins collected, etc...
+    *  `last_updated` - The last time the trophy has been updated, in Unix time.
+
+Emitted when GC responds to the `requestTrophyList` method.
 
 ### `playerMatchHistoryData` (`request_id`, `matchHistoryResponse`)
 
