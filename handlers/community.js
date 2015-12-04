@@ -161,6 +161,32 @@ Dota2.Dota2Client.prototype.requestPlayerInfo = function(account_ids) {
     );
 };
 
+Dota2.Dota2Client.prototype.requestTrophyList = function(account_id, callback) {
+    account_id = account_id || null;
+
+    var _self = this;
+
+    if (!this._gcReady) {
+        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+        return null;
+    }
+
+    if (this.debug) util.log("Sending trophy list request.");
+
+    var payload = new Dota2.schema.CMsgClientToGCGetTrophyList({
+        "account_id": account_id
+    });
+
+    this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCGetTrophyList;
+    this._gc.send(
+        this._protoBufHeader,
+        payload.toBuffer(),
+        function(header, body) {
+            onTrophyListResponse.call(_self, body, callback);
+        }
+    );
+};
+
 // Handlers
 
 var handlers = Dota2.Dota2Client.prototype._handlers;
@@ -237,3 +263,12 @@ var onPlayerInfoResponse = function onPlayerInfoResponse(message) {
     this.emit("playerInfoData", playerInfoResponse);
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCPlayerInfo] = onPlayerInfoResponse;
+
+var onTrophyListResponse = function onTrophyListResponse(message, callback) {
+    var trophyListResponse = Dota2.schema.CMsgClientToGCGetTrophyListResponse.decode(message);
+
+    if (this.debug) util.log("Received new trophy list data.");
+    this.emit("trophyListData", trophyListResponse);
+    if (callback) callback(null, trophyListResponse);
+};
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCGetTrophyListResponse] = onTrophyListResponse;
