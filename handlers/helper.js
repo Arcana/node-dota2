@@ -26,4 +26,11 @@ Dota2._parseOptions = function(options, possibleOptions) {
     }
 
     return details;
-}
+};
+
+Dota2._convertCallback = function(handler, callback) {
+    var self = this;
+    return function (header, body) {
+        handler.call(self, body, callback);
+    }
+};

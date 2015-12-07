@@ -14,96 +14,63 @@ Dota2.Dota2Client.prototype.requestPlayerMatchHistory = function(account_id, opt
     options = options || null;
     var _self = this;
     /* Sends a message to the Game Coordinator requesting `accountId`'s player match history.  Listen for `playerMatchHistoryData` event for Game Coordinator's response. */
-    if (!this._gcReady) {
-        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-        return null;
-    }
-
     if (this.debug) util.log("Sending player match history request");
+    
     var command = Dota2._parseOptions(options, Dota2._playerHistoryOptions);
     command.account_id = account_id;
     command.matches_requested = command.matches_requested || 1;
     command.request_id = command.request_id || account_id;
     var payload = new Dota2.schema.CMsgDOTAGetPlayerMatchHistory(command);
-    this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgDOTAGetPlayerMatchHistory;
-    this._gc.send(
-        this._protoBufHeader,
-        payload.toBuffer(),
-        function(header, body) {
-            onPlayerMatchHistoryResponse.call(_self, body, callback);
-        }
-    );
+    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgDOTAGetPlayerMatchHistory, 
+                    payload, 
+                    Dota2._convertCallback.call(_self, onPlayerMatchHistoryResponse, callback));
 };
 
 Dota2.Dota2Client.prototype.requestProfile = function(account_id, request_name, callback) {
     callback = callback || null;
     var _self = this;
+    
     /* Sends a message to the Game Coordinator requesting `accountId`'s profile data.  Listen for `profileData` event for Game Coordinator's response. */
-    if (!this._gcReady) {
-        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-        return null;
-    }
-
     if (this.debug) util.log("Sending profile request");
+    
     var payload = new Dota2.schema.CMsgDOTAProfileRequest({
         "account_id": account_id,
         "request_name": request_name,
         "engine": 1
     });
-    this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCProfileRequest;
-    this._gc.send(
-        this._protoBufHeader,
-        payload.toBuffer(),
-        function(header, body) {
-            onProfileResponse.call(_self, body, callback);
-        }
-    );
+    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCProfileRequest, 
+                    payload, 
+                    Dota2._convertCallback.call(_self, onProfileResponse, callback));
 };
 
 Dota2.Dota2Client.prototype.requestProfileCard = function(account_id, callback) {
     callback = callback || null;
     var _self = this;
+    
     /* Sends a message to the Game Coordinator requesting `accountId`'s profile card.  Listen for `profileCardData` event for Game Coordinator's response. */
-    if (!this._gcReady) {
-        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-        return null;
-    }
-
     if (this.debug) util.log("Sending profile card request");
+    
     var payload = new Dota2.schema.CMsgClientToGCGetProfileCard({
         "account_id": account_id
     });
-    this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCGetProfileCard;
-    this._gc.send(
-        this._protoBufHeader,
-        payload.toBuffer(),
-        function(header, body) {
-            onProfileCardResponse.call(_self, body, callback);
-        }
-    );
+    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCGetProfileCard, 
+                    payload, 
+                    Dota2._convertCallback.call(_self, onProfileCardResponse, callback));
 };
 
 Dota2.Dota2Client.prototype.requestPassportData = function(account_id, callback) {
     callback = callback || null;
     var _self = this;
+    
     /* Sends a message to the Game Coordinator requesting `accountId`'s passport data.  Listen for `passportData` event for Game Coordinator's response. */
-    if (!this._gcReady) {
-        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-        return null;
-    }
-
     if (this.debug) util.log("Sending passport data request");
+    
     var payload = new Dota2.schema.CMsgPassportDataRequest({
         "account_id": account_id
     });
-    this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCPassportDataRequest;
-    this._gc.send(
-        this._protoBufHeader,
-        payload.toBuffer(),
-        function(header, body) {
-            onPassportDataResponse.call(_self, body, callback);
-        }
-    );
+    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCPassportDataRequest,
+                    payload,
+                    Dota2._convertCallback.call(_self, onPassportDataResponse, callback));
 };
 
 Dota2.Dota2Client.prototype.requestHallOfFame = function(week, callback) {
@@ -112,79 +79,47 @@ Dota2.Dota2Client.prototype.requestHallOfFame = function(week, callback) {
     var _self = this;
 
     /* Sends a message to the Game Coordinator requesting `accountId`'s passport data.  Listen for `passportData` event for Game Coordinator's response. */
-    if (!this._gcReady) {
-        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-        return null;
-    }
-
     if (this.debug) util.log("Sending hall of fame request.");
+    
     var payload = new Dota2.schema.CMsgDOTAHallOfFameRequest({
         "week": week
     });
-    this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCHallOfFameRequest;
-    this._gc.send(
-        this._protoBufHeader,
-        payload.toBuffer(),
-        function(header, body) {
-            onHallOfFameResponse.call(_self, body, callback);
-        }
-    );
+    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCHallOfFameRequest, 
+                    payload, 
+                    Dota2._convertCallback.call(_self, onHallOfFameResponse, callback));
 };
 
 Dota2.Dota2Client.prototype.requestPlayerInfo = function(account_ids) {
-    // This one doesn't support callbacks
     account_ids = account_ids || [];
     account_ids = Array.isArray(account_ids) ? account_ids : [account_ids];
-
-    var _self = this;
-
     if (account_ids.length == 0) {
         if (this.debug) util.log("Account ids must be a single id or array of ids.");
         return null;
     }
 
-    if (!this._gcReady) {
-        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-        return null;
-    }
-
+    /* Sends a message to the Game Coordinator requesting the player info on all `account_ids`. Listen for `playerInfoData` event for Game Coordinator's response. */
     if (this.debug) util.log("Sending player info request.");
 
     var payload = new Dota2.schema.CMsgGCPlayerInfoRequest({
         account_ids: account_ids
     });
-
-    this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCPlayerInfoRequest;
-    this._gc.send(
-        this._protoBufHeader,
-        payload.toBuffer()
-    );
+    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCPlayerInfoRequest, 
+                    payload);
 };
 
 Dota2.Dota2Client.prototype.requestTrophyList = function(account_id, callback) {
     account_id = account_id || null;
-
     var _self = this;
 
-    if (!this._gcReady) {
-        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-        return null;
-    }
-
+    /* Sends a message to the Game Coordinator requesting `accountId`'s trophy list. Listen for `trophyListData` event for Game Coordinator's response. */
     if (this.debug) util.log("Sending trophy list request.");
 
     var payload = new Dota2.schema.CMsgClientToGCGetTrophyList({
         "account_id": account_id
     });
-
-    this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCGetTrophyList;
-    this._gc.send(
-        this._protoBufHeader,
-        payload.toBuffer(),
-        function(header, body) {
-            onTrophyListResponse.call(_self, body, callback);
-        }
-    );
+    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCGetTrophyList,
+                    payload,
+                    Dota2._convertCallback.call(_self, onTrophyListResponse, callback));
 };
 
 // Handlers
