@@ -8,12 +8,6 @@ Dota2.Dota2Client.prototype.requestSourceTVGames = function(filter_options) {
     // Unfortunately this does not seem to support callbacks
     filter_options = filter_options || null;
     var _self = this;
-
-    if (!this._gcReady) {
-        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-        return null;
-    }
-
     if (this.debug) util.log("Sending SourceTV games request");
 
     var payload = new Dota2.schema.CMsgClientToGCFindTopSourceTVGames(merge({
@@ -25,11 +19,7 @@ Dota2.Dota2Client.prototype.requestSourceTVGames = function(filter_options) {
         "lobby_ids": [],      // Used for getting player specific games, still don't know where the lobbyids come from though
     }, filter_options));
 
-    this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCFindTopSourceTVGames;
-    this._gc.send(
-        this._protoBufHeader,
-        payload.toBuffer()
-    );
+    this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCFindTopSourceTVGames, payload);
 };
 
 // Handlers
