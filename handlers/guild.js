@@ -6,18 +6,10 @@ var Dota2 = require("../index"),
 
 Dota2.Dota2Client.prototype.requestGuildData = function() {
     /* Asks the GC for info on the users current guilds. Expect k_EMsgGCGuildOpenPartyRefresh and k_EMsgGCGuildData from GC for guild ids. */
-    if (!this._gcReady) {
-        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-        return null;
-    }
-
     if (this.debug) util.log("Requesting current user guild data. ");
+    
     var payload = new Dota2.schema.CMsgDOTARequestGuildData();
-    this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCRequestGuildData;
-    this._gc.send(
-        this._protoBufHeader,
-        payload.toBuffer()
-    );
+    this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgGCRequestGuildData, payload);
 };
 
 Dota2.Dota2Client.prototype.inviteToGuild = function(guild_id, target_account_id, callback) {
@@ -25,24 +17,15 @@ Dota2.Dota2Client.prototype.inviteToGuild = function(guild_id, target_account_id
     var _self = this;
 
     /* Attempts to invite target_account_id to a guild.  Expect k_EMsgGCGuildInviteAccountResponse from GC. */
-    if (!this._gcReady) {
-        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-        return null;
-    }
-
     if (this.debug) util.log("Inviting person to guild. " + [guild_id, target_account_id].join(", "));
+    
     var payload = new Dota2.schema.CMsgDOTAGuildInviteAccountRequest({
         "guild_id": guild_id,
         "target_account_id": target_account_id
     });
-    this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCGuildInviteAccountRequest;
-    this._gc.send(
-        this._protoBufHeader,
-        payload.toBuffer(),
-        function(header, body) {
-            onGuildInviteResponse.call(_self, body, callback);
-        }
-    );
+    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCGuildInviteAccountRequest, 
+                    payload,
+                    Dota2._convertCallback.call(_self, onGuildInviteResponse, callback));
 };
 
 Dota2.Dota2Client.prototype.cancelInviteToGuild = function(guild_id, target_account_id, callback) {
@@ -50,24 +33,15 @@ Dota2.Dota2Client.prototype.cancelInviteToGuild = function(guild_id, target_acco
     var _self = this;
 
     /* Attempts to cancel target_account_id's invitation to a guild.  Expect k_EMsgGCGuildCancelInviteAccountResponse from GC. */
-    if (!this._gcReady) {
-        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-        return null;
-    }
-
     if (this.debug) util.log("Cancelling invite to guild. " + [guild_id, target_account_id].join(", "));
+    
     var payload = new Dota2.schema.CMsgDOTAGuildCancelInviteRequest({
         "guild_id": guild_id,
         "target_account_id": target_account_id
     });
-    this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCGuildCancelInviteRequest;
-    this._gc.send(
-        this._protoBufHeader,
-        payload.toBuffer(),
-        function(header, body) {
-            onGuildCancelInviteResponse.call(_self, body, callback);
-        }
-    );
+    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCGuildCancelInviteRequest, 
+                    payload,
+                    Dota2._convertCallback.call(_self, onGuildCancelInviteResponse, callback));
 };
 
 Dota2.Dota2Client.prototype.setGuildAccountRole = function(guild_id, target_account_id, target_role, callback) {
@@ -80,25 +54,16 @@ Dota2.Dota2Client.prototype.setGuildAccountRole = function(guild_id, target_acco
        - 2: Officer
        - 3: Member
     */
-    if (!this._gcReady) {
-        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-        return null;
-    }
-
     if (this.debug) util.log("Setting guild account role. " + [guild_id, target_account_id, target_role].join(", "));
+    
     var payload = new Dota2.schema.CMsgDOTAGuildSetAccountRoleRequest({
         "guild_id": guild_id,
         "target_account_id": target_account_id,
         "target_role": target_role
     });
-    this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCGuildSetAccountRoleRequest;
-    this._gc.send(
-        this._protoBufHeader,
-        payload.toBuffer(),
-        function(header, body) {
-            onGuildSetAccountRoleResponse.call(_self, body, callback);
-        }
-    );
+    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCGuildSetAccountRoleRequest, 
+                    payload, 
+                    Dota2._convertCallback.call(_self, onGuildSetAccountRoleResponse, callback));
 };
 
 
