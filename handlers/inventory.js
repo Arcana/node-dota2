@@ -5,12 +5,8 @@ var Dota2 = require("../index"),
 
 Dota2.Dota2Client.prototype.setItemPositions = function(item_positions) {
     /* Attempts to move inventory items to positions as noted itemPositions - which is interpreted as a [itemid, position] tuple. */
-    if (!this._gcReady) {
-        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-        return null;
-    }
-
     if (this.debug) util.log("Setting item positions.");
+    
     var payloadItemPositions = item_positions.map(function(item) {
             return {
                 "itemId": item[0],
@@ -20,11 +16,7 @@ Dota2.Dota2Client.prototype.setItemPositions = function(item_positions) {
         payload = new Dota2.schema.CMsgSetItemPositions({
             "itemPositions": payloadItemPositions
         });
-    this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCSetItemPositions;
-    this._gc.send(
-        this._protoBufHeader,
-        payload.toBuffer()
-    );
+    this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgGCSetItemPositions, payload);
 };
 
 Dota2.Dota2Client.prototype.deleteItem = function(item_id) {

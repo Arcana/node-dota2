@@ -13,46 +13,23 @@ Dota2.Dota2Client.prototype.requestLeaguesInMonth = function(month, year, callba
 
     /* Sends a message to the Game Coordinator requesting the data on the given month's leagues.
        Listen for `leaguesInMonthResponse` event for the Game Coordinator's response. */
-
-    if (!this._gcReady) {
-        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-        return null;
-    }
-
     if (this.debug) util.log("Sending CMsgDOTALeaguesInMonthRequest");
+    
     var payload = new Dota2.schema.CMsgDOTALeaguesInMonthRequest({
         month: month,
         year: year
     });
-    this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCLeaguesInMonthRequest;
-    this._gc.send(
-        this._protoBufHeader,
-        payload.toBuffer(),
-        function(header, body) {
-            onLeaguesInMonthResponse.call(_self, body, callback);
-        }
-    );
+    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCLeaguesInMonthRequest, 
+                    payload, 
+                    Dota2._convertCallback.call(_self, onLeaguesInMonthResponse, callback));
 };
 
 Dota2.Dota2Client.prototype.requestLeagueInfo = function() {
-    var _self = this;
     /* Sends a message to the Game Coordinator request the info on all available official leagues */
-
-    if (!this._gcReady) {
-        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-        return null;
-    }
-
     if (this.debug) util.log("Sending CMsgRequestLeagueInfo");
+    
     var payload = new Dota2.schema.CMsgRequestLeagueInfo({});
-    this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgRequestLeagueInfo;
-    this._gc.send(
-        this._protoBufHeader,
-        payload.toBuffer(),
-        function(header, body) {
-            onLeagueInfoResponse.call(_self, body);
-        }
-    );
+    this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgRequestLeagueInfo, payload);
 
 };
 
