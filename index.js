@@ -152,7 +152,7 @@ Dota2Client.prototype.exit = function() {
     }
     this._gcReady = false;
 
-    if (this._client.loggedOn) this._client.gamesPlayed([]);
+    if (this._client.loggedOn) this._user.gamesPlayed([]);
 };
 
 Dota2Client.prototype.sendToGC = function(type, payload, callback) {
