@@ -25,7 +25,7 @@ Dota2.Dota2Client.prototype.inviteToGuild = function(guild_id, target_account_id
     });
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCGuildInviteAccountRequest, 
                     payload,
-                    Dota2._convertCallback.call(_self, onGuildInviteResponse, callback));
+                    onGuildInviteResponse, callback);
 };
 
 Dota2.Dota2Client.prototype.cancelInviteToGuild = function(guild_id, target_account_id, callback) {
@@ -41,7 +41,7 @@ Dota2.Dota2Client.prototype.cancelInviteToGuild = function(guild_id, target_acco
     });
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCGuildCancelInviteRequest, 
                     payload,
-                    Dota2._convertCallback.call(_self, onGuildCancelInviteResponse, callback));
+                    onGuildCancelInviteResponse, callback);
 };
 
 Dota2.Dota2Client.prototype.setGuildAccountRole = function(guild_id, target_account_id, target_role, callback) {
@@ -63,7 +63,7 @@ Dota2.Dota2Client.prototype.setGuildAccountRole = function(guild_id, target_acco
     });
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCGuildSetAccountRoleRequest, 
                     payload, 
-                    Dota2._convertCallback.call(_self, onGuildSetAccountRoleResponse, callback));
+                    onGuildSetAccountRoleResponse, callback);
 };
 
 

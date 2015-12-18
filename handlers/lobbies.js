@@ -59,7 +59,7 @@ Dota2.Dota2Client.prototype.createTournamentLobby = function(password, tournamen
 
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCPracticeLobbyCreate, 
                     payload, 
-                    Dota2._convertCallback.call(_self, onPracticeLobbyResponse, callback));
+                    onPracticeLobbyResponse, callback);
 };
 // callback to onPracticeLobbyResponse
 Dota2.Dota2Client.prototype.configPracticeLobby = function(lobby_id, options, callback) {
@@ -72,7 +72,7 @@ Dota2.Dota2Client.prototype.configPracticeLobby = function(lobby_id, options, ca
     var payload = new Dota2.schema.CMsgPracticeLobbySetDetails(command);
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCPracticeLobbySetDetails,
                     payload, 
-                    Dota2._convertCallback.call(_self, onPracticeLobbyResponse, callback));
+                    onPracticeLobbyResponse, callback);
 };
 // callback to onPracticeLobbyListResponse
 Dota2.Dota2Client.prototype.requestPracticeLobbyList = function(callback) {
@@ -84,7 +84,7 @@ Dota2.Dota2Client.prototype.requestPracticeLobbyList = function(callback) {
     var payload = new Dota2.schema.CMsgPracticeLobbyList({});
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCPracticeLobbyList, 
                     payload, 
-                    Dota2._convertCallback.call(_self, onPracticeLobbyListResponse, callback));
+                    onPracticeLobbyListResponse, callback);
 };
 // callback to onFriendPracticeLobbyListResponse
 Dota2.Dota2Client.prototype.requestFriendPracticeLobbyList = function(callback) {
@@ -96,7 +96,7 @@ Dota2.Dota2Client.prototype.requestFriendPracticeLobbyList = function(callback) 
     var payload = new Dota2.schema.CMsgFriendPracticeLobbyListRequest({});
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCFriendPracticeLobbyListRequest, 
                     payload, 
-                    Dota2._convertCallback.call(_self, onFriendPracticeLobbyListResponse, callback));
+                    onFriendPracticeLobbyListResponse, callback);
 };
 // callback to onPracticeLobbyResponse
 Dota2.Dota2Client.prototype.balancedShuffleLobby = function(callback) {
@@ -108,7 +108,7 @@ Dota2.Dota2Client.prototype.balancedShuffleLobby = function(callback) {
     var payload = new Dota2.schema.CMsgBalancedShuffleLobby({});
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCBalancedShuffleLobby, 
                     payload, 
-                    Dota2._convertCallback.call(_self, onPracticeLobbyResponse, callback));
+                    onPracticeLobbyResponse, callback);
 };
 
 //TODO: figure out the enum for team
@@ -145,7 +145,7 @@ Dota2.Dota2Client.prototype.flipLobbyTeams = function(callback) {
     var payload = new Dota2.schema.CMsgFlipLobbyTeams({});
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCFlipLobbyTeams, 
                     payload, 
-                    Dota2._convertCallback.call(_self, onPracticeLobbyResponse, callback));
+                    onPracticeLobbyResponse, callback);
 };
 
 Dota2.Dota2Client.prototype.inviteToLobby = function(steam_id) {
@@ -175,7 +175,7 @@ Dota2.Dota2Client.prototype.practiceLobbyKick = function(account_id, callback) {
     });
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCPracticeLobbyKick, 
                     payload, 
-                    Dota2._convertCallback.call(_self, onPracticeLobbyResponse, callback));
+                    onPracticeLobbyResponse, callback);
 };
 // callback to onPracticeLobbyJoinResponse
 Dota2.Dota2Client.prototype.joinPracticeLobby = function(id, password, callback) {
@@ -191,7 +191,7 @@ Dota2.Dota2Client.prototype.joinPracticeLobby = function(id, password, callback)
     });
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCPracticeLobbyJoin, 
                     payload, 
-                    Dota2._convertCallback.call(_self, onPracticeLobbyJoinResponse, callback));
+                    onPracticeLobbyJoinResponse, callback);
 };
 // callback to onPracticeLobbyResponse
 Dota2.Dota2Client.prototype.leavePracticeLobby = function(callback) {
@@ -204,7 +204,7 @@ Dota2.Dota2Client.prototype.leavePracticeLobby = function(callback) {
     var payload = new Dota2.schema.CMsgPracticeLobbyLeave({});
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCPracticeLobbyLeave, 
                     payload, 
-                    Dota2._convertCallback.call(_self, onPracticeLobbyResponse, callback));
+                    onPracticeLobbyResponse, callback);
 };
 // callback to onPracticeLobbyResponse
 Dota2.Dota2Client.prototype.launchPracticeLobby = function(callback) {
@@ -216,7 +216,7 @@ Dota2.Dota2Client.prototype.launchPracticeLobby = function(callback) {
     var payload = new Dota2.schema.CMsgPracticeLobbyLaunch({});
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCPracticeLobbyLaunch, 
                     payload, 
-                    Dota2._convertCallback.call(_self, onPracticeLobbyResponse, callback));
+                    onPracticeLobbyResponse, callback);
 };
 // callback to onPracticeLobbyResponse
 Dota2.Dota2Client.prototype.joinPracticeLobbyTeam = function(slot, team, callback) {
@@ -234,7 +234,7 @@ Dota2.Dota2Client.prototype.joinPracticeLobbyTeam = function(slot, team, callbac
     });
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCPracticeLobbySetTeamSlot, 
                     payload, 
-                    Dota2._convertCallback.call(_self, onPracticeLobbyResponse, callback));
+                    onPracticeLobbyResponse, callback);
 }
 // callback to onPracticeLobbyResponse
 Dota2.Dota2Client.prototype.addBotToPracticeLobby = function(slot, team, bot_difficulty, callback) {
@@ -253,7 +253,7 @@ Dota2.Dota2Client.prototype.addBotToPracticeLobby = function(slot, team, bot_dif
     });
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCPracticeLobbySetTeamSlot, 
                     payload, 
-                    Dota2._convertCallback.call(_self, onPracticeLobbyResponse, callback));
+                    onPracticeLobbyResponse, callback);
 }
 
 // Handlers

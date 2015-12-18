@@ -14,7 +14,7 @@ Dota2.Dota2Client.prototype.requestMyTeams = function requestMyTeams(callback) {
     var payload = new Dota2.schema.CMsgDOTARequestTeamData({});
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCRequestTeamData,
                     payload, 
-                    Dota2._convertCallback.call(_self, onTeamDataResponse, callback));
+                    onTeamDataResponse, callback);
 }
 
 Dota2.Dota2Client.prototype.requestTeamProfile = function requestTeamProfile(team_id, callback) {
@@ -28,7 +28,7 @@ Dota2.Dota2Client.prototype.requestTeamProfile = function requestTeamProfile(tea
     });
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCTeamProfileRequest, 
                     payload, 
-                    Dota2._convertCallback.call(_self, onTeamProfileResponse, callback));
+                    onTeamProfileResponse, callback);
 }
 
 Dota2.Dota2Client.prototype.requestTeamIDByName = function requestTeamIDByName(team_name, callback) {
@@ -42,7 +42,7 @@ Dota2.Dota2Client.prototype.requestTeamIDByName = function requestTeamIDByName(t
     });
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCTeamIDByNameRequest, 
                     payload, 
-                    Dota2._convertCallback.call(_self, onTeamIDByNameResponse, callback));
+                    onTeamIDByNameResponse, callback);
 }
 
 Dota2.Dota2Client.prototype.requestTeamMemberProfile = function requestTeamMemberProfile(steam_id, callback) {
@@ -56,7 +56,7 @@ Dota2.Dota2Client.prototype.requestTeamMemberProfile = function requestTeamMembe
     });
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCTeamMemberProfileRequest,
                     payload, 
-                    Dota2._convertCallback.call(_self, onTeamProfileResponse, callback));
+                    onTeamProfileResponse, callback);
 }
 
 Dota2.Dota2Client.prototype.requestProTeamList = function requestProTeamList(callback) {
@@ -68,7 +68,7 @@ Dota2.Dota2Client.prototype.requestProTeamList = function requestProTeamList(cal
     var payload = new Dota2.schema.CMsgDOTAProTeamListRequest({});
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCProTeamListRequest, 
                     payload, 
-                    Dota2._convertCallback.call(_self, onProTeamListResponse, callback));
+                    onProTeamListResponse, callback);
 }
 
 

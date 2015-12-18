@@ -90,7 +90,11 @@ Dota2._parseOptions = function(options, possibleOptions) {
 
 Dota2._convertCallback = function(handler, callback) {
     var self = this;
-    return function (header, body) {
-        handler.call(self, body, callback);
+    if (callback && handler) {
+        return function (header, body) {
+            handler.call(self, body, callback);
+        }
+    } else {
+        return undefined;
     }
 };

@@ -21,7 +21,7 @@ Dota2.Dota2Client.prototype.requestLeaguesInMonth = function(month, year, callba
     });
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCLeaguesInMonthRequest, 
                     payload, 
-                    Dota2._convertCallback.call(_self, onLeaguesInMonthResponse, callback));
+                    onLeaguesInMonthResponse, callback);
 };
 
 Dota2.Dota2Client.prototype.requestLeagueInfo = function() {

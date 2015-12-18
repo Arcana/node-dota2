@@ -23,7 +23,7 @@ Dota2.Dota2Client.prototype.requestPlayerMatchHistory = function(account_id, opt
     var payload = new Dota2.schema.CMsgDOTAGetPlayerMatchHistory(command);
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgDOTAGetPlayerMatchHistory, 
                     payload, 
-                    Dota2._convertCallback.call(_self, onPlayerMatchHistoryResponse, callback));
+                    onPlayerMatchHistoryResponse, callback);
 };
 
 Dota2.Dota2Client.prototype.requestProfile = function(account_id, request_name, callback) {
@@ -40,7 +40,7 @@ Dota2.Dota2Client.prototype.requestProfile = function(account_id, request_name, 
     });
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCProfileRequest, 
                     payload, 
-                    Dota2._convertCallback.call(_self, onProfileResponse, callback));
+                    onProfileResponse, callback);
 };
 
 Dota2.Dota2Client.prototype.requestProfileCard = function(account_id, callback) {
@@ -55,7 +55,7 @@ Dota2.Dota2Client.prototype.requestProfileCard = function(account_id, callback) 
     });
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCGetProfileCard, 
                     payload, 
-                    Dota2._convertCallback.call(_self, onProfileCardResponse, callback));
+                    onProfileCardResponse, callback);
 };
 
 Dota2.Dota2Client.prototype.requestPassportData = function(account_id, callback) {
@@ -70,7 +70,7 @@ Dota2.Dota2Client.prototype.requestPassportData = function(account_id, callback)
     });
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCPassportDataRequest,
                     payload,
-                    Dota2._convertCallback.call(_self, onPassportDataResponse, callback));
+                    onPassportDataResponse, callback);
 };
 
 Dota2.Dota2Client.prototype.requestHallOfFame = function(week, callback) {
@@ -86,7 +86,7 @@ Dota2.Dota2Client.prototype.requestHallOfFame = function(week, callback) {
     });
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCHallOfFameRequest, 
                     payload, 
-                    Dota2._convertCallback.call(_self, onHallOfFameResponse, callback));
+                    onHallOfFameResponse, callback);
 };
 
 Dota2.Dota2Client.prototype.requestPlayerInfo = function(account_ids) {
@@ -119,7 +119,7 @@ Dota2.Dota2Client.prototype.requestTrophyList = function(account_id, callback) {
     });
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCGetTrophyList,
                     payload,
-                    Dota2._convertCallback.call(_self, onTrophyListResponse, callback));
+                    onTrophyListResponse, callback);
 };
 
 // Handlers

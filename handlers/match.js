@@ -31,7 +31,7 @@ Dota2.Dota2Client.prototype.requestMatches = function(criteria, callback) {
     var payload = new Dota2.schema.CMsgDOTARequestMatches(matchOptions);
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCRequestMatches, 
                     payload, 
-                    Dota2._convertCallback.call(_self, onMatchesResponse, callback));
+                    onMatchesResponse, callback);
 }
 
 Dota2.Dota2Client.prototype.requestMatchDetails = function(match_id, callback) {
@@ -46,7 +46,7 @@ Dota2.Dota2Client.prototype.requestMatchDetails = function(match_id, callback) {
     });
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCMatchDetailsRequest, 
                     payload, 
-                    Dota2._convertCallback.call(_self, onMatchDetailsResponse, callback));
+                    onMatchDetailsResponse, callback);
 };
 
 Dota2.Dota2Client.prototype.requestMatchmakingStats = function() {
