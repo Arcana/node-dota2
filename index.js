@@ -152,8 +152,22 @@ Dota2Client.prototype.exit = function() {
     }
     this._gcReady = false;
 
-    if (this._client.loggedOn) this._client.gamesPlayed([]);
+    if (this._client.loggedOn) this._user.gamesPlayed([]);
 };
+
+Dota2Client.prototype.sendToGC = function(type, payload, handler, callback) {
+    var self = this;
+    if (!this._gcReady) {
+        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+        if (callback) callback(-1, null);                   // notify user that something went wrong
+        return null;
+    }
+    this._protoBufHeader.msg = type;
+    this._gc.send(this._protoBufHeader,                     // protobuf header, same for all messages
+                  payload.toBuffer(),                       // payload of the message
+                  Dota2._convertCallback.call(self, handler, callback) // let handler treat callback so events are triggered
+    );
+}
 
 
 // Handlers

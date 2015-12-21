@@ -12,107 +12,63 @@ Dota2.Dota2Client.prototype.requestMyTeams = function requestMyTeams(callback) {
 
     if (this.debug) util.log("Requesting my own team data");
     var payload = new Dota2.schema.CMsgDOTARequestTeamData({});
-    this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCRequestTeamData;
-    this._gc.send(
-        this._protoBufHeader,
-        payload.toBuffer(),
-        function(header, body) {
-            onTeamDataResponse.call(_self, body, callback);
-        }
-    );
+    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCRequestTeamData,
+                    payload, 
+                    onTeamDataResponse, callback);
 }
 
 Dota2.Dota2Client.prototype.requestTeamProfile = function requestTeamProfile(team_id, callback) {
     // Request the profile of a given team
     callback = callback || null;
-    
     var _self = this;
-    if (!this._gcReady) {
-        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-        return null;
-    }
 
     if (this.debug) util.log("Sending team profile request");
     var payload = new Dota2.schema.CMsgDOTATeamProfileRequest({
         "team_id": team_id
     });
-    this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCTeamProfileRequest;
-    this._gc.send(
-        this._protoBufHeader,
-        payload.toBuffer(),
-        function(header, body) {
-            onTeamProfileResponse.call(_self, body, callback);
-        }
-    );
+    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCTeamProfileRequest, 
+                    payload, 
+                    onTeamProfileResponse, callback);
 }
 
 Dota2.Dota2Client.prototype.requestTeamIDByName = function requestTeamIDByName(team_name, callback) {
     // Request the ID of a given team
     callback = callback || null;
-    
     var _self = this;
-    if (!this._gcReady) {
-        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-        return null;
-    }
 
     if (this.debug) util.log("Sending team ID by name request");
     var payload = new Dota2.schema.CMsgDOTATeamIDByNameRequest({
         "name": team_name
     });
-    this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCTeamIDByNameRequest;
-    this._gc.send(
-        this._protoBufHeader,
-        payload.toBuffer(),
-        function(header, body) {
-            onTeamIDByNameResponse.call(_self, body, callback);
-        }
-    );
+    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCTeamIDByNameRequest, 
+                    payload, 
+                    onTeamIDByNameResponse, callback);
 }
 
 Dota2.Dota2Client.prototype.requestTeamMemberProfile = function requestTeamMemberProfile(steam_id, callback) {
     // Request the profile of a given team member
     callback = callback || null;
-    
     var _self = this;
-    if (!this._gcReady) {
-        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-        return null;
-    }
 
     if (this.debug) util.log("Sending team member profile request");
     var payload = new Dota2.schema.CMsgDOTATeamMemberProfileRequest({
         "steam_id": steam_id
     });
-    this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCTeamMemberProfileRequest;
-    this._gc.send(
-        this._protoBufHeader,
-        payload.toBuffer(),
-        function(header, body) {
-            onTeamProfileResponse.call(_self, body, callback);
-        }
-    );
+    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCTeamMemberProfileRequest,
+                    payload, 
+                    onTeamProfileResponse, callback);
 }
 
 Dota2.Dota2Client.prototype.requestProTeamList = function requestProTeamList(callback) {
     // Request the list of pro teams
     callback = callback || null;
     var _self = this;
-    if (!this._gcReady) {
-        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
-        return null;
-    }
 
     if (this.debug) util.log("Requesting list of pro teams");
     var payload = new Dota2.schema.CMsgDOTAProTeamListRequest({});
-    this._protoBufHeader.msg = Dota2.schema.EDOTAGCMsg.k_EMsgGCProTeamListRequest;
-    this._gc.send(
-        this._protoBufHeader,
-        payload.toBuffer(),
-        function(header, body) {
-            onProTeamListResponse.call(_self, body, callback);
-        }
-    );
+    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCProTeamListRequest, 
+                    payload, 
+                    onProTeamListResponse, callback);
 }
 
 
