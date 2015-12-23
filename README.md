@@ -380,6 +380,11 @@ Asks to invite a player to your lobby. This creates a new default lobby when you
 
 Asks to kick someone from your current practice lobby.
 
+#### practiceLobbyKickFromTeam(account_id, [callback])
+* `account_id` The ID of the player you want to kick from the team.
+
+Asks to kick someone from his chosen team in your current practice lobby.
+
 #### leavePracticeLobby()
 
 Sends a message to the Game Coordinator requesting to leave the current lobby.  Requires the GC to be ready (listen for the `ready` event before calling).

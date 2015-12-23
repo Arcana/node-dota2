@@ -177,6 +177,21 @@ Dota2.Dota2Client.prototype.practiceLobbyKick = function(account_id, callback) {
                     payload, 
                     onPracticeLobbyResponse, callback);
 };
+// callback to onPracticeLobbyResponse
+Dota2.Dota2Client.prototype.practiceLobbyKickFromTeam = function(account_id, callback) {
+    callback = callback || null;
+    account_id = account_id || "";
+    var _self = this;
+
+    if (this.debug) util.log("Sending match CMsgPracticeLobbyKickFromTeam request");
+    
+    var payload = new Dota2.schema.CMsgPracticeLobbyKickFromTeam({
+        "account_id": account_id
+    });
+    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCPracticeLobbyKickFromTeam, 
+                    payload, 
+                    onPracticeLobbyResponse, callback);
+};
 // callback to onPracticeLobbyJoinResponse
 Dota2.Dota2Client.prototype.joinPracticeLobby = function(id, password, callback) {
     callback = callback || null;
