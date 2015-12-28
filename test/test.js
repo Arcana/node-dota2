@@ -29,42 +29,42 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
                 // Dota2.deleteItem(ITEM ID);
                 /* MATCHES */
                 // Event based
-                // Dota2.matchDetailsRequest(246546269);
-                // Dota2.on("matchData", function (matchId, matchData) {
+                // Dota2.requestMatchDetails(246546269);
+                // Dota2.on("matchDetailsData", function (matchId, matchData) {
                 //     console.log(JSON.stringify(matchData, null, 2));
                 // });
-                // Dota2.matchmakingStatsRequest();
-                // Dota2.on("matchmakingStatsData", function(waitTimesByGroup, searchingPlayersByGroup, disabledGroups, matchmakingStatsResponse) {
+                // Dota2.requestMatchmakingStats();
+                // Dota2.on("matchmakingStatsData", function(searchingPlayersByGroup, disabledGroups, matchmakingStatsResponse) {
                 //     console.log(JSON.stringify(matchmakingStatsResponse, null, 2));
                 // });
                 // Callback based
-                Dota2.matchDetailsRequest(246546269, function(err, body) {
-                    if (err) throw err;
-                    console.log(JSON.stringify(body));
-                });
+                // Dota2.requestMatchDetails(246546269, function(err, body) {
+                //     if (err) throw err;
+                //     console.log(JSON.stringify(body));
+                // });
                 /* COMMUNITY */
                 // Event based
-                // Dota2.profileRequest(28956443, true);
-                // Dota2.on("profileData", function (accountId, profileData) {
+                // Dota2.requestProfileCard(28956443);
+                // Dota2.on("profileCardData", function (accountId, profileData) {
                 //     console.log(JSON.stringify(profileData, null, 2));
                 // });
-                // Dota2.passportDataRequest(28956443);
+                // Dota2.requestPassportData(28956443);
                 // Dota2.on("passportData", function (accountId, passportData) {
-                //     console.log(passportData.leagueGuesses.stampedPlayers);
+                //     console.log(passportData.league_guesses.stamped_players);
                 // });
-                // Dota2.hallOfFameRequest();
+                // Dota2.requestHallOfFame();
                 // Dota2.on("hallOfFameData", function(week, featuredPlayers, featuredFarmer, hallOfFameResponse) {
                 //     console.log(JSON.stringify(hallOfFameResponse, null, 2));
                 // });
                 // Callback based
-                Dota2.profileRequest(28956443, true, function(err, body) {
-                    if (err) throw err;
-                    console.log(JSON.stringify(body));
-                });
-                // Dota2.passportDataRequest(28956443, function(err, body) {
+                // Dota2.requestProfileCard(28956443, function(err, body) {
+                //     if (err) throw err;
                 //     console.log(JSON.stringify(body));
                 // });
-                // Dota2.hallOfFameRequest(null, function(err, body){
+                // Dota2.requestPassportData(28956443, function(err, body) {
+                //     console.log(JSON.stringify(body));
+                // });
+                // Dota2.requestHallOfFame(null, function(err, body){
                 //     console.log(JSON.stringify(body));
                 // });
                 /* CHAT */
@@ -96,26 +96,41 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
                 // setTimeout(function(){ Dota2.leaveChat(guildChannelName); }, 10000);
                 // });
                 /* LOBBIES */
-                // Dota2.createPracticeLobby("Techies cheese", "boop", Dota2.ServerRegion.PERFECTWORLDTELECOM, Dota2.schema.GameMode.DOTA_GAMEMODE_AR, function(err, body){
-                //     console.log(JSON.stringify(body));
-                // });
+                //  Dota2.createPracticeLobby("password",
+                //                             {"game_name": "node-dota2",
+                //                             "server_region": dota2.ServerRegion.PERFECTWORLDTELECOM,
+                //                             "game_mode": dota2.schema.DOTA_GameMode.DOTA_GAMEMODE_AR,
+                //                             "series_type": 2,
+                //                             "game_version": 1,
+                //                             "allow_cheats": false,
+                //                             "fill_with_bots": false,
+                //                             "allow_spectating": true,
+                //                             "pass_key": "password",
+                //                             "radiant_series_wins": 0,
+                //                             "dire_series_wins": 0,
+                //                             "allchat": true
+                //                             }, 
+                //                             function(err, body){
+                //                                  console.log(JSON.stringify(body));
+                //                             });
                 // setTimeout(function(){
                 //     Dota2.leavePracticeLobby(function(err, body){
                 //         console.log(JSON.stringify(body));
                 //     });
                 // }, 60000);
                 /* LEAGUES */
-                // Dota2.leaguesInMonthRequest(10, 2013, function(err, data) { // November 2013
+                // Dota2.requestLeaguesInMonth(10, 2013, function(err, data) { // November 2013
                 //     console.log('Found ' + data.leagues.length + ' leagues full of schedule data :D');
                 // });
-                // Dota2.leaguesInMonthRequest(10, 2013); // November 2013
-                // Dota2.on("leaguesInMonthResponse",  function(err, data) {
+                // Dota2.requestLeaguesInMonth(10, 2013); // November 2013
+                // Dota2.on("leaguesInMonthData",  function(err, data) {
                 //     console.log('Found ' + data.leagues.length + ' leagues full of schedule data :D');
                 // });
                 /* SOURCETV */
-                // Dota2.findSourceTVGames({}, function(data) {    // May 2015
-                //   console.log('Successfully received SourceTVGames: ' + data.games);
-                // })
+                // Dota2.requestSourceTVGames({});
+                // Dota2.on("sourceTVGamesData", function(data) {    // May 2015
+                //   console.log('Successfully received SourceTVGames: ' + data.game_list);
+                // });
             });
             Dota2.on("unready", function onUnready() {
                 console.log("Node-dota2 unready.");
