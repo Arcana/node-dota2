@@ -270,6 +270,23 @@ Dota2.Dota2Client.prototype.addBotToPracticeLobby = function(slot, team, bot_dif
                     payload, 
                     onPracticeLobbyResponse, callback);
 }
+// no callback
+Dota2.Dota2Client.prototype.respondLobbyInvite = function(id, accept) {
+    id = id || null;
+    accept = accept || false;
+    if (id == null) {
+        if (this.debug) util.log("Lobby ID required to respond to an invite.");
+        return null;
+    }
+
+    if (this.debug) util.log("Responding to lobby invite " + id + ", accept: " + accept);
+    // todo: set client version here?
+    var payload = new Dota2.schema.CMsgLobbyInviteResponse({
+        "lobby_id": id,
+        "accept": accept
+    });
+    this.sendToGC(Dota2.schema.EGCBaseMsg.k_EMsgGCLobbyInviteResponse, payload);
+};
 
 // Handlers
 
@@ -335,3 +352,4 @@ var onInviteCreated = function onInviteCreated(message) {
     this.emit("inviteCreated", inviteCreated.steam_id, inviteCreated.group_id, is_online);
 }
 handlers[Dota2.schema.EGCBaseMsg.k_EMsgGCInvitationCreated] = onInviteCreated;
+

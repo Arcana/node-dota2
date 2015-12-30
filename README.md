@@ -41,6 +41,9 @@ The current party object (see CSODOTAParty). Null if the bot is not in a party.
 ###PartyInvite
 The current party invite object (see CSODOTAPartyInvite). Null if the bot does not have an active incoming party invite.
 
+###LobbyInvite
+The current lobby invite object (see CSODOTALobbyInvite). Null if the bot does not have an active incoming lobby invite.
+
 ## Methods
 All methods require the SteamClient instance to be logged on.
 
@@ -263,28 +266,26 @@ Sends a message to the Game Coordinator requesting some matchmaking stats. Liste
 ### Parties
 
 ### respondPartyInvite(id, accept)
-* `[id]` Number, party ID.
-* `[accept]` Accept or decline the invite.
+* `[id]` - Number, party ID.
+* `[accept]` - Accept or decline the invite.
 
-Responds to an incoming party invite. See the `PartyInvite` property.
+Responds to an incoming party invite. The `PartyInvite` property is cleared after the response has been sent.
 
 
 ### inviteToParty(id)
-* `[id]` The steam ID to invite.
+* `[id]` - The steam ID to invite.
 
-Invites a player to a party. This will create a new party if you aren't
-in one.
+Invites a player to a party. This will create a new party if you aren't in one.
 
 
 ### kickFromParty(id)
-* `[id]` The steam ID to kick.
+* `[id]` - The steam ID to kick.
 
-Kicks a player from the party. This will create a new party if you aren't
-in one.
+Kicks a player from the party. This will create a new party if you aren't in one.
 
 
 ### setPartyCoach(coach)
-* `[coach]` Boolean, if the bot wants to be coach or not.
+* `[coach]` - Boolean, if the bot wants to be coach or not.
 
 Set the bot's status as a coach.
 
@@ -295,9 +296,16 @@ Leaves the current party. See the `Party` property.
 
 
 ### Lobbies
+### respondLobbyInvite(id, accept)
+* `[id]` - Practice lobby ID
+* `[accept]` - Boolean, whether or not you accept the invitation.
+
+Sends a message to the Game Coordinator confirming a lobby invitation. The `LobbyInvite` property is cleared after the response is sent.
+
 ### joinPracticeLobby(id, [password], [callback])
-* `[id]` Practice lobby ID
-* `[password]` Practice lobby password
+* `[id]` - Practice lobby ID
+* `[password]` - Practice lobby password
+* `[callback]` - Optional callback, returns args: `err, response`.
 
 Sends a message to the Game Coordinator requesting to join a lobby.  Provide a callback or listen for `practiceLobbyJoinResponse` for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
@@ -677,6 +685,13 @@ You can use this to detect when a lobby has been entered / created
 successfully as well. Note that the `Lobby` property will be the old
 value until after this event completes to allow comparison between the
 two.
+
+
+### `lobbyInviteCleared` ()
+
+Emitted when the Lobby Invite is cleared, for example when
+accepting/rejecting it or when the lobby is closed.
+
 
 
 ### `practiceLobbyJoinResponse`(`result`, `practiceLobbyJoinResponse`)

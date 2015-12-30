@@ -4,7 +4,8 @@ var Dota2 = require("../index"),
 var cacheTypeIDs = {
     LOBBY: 2004,
     PARTY: 2003,
-    PARTY_INVITE: 2006
+    PARTY_INVITE: 2006,
+    LOBBY_INVITE: 2011
 };
 
 // Handlers
@@ -17,14 +18,21 @@ function handleSubscribedType(obj_type, object_data) {
             this.emit("practiceLobbyUpdate", lobby);
             this.Lobby = lobby;
             break;
-            // Party snapshot.
+        // Lobby invite snapshot.
+        case cacheTypeIDs.LOBBY_INVITE:
+            var lobby = Dota2.schema.CSODOTALobbyInvite.decode(object_data);
+            if (this.debug) util.log("Received lobby invite snapshot for group ID " + lobby.group_id);
+            this.emit("lobbyInviteUpdate", lobby);
+            this.LobbyInvite = lobby;
+            break;
+        // Party snapshot.
         case cacheTypeIDs.PARTY:
             var party = Dota2.schema.CSODOTAParty.decode(object_data);
             if (this.debug) util.log("Received party snapshot for party ID " + party.party_id);
             this.emit("partyUpdate", party);
             this.Party = party;
             break;
-            // Party invite snapshot.
+        // Party invite snapshot.
         case cacheTypeIDs.PARTY_INVITE:
             var party = Dota2.schema.CSODOTAPartyInvite.decode(object_data);
             if (this.debug) util.log("Received party invite snapshot for group ID " + party.group_id);
@@ -96,6 +104,9 @@ var onCacheUnsubscribed = function onCacheUnsubscribed(message) {
     if (this.Lobby && "" + unsubscribe.owner_soid.id === "" + this.Lobby.lobby_id) {
         this.Lobby = null;
         this.emit("practiceLobbyCleared");
+    } else if (this.LobbyInvite && "" + unsubscribe.owner_soid.id === "" + this.LobbyInvite.group_id) {
+        this.LobbyInvite = null;
+        this.emit("lobbyInviteCleared");
     } else if (this.Party && "" + unsubscribe.owner_soid.id === "" + this.Party.party_id) {
         this.Party = null;
         this.emit("partyCleared");
@@ -116,5 +127,9 @@ var onCacheDestroy = function onCacheDestroy(message) {
         this.PartyInvite = null;
         this.emit("partyInviteCleared");
     }
+    if (destroy.type_id === cacheTypeIDs.LOBBY_INVITE) {
+        this.LobbyInvite = null;
+        this.emit("lobbyInviteCleared");
+    }
 };
-handlers[Dota2.schema.ESOMsg.k_ESOMsg_CacheDestroy] = onCacheDestroy;
+handlers[Dota2.schema.ESOMsg.k_ESOMsg_Destroy] = onCacheDestroy;
