@@ -1,6 +1,8 @@
 node-dota2
 ========
 
+[![Build Status](https://travis-ci.org/RJacksonm1/node-dota2.svg)](https://travis-ci.org/RJacksonm1/node-dota2)
+
 A node-steam plugin for Dota 2, consider it in alpha state.
 
 Check out my blog post (my only blog post), [Extending node-dota2](https://blog.rjackson.me/extending-node-dota2/), for a rough overview of adding new functionality to the library.
