@@ -20,7 +20,7 @@ Dota2.Dota2Client.prototype.respondPartyInvite = function(id, accept) {
         "game_language_enum": 1,
         "game_language_name": "english"
     });
-    this.sendToGC(Dota2.EGCBaseMsg.k_EMsgGCPartyInviteResponse, payload);
+    this.sendToGC(Dota2.schema.EGCBaseMsg.k_EMsgGCPartyInviteResponse, payload);
 };
 
 Dota2.Dota2Client.prototype.leaveParty = function() {
@@ -28,7 +28,7 @@ Dota2.Dota2Client.prototype.leaveParty = function() {
 
     var payload = new Dota2.schema.CMsgLeaveParty({});
     this.Party = null;
-    this.sendToGC(Dota2.EGCBaseMsg.k_EMsgGCLeaveParty, payload);
+    this.sendToGC(Dota2.schema.EGCBaseMsg.k_EMsgGCLeaveParty, payload);
 };
 
 Dota2.Dota2Client.prototype.setPartyCoach = function(coach) {
@@ -43,7 +43,7 @@ Dota2.Dota2Client.prototype.setPartyCoach = function(coach) {
     var payload = new Dota2.schema.CMsgDOTAPartyMemberSetCoach({
         "wants_coach": coach
     });
-    this.sendToGC(Dota2.k_EMsgGCPartyMemberSetCoach, payload);
+    this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgGCPartyMemberSetCoach, payload);
 };
 
 Dota2.Dota2Client.prototype.inviteToParty = function(steam_id) {
@@ -58,7 +58,7 @@ Dota2.Dota2Client.prototype.inviteToParty = function(steam_id) {
     var payload = new Dota2.schema.CMsgInviteToParty({
         "steam_id": steam_id
     });
-    this.sendToGC(Dota2.EGCBaseMsg.k_EMsgGCInviteToParty, payload);
+    this.sendToGC(Dota2.schema.EGCBaseMsg.k_EMsgGCInviteToParty, payload);
 };
 
 Dota2.Dota2Client.prototype.kickFromParty = function(steam_id) {
@@ -73,5 +73,5 @@ Dota2.Dota2Client.prototype.kickFromParty = function(steam_id) {
     var payload = new Dota2.schema.CMsgKickFromParty({
         "steam_id": steam_id
     });
-    this.sendToGC(Dota2.EGCBaseMsg.k_EMsgGCKickFromParty, payload);
+    this.sendToGC(Dota2.schema.EGCBaseMsg.k_EMsgGCKickFromParty, payload);
 };
