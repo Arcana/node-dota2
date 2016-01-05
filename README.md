@@ -4,6 +4,7 @@ node-dota2
 [![NPM version](https://img.shields.io/npm/v/dota2.svg)](https://npmjs.org/package/dota2 "View this project on NPM")
 [![Build Status](https://img.shields.io/travis/RJacksonm1/node-dota2.svg)](https://travis-ci.org/RJacksonm1/node-dota2 "View this project's build information")
 [![Dependency Status](https://img.shields.io/david/RJacksonm1/node-dota2.svg)](https://david-dm.org/RJacksonm1/node-dota2 "Check this project's dependencies")
+[![devDependency Status](https://img.shields.io/david/dev/RJacksonm1/node-dota2.svg)](https://david-dm.org/RJacksonm1/node-dota2#info=devDependencies "Check this project's dev dependencies")
 
 A node-steam plugin for Dota 2, consider it in alpha state.
 
