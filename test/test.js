@@ -109,7 +109,7 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
                 //                             "radiant_series_wins": 0,
                 //                             "dire_series_wins": 0,
                 //                             "allchat": true
-                //                             }, 
+                //                             },
                 //                             function(err, body){
                 //                                  console.log(JSON.stringify(body));
                 //                             });
@@ -158,11 +158,12 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
         util.log("Connection closed by server.");
     };
 
-steamUser.on('updateMachineAuth', function(sentry, callback) {
-    fs.writeFileSync('sentry', sentry.bytes)
+SteamUser.on('updateMachineAuth', function(sentry, callback) {
+    var hashedSentry = crypto.createHash('sha1').update(sentry.bytes).digest();
+    fs.writeFileSync('sentry', hashedSentry)
     util.log("sentryfile saved");
     callback({
-        sha_file: crypto.createHash('sha1').update(sentry.bytes).digest()
+        sha_file: hashedSentry
     });
 });
 
