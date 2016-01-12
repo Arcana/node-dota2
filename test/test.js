@@ -158,7 +158,7 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
         util.log("Connection closed by server.");
     };
 
-SteamUser.on('updateMachineAuth', function(sentry, callback) {
+steamUser.on('updateMachineAuth', function(sentry, callback) {
     var hashedSentry = crypto.createHash('sha1').update(sentry.bytes).digest();
     fs.writeFileSync('sentry', hashedSentry)
     util.log("sentryfile saved");
