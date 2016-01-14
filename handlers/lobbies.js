@@ -66,7 +66,7 @@ Dota2.Dota2Client.prototype.configPracticeLobby = function(lobby_id, options, ca
     callback = callback || null;
     var _self = this;
 
-    var command = Dota2._parseOptions(options);
+    var command = Dota2._parseOptions(options, Dota2._lobbyOptions);
     command["lobby_id"] = lobby_id;
 
     var payload = new Dota2.schema.CMsgPracticeLobbySetDetails(command);
