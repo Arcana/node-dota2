@@ -222,6 +222,18 @@ Dota2.Dota2Client.prototype.leavePracticeLobby = function(callback) {
                     onPracticeLobbyResponse, callback);
 };
 // callback to onPracticeLobbyResponse
+Dota2.Dota2Client.prototype.abandonCurrentGame = function(callback) {
+    callback = callback || null;
+    var _self = this;
+
+    if (this.debug) util.log("Sending match CMsgAbandonCurrentGame request");
+
+    var payload = new Dota2.schema.CMsgAbandonCurrentGame({});
+    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCAbandonCurrentGame,
+                    payload,
+                    onPracticeLobbyResponse, callback);
+};
+// callback to onPracticeLobbyResponse
 Dota2.Dota2Client.prototype.launchPracticeLobby = function(callback) {
     callback = callback || null;
     var _self = this;
