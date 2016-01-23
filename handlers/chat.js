@@ -75,6 +75,28 @@ Dota2.Dota2Client.prototype.sendMessage = function(channel, message) {
     this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgGCChatMessage, payload);
 };
 
+Dota2.Dota2Client.prototype.shareLobby = function(channel) {
+    /* Attempts to send a message to a chat channel. GC does not send a response. */
+    if (this.debug) util.log("Sharing lobby to " + channel);
+    // Check cache
+    var cache = this._getChannelByName(channel);
+    if (cache === undefined) {
+        if (this.debug) util.log("Cannot send message to a channel you have not joined.");
+        return;
+    }
+    if (this.Lobby === undefined) {
+        if (this.debug) util.log("Cannot share a lobby when you're not in one.");
+        return;
+    }
+    
+    var payload = new Dota2.schema.CMsgDOTAChatMessage({
+        "channel_id": cache.channel_id,
+        "share_lobby_id": this.Lobby.lobby_id,
+        "share_lobby_passkey": this.Lobby.pass_key
+    });
+    this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgGCChatMessage, payload);
+};
+
 Dota2.Dota2Client.prototype.flipCoin = function(channel) {
     /* Attempts to send a coin flip to a chat channel. Expect a chatmessage in response. */
     if (this.debug) util.log("Sending coin flip to " + channel);
