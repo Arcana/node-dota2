@@ -1,16 +1,15 @@
 {
   "name": "dota2",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "dependencies": {
-    "bignumber.js": "2.0.7",
+    "bignumber.js": "^2.1.0",
     "deferred": "^0.7.2",
     "merge": "^1.2.0",
-    "protobufjs": "^4.0.0",
+    "protobufjs": "^5.0.0",
     "steam": "^1.2.0"
   },
   "scripts": {
-    "update": "bash update_proto.sh",
-    "test": "mocha"
+    "update": "bash update_proto.sh"
   },
   "readmeFilename": "README.md",
   "description": "A node-steam plugin for Dota 2.",
@@ -24,9 +23,5 @@
     "valve",
     "dota"
   ],
-  "license": "MIT",
-  "devDependencies": {
-    "mocha": "^2.3.3",
-    "should": "^7.1.1"
-  }
+  "license": "MIT"
 }
