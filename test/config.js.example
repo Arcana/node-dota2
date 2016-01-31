@@ -1,0 +1,9 @@
+// Configure and mv to config.js
+var config = {};
+
+config.steam_name = "mySteamName";
+config.steam_user = "mySteamUserName";
+config.steam_pass = "mySteamPassword";
+config.steam_guard_code = "steamGuardCodeIfApplicable";
+
+module.exports = config;
