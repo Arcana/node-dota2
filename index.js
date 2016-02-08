@@ -16,21 +16,7 @@ folder.forEach(function(f) {
     ProtoBuf.loadProtoFile(__dirname + '/proto/' + f, builder);
 });
 Dota2.schema = builder.build();
-Dota2.ServerRegion = {
-    UNSPECIFIED: 0,
-    USWEST: 1,
-    USEAST: 2,
-    EUROPE: 3,
-    KOREA: 4,
-    SINGAPORE: 5,
-    AUSTRALIA: 7,
-    STOCKHOLM: 8,
-    AUSTRIA: 9,
-    BRAZIL: 10,
-    SOUTHAFRICA: 11,
-    PERFECTWORLDTELECOM: 12,
-    PERFECTWORLDUNICOM: 13
-};
+
 
 var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
     EventEmitter.call(this);
