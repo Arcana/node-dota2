@@ -275,8 +275,9 @@ Dota2.Dota2Client.prototype.joinPracticeLobbyBroadcastChannel = function(channel
         "channel": channel
     });
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCPracticeLobbyJoinBroadcastChannel,
-        payload,
-        onPracticeLobbyJoinResponse, callback);};
+                    payload,
+                    onPracticeLobbyJoinResponse, callback);
+};
 // callback to onPracticeLobbyResponse
 Dota2.Dota2Client.prototype.addBotToPracticeLobby = function(slot, team, bot_difficulty, callback) {
     callback = callback || null;
