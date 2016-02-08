@@ -364,6 +364,12 @@ Sends a message to the Game Coordinator requesting to join a particular team in 
 
 Sends a message to the Game Coordinator requesting to add a bot to the given team in the lobby. Provide a callback or listen for `practiceLobbyResponse` for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
+#### joinPracticeLobbyBroadcastChannel(channel, [callback])
+  * `channel` - The channel slot you want to fill (default: 1)
+  * `[callback]` - optional callback, returns args: `err, response`.
+
+ Sends a message to the Game Coordinator requesting to add a bot to the broadcast channel. Provide a callback or listen for `practiceLobbyResponse` for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+
 #### balancedShuffleLobby()
 
 Shuffles the lobby teams.
