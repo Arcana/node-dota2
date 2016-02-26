@@ -299,4 +299,3 @@ message CBroadcast_PostGameDataFrame_Request {
 	optional fixed64 broadcast_id = 3;
 	optional bytes frame_data = 4;
 }
-

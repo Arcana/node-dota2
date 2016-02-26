@@ -609,9 +609,12 @@ message CMsgDOTAMatch {
 	optional uint32 engine = 44;
 	optional .CMsgDOTAMatch.CustomGameData custom_game_data = 45;
 	optional uint32 match_flags = 46;
+<<<<<<< HEAD
 	optional fixed32 private_metadata_key = 47;
 	optional uint32 radiant_team_score = 48;
 	optional uint32 dire_team_score = 49;
+=======
+>>>>>>> upstream/dev
 }
 
 message CMsgDOTAPlayerMatchHistory {
@@ -2907,6 +2910,7 @@ message CMsgPlayerConductScorecard {
 
 message CMsgClientToGCWageringRequest {
 	optional uint32 event_id = 1;
+<<<<<<< HEAD
 }
 
 message CMsgGCToClientWageringResponse {
@@ -3018,5 +3022,53 @@ message CMsgMVPVotesForMatch {
 	}
 
 	repeated .CMsgMVPVotesForMatch.Player players = 1;
+=======
+>>>>>>> upstream/dev
 }
 
+message CMsgGCToClientWageringResponse {
+	optional uint32 coins_remaining = 1;
+	optional uint32 total_points_won = 2;
+	optional uint32 total_points_wagered = 3;
+	optional uint32 total_points_tipped = 4;
+	optional uint32 success_rate = 5;
+	optional uint32 total_games_wagered = 6;
+}
+
+message CMsgClientToGCMysteryItem {
+	optional uint32 event_id = 1;
+	optional uint32 action_id = 2;
+}
+
+message CMsgGCToClientMysteryItemResponse {
+	enum Result {
+		SUCCESS = 0;
+		FAILURE_SDO_LOAD = 1;
+		FAILURE_NO_ACTIONS = 2;
+		FAILURE_NO_LOOTLIST = 3;
+		FAILURE_EMPTY_LOOTLIST = 4;
+		FAILURE_NO_ITEM_GENERATED = 5;
+		FAILURE_SQL_COMMIT = 6;
+		FAILURE_EVENT_NOT_OWNED = 7;
+		FAILURE_INVALID_ACTION = 8;
+		FAILURE_ALREADY_GRANTED = 9;
+	}
+
+	optional .CMsgGCToClientMysteryItemResponse.Result result = 1 [default = SUCCESS];
+	optional uint32 reward_type = 2;
+	optional uint32 itemdef = 3;
+}
+
+message CMsgClientToGCGetEventGoals {
+	repeated .EEvent event_ids = 1;
+}
+
+message CMsgEventGoals {
+	message EventGoal {
+		optional .EEvent event_id = 1 [default = EVENT_ID_NONE];
+		optional uint32 goal_id = 2;
+		optional uint64 value = 3;
+	}
+
+	repeated .CMsgEventGoals.EventGoal event_goals = 1;
+}

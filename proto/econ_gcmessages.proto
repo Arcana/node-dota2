@@ -797,6 +797,7 @@ message CMsgClientToGCLookupAccountNameResponse {
 	optional uint32 account_id = 1;
 	optional string account_name = 2;
 }
+<<<<<<< HEAD
 
 message CMsgGCToGCDevRevokeUserItems {
 	optional uint32 account_id = 1;
@@ -832,3 +833,5 @@ message CMsgClientToGCCreateStaticRecipeResponse {
 	repeated .CMsgClientToGCCreateStaticRecipeResponse.OutputItem output_items = 2;
 }
 
+=======
+>>>>>>> upstream/dev

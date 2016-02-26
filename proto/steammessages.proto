@@ -601,6 +601,7 @@ message CMsgDPPartnerMicroTxnsResponse {
 	optional uint32 eresult = 1 [default = 2];
 	optional .CMsgDPPartnerMicroTxnsResponse.EErrorCode eerrorcode = 2 [default = k_MsgValid];
 }
+<<<<<<< HEAD
 
 message CMsgGCHVacVerificationChange {
 	optional fixed64 steamid = 1;
@@ -608,3 +609,5 @@ message CMsgGCHVacVerificationChange {
 	optional bool is_verified = 3;
 }
 
+=======
+>>>>>>> upstream/dev
