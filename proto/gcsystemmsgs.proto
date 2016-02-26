@@ -131,3 +131,4 @@ enum EGCToGCMsg {
 	k_EMsgGCToGCUniverseStartup = 163;
 	k_EMsgGCToGCUniverseStartupResponse = 164;
 }
+

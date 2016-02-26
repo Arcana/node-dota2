@@ -832,4 +832,3 @@ message CMsgClientToGCCreateStaticRecipeResponse {
 	repeated .CMsgClientToGCCreateStaticRecipeResponse.OutputItem output_items = 2;
 }
 
-

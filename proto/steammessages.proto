@@ -608,4 +608,3 @@ message CMsgGCHVacVerificationChange {
 	optional bool is_verified = 3;
 }
 
-

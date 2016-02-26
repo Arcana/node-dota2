@@ -593,3 +593,4 @@ message CMsgResetStrangeGemCountResponse {
 
 	optional .CMsgResetStrangeGemCountResponse.EResetGem response = 1 [default = k_ResetGem_Succeeded];
 }
+
