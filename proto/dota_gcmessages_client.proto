@@ -609,12 +609,10 @@ message CMsgDOTAMatch {
 	optional uint32 engine = 44;
 	optional .CMsgDOTAMatch.CustomGameData custom_game_data = 45;
 	optional uint32 match_flags = 46;
-<<<<<<< HEAD
 	optional fixed32 private_metadata_key = 47;
 	optional uint32 radiant_team_score = 48;
 	optional uint32 dire_team_score = 49;
-=======
->>>>>>> upstream/dev
+
 }
 
 message CMsgDOTAPlayerMatchHistory {
@@ -2910,7 +2908,6 @@ message CMsgPlayerConductScorecard {
 
 message CMsgClientToGCWageringRequest {
 	optional uint32 event_id = 1;
-<<<<<<< HEAD
 }
 
 message CMsgGCToClientWageringResponse {
@@ -3022,8 +3019,6 @@ message CMsgMVPVotesForMatch {
 	}
 
 	repeated .CMsgMVPVotesForMatch.Player players = 1;
-=======
->>>>>>> upstream/dev
 }
 
 message CMsgGCToClientWageringResponse {

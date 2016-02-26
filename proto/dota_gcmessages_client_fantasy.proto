@@ -955,8 +955,6 @@ message CMsgDOTAPassportVote {
 	repeated .CMsgDOTAPassportPlayerCardChallenge player_card_challenges = 4;
 }
 
-<<<<<<< HEAD
-=======
 message CMsgPassportDataRequest {
 	optional uint32 account_id = 1;
 }
@@ -979,4 +977,4 @@ message CMsgPassportDataResponse {
 	optional uint32 fantasy_teamexpiration = 17;
 	optional uint32 fantasy_teams_will_lock_at = 18;
 }
->>>>>>> upstream/dev
+
