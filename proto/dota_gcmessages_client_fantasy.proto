@@ -977,3 +977,4 @@ message CMsgPassportDataResponse {
 	optional uint32 fantasy_teamexpiration = 17;
 	optional uint32 fantasy_teams_will_lock_at = 18;
 }
+
