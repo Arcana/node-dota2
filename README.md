@@ -423,9 +423,10 @@ TODO
 Sends a message to the Game Coordinator requesting a list of joinable custom games for a given region.
 
 ### Leagues
-#### requestLeaguesInMonth([month], [year], [callback])
+#### requestLeaguesInMonth([month], [year], [tier], [callback])
 * `[month]` - Int for the month (MM) you want to query data for.  Defaults to current month. **IMPORTANT NOTE**:  Month is zero-aligned, not one-aligned; so Jan = 00, Feb = 01, etc.
 * `[year]`  - Int for the year (YYYY) you want to query data for .  Defaults to current year.
+* `[tier]`  - Search only for a specific tier of tournaments. Defaults to 0.
 * `[callback]` - optional callback` returns args: `err` response`.
 
 Sends a message to the Game Coordinator requesting data on leagues being played in the given month.  Provide a callback or listen for `leaguesInMonthData` for the Game Coordinator's response.  Requires the GC to be ready (listen for the `ready` event before calling).
@@ -789,9 +790,10 @@ accepting/rejecting it or when the party is closed.
 * `liveLeaguesResponse` - Integer representing number of live league games.
 
 
-### `leaguesInMonthData` (`result`, `leaguesInMonthData`)
-* `result` - The result object from `leaguesInMonthData`.
-* `leaguesInMonthData` - The raw response object.
+### `leaguesInMonthData` (`month`, `year`, `leagues`)
+* `month` - Int representing which month this data represents.
+* `year` - Int representing which year this data represents.
+* `leagues` - Array of CMsgLeague objects
 
 Emitted when the GC responds to `requestLeaguesInMonth` method.
 
@@ -801,28 +803,24 @@ Notes:
 * `month` is also zero-aligned, so January = 0, Febuary = 1, March = 2, etc.
 * Not every participating team seems to be hooked up to Dota 2's team system, so there will be a few `{ teamId: 0 }` objects for some schedule blocks.
 
-The response object is visualized as follows:
+The leagues object is visualized as follows:
 
 ```
-{
-    eresult,            // EResult enum
-    month,              // Int representing which month this data represents.
-    leagues: [{         // An array of CMsgLeague objects
-        leagueId,       // ID of the league associated
-        schedule: [{    // An array of CMsgLeagueScheduleBlock objects
-            blockId,    // ID represending this block
-            startTime,  // Unix timestamp of a scheduled match (or group of matches)
-            finals,     // Boolean represending if this match is a final.
-            comment,    // Comment about this scheduled block - often the team names & position in bracket
-            teams: [{   // An array of CMsgLeagueScheduleBlockTeamInfo objects
-                teamId, // ID of the associated team
-                name,   // The teams name
-                tag,    // The teams tag
-                logo    // The teams logo
-            }]
+leagues: [{         // An array of CMsgLeague objects
+    leagueId,       // ID of the league associated
+    schedule: [{    // An array of CMsgLeagueScheduleBlock objects
+        blockId,    // ID represending this block
+        startTime,  // Unix timestamp of a scheduled match (or group of matches)
+        finals,     // Boolean represending if this match is a final.
+        comment,    // Comment about this scheduled block - often the team names & position in bracket
+        teams: [{   // An array of CMsgLeagueScheduleBlockTeamInfo objects
+            teamId, // ID of the associated team
+            name,   // The teams name
+            tag,    // The teams tag
+            logo    // The teams logo
         }]
     }]
-}
+}]
 ```
 
 ### `leagueData` ()

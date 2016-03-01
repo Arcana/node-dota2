@@ -3,21 +3,23 @@ var Dota2 = require("../index"),
 
 // Methods
 
-Dota2.Dota2Client.prototype.requestLeaguesInMonth = function(month, year, callback) {
+Dota2.Dota2Client.prototype.requestLeaguesInMonth = function(month, year, tier, callback) {
     callback = callback || null;
     var _self = this;
 
     // Month & year default to current time values
     month = month === undefined ? (new Date()).getMonth() : month;
     year = year || (new Date()).getFullYear();
+    tier = tier || 0;
 
     /* Sends a message to the Game Coordinator requesting the data on the given month's leagues.
        Listen for `leaguesInMonthResponse` event for the Game Coordinator's response. */
     if (this.debug) util.log("Sending CMsgDOTALeaguesInMonthRequest");
     
     var payload = new Dota2.schema.CMsgDOTALeaguesInMonthRequest({
-        month: month,
-        year: year
+        'month': month,
+        'year': year,
+        'tier': tier
     });
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCLeaguesInMonthRequest, 
                     payload, 
@@ -43,7 +45,7 @@ var onLeaguesInMonthResponse = function onLeaguesInMonthResponse(message, callba
 
     if (response.eresult === 1) {
         if (this.debug) util.log("Received leagues in month response " + response.eresult);
-        this.emit("leaguesInMonthData", response.eresult, response);
+        this.emit("leaguesInMonthData", response.month, response.year, response.leagues);
         if (callback) callback(null, response);
     } else {
         if (this.debug) util.log("Received a bad leaguesInMonthResponse");
