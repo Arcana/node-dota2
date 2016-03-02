@@ -12,13 +12,13 @@ Check out my blog post (my only blog post), [Extending node-dota2](https://blog.
 
 ## Upgrade guide
 
-### `1.*.*` to `2.0.0`
+### `2.*.*` to `3.0.0`
 
-A few backwards incompatible API changes were included with version 2.0.0.
+A few backwards incompatible API changes were included with version 3.0.0.
 
-* The `chatJoin` and `chatLeave` events were changed to return the channel name instead of the id. All debug logs pertaining chat channels will now mention chat channel instead of IDs.
+* The `requestLeaguesInMonth` function now takes an extra `tier`parameter
+* The `leaguesInMonthData` event now has three parameters: month, year, leagues.
 
-* The `waitTimesByGroup` argument in the `matchmakingStatsData` event has been removed.
 
 ## Initializing
 Parameters:
