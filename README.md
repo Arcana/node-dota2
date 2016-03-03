@@ -267,6 +267,10 @@ Note:  There is a server-side rate-limit of 100 requests per 24 hours on this me
 
 Sends a message to the Game Coordinator requesting some matchmaking stats. Listen for the `matchmakingStatsData` event for the Game Coordinator's response (cannot take a callback because of Steam's backend, or RJackson's incompetence; not sure which). Requires the GC to be ready (listen for the `ready` event before calling).
 
+#### requestTopFriendMatches()
+
+Sends a message to the Game Coordinator requesting the top matches of your friends. Listen for the `topFriendMatchesData` event for the Game Coordinator's response (cannot take a callback because of Steam's backend). Requires the GC to be ready (listen for the `ready` event before calling).
+
 
 ### Parties
 
@@ -434,6 +438,10 @@ Sends a message to the Game Coordinator requesting data on leagues being played 
 #### requestLeagueInfo()
 
 Requests info on all available official leagues from the GC. Listen for `leagueData` for the Game Coordinator's response.  Requires the GC to be ready (listen for the `ready` event before calling).
+
+#### requestTopLeagueMatches()
+
+Sends a message to the Game Coordinator requesting the top league matches. Listen for the `topLeagueMatchesData` event for the Game Coordinator's response (cannot take a callback because of Steam's backend). Requires the GC to be ready (listen for the `ready` event before calling).
 
 
 ### SourceTV
@@ -687,6 +695,19 @@ Here are the groups at the time of this sentence being written (with unecessary 
     "Japan":                        {"matchgroup": "19"}
 ```
 
+### `topFriendMatchesData` (`matches`)
+* `matches` - A list of matches. Each match contains:
+  * `match_id` - Match ID
+  * `start_time` - Unix time of the start of the match
+  * `duration` - Duration of the match in seconds
+  * `game_mode` - Game mode
+  * `winning_team` - Team who won the match
+  * `players` - List of all the players in the game, contains id, hero, K/D/A and items
+  * `league` - Information on the league if this is a league match
+
+Emitted when the GC responds to the `requestTopFriendMatches` method.
+
+
 ### `practiceLobbyUpdate` (`lobby`)
 * `lobby` - The full lobby object (see CSODOTALobby).
 
@@ -822,6 +843,18 @@ leagues: [{         // An array of CMsgLeague objects
     }]
 }]
 ```
+
+### `topLeagueMatchesData` (`matches`)
+* `matches` - A list of matches. Each match contains:
+  * `match_id` - Match ID
+  * `start_time` - Unix time of the start of the match
+  * `duration` - Duration of the match in seconds
+  * `game_mode` - Game mode
+  * `winning_team` - Team who won the match
+  * `players` - List of all the players in the game, contains id, hero, K/D/A and items
+  * `league` - Information on the league if this is a league match
+
+Emitted when the GC responds to the `requestTopLeagueMatches` method.
 
 ### `leagueData` ()
 

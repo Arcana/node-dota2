@@ -35,6 +35,15 @@ Dota2.Dota2Client.prototype.requestLeagueInfo = function() {
 
 };
 
+Dota2.Dota2Client.prototype.requestTopLeagueMatches = function() {
+    /* Sends a message to the Game Coordinator request the info on all available official leagues */
+    if (this.debug) util.log("Sending CMsgClientToGCTopLeagueMatchesRequest");
+    
+    var payload = new Dota2.schema.CMsgClientToGCTopLeagueMatchesRequest({});
+    this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCTopLeagueMatchesRequest, payload);
+
+};
+
 // Handlers
 
 var handlers = Dota2.Dota2Client.prototype._handlers;
@@ -76,3 +85,16 @@ var onLeagueInfoResponse = function onLeagueInfoResponse(message) {
 
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgResponseLeagueInfo] = onLeagueInfoResponse;
+
+var onTopLeagueMatchesResponse = function onTopLeagueMatchesResponse(message) {
+    var response = Dota2.schema.CMsgGCToClientTopLeagueMatchesResponse.decode(message);
+
+    if (response.matches.length > 0) {
+        if (this.debug) util.log("Received information for " + response.matches.length + " league matches");
+        this.emit("topLeagueMatchesData", response.matches);
+    } else {
+        if (this.debug) util.log("Received a bad topLeagueMatches response", response);
+    }
+
+};
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCToClientTopLeagueMatchesResponse] = onTopLeagueMatchesResponse;
