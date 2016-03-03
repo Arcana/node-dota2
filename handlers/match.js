@@ -58,6 +58,14 @@ Dota2.Dota2Client.prototype.requestMatchmakingStats = function() {
     this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgGCMatchmakingStatsRequest, payload);
 };
 
+Dota2.Dota2Client.prototype.requestTopFriendMatches = function() {
+    /* Sends a message to the Game Coordinator request the info on all available official leagues */
+    if (this.debug) util.log("Sending CMsgClientToGCTopFriendMatchesRequest");
+    
+    var payload = new Dota2.schema.CMsgClientToGCTopFriendMatchesRequest({});
+    this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCTopFriendMatchesRequest, payload);
+
+};
 
 // Handlers
 
@@ -111,3 +119,16 @@ var onMatchmakingStatsResponse = function onMatchmakingStatsResponse(message) {
         matchmakingStatsResponse);
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCMatchmakingStatsResponse] = onMatchmakingStatsResponse;
+
+var onTopFriendMatchesResponse = function onTopFriendMatchesResponse(message) {
+    var response = Dota2.schema.CMsgGCToClientTopFriendMatchesResponse.decode(message);
+
+    if (response.matches.length > 0) {
+        if (this.debug) util.log("Received information for " + response.matches.length + " friend matches");
+        this.emit("topFriendMatchesData", response.matches);
+    } else {
+        if (this.debug) util.log("Received a bad topFriendMatches response", response);
+    }
+
+};
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCToClientTopFriendMatchesResponse] = onTopFriendMatchesResponse;
