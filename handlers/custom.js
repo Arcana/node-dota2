@@ -14,11 +14,10 @@ Dota2.Dota2Client.prototype.requestJoinableCustomGameModes = function requestJoi
 
 var handlers = Dota2.Dota2Client.prototype._handlers;
 
-var onJoinableCustomGameModesResponse = function onJoinableCustomGameModesResponse(message, callback) {
+var onJoinableCustomGameModesResponse = function onJoinableCustomGameModesResponse(message) {
     var modes = Dota2.schema.CMsgJoinableCustomGameModesResponse.decode(message);
     
     if (this.debug) util.log("Received joinable custom game modes");
     this.emit("joinableCustomGameModes", modes.game_modes);
-    if (callback) callback(null, modes);
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCJoinableCustomGameModesResponse] = onJoinableCustomGameModesResponse;
