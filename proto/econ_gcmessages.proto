@@ -6,8 +6,6 @@ option cc_generic_services = false;
 enum EGCItemMsg {
 	k_EMsgGCBase = 1000;
 	k_EMsgGCSetItemPosition = 1001;
-	k_EMsgGCCraft = 1002;
-	k_EMsgGCCraftResponse = 1003;
 	k_EMsgGCDelete = 1004;
 	k_EMsgGCVerifyCacheSubscription = 1005;
 	k_EMsgClientToGCNameItem = 1006;
@@ -179,6 +177,9 @@ enum EGCItemMsg {
 	k_EMsgSQLGCToGCGrantBackpackSlots = 2580;
 	k_EMsgClientToGCLookupAccountName = 2581;
 	k_EMsgClientToGCLookupAccountNameResponse = 2582;
+	k_EMsgGCToGCDevRevokeUserItems = 2583;
+	k_EMsgClientToGCCreateStaticRecipe = 2584;
+	k_EMsgClientToGCCreateStaticRecipeResponse = 2585;
 }
 
 enum EGCMsgResponse {
@@ -365,6 +366,7 @@ message CMsgRequestCrateItemsResponse {
 
 	optional uint32 response = 1;
 	repeated uint32 item_defs = 2;
+	optional uint32 peek_item_def = 3;
 }
 
 message CMsgGCToGCCanUseDropRateBonus {
@@ -418,7 +420,7 @@ message CMsgGCToGCGrantAccountRolledItems {
 		message AdditionalAuditEntry {
 			optional uint32 owner_account_id = 1;
 			optional uint32 audit_action = 2;
-			optional uint32 audit_data = 3;
+			optional uint64 audit_data = 3;
 		}
 
 		optional uint32 item_def = 1;
@@ -433,7 +435,7 @@ message CMsgGCToGCGrantAccountRolledItems {
 	optional uint32 account_id = 1;
 	repeated .CMsgGCToGCGrantAccountRolledItems.Item items = 2;
 	optional uint32 audit_action = 3;
-	optional uint32 audit_data = 4;
+	optional uint64 audit_data = 4;
 }
 
 message CMsgGCToGCGrantSelfMadeItemToAccount {
@@ -794,5 +796,39 @@ message CMsgClientToGCLookupAccountName {
 message CMsgClientToGCLookupAccountNameResponse {
 	optional uint32 account_id = 1;
 	optional string account_name = 2;
+}
+
+message CMsgGCToGCDevRevokeUserItems {
+	optional uint32 account_id = 1;
+	optional uint64 audit_data = 2;
+	optional bool delete_audit_history = 3;
+}
+
+message CMsgClientToGCCreateStaticRecipe {
+	message Item {
+		optional uint64 item_id = 1;
+		optional uint32 slot_id = 2;
+	}
+
+	repeated .CMsgClientToGCCreateStaticRecipe.Item items = 1;
+	optional uint32 recipe_def_index = 2;
+}
+
+message CMsgClientToGCCreateStaticRecipeResponse {
+	message OutputItem {
+		optional uint32 def_index = 1;
+		optional uint64 item_id = 2;
+	}
+
+	enum EResponse {
+		eResponse_Success = 0;
+		eResponse_OfferingDisabled = 1;
+		eResponse_InvalidItems = 2;
+		eResponse_InternalError = 3;
+		eResponse_MissingLeague = 4;
+	}
+
+	optional .CMsgClientToGCCreateStaticRecipeResponse.EResponse response = 1 [default = eResponse_Success];
+	repeated .CMsgClientToGCCreateStaticRecipeResponse.OutputItem output_items = 2;
 }
 
