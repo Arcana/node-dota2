@@ -12,13 +12,13 @@ Check out my blog post (my only blog post), [Extending node-dota2](https://blog.
 
 ## Upgrade guide
 
-### `1.*.*` to `2.0.0`
+### `2.*.*` to `3.0.0`
 
-A few backwards incompatible API changes were included with version 2.0.0.
+A few backwards incompatible API changes were included with version 3.0.0.
 
-* The `chatJoin` and `chatLeave` events were changed to return the channel name instead of the id. All debug logs pertaining chat channels will now mention chat channel instead of IDs.
+* The `requestLeaguesInMonth` function now takes an extra `tier`parameter
+* The `leaguesInMonthData` event now has three parameters: month, year, leagues.
 
-* The `waitTimesByGroup` argument in the `matchmakingStatsData` event has been removed.
 
 ## Initializing
 Parameters:
@@ -267,6 +267,10 @@ Note:  There is a server-side rate-limit of 100 requests per 24 hours on this me
 
 Sends a message to the Game Coordinator requesting some matchmaking stats. Listen for the `matchmakingStatsData` event for the Game Coordinator's response (cannot take a callback because of Steam's backend, or RJackson's incompetence; not sure which). Requires the GC to be ready (listen for the `ready` event before calling).
 
+#### requestTopFriendMatches()
+
+Sends a message to the Game Coordinator requesting the top matches of your friends. Listen for the `topFriendMatchesData` event for the Game Coordinator's response (cannot take a callback because of Steam's backend). Requires the GC to be ready (listen for the `ready` event before calling).
+
 
 ### Parties
 
@@ -364,6 +368,12 @@ Sends a message to the Game Coordinator requesting to join a particular team in 
 
 Sends a message to the Game Coordinator requesting to add a bot to the given team in the lobby. Provide a callback or listen for `practiceLobbyResponse` for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
+#### joinPracticeLobbyBroadcastChannel(channel, [callback])
+  * `channel` - The channel slot you want to fill (default: 1)
+  * `[callback]` - optional callback, returns args: `err, response`.
+
+ Sends a message to the Game Coordinator requesting to add a bot to the broadcast channel. Provide a callback or listen for `practiceLobbyResponse` for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+
 #### balancedShuffleLobby()
 
 Shuffles the lobby teams.
@@ -417,9 +427,10 @@ TODO
 Sends a message to the Game Coordinator requesting a list of joinable custom games for a given region.
 
 ### Leagues
-#### requestLeaguesInMonth([month], [year], [callback])
+#### requestLeaguesInMonth([month], [year], [tier], [callback])
 * `[month]` - Int for the month (MM) you want to query data for.  Defaults to current month. **IMPORTANT NOTE**:  Month is zero-aligned, not one-aligned; so Jan = 00, Feb = 01, etc.
 * `[year]`  - Int for the year (YYYY) you want to query data for .  Defaults to current year.
+* `[tier]`  - Search only for a specific tier of tournaments. Defaults to 0.
 * `[callback]` - optional callback` returns args: `err` response`.
 
 Sends a message to the Game Coordinator requesting data on leagues being played in the given month.  Provide a callback or listen for `leaguesInMonthData` for the Game Coordinator's response.  Requires the GC to be ready (listen for the `ready` event before calling).
@@ -427,6 +438,10 @@ Sends a message to the Game Coordinator requesting data on leagues being played 
 #### requestLeagueInfo()
 
 Requests info on all available official leagues from the GC. Listen for `leagueData` for the Game Coordinator's response.  Requires the GC to be ready (listen for the `ready` event before calling).
+
+#### requestTopLeagueMatches()
+
+Sends a message to the Game Coordinator requesting the top league matches. Listen for the `topLeagueMatchesData` event for the Game Coordinator's response (cannot take a callback because of Steam's backend). Requires the GC to be ready (listen for the `ready` event before calling).
 
 
 ### SourceTV
@@ -680,6 +695,19 @@ Here are the groups at the time of this sentence being written (with unecessary 
     "Japan":                        {"matchgroup": "19"}
 ```
 
+### `topFriendMatchesData` (`matches`)
+* `matches` - A list of matches. Each match contains:
+  * `match_id` - Match ID
+  * `start_time` - Unix time of the start of the match
+  * `duration` - Duration of the match in seconds
+  * `game_mode` - Game mode
+  * `winning_team` - Team who won the match
+  * `players` - List of all the players in the game, contains id, hero, K/D/A and items
+  * `league` - Information on the league if this is a league match
+
+Emitted when the GC responds to the `requestTopFriendMatches` method.
+
+
 ### `practiceLobbyUpdate` (`lobby`)
 * `lobby` - The full lobby object (see CSODOTALobby).
 
@@ -783,9 +811,10 @@ accepting/rejecting it or when the party is closed.
 * `liveLeaguesResponse` - Integer representing number of live league games.
 
 
-### `leaguesInMonthData` (`result`, `leaguesInMonthData`)
-* `result` - The result object from `leaguesInMonthData`.
-* `leaguesInMonthData` - The raw response object.
+### `leaguesInMonthData` (`month`, `year`, `leagues`)
+* `month` - Int representing which month this data represents.
+* `year` - Int representing which year this data represents.
+* `leagues` - Array of CMsgLeague objects
 
 Emitted when the GC responds to `requestLeaguesInMonth` method.
 
@@ -795,29 +824,37 @@ Notes:
 * `month` is also zero-aligned, so January = 0, Febuary = 1, March = 2, etc.
 * Not every participating team seems to be hooked up to Dota 2's team system, so there will be a few `{ teamId: 0 }` objects for some schedule blocks.
 
-The response object is visualized as follows:
+The leagues object is visualized as follows:
 
 ```
-{
-    eresult,            // EResult enum
-    month,              // Int representing which month this data represents.
-    leagues: [{         // An array of CMsgLeague objects
-        leagueId,       // ID of the league associated
-        schedule: [{    // An array of CMsgLeagueScheduleBlock objects
-            blockId,    // ID represending this block
-            startTime,  // Unix timestamp of a scheduled match (or group of matches)
-            finals,     // Boolean represending if this match is a final.
-            comment,    // Comment about this scheduled block - often the team names & position in bracket
-            teams: [{   // An array of CMsgLeagueScheduleBlockTeamInfo objects
-                teamId, // ID of the associated team
-                name,   // The teams name
-                tag,    // The teams tag
-                logo    // The teams logo
-            }]
+leagues: [{         // An array of CMsgLeague objects
+    leagueId,       // ID of the league associated
+    schedule: [{    // An array of CMsgLeagueScheduleBlock objects
+        blockId,    // ID represending this block
+        startTime,  // Unix timestamp of a scheduled match (or group of matches)
+        finals,     // Boolean represending if this match is a final.
+        comment,    // Comment about this scheduled block - often the team names & position in bracket
+        teams: [{   // An array of CMsgLeagueScheduleBlockTeamInfo objects
+            teamId, // ID of the associated team
+            name,   // The teams name
+            tag,    // The teams tag
+            logo    // The teams logo
         }]
     }]
-}
+}]
 ```
+
+### `topLeagueMatchesData` (`matches`)
+* `matches` - A list of matches. Each match contains:
+  * `match_id` - Match ID
+  * `start_time` - Unix time of the start of the match
+  * `duration` - Duration of the match in seconds
+  * `game_mode` - Game mode
+  * `winning_team` - Team who won the match
+  * `players` - List of all the players in the game, contains id, hero, K/D/A and items
+  * `league` - Information on the league if this is a league match
+
+Emitted when the GC responds to the `requestTopLeagueMatches` method.
 
 ### `leagueData` ()
 
