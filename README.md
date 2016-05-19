@@ -213,11 +213,12 @@ Sends a message to the Game Coordinator requesting `account_id`'s profile data. 
 
 Sends a message to the Game Coordinator requesting `account_id`'s profile card. Provide a callback or listen for `profileCardData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
-#### requestPassportData(account_id, [callback])
+#### requestPassportData(account_id, [callback]) - DEPRECATED
 * `account_id` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose passport data you wish to view.
 * `[callback]` - optional callback, returns args: `err, response`.
 
 Sends a message to the Game Coordinator requesting `account_id`'s passport data. Provide a callback or listen for `passportData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+This function is no longer supported by Valve, it's only left here for historical purposes. It will be removed in a future release.
 
 #### requestHallOfFame([week], [callback])
 * `[week]` - The week of which you wish to know the Hall of Fame members; will return latest week if omitted.  Weeks also randomly start at 2233 for some reason, valf please.

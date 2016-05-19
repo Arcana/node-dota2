@@ -123,12 +123,12 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
                 //     });
                 // }, 60000);
                 /* LEAGUES */
-                // Dota2.requestLeaguesInMonth(10, 2013, function(err, data) { // November 2013
+                // Dota2.requestLeaguesInMonth(10, 2013, 0, function(err, data) { // November 2013
                 //     console.log('Found ' + data.leagues.length + ' leagues full of schedule data :D');
                 // });
                 // Dota2.requestLeaguesInMonth(10, 2013); // November 2013
-                // Dota2.on("leaguesInMonthData",  function(err, data) {
-                //     console.log('Found ' + data.leagues.length + ' leagues full of schedule data :D');
+                // Dota2.on("leaguesInMonthData",  function(month, year, leagues) {
+                //     console.log('Found ' + leagues.length + ' leagues full of schedule data :D');
                 // });
                 /* SOURCETV */
                 // Dota2.requestSourceTVGames({});
