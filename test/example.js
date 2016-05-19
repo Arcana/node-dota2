@@ -56,6 +56,10 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
                 // Dota2.on("hallOfFameData", function(week, featuredPlayers, featuredFarmer, hallOfFameResponse) {
                 //     console.log(JSON.stringify(hallOfFameResponse, null, 2));
                 // });
+                // Dota2.requestPlayerInfo(28956443);
+                // Dota2.on("playerInfoData", function (playerInfo) {
+                //     console.log(JSON.stringify(playerInfo, null, 2));
+                // });
                 // Callback based
                 // Dota2.requestProfileCard(28956443, function(err, body) {
                 //     if (err) throw err;
