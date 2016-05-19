@@ -264,6 +264,14 @@ Sends a message to the Game Coordinator requesting `match_id`'s match details. P
 
 Note:  There is a server-side rate-limit of 100 requests per 24 hours on this method.
 
+#### requestMatchMinimalDetails(match_ids, [callback])
+ * `match_ids` - The match IDs that you want concise details of
+ * `[callback]` - optional callback, returns args: `err, response`.
+
+Sends a message to the Game Coordinator requesting the match details for matches corresponding to `match_ids`. Provide a callback or listen for `matchMinimalDetailsData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+
+Note:  `jimmydorry` was lazy when implementing this, so the `match_ids` variable only accepts a single matchID right now. It was only implemented to prove that it was leaking data for anonymous users. Someone that wants to use this method should go fixup the copy-paste job, to make it more useful.
+
 #### requestMatchmakingStats()
 
 Sends a message to the Game Coordinator requesting some matchmaking stats. Listen for the `matchmakingStatsData` event for the Game Coordinator's response (cannot take a callback because of Steam's backend, or RJackson's incompetence; not sure which). Requires the GC to be ready (listen for the `ready` event before calling).
@@ -662,6 +670,14 @@ TODO
 Emitted when GC responds to the `requestmatchDetails` method.
 
 See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client.proto#L1571) for `matchDetailsData`'s object structure.
+
+### `matchMinimalDetailsData` (`match_id`, `matchMinimalDetailsData`)
+* `match_id` - Match ID whom the data is associatd with.
+* `matchMinimalDetailsData` - The raw match details data object.
+
+Emitted when GC responds to the `requestMatchMinimalDetails` method.
+
+See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/5acc8bb72bb7fb79ad08723a431fcbfe90669230/Resources/Protobufs/dota/dota_gcmessages_client.proto#L621-L650) for `matchMinimalDetailsData`'s object structure.
 
 ### `matchmakingStatsData` (`searchingPlayersByGroup`, `disabledGroups`, `matchmakingStatsResponse`)
 * `searchingPlayersByGroup` - Current players searching for matches per group.
