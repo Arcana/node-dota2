@@ -11,12 +11,13 @@ Dota2.Dota2Client.prototype.requestMyTeams = function requestMyTeams(callback) {
     }
 
     if (this.debug) util.log("Requesting my own team data");
-    var payload = new Dota2.schema.CMsgDOTARequestTeamData({});
-    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCRequestTeamData,
+    var payload = new Dota2.schema.CMsgDOTAMyTeamInfoRequest({});
+    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCMyTeamInfoRequest,
                     payload, 
                     onTeamDataResponse, callback);
 }
-
+/*
+// DEPRECATED
 Dota2.Dota2Client.prototype.requestTeamProfile = function requestTeamProfile(team_id, callback) {
     // Request the profile of a given team
     callback = callback || null;
@@ -30,7 +31,7 @@ Dota2.Dota2Client.prototype.requestTeamProfile = function requestTeamProfile(tea
                     payload, 
                     onTeamProfileResponse, callback);
 }
-
+// DEPRECATED
 Dota2.Dota2Client.prototype.requestTeamIDByName = function requestTeamIDByName(team_name, callback) {
     // Request the ID of a given team
     callback = callback || null;
@@ -44,7 +45,7 @@ Dota2.Dota2Client.prototype.requestTeamIDByName = function requestTeamIDByName(t
                     payload, 
                     onTeamIDByNameResponse, callback);
 }
-
+// DEPRECATED
 Dota2.Dota2Client.prototype.requestTeamMemberProfile = function requestTeamMemberProfile(steam_id, callback) {
     // Request the profile of a given team member
     callback = callback || null;
@@ -58,7 +59,7 @@ Dota2.Dota2Client.prototype.requestTeamMemberProfile = function requestTeamMembe
                     payload, 
                     onTeamProfileResponse, callback);
 }
-
+*/
 Dota2.Dota2Client.prototype.requestProTeamList = function requestProTeamList(callback) {
     // Request the list of pro teams
     callback = callback || null;
@@ -75,19 +76,16 @@ Dota2.Dota2Client.prototype.requestProTeamList = function requestProTeamList(cal
 var handlers = Dota2.Dota2Client.prototype._handlers;
 
 var onTeamDataResponse = function onTeamDataResponse(message, callback) {
-    var teamDataResponse = Dota2.schema.CMsgDOTARequestTeamDataResponse.decode(message);
+    var teamDataResponse = Dota2.schema.CMsgDOTATeamsInfo.decode(message);
     
-    if (teamDataResponse.result === Dota2.schema.CMsgDOTARequestTeamDataResponse.Result.SUCCESS) {
-        if (this.debug) util.log("Received my teams response " + JSON.stringify(teamDataResponse));
-        this.emit("teamData", teamDataResponse.data);
-        if (callback) callback(null, teamDataResponse);
-    } else {
-        if (this.debug) util.log("Received a bad my teams response " + JSON.stringify(teamDataResponse));
-        if (callback) callback(teamDataResponse.result, teamDataResponse);
-    }
+    if (this.debug) util.log("Received my teams response " + JSON.stringify(teamDataResponse));
+    this.emit("teamData", teamDataResponse.teams, teamDataResponse.league_id);
+    if (callback) callback(null, teamDataResponse);
+    
 };
-handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCRequestTeamDataResponse] = onTeamDataResponse;
-
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCToClientTeamsInfo] = onTeamDataResponse;
+/*
+// DEPRECATED
 var onTeamProfileResponse = function onTeamProfileResponse(message, callback) {
     var teamProfileResponse = Dota2.schema.CMsgDOTATeamProfileResponse.decode(message);
     
@@ -101,7 +99,7 @@ var onTeamProfileResponse = function onTeamProfileResponse(message, callback) {
     }
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCTeamProfileResponse] = onTeamProfileResponse;
-
+// DEPRECATED
 var onTeamIDByNameResponse = function onTeamIDByNameResponse(message, callback) {
     var teamID = Dota2.schema.CMsgDOTATeamIDByNameResponse.decode(message);
     
@@ -115,7 +113,7 @@ var onTeamIDByNameResponse = function onTeamIDByNameResponse(message, callback) 
         if (callback) callback(teamID.eresult, teamID);
     }
 };
-handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCTeamIDByNameResponse] = onTeamIDByNameResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCTeamIDByNameResponse] = onTeamIDByNameResponse;*/
 
 var onProTeamListResponse = function onProTeamListResponse(message, callback) {
     var teams = Dota2.schema.CMsgDOTAProTeamListResponse.decode(message);
