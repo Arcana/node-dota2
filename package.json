@@ -8,6 +8,9 @@
     "protobufjs": "^5.0.0",
     "steam": "^1.2.0"
   },
+  "devDependencies":{
+    "should": "^8.4.0"
+  },
   "scripts": {
     "update": "bash update_proto.sh",
     "test":"node test/test.js"
