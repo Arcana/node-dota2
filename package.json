@@ -13,7 +13,7 @@
   },
   "scripts": {
     "update": "bash update_proto.sh",
-    "test":"node test/test.js"
+    "test":"mocha"
   },
   "readmeFilename": "README.md",
   "description": "A node-steam plugin for Dota 2.",
