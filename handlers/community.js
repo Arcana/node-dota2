@@ -1,4 +1,4 @@
-var Dota2 = require("../index"),
+ var Dota2 = require("../index"),
     util = require("util");
 
 Dota2._playerHistoryOptions = {
@@ -91,7 +91,8 @@ Dota2.Dota2Client.prototype.requestHallOfFame = function(week, callback) {
 
 Dota2.Dota2Client.prototype.requestPlayerInfo = function(account_ids) {
     account_ids = account_ids || [];
-    account_ids = Array.isArray(account_ids) ? account_ids : [account_ids];
+    account_ids = (Array.isArray(account_ids) ? account_ids : [account_ids]).map(id => {return {'account_id': id};});
+    console.log(account_ids);
     if (account_ids.length == 0) {
         if (this.debug) util.log("Account ids must be a single id or array of ids.");
         return null;
@@ -101,7 +102,7 @@ Dota2.Dota2Client.prototype.requestPlayerInfo = function(account_ids) {
     if (this.debug) util.log("Sending player info request.");
 
     var payload = new Dota2.schema.CMsgGCPlayerInfoRequest({
-        account_ids: account_ids
+        player_infos: account_ids
     });
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCPlayerInfoRequest, 
                     payload);

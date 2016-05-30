@@ -56,6 +56,10 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
                 // Dota2.on("hallOfFameData", function(week, featuredPlayers, featuredFarmer, hallOfFameResponse) {
                 //     console.log(JSON.stringify(hallOfFameResponse, null, 2));
                 // });
+                // Dota2.requestPlayerInfo(28956443);
+                // Dota2.on("playerInfoData", function (playerInfo) {
+                //     console.log(JSON.stringify(playerInfo, null, 2));
+                // });
                 // Callback based
                 // Dota2.requestProfileCard(28956443, function(err, body) {
                 //     if (err) throw err;
@@ -119,12 +123,12 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
                 //     });
                 // }, 60000);
                 /* LEAGUES */
-                // Dota2.requestLeaguesInMonth(10, 2013, function(err, data) { // November 2013
+                // Dota2.requestLeaguesInMonth(10, 2013, 0, function(err, data) { // November 2013
                 //     console.log('Found ' + data.leagues.length + ' leagues full of schedule data :D');
                 // });
                 // Dota2.requestLeaguesInMonth(10, 2013); // November 2013
-                // Dota2.on("leaguesInMonthData",  function(err, data) {
-                //     console.log('Found ' + data.leagues.length + ' leagues full of schedule data :D');
+                // Dota2.on("leaguesInMonthData",  function(month, year, leagues) {
+                //     console.log('Found ' + leagues.length + ' leagues full of schedule data :D');
                 // });
                 /* SOURCETV */
                 // Dota2.requestSourceTVGames({});

@@ -49,6 +49,21 @@ Dota2.Dota2Client.prototype.requestMatchDetails = function(match_id, callback) {
                     onMatchDetailsResponse, callback);
 };
 
+Dota2.Dota2Client.prototype.requestMatchMinimalDetails = function(match_ids, callback) {
+    callback = callback || null;
+    var _self = this;
+    
+    /* Sends a message to the Game Coordinator requesting `match_id`'s match details.  Listen for `matchData` event for Game Coordinator's response. */
+    if (this.debug) util.log("Sending match minimal details request");
+    
+    var payload = new Dota2.schema.CMsgClientToGCMatchesMinimalRequest({
+        "match_ids": match_ids
+    });
+    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCMatchesMinimalRequest, 
+                    payload, 
+                    onMatchMinimalDetailsResponse, callback);
+};
+
 Dota2.Dota2Client.prototype.requestMatchmakingStats = function() {
     /* Sends a message to the Game Coordinator requesting `match_id`'s match deails.  Listen for `matchData` event for Game Coordinator's response. */
     // Is not Job ID based - can't do callbacks.
@@ -107,6 +122,25 @@ var onMatchDetailsResponse = function onMatchDetailsResponse(message, callback) 
     }
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCMatchDetailsResponse] = onMatchDetailsResponse;
+
+var onMatchMinimalDetailsResponse = function onMatchMinimalDetailsResponse(message, callback) {
+    callback = callback || null;
+    var matchMinimalDetailsResponse = Dota2.schema.CMsgClientToGCMatchesMinimalResponse.decode(message);
+
+    if (matchMinimalDetailsResponse.matches) {
+        /*if (this.debug)*/
+        util.log("Received match minimal data for: " + matchMinimalDetailsResponse.matches.match_id);
+        this.emit("matchMinimalDetailsData",
+            matchMinimalDetailsResponse.matches.match_id,
+            matchMinimalDetailsResponse);
+        if (callback) callback(null, matchMinimalDetailsResponse);
+    } else {
+        if (this.debug) util.log("Received a bad matchMinimalDetailsResponse");
+		if (this.debug) console.log(JSON.stringify(matchMinimalDetailsResponse));
+        if (callback) callback(matchMinimalDetailsResponse.result, matchMinimalDetailsResponse);
+    }
+};
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCMatchesMinimalResponse] = onMatchMinimalDetailsResponse;
 
 var onMatchmakingStatsResponse = function onMatchmakingStatsResponse(message) {
     // Is not Job ID based - can't do callbacks.

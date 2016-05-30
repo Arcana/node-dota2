@@ -205,7 +205,12 @@ var steam = require("steam"),
 			});
 			
 			describe('#requestMatchDetails', function(){
-				it('should fetch data on a given match id'); // TODO
+				it('should fetch data on a given match id', function(done){
+					Dota2.requestMatchDetails(2038049617, function(err, details){
+						should.exist(details.replay_salt);
+						done(err);
+					});
+				});
 			});
 			
 			describe('#requestMatchmakingStats', function(){

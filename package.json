@@ -1,6 +1,6 @@
 {
   "name": "dota2",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "dependencies": {
     "bignumber.js": "^2.1.0",
     "deferred": "^0.7.2",
@@ -9,7 +9,8 @@
     "steam": "^1.2.0"
   },
   "scripts": {
-    "update": "bash update_proto.sh"
+    "update": "bash update_proto.sh",
+    "test":"node test/test.js"
   },
   "readmeFilename": "README.md",
   "description": "A node-steam plugin for Dota 2.",

@@ -213,11 +213,12 @@ Sends a message to the Game Coordinator requesting `account_id`'s profile data. 
 
 Sends a message to the Game Coordinator requesting `account_id`'s profile card. Provide a callback or listen for `profileCardData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
-#### requestPassportData(account_id, [callback])
+#### requestPassportData(account_id, [callback]) - DEPRECATED
 * `account_id` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose passport data you wish to view.
 * `[callback]` - optional callback, returns args: `err, response`.
 
 Sends a message to the Game Coordinator requesting `account_id`'s passport data. Provide a callback or listen for `passportData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+This function is no longer supported by Valve, it's only left here for historical purposes. It will be removed in a future release.
 
 #### requestHallOfFame([week], [callback])
 * `[week]` - The week of which you wish to know the Hall of Fame members; will return latest week if omitted.  Weeks also randomly start at 2233 for some reason, valf please.
@@ -262,6 +263,14 @@ Requests matches from the GC matching the given criteria.  Provide a callback or
 Sends a message to the Game Coordinator requesting `match_id`'s match details. Provide a callback or listen for `matchDetailsData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
 Note:  There is a server-side rate-limit of 100 requests per 24 hours on this method.
+
+#### requestMatchMinimalDetails(match_ids, [callback])
+ * `match_ids` - The match IDs that you want concise details of
+ * `[callback]` - optional callback, returns args: `err, response`.
+
+Sends a message to the Game Coordinator requesting the match details for matches corresponding to `match_ids`. Provide a callback or listen for `matchMinimalDetailsData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+
+Note:  `jimmydorry` was lazy when implementing this, so the `match_ids` variable only accepts a single matchID right now. It was only implemented to prove that it was leaking data for anonymous users. Someone that wants to use this method should go fixup the copy-paste job, to make it more useful.
 
 #### requestMatchmakingStats()
 
@@ -661,6 +670,14 @@ TODO
 Emitted when GC responds to the `requestmatchDetails` method.
 
 See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client.proto#L1571) for `matchDetailsData`'s object structure.
+
+### `matchMinimalDetailsData` (`match_id`, `matchMinimalDetailsData`)
+* `match_id` - Match ID whom the data is associatd with.
+* `matchMinimalDetailsData` - The raw match details data object.
+
+Emitted when GC responds to the `requestMatchMinimalDetails` method.
+
+See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/5acc8bb72bb7fb79ad08723a431fcbfe90669230/Resources/Protobufs/dota/dota_gcmessages_client.proto#L621-L650) for `matchMinimalDetailsData`'s object structure.
 
 ### `matchmakingStatsData` (`searchingPlayersByGroup`, `disabledGroups`, `matchmakingStatsResponse`)
 * `searchingPlayersByGroup` - Current players searching for matches per group.
