@@ -1,4 +1,4 @@
-var Dota2 = require("../index"),
+ var Dota2 = require("../index"),
     util = require("util");
 
 Dota2._playerHistoryOptions = {
@@ -57,12 +57,13 @@ Dota2.Dota2Client.prototype.requestProfileCard = function(account_id, callback) 
                     payload, 
                     onProfileCardResponse, callback);
 };
-
+/*
+// DEPRECATED
 Dota2.Dota2Client.prototype.requestPassportData = function(account_id, callback) {
     callback = callback || null;
     var _self = this;
     
-    /* Sends a message to the Game Coordinator requesting `accountId`'s passport data.  Listen for `passportData` event for Game Coordinator's response. */
+    // Sends a message to the Game Coordinator requesting `accountId`'s passport data.  Listen for `passportData` event for Game Coordinator's response. 
     if (this.debug) util.log("Sending passport data request");
     
     var payload = new Dota2.schema.CMsgPassportDataRequest({
@@ -72,6 +73,7 @@ Dota2.Dota2Client.prototype.requestPassportData = function(account_id, callback)
                     payload,
                     onPassportDataResponse, callback);
 };
+*/
 
 Dota2.Dota2Client.prototype.requestHallOfFame = function(week, callback) {
     week = week || null;
@@ -91,7 +93,8 @@ Dota2.Dota2Client.prototype.requestHallOfFame = function(week, callback) {
 
 Dota2.Dota2Client.prototype.requestPlayerInfo = function(account_ids) {
     account_ids = account_ids || [];
-    account_ids = Array.isArray(account_ids) ? account_ids : [account_ids];
+    account_ids = (Array.isArray(account_ids) ? account_ids : [account_ids]).map(id => {return {'account_id': id};});
+    console.log(account_ids);
     if (account_ids.length == 0) {
         if (this.debug) util.log("Account ids must be a single id or array of ids.");
         return null;
@@ -101,7 +104,7 @@ Dota2.Dota2Client.prototype.requestPlayerInfo = function(account_ids) {
     if (this.debug) util.log("Sending player info request.");
 
     var payload = new Dota2.schema.CMsgGCPlayerInfoRequest({
-        account_ids: account_ids
+        player_infos: account_ids
     });
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCPlayerInfoRequest, 
                     payload);
@@ -165,7 +168,8 @@ var onProfileCardResponse = function onProfileCardResponse(message, callback) {
     if (callback) callback(null, profileCardResponse);
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCGetProfileCardResponse] = onProfileCardResponse;
-
+/*
+// DEPRECATED
 var onPassportDataResponse = function onPassportDataResponse(message, callback) {
     callback = callback || null;
     var passportDataResponse = Dota2.schema.CMsgPassportDataResponse.decode(message);
@@ -175,7 +179,7 @@ var onPassportDataResponse = function onPassportDataResponse(message, callback) 
     if (callback) callback(null, passportDataResponse);
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCPassportDataResponse] = onPassportDataResponse;
-
+*/
 var onHallOfFameResponse = function onHallOfFameResponse(message, callback) {
     callback = callback || null;
     var hallOfFameResponse = Dota2.schema.CMsgDOTAHallOfFameResponse.decode(message);

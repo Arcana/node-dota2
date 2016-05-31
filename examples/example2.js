@@ -1,3 +1,13 @@
+var steam = require("steam"),
+    util = require("util"),
+    fs = require("fs"),
+    crypto = require("crypto"),
+    dota2 = require("./"),
+    steamClient = new steam.SteamClient(),
+    steamUser = new steam.SteamUser(steamClient),
+    steamFriends = new steam.SteamFriends(steamClient),
+    Dota2 = new dota2.Dota2Client(steamClient, true);
+
 global.config = require("./config");
 
 var onSteamLogOn = function onSteamLogOn(logonResp) {
@@ -34,16 +44,16 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
             // COMMUNITY
 
             var accId = 63470426;
-            var playerInfo = 0;
+            // var playerInfo = 0;
             var playerInfo2 = 0;
-            var playerInfo3 = 0;
+            // var playerInfo3 = 0;
 
-            if(playerInfo == 1){ // not working - maybe disabled by Valve
-                Dota2.requestProfile(accId, true);
-                Dota2.on("profileData", function (accId, data) {
-                    util.log(JSON.stringify(data));
-                });
-            }
+            // if(playerInfo == 1){ // not working - maybe disabled by Valve
+            //     Dota2.requestProfile(accId, true);
+            //     Dota2.on("profileData", function (accId, data) {
+            //         util.log(JSON.stringify(data));
+            //     });
+            // }
 
             if(playerInfo2 == 1){
                 Dota2.requestProfileCard(accId, function (accId, data) {
@@ -51,11 +61,11 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
                 });
             }
 
-            if(playerInfo3 == 1){
-                Dota2.requestPassportData(accId, function (accId, data) {
-                    util.log(JSON.stringify(data));
-                });
-            }
+            // if(playerInfo3 == 1){
+            //     Dota2.requestPassportData(accId, function (accId, data) {
+            //         util.log(JSON.stringify(data));
+            //     });
+            // }
 
             // ----------------------------------
 
@@ -95,6 +105,17 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
             }
 
             // ----------------------------------
+            
+            // TEAM
+            
+            var myTeamInfo = 0;
+            
+            if (myTeamInfo == 1) {
+                Dota2.requestMyTeams(function(err, data){
+                    util.log(JSON.stringify(data));
+                });
+            }
+            
         });
 
         Dota2.on("unready", function onUnready() {
