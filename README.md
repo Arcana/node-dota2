@@ -4,7 +4,6 @@ node-dota2
 [![NPM version](https://img.shields.io/npm/v/dota2.svg)](https://npmjs.org/package/dota2 "View this project on NPM")
 [![Build Status](https://img.shields.io/travis/RJacksonm1/node-dota2.svg)](https://travis-ci.org/RJacksonm1/node-dota2 "View this project's build information")
 [![Dependency Status](https://img.shields.io/david/RJacksonm1/node-dota2.svg)](https://david-dm.org/RJacksonm1/node-dota2 "Check this project's dependencies")
-[![devDependency Status](https://img.shields.io/david/dev/RJacksonm1/node-dota2.svg)](https://david-dm.org/RJacksonm1/node-dota2#info=devDependencies "Check this project's dev dependencies")
 
 A node-steam plugin for Dota 2, consider it in alpha state.
 
@@ -12,12 +11,16 @@ Check out my blog post (my only blog post), [Extending node-dota2](https://blog.
 
 ## Upgrade guide
 
-### `2.*.*` to `3.0.0`
+### `3.*.*` to `4.0.0`
 
-A few backwards incompatible API changes were included with version 3.0.0.
+A few backwards incompatible API changes were included with version 4.0.0.
 
-* The `requestLeaguesInMonth` function now takes an extra `tier`parameter
-* The `leaguesInMonthData` event now has three parameters: month, year, leagues.
+* The following functions are no longer supported by Valve so they have been commented:
+  * `requestPassportData`
+  * `requestTeamProfile`
+  * `requestTeamIDByName`
+  * `requestTeamMemberProfile`
+* The `teamData` event now throws an extra parameter `league_id`
 
 
 ## Initializing
@@ -161,19 +164,19 @@ Attempts to set a user's role within a guild; use this with your own account ID 
 
 Requests the authenticated user's team data. 
 
-#### requestTeamProfile(team_id, [callback])
+#### requestTeamProfile(team_id, [callback]) - DEPRECATED
 * `team_id` - ID of a team
 * `[callback]` - optional callback, returns args: `err, response`.
 
 Requests the profile for a given team.
 
-#### requestTeamMemberProfile(steam_id, [callback])
+#### requestTeamMemberProfile(steam_id, [callback]) - DEPRECATED
 * `steam_id` - Steam ID of the user whose team profile you want
 * `[callback]` - optional callback, returns args: `err, response`.
 
 Requests the profile of the team a given user belongs to.
 
-#### requestTeamIDByName(team_name, [callback])
+#### requestTeamIDByName(team_name, [callback]) - DEPRECATED
 * `team_name` - Name of a team
 * `[callback]` - optional callback, returns args: `err, response`.
 
@@ -198,7 +201,7 @@ Requests the given player's match history. The responses are paginated, but you 
 
 Provide a callback or listen for the `playerMatchHistoryData` for the GC's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
-#### requestProfile(account_id, request_name, [callback])
+#### requestProfile(account_id, request_name, [callback]) - DEPRECATED
 * `account_id` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose profile data you wish to view.
 * `request_name` - Boolean, whether you want the GC to return the accounts current display name.
 * `[callback]` - optional callback, returns args: `err, response`.
@@ -546,7 +549,7 @@ Emitted when information on a particular guild is retrieved.
 
 You can respond with `cancelInviteToGuild` or `setGuildAccountRole`.
 
-### `teamData` (`teams`)
+### `teamData` (`teams`, `league_id`)
 * `teams` - Array containing the teams the user is in or which are featured on the user's profile. Each object has the following properties:
   * `on_team` - Whether or not the user is on this team
   * `profile_team` - Whether or not this is a team featured on the user's profile
@@ -558,12 +561,13 @@ You can respond with `cancelInviteToGuild` or `setGuildAccountRole`.
   * `gamesplayed` - Total amount of games played
   * `rank` - Team MMR
   * ...
+* `league_id` - League ID (no clue as of its meaning, feel free to suggest)
 
 Emitted when GC responds to the `requestMyTeams` method.
 
 See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client.proto#L776) for `team`'s object structure.
 
-### `teamProfile` (`team_id`, `team_info`)
+### `teamProfile` (`team_id`, `team_info`) - DEPRECATED
 * `team_id` - ID of the team.
 * `team_info` - Info about the team. This contains among others:
   * `name` - Name of the team
@@ -578,7 +582,7 @@ Emitted when GC responds to the `requestTeamProfile` and `requestTeamMemberProfi
 
 See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client.proto#L776) for `team_info`'s object structure.
 
-### `teamID` (`team_id`)
+### `teamID` (`team_id`) - DEPRECATED
 * `team_id` - ID of the team. Null if none was found.
 
 Emitted when GC responds to the `requestTeamIDByName` method.
@@ -594,7 +598,7 @@ Emitted when GC responds to the `requestTeamIDByName` method.
 
 Emitted when GC responds to the `requestProTeamList` method.
 
-### `profileData` (`account_id`, `profileData`)
+### `profileData` (`account_id`, `profileData`) - DEPRECATED
 * `account_id` - Account ID whom the data is associated with.
 * `profileData` - The raw profile data object.
 
@@ -643,7 +647,7 @@ Emitted when GC responds to the `requestTrophyList` method.
 
 TODO
 
-### `passportData` (`account_id`, `passportData`)
+### `passportData` (`account_id`, `passportData`) - DEPRECATED
 * `account_id` - Account ID whom the passport belongs to.
 * `passportData` - The raw passport data object.
 

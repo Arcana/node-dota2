@@ -12,4 +12,11 @@ wget https://raw.githubusercontent.com/SteamDatabase/GameTracking/master/Protobu
 wget https://raw.githubusercontent.com/SteamDatabase/GameTracking/master/Protobufs/dota/steammessages.proto
 wget https://raw.githubusercontent.com/SteamDatabase/GameTracking/master/Protobufs/dota/econ_gcmessages.proto
 wget https://raw.githubusercontent.com/SteamDatabase/GameTracking/master/Protobufs/dota/gcsystemmsgs.proto
+wget https://raw.githubusercontent.com/SteamDatabase/GameTracking/master/Protobufs/dota/dota_gcmessages_msgid.proto
+wget https://raw.githubusercontent.com/SteamDatabase/GameTracking/master/Protobufs/dota/dota_gcmessages_client_chat.proto
+wget https://raw.githubusercontent.com/SteamDatabase/GameTracking/master/Protobufs/dota/dota_gcmessages_client_match_management.proto
+wget https://raw.githubusercontent.com/SteamDatabase/GameTracking/master/Protobufs/dota/dota_client_enums.proto
+wget https://raw.githubusercontent.com/SteamDatabase/GameTracking/master/Protobufs/dota/dota_gcmessages_client_guild.proto
+wget https://raw.githubusercontent.com/SteamDatabase/GameTracking/master/Protobufs/dota/dota_gcmessages_client_watch.proto 
+wget https://raw.githubusercontent.com/SteamDatabase/GameTracking/master/Protobufs/dota/dota_gcmessages_client_team.proto 
 popd
