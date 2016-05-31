@@ -182,17 +182,22 @@ var steam = require("steam"),
 				it('should fetch a paginated and filtered list of a player\'s matches'); // TODO
 			});
 			
-			describe('#requestProfile', function(){
-				it('should fetch an account\'s profile'); // TODO
+			// describe('#requestProfile', function(){
+			// 	it('should fetch an account\'s profile'); // TODO
+			// });
+			
+			describe('#requestProfileCard', function(done){
+				it('should fetch an account\'s profile card', function(done){
+					Dota2.requestProfileCard(parseInt(GABE_ACCOUNT_ID), function (err, data) {
+	                    should.exist(data.account_id);
+	                    done(err);
+	                });	
+				});
 			});
 			
-			describe('#requestProfileCard', function(){
-				it('should fetch an account\'s profile card'); // TODO
-			});
-			
-			describe('#requestPassportData', function(){
-				it('should fetch an account\'s passport (compendium) data'); // TODO
-			});
+			// describe('#requestPassportData', function(){
+			// 	it('should fetch an account\'s passport (compendium) data'); // TODO
+			// });
 			
 			describe('#requestHallOfFame', function(){
 				it('should fetch a given weeks hall of fame data'); // TODO
@@ -207,7 +212,7 @@ var steam = require("steam"),
 			describe('#requestMatchDetails', function(){
 				it('should fetch data on a given match id', function(done){
 					Dota2.requestMatchDetails(2038049617, function(err, details){
-						should.exist(details.replay_salt);
+						should.exist(details.match.replay_salt);
 						done(err);
 					});
 				});
