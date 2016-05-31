@@ -8,12 +8,13 @@
     "protobufjs": "^5.0.0",
     "steam": "^1.2.0"
   },
-  "devDependencies":{
+  "devDependencies": {
+    "mocha": "^2.5.3",
     "should": "^8.4.0"
   },
   "scripts": {
     "update": "bash update_proto.sh",
-    "test":"mocha"
+    "test": "mocha"
   },
   "readmeFilename": "README.md",
   "description": "A node-steam plugin for Dota 2.",
