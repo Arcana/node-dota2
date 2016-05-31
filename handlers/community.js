@@ -57,12 +57,13 @@ Dota2.Dota2Client.prototype.requestProfileCard = function(account_id, callback) 
                     payload, 
                     onProfileCardResponse, callback);
 };
-
+/*
+// DEPRECATED
 Dota2.Dota2Client.prototype.requestPassportData = function(account_id, callback) {
     callback = callback || null;
     var _self = this;
     
-    /* Sends a message to the Game Coordinator requesting `accountId`'s passport data.  Listen for `passportData` event for Game Coordinator's response. */
+    // Sends a message to the Game Coordinator requesting `accountId`'s passport data.  Listen for `passportData` event for Game Coordinator's response. 
     if (this.debug) util.log("Sending passport data request");
     
     var payload = new Dota2.schema.CMsgPassportDataRequest({
@@ -72,6 +73,7 @@ Dota2.Dota2Client.prototype.requestPassportData = function(account_id, callback)
                     payload,
                     onPassportDataResponse, callback);
 };
+*/
 
 Dota2.Dota2Client.prototype.requestHallOfFame = function(week, callback) {
     week = week || null;
@@ -166,7 +168,8 @@ var onProfileCardResponse = function onProfileCardResponse(message, callback) {
     if (callback) callback(null, profileCardResponse);
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCGetProfileCardResponse] = onProfileCardResponse;
-
+/*
+// DEPRECATED
 var onPassportDataResponse = function onPassportDataResponse(message, callback) {
     callback = callback || null;
     var passportDataResponse = Dota2.schema.CMsgPassportDataResponse.decode(message);
@@ -176,7 +179,7 @@ var onPassportDataResponse = function onPassportDataResponse(message, callback) 
     if (callback) callback(null, passportDataResponse);
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCPassportDataResponse] = onPassportDataResponse;
-
+*/
 var onHallOfFameResponse = function onHallOfFameResponse(message, callback) {
     callback = callback || null;
     var hallOfFameResponse = Dota2.schema.CMsgDOTAHallOfFameResponse.decode(message);

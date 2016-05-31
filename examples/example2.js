@@ -44,16 +44,16 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
             // COMMUNITY
 
             var accId = 63470426;
-            var playerInfo = 0;
+            // var playerInfo = 0;
             var playerInfo2 = 0;
             // var playerInfo3 = 0;
 
-            if(playerInfo == 1){ // not working - maybe disabled by Valve
-                Dota2.requestProfile(accId, true);
-                Dota2.on("profileData", function (accId, data) {
-                    util.log(JSON.stringify(data));
-                });
-            }
+            // if(playerInfo == 1){ // not working - maybe disabled by Valve
+            //     Dota2.requestProfile(accId, true);
+            //     Dota2.on("profileData", function (accId, data) {
+            //         util.log(JSON.stringify(data));
+            //     });
+            // }
 
             if(playerInfo2 == 1){
                 Dota2.requestProfileCard(accId, function (accId, data) {
@@ -105,6 +105,17 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
             }
 
             // ----------------------------------
+            
+            // TEAM
+            
+            var myTeamInfo = 0;
+            
+            if (myTeamInfo == 1) {
+                Dota2.requestMyTeams(function(err, data){
+                    util.log(JSON.stringify(data));
+                });
+            }
+            
         });
 
         Dota2.on("unready", function onUnready() {
