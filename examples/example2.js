@@ -143,16 +143,18 @@ onSteamError = function onSteamError(error) {
 };
 
 steamUser.on('updateMachineAuth', function(sentry, callback) {
-    fs.writeFileSync('sentry', sentry.bytes)
+    var hashedSentry = crypto.createHash('sha1').update(sentry.bytes).digest();
+    fs.writeFileSync('sentry', hashedSentry)
     util.log("sentryfile saved");
 
-    callback({ sha_file: crypto.createHash('sha1').update(sentry.bytes).digest() });
+    callback({ sha_file: hashedSentry});
 });
 
 var logOnDetails = {
     "account_name": global.config.steam_user,
     "password": global.config.steam_pass,
 };
+if (global.config.steam_guard_code) logOnDetails.auth_code = global.config.steam_guard_code;
 
 try {
     var sentry = fs.readFileSync('sentry');
