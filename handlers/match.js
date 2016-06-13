@@ -131,7 +131,7 @@ var onMatchMinimalDetailsResponse = function onMatchMinimalDetailsResponse(messa
         /*if (this.debug)*/
         util.log("Received match minimal data for: " + matchMinimalDetailsResponse.matches.match_id);
         this.emit("matchMinimalDetailsData",
-            matchMinimalDetailsResponse.matches.match_id,
+            matchMinimalDetailsResponse.last_match,
             matchMinimalDetailsResponse);
         if (callback) callback(null, matchMinimalDetailsResponse);
     } else {
@@ -142,14 +142,15 @@ var onMatchMinimalDetailsResponse = function onMatchMinimalDetailsResponse(messa
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCMatchesMinimalResponse] = onMatchMinimalDetailsResponse;
 
+// TODO: replace first two parameters by matchmakingStatsResponse.match_groups
 var onMatchmakingStatsResponse = function onMatchmakingStatsResponse(message) {
     // Is not Job ID based - can't do callbacks.
     var matchmakingStatsResponse = Dota2.schema.CMsgDOTAMatchmakingStatsResponse.decode(message);
 
     if (this.debug) util.log("Received matchmaking stats");
     this.emit("matchmakingStatsData",
-        matchmakingStatsResponse.searching_players_by_group_source2,
-        matchmakingStatsResponse.disabled_groups_source2,
+        matchmakingStatsResponse.matchgroups_version,
+        matchmakingStatsResponse.match_groups,
         matchmakingStatsResponse);
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCMatchmakingStatsResponse] = onMatchmakingStatsResponse;

@@ -26,22 +26,22 @@ Dota2.Dota2Client.prototype.requestPlayerMatchHistory = function(account_id, opt
                     onPlayerMatchHistoryResponse, callback);
 };
 
-Dota2.Dota2Client.prototype.requestProfile = function(account_id, request_name, callback) {
-    callback = callback || null;
-    var _self = this;
+// Dota2.Dota2Client.prototype.requestProfile = function(account_id, request_name, callback) {
+//     callback = callback || null;
+//     var _self = this;
     
-    /* Sends a message to the Game Coordinator requesting `accountId`'s profile data.  Listen for `profileData` event for Game Coordinator's response. */
-    if (this.debug) util.log("Sending profile request");
+//     /* Sends a message to the Game Coordinator requesting `accountId`'s profile data.  Listen for `profileData` event for Game Coordinator's response. */
+//     if (this.debug) util.log("Sending profile request");
     
-    var payload = new Dota2.schema.CMsgDOTAProfileRequest({
-        "account_id": account_id,
-        "request_name": request_name,
-        "engine": 1
-    });
-    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCProfileRequest, 
-                    payload, 
-                    onProfileResponse, callback);
-};
+//     var payload = new Dota2.schema.CMsgDOTAProfileRequest({
+//         "account_id": account_id,
+//         "request_name": request_name,
+//         "engine": 1
+//     });
+//     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCProfileRequest, 
+//                     payload, 
+//                     onProfileResponse, callback);
+// };
 
 Dota2.Dota2Client.prototype.requestProfileCard = function(account_id, callback) {
     callback = callback || null;

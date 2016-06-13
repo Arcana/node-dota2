@@ -899,6 +899,8 @@ message CMsgDOTAGetPlayerMatchHistoryResponse {
 		optional uint32 engine = 12;
 		optional bool active_battle_pass = 13;
 		optional bool seasonal_rank = 14;
+		optional uint32 tournament_id = 15;
+		optional uint32 tournament_round = 16;
 	}
 
 	repeated .CMsgDOTAGetPlayerMatchHistoryResponse.Match matches = 1;
