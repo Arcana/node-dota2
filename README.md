@@ -935,13 +935,13 @@ Use this to pass valid server region data to `createPracticeLobby`.
 Use this to pass valid game mode data to `createPracticeLobby`.
 
 ## Testing
-There is no automated test suite for node-dota2 (I've no idea how I'd make one for the stuff this does :o), however there the `test` directory does contain a Steam bot with commented-out dota2 methods; you can use this bot to test the library.
+There is a partial automated test suite for node-dota2 and the `examples` directory contains a Steam bot with commented-out dota2 methods; you can use this bot to test the library as well.
 
 ### Setting up
 * `npm install steam; npm install` in the repository root (install Steam first to work around a node-steam#222)
 * Copy `config.js.example` to `config.js` and edit appropriately
-* Run the test script: `node test.js`
+* Run the example script: `node example.js`
 * If you receive Error 63 you need to provide a Steam Guard code by setting the Steam Guard code in `config.js` and launching again.
-* Make sure to use at least version 0.12 of node js
+* Make sure to use at least version 4.4.5 of node js
 
 
