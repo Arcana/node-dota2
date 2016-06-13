@@ -60,6 +60,8 @@ Dota2.Dota2Client.prototype.requestTeamMemberProfile = function requestTeamMembe
                     onTeamProfileResponse, callback);
 }
 */
+
+// No longer gets a response from the GC
 Dota2.Dota2Client.prototype.requestProTeamList = function requestProTeamList(callback) {
     // Request the list of pro teams
     callback = callback || null;
@@ -115,6 +117,7 @@ var onTeamIDByNameResponse = function onTeamIDByNameResponse(message, callback) 
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCTeamIDByNameResponse] = onTeamIDByNameResponse;*/
 
+// No longer gets triggered
 var onProTeamListResponse = function onProTeamListResponse(message, callback) {
     var teams = Dota2.schema.CMsgDOTAProTeamListResponse.decode(message);
     
