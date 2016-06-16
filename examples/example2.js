@@ -89,9 +89,22 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
 
             if(creatingLobby == 1){ // sets only password, nothing more
                 var lobbyPassword = "ap";
-                var lobbyName = "Lobby Name";
+                var properties = {
+                    "game_name": "MyLobby",
+                    "server_region": 3,
+                    "game_mode": 2,
+                    "series_type": 2,
+                    "game_version": 1,
+                    "allow_cheats": false,
+                    "fill_with_bots": false,
+                    "allow_spectating": true,
+                    "pass_key": lobbyPassword,
+                    "radiant_series_wins": 0,
+                    "dire_series_wins": 0,
+                    "allchat": true
+                }
 
-                Dota2.createPracticeLobby(lobbyPassword, lobbyName, function(err, data){
+                Dota2.createPracticeLobby(lobbyPassword, properties, function(err, data){
                     // util.log(JSON.stringify(data));
                 });
             }
