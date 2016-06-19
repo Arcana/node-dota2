@@ -193,9 +193,11 @@ var onOtherLeftChannel = function onOtherLeftChannel(message) {
     // Check if it is me that left the channel
     if ("" + otherLeft.steam_id === "" + this._client.steamID) {
         if (this.debug) {
-            util.log("Left channel " + channel.channel_name);
-        } else {    
-            util.log("This probably should be physically impossible, but whatever: you managed to leave a channel you didn't know you were in, congratulations...");
+            if (channel) {
+                util.log("Left channel " + channel.channel_name);
+            } else {    
+                util.log("This probably should be physically impossible, but whatever: you managed to leave a channel you didn't know you were in, congratulations...");
+            }
         }
         this.emit("chatLeave",
             channel.channel_name,
