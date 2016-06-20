@@ -355,9 +355,9 @@ Sends a message to the Game Coordinator requesting to join a lobby.  Provide a c
   * `series_type`: Use the series type enum.
   * `radiant_series_wins`: # of games won so far, e.g. for a Bo3 or Bo5.
   * `dire_series_wins`: # of games won so far, e.g. for a Bo3 or Bo5.
-  * `allchat`: Enable all chat?
+  * `allchat`: Enable all chat for VOIP
   * `league_id`: The league this lobby is being created for. Optional
-  * `dota_tv_delay`: TODO.
+  * `dota_tv_delay`: Number of seconds the game should be delayed for DotaTV.
   * `custom_game_mode`: TODO.
   * `custom_map_name`: TODO.
   * `custom_difficulty`: TODO.
