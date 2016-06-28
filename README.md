@@ -8,6 +8,8 @@ node-dota2
 A node-steam plugin for Dota 2, consider it in alpha state.
 
 Check out my blog post (my only blog post), [Extending node-dota2](https://blog.rjackson.me/extending-node-dota2/), for a rough overview of adding new functionality to the library.
+A fair warning, while the way you search for new functionality is still the same, quite a lot has changed (and been simplified) implementation wise.
+It is now easier to implement new functionality than it was back when this blog was written.
 
 ## Upgrade guide
 
@@ -21,20 +23,37 @@ A few backwards incompatible API changes were included with version 4.0.0.
   * `requestTeamIDByName`
   * `requestTeamMemberProfile`
 * The `teamData` event now throws an extra parameter `league_id`
+* The `matchMakingStatsData` event's first two parameters changed as the old values no longer exist.
+* The `matchMinimalDetailsData` event now returns the `last_match` bool as first argument.
 
+## Installation and setup
+* `npm install steam; npm install` in the repository root (install Steam first to work around a node-steam#222)
+* Copy `config.js.example` to `config.js` and edit appropriately
+* Run the example script: `node example.js`
+* If you receive Error 63 you need to provide a Steam Guard code by setting the Steam Guard code in `config.js` and launching again.
+* Make sure to use at least version 4.4.5 of node js
 
 ## Initializing
 Parameters:
 * `steamClient` - Pass a SteamClient instance to use to send & receive GC messages.
 * `debug` - A boolean noting whether to print information about operations to console.
+* `debugMore` - A boolean noting whether to print extended debug information. Activating this will log messages for each proto message exchanged with the GC.
 
 ```js
 var Steam = require('steam'),
     steamClient = new Steam.SteamClient(),
     dota2 = require('dota2'),
-    Dota2 = new dota2.Dota2Client(steamClient, true);
+    Dota2 = new dota2.Dota2Client(steamClient, true, false);
 ```
 
+## Examples
+The `examples` directory contains two Dota2 bots as an example. One contains commented-out dota2 methods, the other has boolean activated methods. 
+Both examples show how to interact with the library.
+
+## Testing
+There is a partial automated test suite for node-dota2, which is located in the test directory. 
+You need to configure the `STEAM_USERNAME` and `STEAM_PASSWORD` environment variables to be able to run it.
+You can launch the tests by running the file with mocha.
 
 ##Properties
 ###AccountID
@@ -170,11 +189,15 @@ Requests the authenticated user's team data.
 
 Requests the profile for a given team.
 
+**Warning** protobuf no longer exists, function is now deprecated.
+
 #### requestTeamMemberProfile(steam_id, [callback]) - DEPRECATED
 * `steam_id` - Steam ID of the user whose team profile you want
 * `[callback]` - optional callback, returns args: `err, response`.
 
 Requests the profile of the team a given user belongs to.
+
+**Warning** protobuf no longer exists, function is now deprecated.
 
 #### requestTeamIDByName(team_name, [callback]) - DEPRECATED
 * `team_name` - Name of a team
@@ -182,10 +205,14 @@ Requests the profile of the team a given user belongs to.
 
 Requests the ID for a given team name.
 
-#### requestProTeamList([callback])
+**Warning** protobuf no longer exists, function is now deprecated.
+
+#### requestProTeamList([callback]) - STATUS UNKNOWN
 * `[callback]` - optional callback, returns args: `err, response`.
 
-Requests the list of pro teams
+Requests the list of pro teams.
+
+**Warning** this request no longer triggers a response from the GC. This might be temporary.
 
 ### Community
 #### requestPlayerMatchHistory(account_id, [options], [callback])
@@ -208,7 +235,7 @@ Provide a callback or listen for the `playerMatchHistoryData` for the GC's respo
 
 Sends a message to the Game Coordinator requesting `account_id`'s profile data. Provide a callback or listen for `profileData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
-**This functionality is currently disabled by Valve**
+**Warning** Valve's privacy policy has become stricter since reborn. This function is now reserved for internal use.
 
 #### requestProfileCard (account_id, [callback])
 * `account_id` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose profile card you wish to view.
@@ -272,8 +299,6 @@ Note:  There is a server-side rate-limit of 100 requests per 24 hours on this me
  * `[callback]` - optional callback, returns args: `err, response`.
 
 Sends a message to the Game Coordinator requesting the match details for matches corresponding to `match_ids`. Provide a callback or listen for `matchMinimalDetailsData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
-
-Note:  `jimmydorry` was lazy when implementing this, so the `match_ids` variable only accepts a single matchID right now. It was only implemented to prove that it was leaking data for anonymous users. Someone that wants to use this method should go fixup the copy-paste job, to make it more useful.
 
 #### requestMatchmakingStats()
 
@@ -345,9 +370,9 @@ Sends a message to the Game Coordinator requesting to join a lobby.  Provide a c
   * `series_type`: Use the series type enum.
   * `radiant_series_wins`: # of games won so far, e.g. for a Bo3 or Bo5.
   * `dire_series_wins`: # of games won so far, e.g. for a Bo3 or Bo5.
-  * `allchat`: Enable all chat?
+  * `allchat`: Enable all chat for VOIP
   * `league_id`: The league this lobby is being created for. Optional
-  * `dota_tv_delay`: TODO.
+  * `dota_tv_delay`: Number of seconds the game should be delayed for DotaTV.
   * `custom_game_mode`: TODO.
   * `custom_map_name`: TODO.
   * `custom_difficulty`: TODO.
@@ -675,17 +700,17 @@ Emitted when GC responds to the `requestmatchDetails` method.
 
 See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client.proto#L1571) for `matchDetailsData`'s object structure.
 
-### `matchMinimalDetailsData` (`match_id`, `matchMinimalDetailsData`)
-* `match_id` - Match ID whom the data is associatd with.
+### `matchMinimalDetailsData` (`matchMinimalDetailsData`)
+* `last_match` - Bool, usage unknown
 * `matchMinimalDetailsData` - The raw match details data object.
 
 Emitted when GC responds to the `requestMatchMinimalDetails` method.
 
 See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/5acc8bb72bb7fb79ad08723a431fcbfe90669230/Resources/Protobufs/dota/dota_gcmessages_client.proto#L621-L650) for `matchMinimalDetailsData`'s object structure.
 
-### `matchmakingStatsData` (`searchingPlayersByGroup`, `disabledGroups`, `matchmakingStatsResponse`)
-* `searchingPlayersByGroup` - Current players searching for matches per group.
-* `disabledGroups` - Bitmask corresponding to groups in `searchingPlayersByGroup`. Groups marked as disabled will have a value of 0.
+### `matchmakingStatsData` (`matchgroups_version`, `match_groups`, `matchmakingStatsResponse`)
+* `matchgroups_version` - Version of the current list of match groups.
+* `match_groups` - Array of CMsgMatchmakingMatchGroupInfo objects. Contains info on the number of people searching and ping penalty.
 * `matchmakingStatsResponse` - Raw response object.
 
 Emitted when te GC response to the `requestMatchmakingStats` method.  The array order dictates which matchmaking groups the figure belongs to. 
@@ -924,14 +949,5 @@ Use this to pass valid server region data to `createPracticeLobby`.
 
 Use this to pass valid game mode data to `createPracticeLobby`.
 
-## Testing
-There is no automated test suite for node-dota2 (I've no idea how I'd make one for the stuff this does :o), however there the `test` directory does contain a Steam bot with commented-out dota2 methods; you can use this bot to test the library.
-
-### Setting up
-* `npm install steam; npm install` in the repository root (install Steam first to work around a node-steam#222)
-* Copy `config.js.example` to `config.js` and edit appropriately
-* Run the test script: `node test.js`
-* If you receive Error 63 you need to provide a Steam Guard code by setting the Steam Guard code in `config.js` and launching again.
-* Make sure to use at least version 0.12 of node js
 
 

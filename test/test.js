@@ -109,85 +109,102 @@ var steam = require("steam"),
 		before(beConnectedToSteam);
 		before(beLoggedInToSteam);
 		
-		describe('Core', function() {
-			describe('#launch', function() {
+		describe('Core', function () {
+			describe('#launch', function () {
 				it('should connect to Dota2 GC (recv \'ready\' event', connectToDota2);
 			});
 			
-			describe('#exit', function() {
+			describe('#exit', function () {
 				// TODO: Not sure how we test this. Need to run it after all the other tests too.
 				it('should disconnect from Dota2 GC');
 			});
 		});
 		
-		describe('Utilities', function() {
-			describe('#ToAccountID', function() {
+		describe('Utilities', function () {
+			describe('#ToAccountID', function () {
 				it('should convert a 64-bit Steam ID into a 32-bit account ID', convertSteamIDToAccountID);
 			});
 			
-			describe('#ToSteamID', function() {
+			describe('#ToSteamID', function () {
 				it('should convert a 32-bit account ID into a 64-bit Steam ID ', convertAccountIDToSteamID);
 			});
 		});
 		
-		describe('Inventory', function() {
+		describe('Inventory', function () {
 			// TODO: No idea how we test these.
-			describe('#setItemPositions', function() {
+			describe('#setItemPositions', function () {
 				it('should move the given items to the given positions');
 			});
 			
-			describe('#deleteItem', function() {
+			describe('#deleteItem', function () {
 				it('should delete the given item');
 			});
 		});
 		
-		describe('Chat', function() {
-			describe('#joinChat', function() {
+		describe('Chat', function () {
+			describe('#joinChat', function () {
 				it('should join a chat channel'); // TODO
 			});
 			
-			describe('#leaveChat', function() {
+			describe('#leaveChat', function () {
 				it('should leave a chat channel'); // TODO
 			});
 			
-			describe('#sendMessage', function() {
+			describe('#sendMessage', function () {
 				it('should a message to a chat channel'); // TODO
 			});
 			
-			describe('#requestChatChannels', function() {
-				it('should fetch a list of chat channels from the GC'); // TODO
+			describe('#requestChatChannels', function () {
+				it('should fetch a list of chat channels from the GC', function (done) {
+					Dota2.on('chatChannelsData', function (channels) {
+						should.exist(channels);
+						should(channels.length).above(0);
+						should.exist(channels[0].channel_name);
+						channels[0].num_members.should.be.aboveOrEqual(0);
+						should.exist(channels[0].channel_type);
+						done();
+					});
+					Dota2.requestChatChannels();
+				});
 			});
 		});
 		
-		describe('Guild', function() {
-			describe('#requestGuildData', function() {
+		describe('Guild', function () {
+			describe('#requestGuildData', function () {
 				it('should return a list of guid IDs and a list of any open parties they have'); // TODO
 			});
 			
-			describe('#inviteToGuild', function(){
+			describe('#inviteToGuild', function () {
 				it('should invite an account to join a guild'); // TODO
 			});
 			
-			describe('#cancelInviteToGuild', function(){
+			describe('#cancelInviteToGuild', function () {
 				it('should cancel a pending guild invitation'); // TODO
 			});
 			
-			describe('#setGuildAccountRole', function(){
+			describe('#setGuildAccountRole', function () {
 				it('should set a given account\'s role within a guild'); // TODO
 			});
 		});
 		
-		describe('Community', function() {
-			describe('#requestPlayerMatchHistory', function(){
-				it('should fetch a paginated and filtered list of a player\'s matches'); // TODO
+		describe('Community', function () {
+			describe('#requestPlayerMatchHistory', function () {
+				it('should fetch a paginated and filtered list of a player\'s matches', function (done) {
+					Dota2.requestPlayerMatchHistory(parseInt(GABE_ACCOUNT_ID), null, function (err, data) {
+						should.exist(data);
+						should.exist(data.matches);
+						data.matches.length.should.be.aboveOrEqual(0);
+						done(err);
+					});
+				});
 			});
 			
-			// describe('#requestProfile', function(){
+			// describe('#requestProfile', function () {
 			// 	it('should fetch an account\'s profile'); // TODO
 			// });
 			
-			describe('#requestProfileCard', function(done){
-				it('should fetch an account\'s profile card', function(done){
+			describe('#requestProfileCard', function (done){
+				it('should fetch an account\'s profile card', function (done) {
 					Dota2.requestProfileCard(parseInt(GABE_ACCOUNT_ID), function (err, data) {
 	                    should.exist(data.account_id);
 	                    done(err);
@@ -195,21 +212,51 @@ var steam = require("steam"),
 				});
 			});
 			
-			// describe('#requestPassportData', function(){
+			// describe('#requestPassportData', function () {
 			// 	it('should fetch an account\'s passport (compendium) data'); // TODO
 			// });
 			
-			describe('#requestHallOfFame', function(){
+			describe('#requestHallOfFame', function () {
 				it('should fetch a given weeks hall of fame data'); // TODO
 			});
 		});
 		
-		describe('Matches', function() {
-			describe('#requestMatches', function(){
-				it('should fetch a list of matches matching the given search criteria'); // TODO
+		describe('Matches', function () {
+			describe('#requestMatches', function () {
+				it('should fetch a list of matches matching the given search criteria', function (done) {
+					Dota2.requestMatches([], function(err, matchesData) {
+						should.exist(matchesData);
+						matchesData.total_results.should.be.aboveOrEqual(0);
+						matchesData.results_remaining.should.be.aboveOrEqual(0);
+						should.exist(matchesData.matches);
+						done(err);
+					});
+				});
 			});
 			
-			describe('#requestMatchDetails', function(){
+			describe('#requestMatchMinimalDetails', function () {
+				it ('should fetch a list of minimal match data corresponding to the given ids', done => {
+					Dota2.requestMatchMinimalDetails([2466191302], function (err, data) {
+						should.exist(data);
+						should.exist(data.matches);
+						should.exist(data.matches[0].match_id);
+						data.matches[0].match_id.toString().should.be.eql('2466191302');
+						should.exist(data.matches[0].match_outcome);
+						should.exist(data.matches[0].players)
+						data.matches[0].players.length.should.be.above(0);
+						should.exist(data.matches[0].players[0].account_id);
+						should.exist(data.matches[0].players[0].hero_id);
+						should.exist(data.matches[0].players[0].kills);
+						should.exist(data.matches[0].players[0].deaths);
+						should.exist(data.matches[0].players[0].assists);
+						should.exist(data.matches[0].players[0].items);
+						should.exist(data.matches[0].players[0].player_slot);
+						done(err);
+					});
+				});
+			});
+			
+			describe('#requestMatchDetails', function () {
 				it('should fetch data on a given match id', function(done){
 					Dota2.requestMatchDetails(2038049617, function(err, details){
 						should.exist(details.match.replay_salt);
@@ -218,96 +265,165 @@ var steam = require("steam"),
 				});
 			});
 			
-			describe('#requestMatchmakingStats', function(){
-				it('should fetch some data on the current state of matchmaking'); // TODO
+			describe('#requestMatchmakingStats', function () {
+				it('should fetch some data on the current state of matchmaking', function(done){
+					Dota2.on('matchmakingStatsData', function (version, match_groups, data) {
+						should.exist(data.match_groups);
+						should(match_groups.length).above(0);
+						should.exist(match_groups[0].players_searching);
+						should.exist(match_groups[0].status);
+						done();
+					});
+					Dota2.requestMatchmakingStats();
+				});
 			});
 		});
 		
-		describe('Parties', function() {
-			describe('#respondPartyInvite', function(){
+		describe('Parties', function () {
+			describe('#respondPartyInvite', function () {
 				it('should respond to an incoming party invite'); // TODO
 			});
 			
-			describe('#inviteToParty', function(){
+			describe('#inviteToParty', function () {
 				it('should invite a given account ID to a party'); // TODO
 			});
 			
-			describe('#kickFromParty', function(){
+			describe('#kickFromParty', function () {
 				it('should kick a given user from a party'); // TODO
 			});
 			
-			describe('#setPartyCoach', function(){
+			describe('#setPartyCoach', function () {
 				it('should set the node-dota2 instance to be this party\'s coach'); // TODO
 			});
 			
-			describe('#leaveParty', function(){
+			describe('#leaveParty', function () {
 				it('should leave the party'); // TODO
 			});
 		});
 		
-		describe('Lobbies', function() {
-			describe('#joinPracticeLobby', function(){
+		describe('Lobbies', function () {
+			describe('#joinPracticeLobby', function () {
 				it('should join a lobby with the given id'); // TODO
 			});
 			
-			describe('#createPracticeLobby', function(){
+			describe('#createPracticeLobby', function () {
 				it('should create a lobby'); // TODO
 			});
 			
-			describe('#createTournamentLobby', function(){
+			describe('#createTournamentLobby', function () {
 				it('should create a tournament lobby'); // TODO
 			});
 			
-			describe('#balancedShuffleLobby', function(){
+			describe('#balancedShuffleLobby', function () {
 				it('should shuffle the teams within the lobby'); // TODO
 			});
 			
-			describe('#flipLobbyTeams', function(){
+			describe('#flipLobbyTeams', function () {
 				it('should flip the teams within the lobby'); // TODO
 			});
 			
-			describe('#configPracticeLobby', function(){
+			describe('#configPracticeLobby', function () {
 				it('should (re)configure the lobby'); // TODO
 			});
 			
-			describe('#launchPracticeLobby', function(){
+			describe('#launchPracticeLobby', function () {
 				it('should launch the lobby and begin a match'); // TODO
 			});
 			
-			describe('#inviteToLobby', function(){
+			describe('#inviteToLobby', function () {
 				it('should invite the given account to a lobby'); // TODO
 			});
 			
-			describe('#practiceLobbyKick', function(){
+			describe('#practiceLobbyKick', function () {
 				it('should kick a given account from a lobby'); // TODO
 			});
 			
-			describe('#leavePracticeLobby', function(){
+			describe('#leavePracticeLobby', function () {
 				it('should leave a lobby'); // TODO
 			});
 			
-			describe('#requestPracticeLobbyList', function(){
+			describe('#requestPracticeLobbyList', function () {
 				it('should do something'); // TODO
 			});
 			
-			describe('#requestFriendPractiseLobbyList', function(){
+			describe('#requestFriendPractiseLobbyList', function () {
 				it('should do something'); // TODO
 			});
 		});
 		
-		describe('Leagues', function() {
-			describe('#requestLeaguesInMonth', function(){
-				it('should fetch data on leages being played in the given month'); // TODO
+		describe('Leagues', function () {
+			describe('#requestLeaguesInMonth', function () {
+				it('should fetch data on leages being played in the given month', function (done) {
+					Dota2.on('leaguesInMonthData', function (month, year, leagues){
+						should.exist(month);
+						should.exist(year);
+						should(leagues.length).above(0);
+						should.exist(leagues[0].league_id);
+						should(leagues[0].schedule.length).above(0);
+						done();
+					});
+					Dota2.requestLeaguesInMonth(8,2015);
+				}); 
 			});
 			
-			describe('#requestLeagueInfo', function(){
-				it('should fetch data on all official leagues'); // TODO
+			describe('#requestLeagueInfo', function () {
+				it('should fetch data on all official leagues', function (done) {
+					Dota2.on('leagueData', function (leagues){
+						should(leagues.length).above(0);
+						should.exist(leagues[0].league_id);
+						done();
+					});
+					Dota2.requestLeagueInfo();
+				}); 
+			});
+			
+			describe('#requestTopLeagueMatches', function () {
+				it('should fetch data on all top league matches', function (done) {
+					Dota2.on('topLeagueMatchesData', function (matches){
+						should(matches.length).above(0);
+						should.exist(matches[0].match_id);
+						should.exist(matches[0].players);
+						should(matches[0].players.length).above(0);
+						should.exist(matches[0].league.league_id);
+						done();
+					});
+					Dota2.requestTopLeagueMatches();
+				}); 
 			});
 		});
 		
-		describe('SourceTV', function() {
-			describe('#requestSourceTVGames', function(){
-				it('should fetch a list of ongoing matches matching the search criteria'); // TODO
+		describe('SourceTV', function () {
+			describe('#requestSourceTVGames', function () {
+				it('should fetch a list of ongoing matches matching the search criteria', done => {
+					Dota2.on('sourceTVGamesData', function (games) {
+						should.exist(games);
+						should(games.num_games).above(0);
+						done();
+					});
+					Dota2.requestSourceTVGames();
+				}); 
 			});
 		});
+	
+		describe('Teams', function () {
+			describe('#requestMyTeams', function () {
+				it('should fetch a list of teams of which I\'m a member', done => {
+					Dota2.requestMyTeams(function (err, teamData) {
+						should.exist(teamData.teams);
+						done(err);
+					});
+				});
+			});
+			
+			// describe('#requestProTeamList', function () {
+			// 	it('should fetch a list of pro teams', function(done){
+			// 		Dota2.requestProTeamList(function (err, teamData) {
+			// 			should.exist(teamData.teams);
+			// 			done(err);
+			// 		});
+			// 	});
+			// });
+		});
+		
+		
 	});
