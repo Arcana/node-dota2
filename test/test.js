@@ -236,12 +236,12 @@ var steam = require("steam"),
 			
 			describe('#requestMatchMinimalDetails', function () {
 				it ('should fetch a list of minimal match data corresponding to the given ids', done => {
-					Dota2.requestMatchMinimalDetails([2038049617], function (err, data) {
+					Dota2.requestMatchMinimalDetails([2466191302], function (err, data) {
 						should.exist(data);
 						should.exist(data.matches);
 						should.exist(data.matches[0].match_id);
-						data.matches[0].match_id.toString().should.be.eql('2038049617');
-						should.exist(data.matches[0].winning_team);
+						data.matches[0].match_id.toString().should.be.eql('2466191302');
+						should.exist(data.matches[0].match_outcome);
 						should.exist(data.matches[0].players)
 						data.matches[0].players.length.should.be.above(0);
 						should.exist(data.matches[0].players[0].account_id);
