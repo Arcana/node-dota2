@@ -26,19 +26,34 @@ A few backwards incompatible API changes were included with version 4.0.0.
 * The `matchMakingStatsData` event's first two parameters changed as the old values no longer exist.
 * The `matchMinimalDetailsData` event now returns the `last_match` bool as first argument.
 
+## Installation and setup
+* `npm install steam; npm install` in the repository root (install Steam first to work around a node-steam#222)
+* Copy `config.js.example` to `config.js` and edit appropriately
+* Run the example script: `node example.js`
+* If you receive Error 63 you need to provide a Steam Guard code by setting the Steam Guard code in `config.js` and launching again.
+* Make sure to use at least version 4.4.5 of node js
 
 ## Initializing
 Parameters:
 * `steamClient` - Pass a SteamClient instance to use to send & receive GC messages.
 * `debug` - A boolean noting whether to print information about operations to console.
+* `debugMore` - A boolean noting whether to print extended debug information. Activating this will log messages for each proto message exchanged with the GC.
 
 ```js
 var Steam = require('steam'),
     steamClient = new Steam.SteamClient(),
     dota2 = require('dota2'),
-    Dota2 = new dota2.Dota2Client(steamClient, true);
+    Dota2 = new dota2.Dota2Client(steamClient, true, false);
 ```
 
+## Examples
+The `examples` directory contains two Dota2 bots as an example. One contains commented-out dota2 methods, the other has boolean activated methods. 
+Both examples show how to interact with the library.
+
+## Testing
+There is a partial automated test suite for node-dota2, which is located in the test directory. 
+You need to configure the `STEAM_USERNAME` and `STEAM_PASSWORD` environment variables to be able to run it.
+You can launch the tests by running the file with mocha.
 
 ##Properties
 ###AccountID
@@ -355,9 +370,9 @@ Sends a message to the Game Coordinator requesting to join a lobby.  Provide a c
   * `series_type`: Use the series type enum.
   * `radiant_series_wins`: # of games won so far, e.g. for a Bo3 or Bo5.
   * `dire_series_wins`: # of games won so far, e.g. for a Bo3 or Bo5.
-  * `allchat`: Enable all chat?
+  * `allchat`: Enable all chat for VOIP
   * `league_id`: The league this lobby is being created for. Optional
-  * `dota_tv_delay`: TODO.
+  * `dota_tv_delay`: Number of seconds the game should be delayed for DotaTV.
   * `custom_game_mode`: TODO.
   * `custom_map_name`: TODO.
   * `custom_difficulty`: TODO.
@@ -934,14 +949,5 @@ Use this to pass valid server region data to `createPracticeLobby`.
 
 Use this to pass valid game mode data to `createPracticeLobby`.
 
-## Testing
-There is a partial automated test suite for node-dota2 and the `examples` directory contains a Steam bot with commented-out dota2 methods; you can use this bot to test the library as well.
-
-### Setting up
-* `npm install steam; npm install` in the repository root (install Steam first to work around a node-steam#222)
-* Copy `config.js.example` to `config.js` and edit appropriately
-* Run the example script: `node example.js`
-* If you receive Error 63 you need to provide a Steam Guard code by setting the Steam Guard code in `config.js` and launching again.
-* Make sure to use at least version 4.4.5 of node js
 
 

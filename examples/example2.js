@@ -2,7 +2,7 @@ var steam = require("steam"),
     util = require("util"),
     fs = require("fs"),
     crypto = require("crypto"),
-    dota2 = require("./"),
+    dota2 = require("../"),
     steamClient = new steam.SteamClient(),
     steamUser = new steam.SteamUser(steamClient),
     steamFriends = new steam.SteamFriends(steamClient),
@@ -126,6 +126,19 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
             if (myTeamInfo == 1) {
                 Dota2.requestMyTeams(function(err, data){
                     util.log(JSON.stringify(data));
+                });
+            }
+            
+            // ----------------------------------
+            
+            // SOURCETV
+            
+            var sourceGames = 0;
+            
+            if (sourceGames == 1) {
+                Dota2.requestSourceTVGames();
+                Dota2.on('sourceTVGamesData', (gamesData) => {
+                    util.log(gamesData);
                 });
             }
             
