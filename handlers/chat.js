@@ -74,7 +74,7 @@ Dota2.Dota2Client.prototype.sendMessage = function(channel, message) {
     });
     this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgGCChatMessage, payload);
 };
-Dota2.Dota2Client.prototype.PrivateChatKick = function(channel, accountID) {
+Dota2.Dota2Client.prototype.privateChatKick = function(channel, accountID) {
     /* Attempts to send a message to a chat channel. GC does not send a response. */
     if (this.debug) util.log("Sending kick  of " +accountID+ " to " + channel);
     // Check cache
@@ -90,7 +90,7 @@ Dota2.Dota2Client.prototype.PrivateChatKick = function(channel, accountID) {
     });
     this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCPrivateChatKick, payload);
 };
-Dota2.Dota2Client.prototype.PrivateChatInvite = function(channel, accountID) {
+Dota2.Dota2Client.prototype.privateChatInvite = function(channel, accountID) {
     /* Attempts to send a message to a chat channel. GC does not send a response. */
     if (this.debug) util.log("Sending Invite  of " +accountID+ " to " + channel);
     // Check cache
@@ -106,7 +106,7 @@ Dota2.Dota2Client.prototype.PrivateChatInvite = function(channel, accountID) {
     });
     this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCPrivateChatInvite, payload);
 };
-Dota2.Dota2Client.prototype.PrivateChatDemote = function(channel, accountID) {
+Dota2.Dota2Client.prototype.privateChatDemote = function(channel, accountID) {
     /* Attempts to send a message to a chat channel. GC does not send a response. */
     if (this.debug) util.log("Sending demote  of " +accountID+ " to " + channel);
     // Check cache
@@ -122,7 +122,7 @@ Dota2.Dota2Client.prototype.PrivateChatDemote = function(channel, accountID) {
     });
     this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCPrivateChatDemote, payload);
 };
-Dota2.Dota2Client.prototype.PrivateChatPromote = function(channel, accountID) {
+Dota2.Dota2Client.prototype.privateChatPromote = function(channel, accountID) {
     /* Attempts to send a message to a chat channel. GC does not send a response. */
     if (this.debug) util.log("Sending promote of " +accountID+ " to " + channel);
     // Check cache
@@ -138,7 +138,7 @@ Dota2.Dota2Client.prototype.PrivateChatPromote = function(channel, accountID) {
     });
     this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCPrivateChatPromote, payload);
 };
-Dota2.Dota2Client.prototype.PrivateChatInfoRequest = function(channel) {
+Dota2.Dota2Client.prototype.requestPrivateChatInfo = function(channel) {
     /* Attempts to send a message to a chat channel. GC does not send a response. */
     if (this.debug) util.log("Requesting Chat Info about  " + channel);
     // Check cache
