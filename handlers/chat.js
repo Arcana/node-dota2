@@ -315,7 +315,7 @@ var onChatPrivateChatResponse = function onChatPrivateChatResponse(message) {
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCToClientPrivateChatResponse] = onChatPrivateChatResponse;
 
-ar onChatPrivateChatInfoResponse = function onChatPrivateChatInfoResponse(message) {
+var onChatPrivateChatInfoResponse = function onChatPrivateChatInfoResponse(message) {
     var result = Dota2.schema.CMsgGCToClientPrivateChatInfoResponse.decode(message).result;
 	var channel_name = Dota2.schema.CMsgGCToClientPrivateChatInfoResponse.decode(message).private_chat_channel_name;
     this.emit("PrivateChatInfoResult", result, channel_name)
