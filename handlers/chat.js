@@ -74,7 +74,81 @@ Dota2.Dota2Client.prototype.sendMessage = function(channel, message) {
     });
     this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgGCChatMessage, payload);
 };
-
+Dota2.Dota2Client.prototype.PrivateChatKick = function(channel, accountID) {
+    /* Attempts to send a message to a chat channel. GC does not send a response. */
+    if (this.debug) util.log("Sending kick  of " +accountID+ " to " + channel);
+    // Check cache
+    var cache = this._getChannelByName(channel);
+    if (cache === undefined) {
+        if (this.debug) util.log("Cannot send message to a channel you have not joined.");
+        return;
+    }
+    
+    var payload = new Dota2.schema.CMsgClientToGCPrivateChatKick({
+        "private_chat_channel_name": channel,
+        "kick_account_id": accountID
+    });
+    this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCPrivateChatKick, payload);
+};
+Dota2.Dota2Client.prototype.PrivateChatInvite = function(channel, accountID) {
+    /* Attempts to send a message to a chat channel. GC does not send a response. */
+    if (this.debug) util.log("Sending Invite  of " +accountID+ " to " + channel);
+    // Check cache
+    var cache = this._getChannelByName(channel);
+    if (cache === undefined) {
+        if (this.debug) util.log("Cannot send message to a channel you have not joined.");
+        return;
+    }
+    
+    var payload = new Dota2.schema.CMsgClientToGCPrivateChatInvite({
+        "private_chat_channel_name": channel,
+        "invited_account_id": accountID
+    });
+    this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCPrivateChatInvite, payload);
+};
+Dota2.Dota2Client.prototype.PrivateChatDemote = function(channel, accountID) {
+    /* Attempts to send a message to a chat channel. GC does not send a response. */
+    if (this.debug) util.log("Sending demote  of " +accountID+ " to " + channel);
+    // Check cache
+    var cache = this._getChannelByName(channel);
+    if (cache === undefined) {
+        if (this.debug) util.log("Cannot send message to a channel you have not joined.");
+        return;
+    }
+    
+    var payload = new Dota2.schema.CMsgClientToGCPrivateChatDemote({
+        "private_chat_channel_name": channel,
+        "demote_account_id": accountID
+    });
+    this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCPrivateChatDemote, payload);
+};
+Dota2.Dota2Client.prototype.PrivateChatPromote = function(channel, accountID) {
+    /* Attempts to send a message to a chat channel. GC does not send a response. */
+    if (this.debug) util.log("Sending promote of " +accountID+ " to " + channel);
+    // Check cache
+    var cache = this._getChannelByName(channel);
+    if (cache === undefined) {
+        if (this.debug) util.log("Cannot send message to a channel you have not joined.");
+        return;
+    }
+    
+    var payload = new Dota2.schema.CMsgClientToGCPrivateChatPromote({
+        "private_chat_channel_name": channel,
+        "promote_account_id": accountID
+    });
+    this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCPrivateChatPromote, payload);
+};
+Dota2.Dota2Client.prototype.PrivateChatInfoRequest = function(channel) {
+    /* Attempts to send a message to a chat channel. GC does not send a response. */
+    if (this.debug) util.log("Requesting Chat Info about  " + channel);
+    // Check cache
+    
+    
+    var payload = new Dota2.schema.CMsgClientToGCPrivateChatInfoRequest({
+        "private_chat_channel_name": channel,
+    });
+    this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCPrivateChatInfoRequest, payload);
+};
 Dota2.Dota2Client.prototype.shareLobby = function(channel) {
     /* Attempts to send a message to a chat channel. GC does not send a response. */
     if (this.debug) util.log("Sharing lobby to " + channel);
@@ -164,6 +238,7 @@ var onChatMessage = function onChatMessage(message) {
         channel.channel_name,
         chatData.persona_name,
         chatData.text,
+		chatData.account_id,
         chatData);
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCChatMessage] = onChatMessage;
@@ -232,3 +307,17 @@ var onChatChannelsResponse = function onChatChannelsResponse(message) {
     this.emit("chatChannelsData", channels)
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCRequestChatChannelListResponse] = onChatChannelsResponse;
+
+var onChatPrivateChatResponse = function onChatPrivateChatResponse(message) {
+    var result = Dota2.schema.CMsgGCToClientPrivateChatResponse.decode(message).result;
+	var channel_name = Dota2.schema.CMsgGCToClientPrivateChatResponse.decode(message).private_chat_channel_name;
+    this.emit("PrivateChatResult", result, channel_name)
+};
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCToClientPrivateChatResponse] = onChatPrivateChatResponse;
+
+ar onChatPrivateChatInfoResponse = function onChatPrivateChatInfoResponse(message) {
+    var result = Dota2.schema.CMsgGCToClientPrivateChatInfoResponse.decode(message).result;
+	var channel_name = Dota2.schema.CMsgGCToClientPrivateChatInfoResponse.decode(message).private_chat_channel_name;
+    this.emit("PrivateChatInfoResult", result, channel_name)
+};
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCToClientPrivateChatInfoResponse] = onChatPrivateChatInfoResponse;
