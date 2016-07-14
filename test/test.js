@@ -87,6 +87,12 @@ var steam = require("steam"),
 		var calculated_steam_id = Dota2.ToSteamID(GABE_ACCOUNT_ID);
 		should(calculated_steam_id.toString()).equal(GABE_STEAM_ID);
 	};
+	
+	var invertKMsgTypeID = function() {
+		var msg_type_id = "k_EMsgClientToGCGetProfileCard";
+		var calculated_msg_type_id = dota2._getMessageName(dota2.schema.EDOTAGCMsg.k_EMsgClientToGCGetProfileCard);
+		should(calculated_msg_type_id).equal(msg_type_id);
+	}
  
 	// Tests
 	describe('Steam', function() {
@@ -121,6 +127,10 @@ var steam = require("steam"),
 		});
 		
 		describe('Utilities', function () {
+			describe('#ToTypeID', function () {
+				it('should convert an enum to the corresponding message type ID ', invertKMsgTypeID);
+			});
+			
 			describe('#ToAccountID', function () {
 				it('should convert a 64-bit Steam ID into a 32-bit account ID', convertSteamIDToAccountID);
 			});
