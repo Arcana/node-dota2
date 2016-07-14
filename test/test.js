@@ -96,7 +96,7 @@ var steam = require("steam"),
  
 	// Tests
 	describe('Steam', function() {
-		this.timeout(10000); // 10s timeout because Steam is slooooooooow
+		this.timeout(15000); // 15s timeout because Steam is sooo slooooooooow
 		
 		describe('#connect', function() {
 			it('should connect to Steam', connectToSteam);
@@ -109,7 +109,7 @@ var steam = require("steam"),
 	});
 	
 	describe('Dota2', function() {
-		this.timeout(10000); // 10s timeout because Steam is slooooooooow
+		this.timeout(15000); // 15s timeout because Steam is sooo slooooooooow
 		
 		// Check we're connected to Steam before running these tests
 		before(beConnectedToSteam);
