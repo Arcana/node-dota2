@@ -144,6 +144,17 @@ Sends a dice roll to the specified chat channel. Won't send if you're not in the
 
 Requests a list of chat channels from the GC. Listen for the `chatChannelsData` event for the GC's response.
 
+#### privateChatKick (channel, account_id)
+* `channel`  - A string for the channel name.
+* `account_id` - ID of the user to kick from channel.
+
+Requests to kick someone from the private channel.
+
+#### privateChatInvite (channel, account_id)
+* `channel`  - A string for the channel name.
+* `account_id` - ID of the user to invite from channel.
+
+Requests to invite someone from the private channel.
 
 ### Guild
 #### requestGuildData()
@@ -542,6 +553,12 @@ Emitted when another user leaves a chat channel you are in.
   * `channel_type`
 
 The GC's response to a requestChatChannels call.
+
+### `privateChatResult` (`result`, `channel_name`)
+* `result` - An errorcode of privateChatKick and privateChatInvite. Zero is default and means success
+  * `channel_name`
+  
+The GC's response to a privateChatKick and privateChatInvite call
 
 ### `guildOpenPartyData` (`guild_id`, `openParties`)
 * `guild_id` - ID of the guild.
