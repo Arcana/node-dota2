@@ -48,7 +48,7 @@ var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
         callback = callback || null;
 
         var kMsg = header.msg;
-        if (self.debugMore) util.log("Dota2 fromGC: " + Dota2._getMessageName(kMsg));
+        if (self.debugMore) util.log("Dota2 fromGC: " + kMsg); // TODO:  Turn type-protoMask into key name.
 
         if (kMsg in self._handlers) {
             if (callback) {

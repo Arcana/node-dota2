@@ -106,9 +106,9 @@ Attempts to delete an item. Requires the GC to be ready (listen for the `ready` 
 ### Chat
 **_Limited Steam accounts cannot interact with chat!_**
 
-#### joinChat(channel_name, [channel_type])
-* `channel_name` - A string for the channel name.
-* `[channel_type]` - The type of the channel being joined.  Defaults to `Dota2.schema.DOTAChatChannelType_t.DOTAChannelType_Custom`.
+#### joinChat(channel, [type])
+* `channel` - A string for the channel name.
+* `[type]` - The type of the channel being joined.  Defaults to `Dota2.schema.DOTAChatChannelType_t.DOTAChannelType_Custom`.
 
 Joins a chat channel. If the chat channel with the given name doesn't exist, it 
 is created. Listen for the `chatMessage` event for other people's chat messages.
@@ -117,35 +117,28 @@ Notable channels:
 * `Guild_##########` - The chat channel of the guild with guild_id = ##########
 * `Lobby_##########` - The chat channel of the lobby with lobby_id = ##########
 
-#### leaveChat(channel_name, [channel_type])
-* `channel_name` - A string for the channel name.
-* `[channel_type]` - The type of the channel you want to leave. Use the `Dota2.schema.DOTAChatChannelType_t` enum. 
+#### leaveChat(channel)
+* `channel` - A string for the channel name.
 
-Leaves a chat channel. If you've joined different channels with the same name, specify the type to prevent unexpected behaviour.
+Leaves a chat channel.
 
-#### sendMessage(channel, message, [channel_type])
+#### sendMessage(channel, message)
 * `channel` - A string for the channel name.
 * `message` - The message you want to send.
-* `[channel_type]` - The type of the channel you want to send a message to. Use the `Dota2.schema.DOTAChatChannelType_t` enum.
 
 Sends a message to the specified chat channel. Won't send if you're not in the channel you try to send to.
-If you've joined different channels with the same name, specify the type to prevent unexpected behaviour.
 
-#### flipCoin(channel, [channel_type])
+#### flipCoin(channel)
 * `channel` - A string for the channel name.
-* `[channel_type]` - The type of the channel you want to flip a coin in. Use the `Dota2.schema.DOTAChatChannelType_t` enum. 
 
 Sends a coin flip to the specified chat channel. Won't send if you're not in the channel you try to send to.
-If you've joined different channels with the same name, specify the type to prevent unexpected behaviour.
 
-#### rollDice(channel, min, max, [channel_type])
+#### rollDice(channel, min, max)
 * `channel` - A string for the channel name.
 * `min` - Lower bound of the dice roll.
 * `max` - Upper bound of the dice roll.
-* `[channel_type]` - The type of the channel you want to roll a dice in. Use the `Dota2.schema.DOTAChatChannelType_t` enum. 
 
 Sends a dice roll to the specified chat channel. Won't send if you're not in the channel you try to send to.
-If you've joined different channels with the same name, specify the type to prevent unexpected behaviour.
 
 #### requestChatChannels()
 
