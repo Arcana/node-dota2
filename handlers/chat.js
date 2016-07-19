@@ -238,7 +238,6 @@ var onChatMessage = function onChatMessage(message) {
         channel.channel_name,
         chatData.persona_name,
         chatData.text,
-		chatData.account_id,
         chatData);
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCChatMessage] = onChatMessage;
@@ -311,13 +310,13 @@ handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCRequestChatChannelListResponse] = onCha
 var onChatPrivateChatResponse = function onChatPrivateChatResponse(message) {
     var result = Dota2.schema.CMsgGCToClientPrivateChatResponse.decode(message).result;
 	var channel_name = Dota2.schema.CMsgGCToClientPrivateChatResponse.decode(message).private_chat_channel_name;
-    this.emit("PrivateChatResult", result, channel_name)
+    this.emit("privateChatResult", result, channel_name)
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCToClientPrivateChatResponse] = onChatPrivateChatResponse;
 
 var onChatPrivateChatInfoResponse = function onChatPrivateChatInfoResponse(message) {
     var result = Dota2.schema.CMsgGCToClientPrivateChatInfoResponse.decode(message).result;
 	var channel_name = Dota2.schema.CMsgGCToClientPrivateChatInfoResponse.decode(message).private_chat_channel_name;
-    this.emit("PrivateChatInfoResult", result, channel_name)
+    this.emit("privateChatInfoResult", result, channel_name)
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCToClientPrivateChatInfoResponse] = onChatPrivateChatInfoResponse;
