@@ -31,6 +31,25 @@ Dota2.Dota2Client.prototype.leaveParty = function() {
     this.sendToGC(Dota2.schema.EGCBaseMsg.k_EMsgGCLeaveParty, payload);
 };
 
+Dota2.Dota2Client.prototype.setPartyLeader = function(steam_id) {
+    steam_id = steam_id || null;
+    if (this.Party == null) {
+        if (this.debug) util.log("setPartyLeader called when not in a party!");
+        return null;
+    }
+    if (steam_id == null) {
+        if (this.debug) util.log("Steam ID required to set party leader.");
+        return null;
+    }
+
+    if (this.debug) util.log("Setting party leader: " + steam_id);
+
+    var payload = new Dota2.schema.CMsgDOTASetGroupLeader({
+        "new_leader_steamid": steam_id
+    });
+    this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCSetPartyLeader, payload);
+}
+
 Dota2.Dota2Client.prototype.setPartyCoach = function(coach) {
     coach = coach || false;
     if (this.Party == null) {
