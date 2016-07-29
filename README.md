@@ -343,6 +343,12 @@ Kicks a player from the party. This will create a new party if you aren't in one
 Set the bot's status as a coach.
 
 
+### setPartyLeader(id)
+* `[id]` - The steam ID of new party leader.
+
+Set the new party leader.
+
+
 ### leaveParty()
 
 Leaves the current party. See the `Party` property.
