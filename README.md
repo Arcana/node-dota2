@@ -274,6 +274,13 @@ Sends a message to the Game Coordinator requesting one or multiple `account_ids`
 
 Sends a message to the Game Coordinator requesting `account_id`'s trophy data. Provide a callback or listen for `trophyListData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling). Notably, this data contains the `profile_name` field, which is the user's name displayed on their profile page in dota.
 
+#### requestPlayerStats(account_id, [callback])
+* `account_id` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose player stats you wish to view.
+* `[callback]` - optional callback, returns args: `err, response`.
+*
+Sends a message to the Game Coordinator requesting `account_id`'s player stats. Provide a callback or listen for `playerStatsData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling). This data contains all stats shown on a player's profile page.
+
+
 ### Matches
 #### requestMatches(criteria, [callback])
 * `[criteria]` - The options available for searching matches:

@@ -229,6 +229,16 @@ var steam = require("steam"),
 			describe('#requestHallOfFame', function () {
 				it('should fetch a given weeks hall of fame data'); // TODO
 			});
+			
+			describe('#requestPlayerStats', function () {
+				it('should fetch a given player\'s stat data', function (done){
+					Dota2.requestPlayerStats(parseInt(GABE_ACCOUNT_ID), function (err, data) {
+	                    should.exist(data.account_id);
+	                    data.account_id.should.equal(parseInt(GABE_ACCOUNT_ID));
+	                    done(err);
+	                });
+				});
+			});
 		});
 		
 		describe('Matches', function () {

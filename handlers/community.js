@@ -125,6 +125,21 @@ Dota2.Dota2Client.prototype.requestTrophyList = function(account_id, callback) {
                     onTrophyListResponse, callback);
 };
 
+Dota2.Dota2Client.prototype.requestPlayerStats = function(account_id, callback) {
+    callback = callback || null;
+    account_id = account_id || null;
+
+    /* Sends a message to the Game Coordinator requesting `accountId`'s stats. Listen for `playerStatsData` event for Game Coordinator's response. */
+    if (this.debug) util.log("Sending player stats request.");
+
+    var payload = new Dota2.schema.CMsgClientToGCPlayerStatsRequest({
+        "account_id": account_id
+    });
+    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCPlayerStatsRequest,
+                    payload,
+                    onPlayerStatsResponse, callback);
+}
+
 // Handlers
 
 var handlers = Dota2.Dota2Client.prototype._handlers;
@@ -211,3 +226,13 @@ var onTrophyListResponse = function onTrophyListResponse(message, callback) {
     if (callback) callback(null, trophyListResponse);
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCGetTrophyListResponse] = onTrophyListResponse;
+
+var onPlayerStatsResponse = function onPlayerStatsResponse(message, callback) {
+    var playerStatsResponse = Dota2.schema.CMsgGCToClientPlayerStatsResponse.decode(message);
+
+    if (this.debug) util.log("Received new player stats data.");
+    this.emit("playerStatsData", playerStatsResponse);
+    if (callback) callback(null, playerStatsResponse);
+    
+};
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCToClientPlayerStatsResponse] = onPlayerStatsResponse;
