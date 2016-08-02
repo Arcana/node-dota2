@@ -291,5 +291,8 @@ message CSODOTALobby {
 	optional uint32 game_start_time = 87;
 	optional .LobbyDotaPauseSetting pause_setting = 88 [default = LobbyDotaPauseSetting_Unlimited];
 	optional uint32 lobby_mvp_account_id = 89;
+	optional uint32 weekend_tourney_division_id = 90;
+	optional uint32 weekend_tourney_skill_level = 91;
+	optional uint32 weekend_tourney_bracket_round = 92;
 }
 

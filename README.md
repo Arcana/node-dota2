@@ -274,6 +274,13 @@ Sends a message to the Game Coordinator requesting one or multiple `account_ids`
 
 Sends a message to the Game Coordinator requesting `account_id`'s trophy data. Provide a callback or listen for `trophyListData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling). Notably, this data contains the `profile_name` field, which is the user's name displayed on their profile page in dota.
 
+#### requestPlayerStats(account_id, [callback])
+* `account_id` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose player stats you wish to view.
+* `[callback]` - optional callback, returns args: `err, response`.
+*
+Sends a message to the Game Coordinator requesting `account_id`'s player stats. Provide a callback or listen for `playerStatsData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling). This data contains all stats shown on a player's profile page.
+
+
 ### Matches
 #### requestMatches(criteria, [callback])
 * `[criteria]` - The options available for searching matches:
@@ -692,6 +699,31 @@ TODO
 Emitted when GC responds to the `requestPassportData` method.
 
 See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client_fantasy.proto#L961) for `passportData`'s object structure.
+
+### `playerStatsData` (`account_id`, `playerStats`)
+* `account_id` - Account ID whom the stats belong to.
+* `playerStats` - Statistics about the player. This entails:
+  * `account_id`
+  * `player_stats`
+  * `match_count`
+  * `mean_gpm`
+  * `mean_xppm`
+  * `mean_lasthits`
+  * `rampages`
+  * `triple_kills`
+  * `first_blood_claimed`
+  * `first_blood_given`
+  * `couriers_killed`
+  * `aegises_snatched`
+  * `cheeses_eaten`
+  * `creeps_stacked`
+  * `fight_score`
+  * `farm_score`
+  * `support_score`
+  * `push_score`
+  * `versatility_score`
+
+Emitted when the GC responds to the `requestPlayerStats` method.
 
 ### `hallOfFameData` (`week`, `featuredPlayers`, `featuredFarmer`, `hallOfFameResponse`)
 * `week` - Week the data is associated with.
