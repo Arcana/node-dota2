@@ -699,23 +699,23 @@ See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resour
 * `playerStats` - Statistics about the player. This entails:
   * `account_id`
   * `player_stats`
-  *	`match_count`
-  *	`mean_gpm`
-  *	`mean_xppm`
-  *	`mean_lasthits`
-  *	`rampages`
-  *	`triple_kills`
-  *	`first_blood_claimed`
-  *	`first_blood_given`
-  *	`couriers_killed`
+  * `match_count`
+  * `mean_gpm`
+  * `mean_xppm`
+  * `mean_lasthits`
+  * `rampages`
+  * `triple_kills`
+  * `first_blood_claimed`
+  * `first_blood_given`
+  * `couriers_killed`
   * `aegises_snatched`
-  *	`cheeses_eaten`
-  *	`creeps_stacked`
-  *	`fight_score`
-  *	`farm_score`
-  *	`support_score`
-  *	`push_score`
-  *	`versatility_score`
+  * `cheeses_eaten`
+  * `creeps_stacked`
+  * `fight_score`
+  * `farm_score`
+  * `support_score`
+  * `push_score`
+  * `versatility_score`
 
 Emitted when the GC responds to the `requestPlayerStats` method.
 
