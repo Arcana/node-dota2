@@ -694,6 +694,31 @@ Emitted when GC responds to the `requestPassportData` method.
 
 See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client_fantasy.proto#L961) for `passportData`'s object structure.
 
+### `playerStatsData` (`account_id`, `playerStats`)
+* `account_id` - Account ID whom the stats belong to.
+* `playerStats` - Statistics about the player. This entails:
+  * `account_id`
+  * `player_stats`
+  *	`match_count`
+  *	`mean_gpm`
+  *	`mean_xppm`
+  *	`mean_lasthits`
+  *	`rampages`
+  *	`triple_kills`
+  *	`first_blood_claimed`
+  *	`first_blood_given`
+  *	`couriers_killed`
+  * `aegises_snatched`
+  *	`cheeses_eaten`
+  *	`creeps_stacked`
+  *	`fight_score`
+  *	`farm_score`
+  *	`support_score`
+  *	`push_score`
+  *	`versatility_score`
+
+Emitted when the GC responds to the `requestPlayerStats` method.
+
 ### `hallOfFameData` (`week`, `featuredPlayers`, `featuredFarmer`, `hallOfFameResponse`)
 * `week` - Week the data is associated with.
 * `featuredPlayers` - Array of featured players for that week. `[{ account_id, heroId, averageScaledMetric, numGames }]`

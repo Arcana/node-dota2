@@ -231,7 +231,7 @@ var onPlayerStatsResponse = function onPlayerStatsResponse(message, callback) {
     var playerStatsResponse = Dota2.schema.CMsgGCToClientPlayerStatsResponse.decode(message);
 
     if (this.debug) util.log("Received new player stats data.");
-    this.emit("playerStatsData", playerStatsResponse);
+    this.emit("playerStatsData", playerStatsResponse.account_id, playerStatsResponse);
     if (callback) callback(null, playerStatsResponse);
     
 };
