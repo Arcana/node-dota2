@@ -9,8 +9,8 @@
     "steam": "^1.2.0"
   },
   "devDependencies": {
-    "mocha": "^2.5.3",
-    "should": "^8.4.0"
+    "mocha": "^3.0.2",
+    "should": "^11.0.0"
   },
   "scripts": {
     "update": "bash update_proto.sh",
