@@ -14,11 +14,7 @@ Dota2.Dota2Client.prototype.respondPartyInvite = function(id, accept) {
     // todo: set client version here?
     var payload = new Dota2.schema.CMsgPartyInviteResponse({
         "party_id": id,
-        "accept": accept,
-        "as_coach": false,
-        "team_id": 0,
-        "game_language_enum": 1,
-        "game_language_name": "english"
+        "accept": accept
     });
     this.sendToGC(Dota2.schema.EGCBaseMsg.k_EMsgGCPartyInviteResponse, payload);
 };
