@@ -2,19 +2,36 @@ var Dota2 = require("../index"),
     util = require("util");
 
 // Methods
-Dota2.Dota2Client.prototype.respondPartyInvite = function(id, accept) {
+Dota2.Dota2Client.prototype.acceptPartyInvite = function(id) {
     id = id || null;
-    accept = accept || false;
     if (id == null) {
         if (this.debug) util.log("Party ID required to respond to an invite.");
         return null;
     }
 
-    if (this.debug) util.log("Responding to party invite " + id + ", accept: " + accept);
-    // todo: set client version here?
+    if (this.debug) util.log("Responding to party invite " + id + ", accept");
     var payload = new Dota2.schema.CMsgPartyInviteResponse({
         "party_id": id,
-        "accept": accept
+        "accept": true,
+        "client_version": "", //todo: client version
+        "ping_data": ""  //todo: ping data
+    });
+    this.sendToGC(Dota2.schema.EGCBaseMsg.k_EMsgGCPartyInviteResponse, payload);
+};
+
+Dota2.Dota2Client.prototype.declinePartyInvite = function(id) {
+    id = id || null;
+    if (id == null) {
+        if (this.debug) util.log("Party ID required to respond to an invite.");
+        return null;
+    }
+    
+    if (this.debug) util.log("Responding to party invite " + id + ", decline");
+    var payload = new Dota2.schema.CMsgPartyInviteResponse({
+        "party_id": id,
+        "accept": false,
+        "client_version": "", //todo: client version
+        "ping_data": null
     });
     this.sendToGC(Dota2.schema.EGCBaseMsg.k_EMsgGCPartyInviteResponse, payload);
 };
