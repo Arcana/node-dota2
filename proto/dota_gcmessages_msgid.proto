@@ -674,5 +674,7 @@ enum EDOTAGCMsg {
 	k_EMsgGCGetPlayerCardItemInfoResponse = 8188;
 	k_EMsgClientToGCRequestSteamDatagramTicket = 8189;
 	k_EMsgClientToGCRequestSteamDatagramTicketResponse = 8190;
+	k_EMsgGCToClientBattlePassRollupRequest = 8191;
+	k_EMsgGCToClientBattlePassRollupResponse = 8192;
 }
 
