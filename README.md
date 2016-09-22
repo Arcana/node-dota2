@@ -2,18 +2,18 @@ node-dota2
 ========
 
 [![NPM version](https://img.shields.io/npm/v/dota2.svg)](https://npmjs.org/package/dota2 "View this project on NPM")
-[![Build Status](https://img.shields.io/travis/RJacksonm1/node-dota2.svg)](https://travis-ci.org/RJacksonm1/node-dota2 "View this project's build information")
-[![Dependency Status](https://img.shields.io/david/RJacksonm1/node-dota2.svg)](https://david-dm.org/RJacksonm1/node-dota2 "Check this project's dependencies")
+[![Build Status](https://img.shields.io/travis/Arcana/node-dota2.svg)](https://travis-ci.org/Arcana/node-dota2 "View this project's build information")
+[![Dependency Status](https://img.shields.io/david/Arcana/node-dota2.svg)](https://david-dm.org/Arcana/node-dota2 "Check this project's dependencies")
 
 A node-steam plugin for Dota 2, consider it in alpha state.
 
-Check out my blog post (my only blog post), [Extending node-dota2](https://blog.rjackson.me/extending-node-dota2/), for a rough overview of adding new functionality to the library.
+Check out RJackson1's blog post (his only blog post), [Extending node-dota2](https://blog.rjackson.me/extending-node-dota2/), for a rough overview of adding new functionality to the library.
 A fair warning, while the way you search for new functionality is still the same, quite a lot has changed (and been simplified) implementation wise.
 It is now easier to implement new functionality than it was back when this blog was written.
 
 ## Upgrade guide
 
-### `3.*.*` to `4.0.0`
+### `3.*.*` to `4.*.0`
 
 A few backwards incompatible API changes were included with version 4.0.0.
 
@@ -45,6 +45,13 @@ var Steam = require('steam'),
     dota2 = require('dota2'),
     Dota2 = new dota2.Dota2Client(steamClient, true, false);
 ```
+
+## Disclaimer
+We do not in any way encourage people to use their own accounts when using this library. 
+This library tries to mimic the behavior of the Dota 2 client to allow people to programmatically interact with the Dota 2 GC, 
+however we make no efforts to hide this fact and it's pretty easy for Valve to detect clients using this library based on the generated traffic. 
+While Valve has not yet expressed a dislike regarding reverse engineering projects like this one, 
+it's not unimaginable that this might one day change and result in VAC bans.
 
 ## Examples
 The `examples` directory contains two Dota2 bots as an example. One contains commented-out dota2 methods, the other has boolean activated methods. 
