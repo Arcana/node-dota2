@@ -404,7 +404,7 @@ var steam = require("steam"),
 						should.exist(matches[0].match_id);
 						should.exist(matches[0].players);
 						should(matches[0].players.length).above(0);
-						should.exist(matches[0].league.league_id);
+						should.exist(matches[0].tourney.league_id);
 						done();
 					});
 					Dota2.requestTopLeagueMatches();
