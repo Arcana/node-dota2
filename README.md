@@ -971,13 +971,21 @@ Emitted when the GC responds to the `requestSourceTVGames` method.  Multiple eve
 * `EUROPE: 3`
 * `KOREA: 4`
 * `SINGAPORE: 5`
+* `DUBAI: 6`
 * `AUSTRALIA: 7`
 * `STOCKHOLM: 8`
 * `AUSTRIA: 9`
 * `BRAZIL: 10`
 * `SOUTHAFRICA: 11`
-* `PERFECTWORLDTELECOM: 12`
-* `PERFECTWORLDUNICOM: 13`
+* `PWTELECOMSHANGHAI: 12`
+* `PWUNICOM: 13`
+* `CHILE: 14`
+* `PERU: 15`
+* `INDIA: 16`
+* `PWTELECOMGUANGZHOU: 17`
+* `PWTELECOMZHEJIANG: 18`
+* `JAPAN: 19`
+* `PWTELECOMWUHAN: 20`
 
 Use this to pass valid server region data to `createPracticeLobby`.
 
@@ -998,8 +1006,15 @@ Use this to pass valid server region data to `createPracticeLobby`.
 * `DOTA_GAMEMODE_POOL1: 13` - Limited Heroes
 * `DOTA_GAMEMODE_FH: 14` - Compendium
 * `DOTA_GAMEMODE_CUSTOM: 15` - Unknown, probably ti4 techies reveal.
+* `DOTA_GAMEMODE_CD: 16` - Captain's Draft
+* `DOTA_GAMEMODE_BD: 17` - Balanced Draft
+* `DOTA_GAMEMODE_ABILITY_DRAFT: 18` - Ability Draft
+* `DOTA_GAMEMODE_EVENT: 19` - Unknown
+* `DOTA_GAMEMODE_ARDM: 20` - All Random Death Match
+* `DOTA_GAMEMODE_1V1MID: 21` - 1v1 Mid
+* `DOTA_GAMEMODE_ALL_DRAFT: 22` - All Draft (ranked all pick?)
 
-Use this to pass valid game mode data to `createPracticeLobby`.
+Use this to pass valid game mode data to `createPracticeLobby`. This enum is built-in the protobuf schema and can be referenced by `Dota2.DOTA_GameMode`.
 
 
 
