@@ -1012,7 +1012,7 @@ Use this to pass valid server region data to `createPracticeLobby`.
 * `DOTA_GAMEMODE_EVENT: 19` - Unknown
 * `DOTA_GAMEMODE_ARDM: 20` - All Random Death Match
 * `DOTA_GAMEMODE_1V1MID: 21` - 1v1 Mid
-* `DOTA_GAMEMODE_ALL_DRAFT: 22` - All Draft (ranked all pick?)
+* `DOTA_GAMEMODE_ALL_DRAFT: 22` - All Draft a.k.a. ranked all pick
 
 Use this to pass valid game mode data to `createPracticeLobby`. This enum is built-in the protobuf schema and can be referenced by `Dota2.DOTA_GameMode`.
 
