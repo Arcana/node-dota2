@@ -2,7 +2,7 @@ var Dota2 = require("../index"),
     util = require("util");
 
 // Methods
-Dota2.Dota2Client.prototype.respondPartyInvite = function(id, accept) {
+Dota2.Dota2Client.prototype.respondPartyInvite = function(id, accept, ping_data) {
     id = id || null;
     accept = accept || false;
     if (id == null) {
@@ -15,10 +15,7 @@ Dota2.Dota2Client.prototype.respondPartyInvite = function(id, accept) {
     var payload = new Dota2.schema.CMsgPartyInviteResponse({
         "party_id": id,
         "accept": accept,
-        "as_coach": false,
-        "team_id": 0,
-        "game_language_enum": 1,
-        "game_language_name": "english"
+        "ping_data": ping_data
     });
     this.sendToGC(Dota2.schema.EGCBaseMsg.k_EMsgGCPartyInviteResponse, payload);
 };
