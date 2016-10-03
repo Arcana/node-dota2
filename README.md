@@ -332,9 +332,10 @@ Sends a message to the Game Coordinator requesting the top matches of your frien
 
 ### Parties
 
-### respondPartyInvite(id, accept)
-* `[id]` - Number, party ID.
-* `[accept]` - Accept or decline the invite.
+### respondPartyInvite(id, accept, [ping_data])
+* `id` - Number, party ID.
+* `accept` - Accept or decline the invite.
+* `[ping_data]` - Optional argument to be provided when accepting a party invite. For contents see `CMsgClientPingData`.
 
 Responds to an incoming party invite. The `PartyInvite` property is cleared after the response has been sent.
 
