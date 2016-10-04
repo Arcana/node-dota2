@@ -236,6 +236,8 @@ Requests the list of pro teams.
   * `[matches_requested]` - How many matches to retrieve
   * `[hero_id]` - The ID of the hero the given account ID had played
   * `[request_id]` - I have no idea.
+  * `[include_practice_matches]` - Do you want practice matches in the result sets?
+  * `[include_custom_games]` - Do you want custom games in the result sets?
 * `[callback]` - optional callback, returns args: `err, response`.
 
 Requests the given player's match history. The responses are paginated, but you can use the `start_at_match_id` and `matches_requested` options to loop through them.
