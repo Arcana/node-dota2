@@ -5,7 +5,9 @@ Dota2._playerHistoryOptions = {
     start_at_match_id: "number",
     matches_requested: "number",
     hero_id: "number",
-    request_id: "number"
+    request_id: "number",
+    include_practice_matches: "boolean",
+    include_custom_games: "boolean"
 };
 
 // Methods
