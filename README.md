@@ -541,6 +541,11 @@ Emitted when the GC is ready to receive messages.  Be careful not to declare ano
 ### `unready`
 Emitted when the connection status to the GC changes, and renders the library unavailable to interact.  You should clear any event handlers set in the `ready` event here, otherwise you'll have multiple handlers for each message every time a new `ready` event is sent.
 
+### `popup` (`type`, `popup`)
+* `type` - The type of the popup. See `CMsgDOTAPopup.PopupID` 
+* `popup` - The raw popup data
+
+Generic popup, can be produced for a plethora of reasons.
 
 ### `chatMessage` (`channel`, `senderName`, `message`, `chatObject`)
 * `channel` - Channel name.
@@ -769,7 +774,7 @@ See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/5acc8bb72bb7f
 * `matchmakingStatsResponse` - Raw response object.
 
 Emitted when te GC response to the `requestMatchmakingStats` method.  The array order dictates which matchmaking groups the figure belongs to. 
-The groups are discoverable through `regions.txt` in Dota 2's game files.  We maintain an indicative list *without guarantees* in this README. 
+The groups are discoverable through [regions.txt](https://github.com/SteamDatabase/GameTracking/blob/master/dota/game/dota/pak01_dir/scripts/regions.txt) in Dota 2's game files.  We maintain an indicative list *without guarantees* in this README. 
 This list is manually updated only when changes are detected by community members, so it can be out of date. 
 Here are the groups at the time of this sentence being written (with unecessary data trimmed out):
 
@@ -793,7 +798,8 @@ Here are the groups at the time of this sentence being written (with unecessary 
     "India":                        {"matchgroup": "16"},
     "PerfectWorldTelecomGuangdong": {"matchgroup": "17"},
     "PerfectWorldTelecomZhejiang":  {"matchgroup": "18"},
-    "Japan":                        {"matchgroup": "19"}
+    "Japan":                        {"matchgroup": "19"},
+    "PerfectWorldTelecomWuhan":     {"matchgroup": "20"}
 ```
 
 ### `topFriendMatchesData` (`matches`)
@@ -810,7 +816,7 @@ Emitted when the GC responds to the `requestTopFriendMatches` method.
 
 
 ### `practiceLobbyUpdate` (`lobby`)
-* `lobby` - The full lobby object (see CSODOTALobby).
+* `lobby` - The full lobby object (see `CSODOTALobby`).
 
 
 Emitted when the GC sends a lobby snapshot. The GC is incredibly
@@ -870,7 +876,7 @@ Emitted when the GC has created the invitation. The invitation is only sent when
 the invitee is online.
 
 ### `partyUpdate` (`party`)
-* `party` - The full party object (see CSODOTAParty).
+* `party` - The full party object (see `CSODOTAParty`).
 
 
 Emitted when the GC sends a party snapshot. The GC is incredibly
