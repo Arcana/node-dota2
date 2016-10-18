@@ -87,10 +87,16 @@ var steam = require("steam"),
 		var calculated_steam_id = Dota2.ToSteamID(GABE_ACCOUNT_ID);
 		should(calculated_steam_id.toString()).equal(GABE_STEAM_ID);
 	};
+	
+	var invertKMsgTypeID = function() {
+		var msg_type_id = "k_EMsgClientToGCGetProfileCard";
+		var calculated_msg_type_id = dota2._getMessageName(dota2.schema.EDOTAGCMsg.k_EMsgClientToGCGetProfileCard);
+		should(calculated_msg_type_id).equal(msg_type_id);
+	}
  
 	// Tests
 	describe('Steam', function() {
-		this.timeout(10000); // 10s timeout because Steam is slooooooooow
+		this.timeout(20000); // 20s timeout because Steam is sooo slooooooooow
 		
 		describe('#connect', function() {
 			it('should connect to Steam', connectToSteam);
@@ -103,7 +109,7 @@ var steam = require("steam"),
 	});
 	
 	describe('Dota2', function() {
-		this.timeout(10000); // 10s timeout because Steam is slooooooooow
+		this.timeout(20000); // 20s timeout because Steam is sooo slooooooooow
 		
 		// Check we're connected to Steam before running these tests
 		before(beConnectedToSteam);
@@ -121,6 +127,10 @@ var steam = require("steam"),
 		});
 		
 		describe('Utilities', function () {
+			describe('#ToTypeID', function () {
+				it('should convert an enum to the corresponding message type ID ', invertKMsgTypeID);
+			});
+			
 			describe('#ToAccountID', function () {
 				it('should convert a 64-bit Steam ID into a 32-bit account ID', convertSteamIDToAccountID);
 			});
@@ -218,6 +228,16 @@ var steam = require("steam"),
 			
 			describe('#requestHallOfFame', function () {
 				it('should fetch a given weeks hall of fame data'); // TODO
+			});
+			
+			describe('#requestPlayerStats', function () {
+				it('should fetch a given player\'s stat data', function (done){
+					Dota2.requestPlayerStats(parseInt(GABE_ACCOUNT_ID), function (err, data) {
+						should.exist(data.account_id);
+						data.account_id.should.equal(parseInt(GABE_ACCOUNT_ID));
+						done(err);
+					});
+				});
 			});
 		});
 		
@@ -384,7 +404,7 @@ var steam = require("steam"),
 						should.exist(matches[0].match_id);
 						should.exist(matches[0].players);
 						should(matches[0].players.length).above(0);
-						should.exist(matches[0].league.league_id);
+						should.exist(matches[0].tourney.league_id);
 						done();
 					});
 					Dota2.requestTopLeagueMatches();

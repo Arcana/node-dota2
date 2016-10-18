@@ -2,18 +2,18 @@ node-dota2
 ========
 
 [![NPM version](https://img.shields.io/npm/v/dota2.svg)](https://npmjs.org/package/dota2 "View this project on NPM")
-[![Build Status](https://img.shields.io/travis/RJacksonm1/node-dota2.svg)](https://travis-ci.org/RJacksonm1/node-dota2 "View this project's build information")
-[![Dependency Status](https://img.shields.io/david/RJacksonm1/node-dota2.svg)](https://david-dm.org/RJacksonm1/node-dota2 "Check this project's dependencies")
+[![Build Status](https://img.shields.io/travis/Arcana/node-dota2.svg)](https://travis-ci.org/Arcana/node-dota2 "View this project's build information")
+[![Dependency Status](https://img.shields.io/david/Arcana/node-dota2.svg)](https://david-dm.org/Arcana/node-dota2 "Check this project's dependencies")
 
 A node-steam plugin for Dota 2, consider it in alpha state.
 
-Check out my blog post (my only blog post), [Extending node-dota2](https://blog.rjackson.me/extending-node-dota2/), for a rough overview of adding new functionality to the library.
+Check out RJackson1's blog post (his only blog post), [Extending node-dota2](https://blog.rjackson.me/extending-node-dota2/), for a rough overview of adding new functionality to the library.
 A fair warning, while the way you search for new functionality is still the same, quite a lot has changed (and been simplified) implementation wise.
 It is now easier to implement new functionality than it was back when this blog was written.
 
 ## Upgrade guide
 
-### `3.*.*` to `4.0.0`
+### `3.*.*` to `4.*.0`
 
 A few backwards incompatible API changes were included with version 4.0.0.
 
@@ -45,6 +45,13 @@ var Steam = require('steam'),
     dota2 = require('dota2'),
     Dota2 = new dota2.Dota2Client(steamClient, true, false);
 ```
+
+## Disclaimer
+We do not in any way encourage people to use their own accounts when using this library. 
+This library tries to mimic the behavior of the Dota 2 client to allow people to programmatically interact with the Dota 2 GC, 
+however we make no efforts to hide this fact and it's pretty easy for Valve to detect clients using this library based on the generated traffic. 
+While Valve has not yet expressed a dislike regarding reverse engineering projects like this one, 
+it's not unimaginable that this might one day change and result in VAC bans.
 
 ## Examples
 The `examples` directory contains two Dota2 bots as an example. One contains commented-out dota2 methods, the other has boolean activated methods. 
@@ -106,9 +113,9 @@ Attempts to delete an item. Requires the GC to be ready (listen for the `ready` 
 ### Chat
 **_Limited Steam accounts cannot interact with chat!_**
 
-#### joinChat(channel, [type])
-* `channel` - A string for the channel name.
-* `[type]` - The type of the channel being joined.  Defaults to `Dota2.schema.DOTAChatChannelType_t.DOTAChannelType_Custom`.
+#### joinChat(channel_name, [channel_type])
+* `channel_name` - A string for the channel name.
+* `[channel_type]` - The type of the channel being joined.  Defaults to `Dota2.schema.DOTAChatChannelType_t.DOTAChannelType_Custom`.
 
 Joins a chat channel. If the chat channel with the given name doesn't exist, it 
 is created. Listen for the `chatMessage` event for other people's chat messages.
@@ -117,28 +124,35 @@ Notable channels:
 * `Guild_##########` - The chat channel of the guild with guild_id = ##########
 * `Lobby_##########` - The chat channel of the lobby with lobby_id = ##########
 
-#### leaveChat(channel)
-* `channel` - A string for the channel name.
+#### leaveChat(channel_name, [channel_type])
+* `channel_name` - A string for the channel name.
+* `[channel_type]` - The type of the channel you want to leave. Use the `Dota2.schema.DOTAChatChannelType_t` enum. 
 
-Leaves a chat channel.
+Leaves a chat channel. If you've joined different channels with the same name, specify the type to prevent unexpected behaviour.
 
-#### sendMessage(channel, message)
+#### sendMessage(channel, message, [channel_type])
 * `channel` - A string for the channel name.
 * `message` - The message you want to send.
+* `[channel_type]` - The type of the channel you want to send a message to. Use the `Dota2.schema.DOTAChatChannelType_t` enum.
 
 Sends a message to the specified chat channel. Won't send if you're not in the channel you try to send to.
+If you've joined different channels with the same name, specify the type to prevent unexpected behaviour.
 
-#### flipCoin(channel)
+#### flipCoin(channel, [channel_type])
 * `channel` - A string for the channel name.
+* `[channel_type]` - The type of the channel you want to flip a coin in. Use the `Dota2.schema.DOTAChatChannelType_t` enum. 
 
 Sends a coin flip to the specified chat channel. Won't send if you're not in the channel you try to send to.
+If you've joined different channels with the same name, specify the type to prevent unexpected behaviour.
 
-#### rollDice(channel, min, max)
+#### rollDice(channel, min, max, [channel_type])
 * `channel` - A string for the channel name.
 * `min` - Lower bound of the dice roll.
 * `max` - Upper bound of the dice roll.
+* `[channel_type]` - The type of the channel you want to roll a dice in. Use the `Dota2.schema.DOTAChatChannelType_t` enum. 
 
 Sends a dice roll to the specified chat channel. Won't send if you're not in the channel you try to send to.
+If you've joined different channels with the same name, specify the type to prevent unexpected behaviour.
 
 #### requestChatChannels()
 
@@ -222,6 +236,8 @@ Requests the list of pro teams.
   * `[matches_requested]` - How many matches to retrieve
   * `[hero_id]` - The ID of the hero the given account ID had played
   * `[request_id]` - I have no idea.
+  * `[include_practice_matches]` - Do you want practice matches in the result sets?
+  * `[include_custom_games]` - Do you want custom games in the result sets?
 * `[callback]` - optional callback, returns args: `err, response`.
 
 Requests the given player's match history. The responses are paginated, but you can use the `start_at_match_id` and `matches_requested` options to loop through them.
@@ -267,6 +283,13 @@ Sends a message to the Game Coordinator requesting one or multiple `account_ids`
 
 Sends a message to the Game Coordinator requesting `account_id`'s trophy data. Provide a callback or listen for `trophyListData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling). Notably, this data contains the `profile_name` field, which is the user's name displayed on their profile page in dota.
 
+#### requestPlayerStats(account_id, [callback])
+* `account_id` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose player stats you wish to view.
+* `[callback]` - optional callback, returns args: `err, response`.
+*
+Sends a message to the Game Coordinator requesting `account_id`'s player stats. Provide a callback or listen for `playerStatsData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling). This data contains all stats shown on a player's profile page.
+
+
 ### Matches
 #### requestMatches(criteria, [callback])
 * `[criteria]` - The options available for searching matches:
@@ -311,9 +334,10 @@ Sends a message to the Game Coordinator requesting the top matches of your frien
 
 ### Parties
 
-### respondPartyInvite(id, accept)
-* `[id]` - Number, party ID.
-* `[accept]` - Accept or decline the invite.
+### respondPartyInvite(id, accept, [ping_data])
+* `id` - Number, party ID.
+* `accept` - Accept or decline the invite.
+* `[ping_data]` - Optional argument to be provided when accepting a party invite. For contents see `CMsgClientPingData`.
 
 Responds to an incoming party invite. The `PartyInvite` property is cleared after the response has been sent.
 
@@ -334,6 +358,12 @@ Kicks a player from the party. This will create a new party if you aren't in one
 * `[coach]` - Boolean, if the bot wants to be coach or not.
 
 Set the bot's status as a coach.
+
+
+### setPartyLeader(id)
+* `[id]` - The steam ID of new party leader.
+
+Set the new party leader.
 
 
 ### leaveParty()
@@ -511,6 +541,11 @@ Emitted when the GC is ready to receive messages.  Be careful not to declare ano
 ### `unready`
 Emitted when the connection status to the GC changes, and renders the library unavailable to interact.  You should clear any event handlers set in the `ready` event here, otherwise you'll have multiple handlers for each message every time a new `ready` event is sent.
 
+### `popup` (`type`, `popup`)
+* `type` - The type of the popup. See `CMsgDOTAPopup.PopupID` 
+* `popup` - The raw popup data
+
+Generic popup, can be produced for a plethora of reasons.
 
 ### `chatMessage` (`channel`, `senderName`, `message`, `chatObject`)
 * `channel` - Channel name.
@@ -680,6 +715,31 @@ Emitted when GC responds to the `requestPassportData` method.
 
 See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client_fantasy.proto#L961) for `passportData`'s object structure.
 
+### `playerStatsData` (`account_id`, `playerStats`)
+* `account_id` - Account ID whom the stats belong to.
+* `playerStats` - Statistics about the player. This entails:
+  * `account_id`
+  * `player_stats`
+  * `match_count`
+  * `mean_gpm`
+  * `mean_xppm`
+  * `mean_lasthits`
+  * `rampages`
+  * `triple_kills`
+  * `first_blood_claimed`
+  * `first_blood_given`
+  * `couriers_killed`
+  * `aegises_snatched`
+  * `cheeses_eaten`
+  * `creeps_stacked`
+  * `fight_score`
+  * `farm_score`
+  * `support_score`
+  * `push_score`
+  * `versatility_score`
+
+Emitted when the GC responds to the `requestPlayerStats` method.
+
 ### `hallOfFameData` (`week`, `featuredPlayers`, `featuredFarmer`, `hallOfFameResponse`)
 * `week` - Week the data is associated with.
 * `featuredPlayers` - Array of featured players for that week. `[{ account_id, heroId, averageScaledMetric, numGames }]`
@@ -714,7 +774,7 @@ See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/5acc8bb72bb7f
 * `matchmakingStatsResponse` - Raw response object.
 
 Emitted when te GC response to the `requestMatchmakingStats` method.  The array order dictates which matchmaking groups the figure belongs to. 
-The groups are discoverable through `regions.txt` in Dota 2's game files.  We maintain an indicative list *without guarantees* in this README. 
+The groups are discoverable through [regions.txt](https://github.com/SteamDatabase/GameTracking/blob/master/dota/game/dota/pak01_dir/scripts/regions.txt) in Dota 2's game files.  We maintain an indicative list *without guarantees* in this README. 
 This list is manually updated only when changes are detected by community members, so it can be out of date. 
 Here are the groups at the time of this sentence being written (with unecessary data trimmed out):
 
@@ -738,7 +798,8 @@ Here are the groups at the time of this sentence being written (with unecessary 
     "India":                        {"matchgroup": "16"},
     "PerfectWorldTelecomGuangdong": {"matchgroup": "17"},
     "PerfectWorldTelecomZhejiang":  {"matchgroup": "18"},
-    "Japan":                        {"matchgroup": "19"}
+    "Japan":                        {"matchgroup": "19"},
+    "PerfectWorldTelecomWuhan":     {"matchgroup": "20"}
 ```
 
 ### `topFriendMatchesData` (`matches`)
@@ -755,7 +816,7 @@ Emitted when the GC responds to the `requestTopFriendMatches` method.
 
 
 ### `practiceLobbyUpdate` (`lobby`)
-* `lobby` - The full lobby object (see CSODOTALobby).
+* `lobby` - The full lobby object (see `CSODOTALobby`).
 
 
 Emitted when the GC sends a lobby snapshot. The GC is incredibly
@@ -815,7 +876,7 @@ Emitted when the GC has created the invitation. The invitation is only sent when
 the invitee is online.
 
 ### `partyUpdate` (`party`)
-* `party` - The full party object (see CSODOTAParty).
+* `party` - The full party object (see `CSODOTAParty`).
 
 
 Emitted when the GC sends a party snapshot. The GC is incredibly
@@ -919,13 +980,21 @@ Emitted when the GC responds to the `requestSourceTVGames` method.  Multiple eve
 * `EUROPE: 3`
 * `KOREA: 4`
 * `SINGAPORE: 5`
+* `DUBAI: 6`
 * `AUSTRALIA: 7`
 * `STOCKHOLM: 8`
 * `AUSTRIA: 9`
 * `BRAZIL: 10`
 * `SOUTHAFRICA: 11`
-* `PERFECTWORLDTELECOM: 12`
-* `PERFECTWORLDUNICOM: 13`
+* `PWTELECOMSHANGHAI: 12`
+* `PWUNICOM: 13`
+* `CHILE: 14`
+* `PERU: 15`
+* `INDIA: 16`
+* `PWTELECOMGUANGZHOU: 17`
+* `PWTELECOMZHEJIANG: 18`
+* `JAPAN: 19`
+* `PWTELECOMWUHAN: 20`
 
 Use this to pass valid server region data to `createPracticeLobby`.
 
@@ -946,8 +1015,15 @@ Use this to pass valid server region data to `createPracticeLobby`.
 * `DOTA_GAMEMODE_POOL1: 13` - Limited Heroes
 * `DOTA_GAMEMODE_FH: 14` - Compendium
 * `DOTA_GAMEMODE_CUSTOM: 15` - Unknown, probably ti4 techies reveal.
+* `DOTA_GAMEMODE_CD: 16` - Captain's Draft
+* `DOTA_GAMEMODE_BD: 17` - Balanced Draft
+* `DOTA_GAMEMODE_ABILITY_DRAFT: 18` - Ability Draft
+* `DOTA_GAMEMODE_EVENT: 19` - Unknown
+* `DOTA_GAMEMODE_ARDM: 20` - All Random Death Match
+* `DOTA_GAMEMODE_1V1MID: 21` - 1v1 Mid
+* `DOTA_GAMEMODE_ALL_DRAFT: 22` - All Draft a.k.a. ranked all pick
 
-Use this to pass valid game mode data to `createPracticeLobby`.
+Use this to pass valid game mode data to `createPracticeLobby`. This enum is built-in the protobuf schema and can be referenced by `Dota2.DOTA_GameMode`.
 
 
 
