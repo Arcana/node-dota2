@@ -1996,6 +1996,14 @@ message CMsgGCToClientBattlePassRollupResponse {
 	optional .CMsgGCToClientBattlePassRollup_International2016 event_ti6 = 1;
 }
 
+message CMsgGCToClientBattlePassRollupListRequest {
+	optional uint32 account_id = 1;
+}
+
+message CMsgGCToClientBattlePassRollupListResponse {
+	repeated uint32 event_id = 1;
+}
+
 message CMsgClientToGCTransferSeasonalMMRRequest {
 	optional bool is_party = 1;
 }
@@ -2013,5 +2021,9 @@ message CMsgDOTAEventInvite {
 	}
 
 	repeated .CMsgDOTAEventInvite.Team teams = 1;
+}
+
+message CMsgDOTASetFavoriteTeam {
+	optional uint32 team_id = 1;
 }
 
