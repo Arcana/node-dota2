@@ -90,7 +90,7 @@ var onMatchesResponse = function onMatchesResponse(message, callback) {
     callback = callback || null;
     var matchResponse = Dota2.schema.CMsgDOTARequestMatchesResponse.decode(message);
     if (matchResponse.total_results > 1) {
-        if (this.debug) util.log("Reveived listing for matches");
+        if (this.debug) util.log("Received listing for matches");
         this.emit("matchesData",
             matchResponse.total_results,
             matchResponse.results_remaining,
