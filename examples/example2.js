@@ -71,12 +71,34 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
 
             // MATCH
 
+            // Request the details of a certain match
             var CheckMatchID = 1944132605;
             var checkingMatch = 0;
 
             if(checkingMatch == 1){
                 Dota2.requestMatchDetails(CheckMatchID, function(err, data){
                     util.log(JSON.stringify(data));
+                });
+            }
+            
+            // Request the 50 most recent matches
+            var checkingMatches = 0;
+            if(checkingMatches == 1){
+                Dota2.requestMatches({
+                    "matches_requested": 25,
+                    "tournament_games_only": false,
+                    "skill": 1
+                }, (result,response) => {
+                    response.matches.map(match => console.log(""+match.match_id));
+                    var lastID = response.matches[24].match_id - 1;
+                    Dota2.requestMatches({
+                        "matches_requested": 25,
+                        "start_at_match_id": lastID,
+                        "tournament_games_only": false,
+                        "skill": 1
+                    }, (result, response)=>{
+                        response.matches.map(match => console.log(""+match.match_id));
+                    });
                 });
             }
 
