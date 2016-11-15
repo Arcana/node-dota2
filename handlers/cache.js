@@ -2,45 +2,65 @@ var Dota2 = require("../index"),
     util = require("util");
 
 var cacheTypeIDs = {
+    // Legacy values
     LOBBY: 2004,
     PARTY: 2003,
     PARTY_INVITE: 2006,
-    LOBBY_INVITE: 2011
+    LOBBY_INVITE: 2011,
+    // Actual values
+    CSOEconItem : 1,
+    CSOItemRecipe : 5,
+    CSOEconGameAccountClient : 7,
+    CSOSelectedItemPreset : 35,      // no longer exists in game files
+    CSOEconItemPresetInstance : 36,  // no longer exists in game files
+    CSOEconItemDropRateBonus : 38,
+    CSOEconItemLeagueViewPass : 39,
+    CSOEconItemEventTicket : 40,
+    CSOEconItemTournamentPassport : 42,
+    CSODOTAGameAccountClient : 2002,
+    CSODOTAParty : 2003,
+    CSODOTALobby : 2004,
+    CSODOTAPartyInvite : 2006,
+    CSODOTAGameHeroFavorites : 2007,
+    CSODOTAMapLocationState : 2008,
+    CMsgDOTATournament : 2009,
+    CSODOTAPlayerChallenge : 2010,
+    CSODOTALobbyInvite : 2011
 };
 
 // Handlers
 function handleSubscribedType(obj_type, object_data) {
     switch (obj_type) {
         // Lobby snapshot.
-        case cacheTypeIDs.LOBBY:
+        case cacheTypeIDs.CSODOTALobby:
             var lobby = Dota2.schema.CSODOTALobby.decode(object_data);
             if (this.debug) util.log("Received lobby snapshot for lobby ID " + lobby.lobby_id);
             this.emit("practiceLobbyUpdate", lobby);
             this.Lobby = lobby;
             break;
         // Lobby invite snapshot.
-        case cacheTypeIDs.LOBBY_INVITE:
+        case cacheTypeIDs.CSODOTALobbyInvite:
             var lobby = Dota2.schema.CSODOTALobbyInvite.decode(object_data);
             if (this.debug) util.log("Received lobby invite snapshot for group ID " + lobby.group_id);
             this.emit("lobbyInviteUpdate", lobby);
             this.LobbyInvite = lobby;
             break;
         // Party snapshot.
-        case cacheTypeIDs.PARTY:
+        case cacheTypeIDs.CSODOTAParty:
             var party = Dota2.schema.CSODOTAParty.decode(object_data);
             if (this.debug) util.log("Received party snapshot for party ID " + party.party_id);
             this.emit("partyUpdate", party);
             this.Party = party;
             break;
         // Party invite snapshot.
-        case cacheTypeIDs.PARTY_INVITE:
+        case cacheTypeIDs.CSODOTAPartyInvite:
             var party = Dota2.schema.CSODOTAPartyInvite.decode(object_data);
             if (this.debug) util.log("Received party invite snapshot for group ID " + party.group_id);
             this.emit("partyInviteUpdate", party);
             this.PartyInvite = party;
             break;
         default:
-            if (this.debug) util.log("Unknown cache ID: " + obj_type);
+            if (this.debug) util.log("Unhandled cache ID: " + obj_type);
             break;
     }
 };
@@ -123,11 +143,11 @@ var onCacheDestroy = function onCacheDestroy(message) {
 
     if (this.debug) util.log("Cache destroy, " + destroy.type_id);
 
-    if (destroy.type_id === cacheTypeIDs.PARTY_INVITE) {
+    if (destroy.type_id === cacheTypeIDs.CSODOTAPartyInvite) {
         this.PartyInvite = null;
         this.emit("partyInviteCleared");
     }
-    if (destroy.type_id === cacheTypeIDs.LOBBY_INVITE) {
+    if (destroy.type_id === cacheTypeIDs.CSODOTALobbyInvite) {
         this.LobbyInvite = null;
         this.emit("lobbyInviteCleared");
     }
