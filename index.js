@@ -112,6 +112,7 @@ Dota2Client.prototype.launch = function() {
     this.Party = null;
     this.Lobby = null;
     this.PartyInvite = null;
+    this.Inventory = null;
     this._user.gamesPlayed([{
         "game_id": this._appid
     }]);
@@ -227,3 +228,4 @@ require("./handlers/sourcetv");
 require("./handlers/team");
 require("./handlers/custom");
 require("./handlers/general");
+require("./handlers/fantasy");
