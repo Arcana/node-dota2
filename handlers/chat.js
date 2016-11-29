@@ -214,14 +214,12 @@ var onOtherLeftChannel = function onOtherLeftChannel(message) {
         if (this.debug) {
             if (channel) {
                 util.log(otherLeft.steam_id + " left channel " + channel.channel_name);
+                this.emit("chatLeave", channel.channel_name, otherLeft.steam_id, otherLeft);
             } else {
                 util.log(otherLeft.steam_id + " left channel " + otherLeft.channel_id + " (PS: why do I get messages from a chat I don't know? Did you kill me D: ?)");
+                this.emit("chatLeave", otherLeft.channel_id, otherLeft.steam_id, otherLeft);
             }
         }
-        this.emit("chatLeave",
-            channel.channel_name,
-            otherLeft.steam_id,
-            otherLeft);
         // Delete member from cached chatChannel
         channel.members = channel.members.filter(function(item) {
             return ("" + item.steam_id !== "" + otherLeft.steam_id);
