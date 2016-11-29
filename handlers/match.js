@@ -49,6 +49,21 @@ Dota2.Dota2Client.prototype.requestMatchDetails = function(match_id, callback) {
                     onMatchDetailsResponse, callback);
 };
 
+Dota2.Dota2Client.prototype.requestMatchMinimalDetails = function(match_ids, callback) {
+    callback = callback || null;
+    var _self = this;
+    
+    /* Sends a message to the Game Coordinator requesting `match_id`'s match details.  Listen for `matchData` event for Game Coordinator's response. */
+    if (this.debug) util.log("Sending match minimal details request");
+    
+    var payload = new Dota2.schema.CMsgClientToGCMatchesMinimalRequest({
+        "match_ids": match_ids
+    });
+    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCMatchesMinimalRequest, 
+                    payload, 
+                    onMatchMinimalDetailsResponse, callback);
+};
+
 Dota2.Dota2Client.prototype.requestMatchmakingStats = function() {
     /* Sends a message to the Game Coordinator requesting `match_id`'s match deails.  Listen for `matchData` event for Game Coordinator's response. */
     // Is not Job ID based - can't do callbacks.
@@ -58,6 +73,14 @@ Dota2.Dota2Client.prototype.requestMatchmakingStats = function() {
     this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgGCMatchmakingStatsRequest, payload);
 };
 
+Dota2.Dota2Client.prototype.requestTopFriendMatches = function() {
+    /* Sends a message to the Game Coordinator request the info on all available official leagues */
+    if (this.debug) util.log("Sending CMsgClientToGCTopFriendMatchesRequest");
+    
+    var payload = new Dota2.schema.CMsgClientToGCTopFriendMatchesRequest({});
+    this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCTopFriendMatchesRequest, payload);
+
+};
 
 // Handlers
 
@@ -100,14 +123,47 @@ var onMatchDetailsResponse = function onMatchDetailsResponse(message, callback) 
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCMatchDetailsResponse] = onMatchDetailsResponse;
 
+var onMatchMinimalDetailsResponse = function onMatchMinimalDetailsResponse(message, callback) {
+    callback = callback || null;
+    var matchMinimalDetailsResponse = Dota2.schema.CMsgClientToGCMatchesMinimalResponse.decode(message);
+
+    if (matchMinimalDetailsResponse.matches) {
+        /*if (this.debug)*/
+        util.log("Received match minimal data for: " + matchMinimalDetailsResponse.matches.match_id);
+        this.emit("matchMinimalDetailsData",
+            matchMinimalDetailsResponse.last_match,
+            matchMinimalDetailsResponse);
+        if (callback) callback(null, matchMinimalDetailsResponse);
+    } else {
+        if (this.debug) util.log("Received a bad matchMinimalDetailsResponse");
+		if (this.debug) console.log(JSON.stringify(matchMinimalDetailsResponse));
+        if (callback) callback(matchMinimalDetailsResponse.result, matchMinimalDetailsResponse);
+    }
+};
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCMatchesMinimalResponse] = onMatchMinimalDetailsResponse;
+
+// TODO: replace first two parameters by matchmakingStatsResponse.match_groups
 var onMatchmakingStatsResponse = function onMatchmakingStatsResponse(message) {
     // Is not Job ID based - can't do callbacks.
     var matchmakingStatsResponse = Dota2.schema.CMsgDOTAMatchmakingStatsResponse.decode(message);
 
     if (this.debug) util.log("Received matchmaking stats");
     this.emit("matchmakingStatsData",
-        matchmakingStatsResponse.searching_players_by_group_source2,
-        matchmakingStatsResponse.disabled_groups_source2,
+        matchmakingStatsResponse.matchgroups_version,
+        matchmakingStatsResponse.match_groups,
         matchmakingStatsResponse);
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCMatchmakingStatsResponse] = onMatchmakingStatsResponse;
+
+var onTopFriendMatchesResponse = function onTopFriendMatchesResponse(message) {
+    var response = Dota2.schema.CMsgGCToClientTopFriendMatchesResponse.decode(message);
+
+    if (response.matches.length > 0) {
+        if (this.debug) util.log("Received information for " + response.matches.length + " friend matches");
+        this.emit("topFriendMatchesData", response.matches);
+    } else {
+        if (this.debug) util.log("Received a bad topFriendMatches response", response);
+    }
+
+};
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCToClientTopFriendMatchesResponse] = onTopFriendMatchesResponse;

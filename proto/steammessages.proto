@@ -18,6 +18,7 @@ enum GCProtoBufMsgSrc {
 	GCProtoBufMsgSrc_FromSteamID = 2;
 	GCProtoBufMsgSrc_FromGC = 3;
 	GCProtoBufMsgSrc_ReplySystem = 4;
+	GCProtoBufMsgSrc_SpoofedSteamID = 5;
 }
 
 message CMsgProtoBufHeader {
@@ -97,11 +98,11 @@ message CMsgAMFindAccountsResponse {
 message CMsgNotifyWatchdog {
 	optional uint32 source = 1;
 	optional uint32 alert_type = 2;
-	optional uint32 alert_destination = 3;
 	optional bool critical = 4;
 	optional uint32 time = 5;
 	optional uint32 appid = 6;
 	optional string text = 7;
+	optional string recipient = 12;
 }
 
 message CMsgAMGetLicenses {
@@ -401,11 +402,13 @@ message CMsgGCCheckFriendship_Response {
 
 message CMsgGCGetAppFriendsList {
 	optional fixed64 steamid = 1;
+	optional bool include_friendship_timestamps = 2;
 }
 
 message CMsgGCGetAppFriendsList_Response {
 	optional bool success = 1;
 	repeated fixed64 steamids = 2;
+	repeated fixed32 friendship_timestamps = 3;
 }
 
 message CMsgGCMsgMasterSetDirectory {
@@ -423,6 +426,7 @@ message CMsgGCMsgMasterSetDirectory {
 
 message CMsgGCMsgMasterSetDirectory_Response {
 	optional int32 eresult = 1 [default = 2];
+	optional string message = 2;
 }
 
 message CMsgGCMsgWebAPIJobRequestForwardResponse {
@@ -463,7 +467,8 @@ message CMsgGCRoutingInfo {
 		DISCARD = 1;
 		CLIENT_STEAMID = 2;
 		PROTOBUF_FIELD_UINT64 = 3;
-		WEBAPI_PARAM_UINT64 = 4;
+		WEBAPI_PARAM = 4;
+		WEBAPI_PARAM_STEAMID_ACCOUNTID = 5;
 	}
 
 	repeated uint32 dir_index = 1;
@@ -600,5 +605,11 @@ message CMsgDPPartnerMicroTxnsResponse {
 
 	optional uint32 eresult = 1 [default = 2];
 	optional .CMsgDPPartnerMicroTxnsResponse.EErrorCode eerrorcode = 2 [default = k_MsgValid];
+}
+
+message CMsgGCHVacVerificationChange {
+	optional fixed64 steamid = 1;
+	optional uint32 appid = 2;
+	optional bool is_verified = 3;
 }
 

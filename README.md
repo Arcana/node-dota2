@@ -2,36 +2,65 @@ node-dota2
 ========
 
 [![NPM version](https://img.shields.io/npm/v/dota2.svg)](https://npmjs.org/package/dota2 "View this project on NPM")
-[![Build Status](https://img.shields.io/travis/RJacksonm1/node-dota2.svg)](https://travis-ci.org/RJacksonm1/node-dota2 "View this project's build information")
-[![Dependency Status](https://img.shields.io/david/RJacksonm1/node-dota2.svg)](https://david-dm.org/RJacksonm1/node-dota2 "Check this project's dependencies")
-[![devDependency Status](https://img.shields.io/david/dev/RJacksonm1/node-dota2.svg)](https://david-dm.org/RJacksonm1/node-dota2#info=devDependencies "Check this project's dev dependencies")
+[![Build Status](https://img.shields.io/travis/Arcana/node-dota2.svg)](https://travis-ci.org/Arcana/node-dota2 "View this project's build information")
+[![Dependency Status](https://img.shields.io/david/Arcana/node-dota2.svg)](https://david-dm.org/Arcana/node-dota2 "Check this project's dependencies")
 
 A node-steam plugin for Dota 2, consider it in alpha state.
 
-Check out my blog post (my only blog post), [Extending node-dota2](https://blog.rjackson.me/extending-node-dota2/), for a rough overview of adding new functionality to the library.
+Check out RJackson1's blog post (his only blog post), [Extending node-dota2](https://blog.rjackson.me/extending-node-dota2/), for a rough overview of adding new functionality to the library.
+A fair warning, while the way you search for new functionality is still the same, quite a lot has changed (and been simplified) implementation wise.
+It is now easier to implement new functionality than it was back when this blog was written.
 
 ## Upgrade guide
 
-### `1.*.*` to `2.0.0`
+### `3.*.*` to `4.*.0`
 
-A few backwards incompatible API changes were included with version 2.0.0.
+A few backwards incompatible API changes were included with version 4.0.0.
 
-* The `chatJoin` and `chatLeave` events were changed to return the channel name instead of the id. All debug logs pertaining chat channels will now mention chat channel instead of IDs.
+* The following functions are no longer supported by Valve so they have been commented:
+  * `requestPassportData`
+  * `requestTeamProfile`
+  * `requestTeamIDByName`
+  * `requestTeamMemberProfile`
+* The `teamData` event now throws an extra parameter `league_id`
+* The `matchMakingStatsData` event's first two parameters changed as the old values no longer exist.
+* The `matchMinimalDetailsData` event now returns the `last_match` bool as first argument.
 
-* The `waitTimesByGroup` argument in the `matchmakingStatsData` event has been removed.
+## Installation and setup
+* `npm install steam; npm install` in the repository root (install Steam first to work around a node-steam#222)
+* Copy `config.js.example` to `config.js` and edit appropriately
+* Run the example script: `node example.js`
+* If you receive Error 63 you need to provide a Steam Guard code by setting the Steam Guard code in `config.js` and launching again.
+* Make sure to use at least version 4.4.5 of node js
 
 ## Initializing
 Parameters:
 * `steamClient` - Pass a SteamClient instance to use to send & receive GC messages.
 * `debug` - A boolean noting whether to print information about operations to console.
+* `debugMore` - A boolean noting whether to print extended debug information. Activating this will log messages for each proto message exchanged with the GC.
 
 ```js
 var Steam = require('steam'),
     steamClient = new Steam.SteamClient(),
     dota2 = require('dota2'),
-    Dota2 = new dota2.Dota2Client(steamClient, true);
+    Dota2 = new dota2.Dota2Client(steamClient, true, false);
 ```
 
+## Disclaimer
+We do not in any way encourage people to use their own accounts when using this library. 
+This library tries to mimic the behavior of the Dota 2 client to allow people to programmatically interact with the Dota 2 GC, 
+however we make no efforts to hide this fact and it's pretty easy for Valve to detect clients using this library based on the generated traffic. 
+While Valve has not yet expressed a dislike regarding reverse engineering projects like this one, 
+it's not unimaginable that this might one day change and result in VAC bans.
+
+## Examples
+The `examples` directory contains two Dota2 bots as an example. One contains commented-out dota2 methods, the other has boolean activated methods. 
+Both examples show how to interact with the library.
+
+## Testing
+There is a partial automated test suite for node-dota2, which is located in the test directory. 
+You need to configure the `STEAM_USERNAME` and `STEAM_PASSWORD` environment variables to be able to run it.
+You can launch the tests by running the file with mocha.
 
 ##Properties
 ###AccountID
@@ -84,9 +113,9 @@ Attempts to delete an item. Requires the GC to be ready (listen for the `ready` 
 ### Chat
 **_Limited Steam accounts cannot interact with chat!_**
 
-#### joinChat(channel, [type])
-* `channel` - A string for the channel name.
-* `[type]` - The type of the channel being joined.  Defaults to `Dota2.schema.DOTAChatChannelType_t.DOTAChannelType_Custom`.
+#### joinChat(channel_name, [channel_type])
+* `channel_name` - A string for the channel name.
+* `[channel_type]` - The type of the channel being joined.  Defaults to `Dota2.schema.DOTAChatChannelType_t.DOTAChannelType_Custom`.
 
 Joins a chat channel. If the chat channel with the given name doesn't exist, it 
 is created. Listen for the `chatMessage` event for other people's chat messages.
@@ -95,28 +124,35 @@ Notable channels:
 * `Guild_##########` - The chat channel of the guild with guild_id = ##########
 * `Lobby_##########` - The chat channel of the lobby with lobby_id = ##########
 
-#### leaveChat(channel)
-* `channel` - A string for the channel name.
+#### leaveChat(channel_name, [channel_type])
+* `channel_name` - A string for the channel name.
+* `[channel_type]` - The type of the channel you want to leave. Use the `Dota2.schema.DOTAChatChannelType_t` enum. 
 
-Leaves a chat channel.
+Leaves a chat channel. If you've joined different channels with the same name, specify the type to prevent unexpected behaviour.
 
-#### sendMessage(channel, message)
+#### sendMessage(channel, message, [channel_type])
 * `channel` - A string for the channel name.
 * `message` - The message you want to send.
+* `[channel_type]` - The type of the channel you want to send a message to. Use the `Dota2.schema.DOTAChatChannelType_t` enum.
 
 Sends a message to the specified chat channel. Won't send if you're not in the channel you try to send to.
+If you've joined different channels with the same name, specify the type to prevent unexpected behaviour.
 
-#### flipCoin(channel)
+#### flipCoin(channel, [channel_type])
 * `channel` - A string for the channel name.
+* `[channel_type]` - The type of the channel you want to flip a coin in. Use the `Dota2.schema.DOTAChatChannelType_t` enum. 
 
 Sends a coin flip to the specified chat channel. Won't send if you're not in the channel you try to send to.
+If you've joined different channels with the same name, specify the type to prevent unexpected behaviour.
 
-#### rollDice(channel, min, max)
+#### rollDice(channel, min, max, [channel_type])
 * `channel` - A string for the channel name.
 * `min` - Lower bound of the dice roll.
 * `max` - Upper bound of the dice roll.
+* `[channel_type]` - The type of the channel you want to roll a dice in. Use the `Dota2.schema.DOTAChatChannelType_t` enum. 
 
 Sends a dice roll to the specified chat channel. Won't send if you're not in the channel you try to send to.
+If you've joined different channels with the same name, specify the type to prevent unexpected behaviour.
 
 #### requestChatChannels()
 
@@ -161,28 +197,36 @@ Attempts to set a user's role within a guild; use this with your own account ID 
 
 Requests the authenticated user's team data. 
 
-#### requestTeamProfile(team_id, [callback])
+#### requestTeamProfile(team_id, [callback]) - DEPRECATED
 * `team_id` - ID of a team
 * `[callback]` - optional callback, returns args: `err, response`.
 
 Requests the profile for a given team.
 
-#### requestTeamMemberProfile(steam_id, [callback])
+**Warning** protobuf no longer exists, function is now deprecated.
+
+#### requestTeamMemberProfile(steam_id, [callback]) - DEPRECATED
 * `steam_id` - Steam ID of the user whose team profile you want
 * `[callback]` - optional callback, returns args: `err, response`.
 
 Requests the profile of the team a given user belongs to.
 
-#### requestTeamIDByName(team_name, [callback])
+**Warning** protobuf no longer exists, function is now deprecated.
+
+#### requestTeamIDByName(team_name, [callback]) - DEPRECATED
 * `team_name` - Name of a team
 * `[callback]` - optional callback, returns args: `err, response`.
 
 Requests the ID for a given team name.
 
-#### requestProTeamList([callback])
+**Warning** protobuf no longer exists, function is now deprecated.
+
+#### requestProTeamList([callback]) - STATUS UNKNOWN
 * `[callback]` - optional callback, returns args: `err, response`.
 
-Requests the list of pro teams
+Requests the list of pro teams.
+
+**Warning** this request no longer triggers a response from the GC. This might be temporary.
 
 ### Community
 #### requestPlayerMatchHistory(account_id, [options], [callback])
@@ -192,20 +236,22 @@ Requests the list of pro teams
   * `[matches_requested]` - How many matches to retrieve
   * `[hero_id]` - The ID of the hero the given account ID had played
   * `[request_id]` - I have no idea.
+  * `[include_practice_matches]` - Do you want practice matches in the result sets?
+  * `[include_custom_games]` - Do you want custom games in the result sets?
 * `[callback]` - optional callback, returns args: `err, response`.
 
 Requests the given player's match history. The responses are paginated, but you can use the `start_at_match_id` and `matches_requested` options to loop through them.
 
 Provide a callback or listen for the `playerMatchHistoryData` for the GC's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
-#### requestProfile(account_id, request_name, [callback])
+#### requestProfile(account_id, request_name, [callback]) - DEPRECATED
 * `account_id` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose profile data you wish to view.
 * `request_name` - Boolean, whether you want the GC to return the accounts current display name.
 * `[callback]` - optional callback, returns args: `err, response`.
 
 Sends a message to the Game Coordinator requesting `account_id`'s profile data. Provide a callback or listen for `profileData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
-**This functionality is currently disabled by Valve**
+**Warning** Valve's privacy policy has become stricter since reborn. This function is now reserved for internal use.
 
 #### requestProfileCard (account_id, [callback])
 * `account_id` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose profile card you wish to view.
@@ -213,11 +259,12 @@ Sends a message to the Game Coordinator requesting `account_id`'s profile data. 
 
 Sends a message to the Game Coordinator requesting `account_id`'s profile card. Provide a callback or listen for `profileCardData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
-#### requestPassportData(account_id, [callback])
+#### requestPassportData(account_id, [callback]) - DEPRECATED
 * `account_id` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose passport data you wish to view.
 * `[callback]` - optional callback, returns args: `err, response`.
 
 Sends a message to the Game Coordinator requesting `account_id`'s passport data. Provide a callback or listen for `passportData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+This function is no longer supported by Valve, it's only left here for historical purposes. It will be removed in a future release.
 
 #### requestHallOfFame([week], [callback])
 * `[week]` - The week of which you wish to know the Hall of Fame members; will return latest week if omitted.  Weeks also randomly start at 2233 for some reason, valf please.
@@ -235,6 +282,13 @@ Sends a message to the Game Coordinator requesting one or multiple `account_ids`
 * `[callback]` - optional callback, returns args: `err, response`.
 
 Sends a message to the Game Coordinator requesting `account_id`'s trophy data. Provide a callback or listen for `trophyListData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling). Notably, this data contains the `profile_name` field, which is the user's name displayed on their profile page in dota.
+
+#### requestPlayerStats(account_id, [callback])
+* `account_id` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose player stats you wish to view.
+* `[callback]` - optional callback, returns args: `err, response`.
+*
+Sends a message to the Game Coordinator requesting `account_id`'s player stats. Provide a callback or listen for `playerStatsData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling). This data contains all stats shown on a player's profile page.
+
 
 ### Matches
 #### requestMatches(criteria, [callback])
@@ -263,16 +317,27 @@ Sends a message to the Game Coordinator requesting `match_id`'s match details. P
 
 Note:  There is a server-side rate-limit of 100 requests per 24 hours on this method.
 
+#### requestMatchMinimalDetails(match_ids, [callback])
+ * `match_ids` - The match IDs that you want concise details of
+ * `[callback]` - optional callback, returns args: `err, response`.
+
+Sends a message to the Game Coordinator requesting the match details for matches corresponding to `match_ids`. Provide a callback or listen for `matchMinimalDetailsData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+
 #### requestMatchmakingStats()
 
 Sends a message to the Game Coordinator requesting some matchmaking stats. Listen for the `matchmakingStatsData` event for the Game Coordinator's response (cannot take a callback because of Steam's backend, or RJackson's incompetence; not sure which). Requires the GC to be ready (listen for the `ready` event before calling).
 
+#### requestTopFriendMatches()
+
+Sends a message to the Game Coordinator requesting the top matches of your friends. Listen for the `topFriendMatchesData` event for the Game Coordinator's response (cannot take a callback because of Steam's backend). Requires the GC to be ready (listen for the `ready` event before calling).
+
 
 ### Parties
 
-### respondPartyInvite(id, accept)
-* `[id]` - Number, party ID.
-* `[accept]` - Accept or decline the invite.
+### respondPartyInvite(id, accept, [ping_data])
+* `id` - Number, party ID.
+* `accept` - Accept or decline the invite.
+* `[ping_data]` - Optional argument to be provided when accepting a party invite. For contents see `CMsgClientPingData`.
 
 Responds to an incoming party invite. The `PartyInvite` property is cleared after the response has been sent.
 
@@ -293,6 +358,12 @@ Kicks a player from the party. This will create a new party if you aren't in one
 * `[coach]` - Boolean, if the bot wants to be coach or not.
 
 Set the bot's status as a coach.
+
+
+### setPartyLeader(id)
+* `[id]` - The steam ID of new party leader.
+
+Set the new party leader.
 
 
 ### leaveParty()
@@ -329,9 +400,9 @@ Sends a message to the Game Coordinator requesting to join a lobby.  Provide a c
   * `series_type`: Use the series type enum.
   * `radiant_series_wins`: # of games won so far, e.g. for a Bo3 or Bo5.
   * `dire_series_wins`: # of games won so far, e.g. for a Bo3 or Bo5.
-  * `allchat`: Enable all chat?
+  * `allchat`: Enable all chat for VOIP
   * `league_id`: The league this lobby is being created for. Optional
-  * `dota_tv_delay`: TODO.
+  * `dota_tv_delay`: Number of seconds the game should be delayed for DotaTV.
   * `custom_game_mode`: TODO.
   * `custom_map_name`: TODO.
   * `custom_difficulty`: TODO.
@@ -363,6 +434,12 @@ Sends a message to the Game Coordinator requesting to join a particular team in 
 * `[callback]` - optional callback, returns args: `err, response`.
 
 Sends a message to the Game Coordinator requesting to add a bot to the given team in the lobby. Provide a callback or listen for `practiceLobbyResponse` for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+
+#### joinPracticeLobbyBroadcastChannel(channel, [callback])
+  * `channel` - The channel slot you want to fill (default: 1)
+  * `[callback]` - optional callback, returns args: `err, response`.
+
+ Sends a message to the Game Coordinator requesting to add a bot to the broadcast channel. Provide a callback or listen for `practiceLobbyResponse` for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
 #### balancedShuffleLobby()
 
@@ -417,9 +494,10 @@ TODO
 Sends a message to the Game Coordinator requesting a list of joinable custom games for a given region.
 
 ### Leagues
-#### requestLeaguesInMonth([month], [year], [callback])
+#### requestLeaguesInMonth([month], [year], [tier], [callback])
 * `[month]` - Int for the month (MM) you want to query data for.  Defaults to current month. **IMPORTANT NOTE**:  Month is zero-aligned, not one-aligned; so Jan = 00, Feb = 01, etc.
 * `[year]`  - Int for the year (YYYY) you want to query data for .  Defaults to current year.
+* `[tier]`  - Search only for a specific tier of tournaments. Defaults to 0.
 * `[callback]` - optional callback` returns args: `err` response`.
 
 Sends a message to the Game Coordinator requesting data on leagues being played in the given month.  Provide a callback or listen for `leaguesInMonthData` for the Game Coordinator's response.  Requires the GC to be ready (listen for the `ready` event before calling).
@@ -427,6 +505,10 @@ Sends a message to the Game Coordinator requesting data on leagues being played 
 #### requestLeagueInfo()
 
 Requests info on all available official leagues from the GC. Listen for `leagueData` for the Game Coordinator's response.  Requires the GC to be ready (listen for the `ready` event before calling).
+
+#### requestTopLeagueMatches()
+
+Sends a message to the Game Coordinator requesting the top league matches. Listen for the `topLeagueMatchesData` event for the Game Coordinator's response (cannot take a callback because of Steam's backend). Requires the GC to be ready (listen for the `ready` event before calling).
 
 
 ### SourceTV
@@ -459,6 +541,11 @@ Emitted when the GC is ready to receive messages.  Be careful not to declare ano
 ### `unready`
 Emitted when the connection status to the GC changes, and renders the library unavailable to interact.  You should clear any event handlers set in the `ready` event here, otherwise you'll have multiple handlers for each message every time a new `ready` event is sent.
 
+### `popup` (`type`, `popup`)
+* `type` - The type of the popup. See `CMsgDOTAPopup.PopupID` 
+* `popup` - The raw popup data
+
+Generic popup, can be produced for a plethora of reasons.
 
 ### `chatMessage` (`channel`, `senderName`, `message`, `chatObject`)
 * `channel` - Channel name.
@@ -522,7 +609,7 @@ Emitted when information on a particular guild is retrieved.
 
 You can respond with `cancelInviteToGuild` or `setGuildAccountRole`.
 
-### `teamData` (`teams`)
+### `teamData` (`teams`, `league_id`)
 * `teams` - Array containing the teams the user is in or which are featured on the user's profile. Each object has the following properties:
   * `on_team` - Whether or not the user is on this team
   * `profile_team` - Whether or not this is a team featured on the user's profile
@@ -534,12 +621,13 @@ You can respond with `cancelInviteToGuild` or `setGuildAccountRole`.
   * `gamesplayed` - Total amount of games played
   * `rank` - Team MMR
   * ...
+* `league_id` - League ID (no clue as of its meaning, feel free to suggest)
 
 Emitted when GC responds to the `requestMyTeams` method.
 
 See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client.proto#L776) for `team`'s object structure.
 
-### `teamProfile` (`team_id`, `team_info`)
+### `teamProfile` (`team_id`, `team_info`) - DEPRECATED
 * `team_id` - ID of the team.
 * `team_info` - Info about the team. This contains among others:
   * `name` - Name of the team
@@ -554,7 +642,7 @@ Emitted when GC responds to the `requestTeamProfile` and `requestTeamMemberProfi
 
 See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client.proto#L776) for `team_info`'s object structure.
 
-### `teamID` (`team_id`)
+### `teamID` (`team_id`) - DEPRECATED
 * `team_id` - ID of the team. Null if none was found.
 
 Emitted when GC responds to the `requestTeamIDByName` method.
@@ -570,7 +658,7 @@ Emitted when GC responds to the `requestTeamIDByName` method.
 
 Emitted when GC responds to the `requestProTeamList` method.
 
-### `profileData` (`account_id`, `profileData`)
+### `profileData` (`account_id`, `profileData`) - DEPRECATED
 * `account_id` - Account ID whom the data is associated with.
 * `profileData` - The raw profile data object.
 
@@ -619,13 +707,38 @@ Emitted when GC responds to the `requestTrophyList` method.
 
 TODO
 
-### `passportData` (`account_id`, `passportData`)
+### `passportData` (`account_id`, `passportData`) - DEPRECATED
 * `account_id` - Account ID whom the passport belongs to.
 * `passportData` - The raw passport data object.
 
 Emitted when GC responds to the `requestPassportData` method.
 
 See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client_fantasy.proto#L961) for `passportData`'s object structure.
+
+### `playerStatsData` (`account_id`, `playerStats`)
+* `account_id` - Account ID whom the stats belong to.
+* `playerStats` - Statistics about the player. This entails:
+  * `account_id`
+  * `player_stats`
+  * `match_count`
+  * `mean_gpm`
+  * `mean_xppm`
+  * `mean_lasthits`
+  * `rampages`
+  * `triple_kills`
+  * `first_blood_claimed`
+  * `first_blood_given`
+  * `couriers_killed`
+  * `aegises_snatched`
+  * `cheeses_eaten`
+  * `creeps_stacked`
+  * `fight_score`
+  * `farm_score`
+  * `support_score`
+  * `push_score`
+  * `versatility_score`
+
+Emitted when the GC responds to the `requestPlayerStats` method.
 
 ### `hallOfFameData` (`week`, `featuredPlayers`, `featuredFarmer`, `hallOfFameResponse`)
 * `week` - Week the data is associated with.
@@ -647,13 +760,21 @@ Emitted when GC responds to the `requestmatchDetails` method.
 
 See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client.proto#L1571) for `matchDetailsData`'s object structure.
 
-### `matchmakingStatsData` (`searchingPlayersByGroup`, `disabledGroups`, `matchmakingStatsResponse`)
-* `searchingPlayersByGroup` - Current players searching for matches per group.
-* `disabledGroups` - Bitmask corresponding to groups in `searchingPlayersByGroup`. Groups marked as disabled will have a value of 0.
+### `matchMinimalDetailsData` (`matchMinimalDetailsData`)
+* `last_match` - Bool, usage unknown
+* `matchMinimalDetailsData` - The raw match details data object.
+
+Emitted when GC responds to the `requestMatchMinimalDetails` method.
+
+See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/5acc8bb72bb7fb79ad08723a431fcbfe90669230/Resources/Protobufs/dota/dota_gcmessages_client.proto#L621-L650) for `matchMinimalDetailsData`'s object structure.
+
+### `matchmakingStatsData` (`matchgroups_version`, `match_groups`, `matchmakingStatsResponse`)
+* `matchgroups_version` - Version of the current list of match groups.
+* `match_groups` - Array of CMsgMatchmakingMatchGroupInfo objects. Contains info on the number of people searching and ping penalty.
 * `matchmakingStatsResponse` - Raw response object.
 
 Emitted when te GC response to the `requestMatchmakingStats` method.  The array order dictates which matchmaking groups the figure belongs to. 
-The groups are discoverable through `regions.txt` in Dota 2's game files.  We maintain an indicative list *without guarantees* in this README. 
+The groups are discoverable through [regions.txt](https://github.com/SteamDatabase/GameTracking/blob/master/dota/game/dota/pak01_dir/scripts/regions.txt) in Dota 2's game files.  We maintain an indicative list *without guarantees* in this README. 
 This list is manually updated only when changes are detected by community members, so it can be out of date. 
 Here are the groups at the time of this sentence being written (with unecessary data trimmed out):
 
@@ -677,11 +798,25 @@ Here are the groups at the time of this sentence being written (with unecessary 
     "India":                        {"matchgroup": "16"},
     "PerfectWorldTelecomGuangdong": {"matchgroup": "17"},
     "PerfectWorldTelecomZhejiang":  {"matchgroup": "18"},
-    "Japan":                        {"matchgroup": "19"}
+    "Japan":                        {"matchgroup": "19"},
+    "PerfectWorldTelecomWuhan":     {"matchgroup": "20"}
 ```
 
+### `topFriendMatchesData` (`matches`)
+* `matches` - A list of matches. Each match contains:
+  * `match_id` - Match ID
+  * `start_time` - Unix time of the start of the match
+  * `duration` - Duration of the match in seconds
+  * `game_mode` - Game mode
+  * `winning_team` - Team who won the match
+  * `players` - List of all the players in the game, contains id, hero, K/D/A and items
+  * `league` - Information on the league if this is a league match
+
+Emitted when the GC responds to the `requestTopFriendMatches` method.
+
+
 ### `practiceLobbyUpdate` (`lobby`)
-* `lobby` - The full lobby object (see CSODOTALobby).
+* `lobby` - The full lobby object (see `CSODOTALobby`).
 
 
 Emitted when the GC sends a lobby snapshot. The GC is incredibly
@@ -741,7 +876,7 @@ Emitted when the GC has created the invitation. The invitation is only sent when
 the invitee is online.
 
 ### `partyUpdate` (`party`)
-* `party` - The full party object (see CSODOTAParty).
+* `party` - The full party object (see `CSODOTAParty`).
 
 
 Emitted when the GC sends a party snapshot. The GC is incredibly
@@ -783,9 +918,10 @@ accepting/rejecting it or when the party is closed.
 * `liveLeaguesResponse` - Integer representing number of live league games.
 
 
-### `leaguesInMonthData` (`result`, `leaguesInMonthData`)
-* `result` - The result object from `leaguesInMonthData`.
-* `leaguesInMonthData` - The raw response object.
+### `leaguesInMonthData` (`month`, `year`, `leagues`)
+* `month` - Int representing which month this data represents.
+* `year` - Int representing which year this data represents.
+* `leagues` - Array of CMsgLeague objects
 
 Emitted when the GC responds to `requestLeaguesInMonth` method.
 
@@ -795,29 +931,37 @@ Notes:
 * `month` is also zero-aligned, so January = 0, Febuary = 1, March = 2, etc.
 * Not every participating team seems to be hooked up to Dota 2's team system, so there will be a few `{ teamId: 0 }` objects for some schedule blocks.
 
-The response object is visualized as follows:
+The leagues object is visualized as follows:
 
 ```
-{
-    eresult,            // EResult enum
-    month,              // Int representing which month this data represents.
-    leagues: [{         // An array of CMsgLeague objects
-        leagueId,       // ID of the league associated
-        schedule: [{    // An array of CMsgLeagueScheduleBlock objects
-            blockId,    // ID represending this block
-            startTime,  // Unix timestamp of a scheduled match (or group of matches)
-            finals,     // Boolean represending if this match is a final.
-            comment,    // Comment about this scheduled block - often the team names & position in bracket
-            teams: [{   // An array of CMsgLeagueScheduleBlockTeamInfo objects
-                teamId, // ID of the associated team
-                name,   // The teams name
-                tag,    // The teams tag
-                logo    // The teams logo
-            }]
+leagues: [{         // An array of CMsgLeague objects
+    leagueId,       // ID of the league associated
+    schedule: [{    // An array of CMsgLeagueScheduleBlock objects
+        blockId,    // ID represending this block
+        startTime,  // Unix timestamp of a scheduled match (or group of matches)
+        finals,     // Boolean represending if this match is a final.
+        comment,    // Comment about this scheduled block - often the team names & position in bracket
+        teams: [{   // An array of CMsgLeagueScheduleBlockTeamInfo objects
+            teamId, // ID of the associated team
+            name,   // The teams name
+            tag,    // The teams tag
+            logo    // The teams logo
         }]
     }]
-}
+}]
 ```
+
+### `topLeagueMatchesData` (`matches`)
+* `matches` - A list of matches. Each match contains:
+  * `match_id` - Match ID
+  * `start_time` - Unix time of the start of the match
+  * `duration` - Duration of the match in seconds
+  * `game_mode` - Game mode
+  * `winning_team` - Team who won the match
+  * `players` - List of all the players in the game, contains id, hero, K/D/A and items
+  * `league` - Information on the league if this is a league match
+
+Emitted when the GC responds to the `requestTopLeagueMatches` method.
 
 ### `leagueData` ()
 
@@ -836,13 +980,21 @@ Emitted when the GC responds to the `requestSourceTVGames` method.  Multiple eve
 * `EUROPE: 3`
 * `KOREA: 4`
 * `SINGAPORE: 5`
+* `DUBAI: 6`
 * `AUSTRALIA: 7`
 * `STOCKHOLM: 8`
 * `AUSTRIA: 9`
 * `BRAZIL: 10`
 * `SOUTHAFRICA: 11`
-* `PERFECTWORLDTELECOM: 12`
-* `PERFECTWORLDUNICOM: 13`
+* `PWTELECOMSHANGHAI: 12`
+* `PWUNICOM: 13`
+* `CHILE: 14`
+* `PERU: 15`
+* `INDIA: 16`
+* `PWTELECOMGUANGZHOU: 17`
+* `PWTELECOMZHEJIANG: 18`
+* `JAPAN: 19`
+* `PWTELECOMWUHAN: 20`
 
 Use this to pass valid server region data to `createPracticeLobby`.
 
@@ -863,17 +1015,15 @@ Use this to pass valid server region data to `createPracticeLobby`.
 * `DOTA_GAMEMODE_POOL1: 13` - Limited Heroes
 * `DOTA_GAMEMODE_FH: 14` - Compendium
 * `DOTA_GAMEMODE_CUSTOM: 15` - Unknown, probably ti4 techies reveal.
+* `DOTA_GAMEMODE_CD: 16` - Captain's Draft
+* `DOTA_GAMEMODE_BD: 17` - Balanced Draft
+* `DOTA_GAMEMODE_ABILITY_DRAFT: 18` - Ability Draft
+* `DOTA_GAMEMODE_EVENT: 19` - Unknown
+* `DOTA_GAMEMODE_ARDM: 20` - All Random Death Match
+* `DOTA_GAMEMODE_1V1MID: 21` - 1v1 Mid
+* `DOTA_GAMEMODE_ALL_DRAFT: 22` - All Draft a.k.a. ranked all pick
 
-Use this to pass valid game mode data to `createPracticeLobby`.
+Use this to pass valid game mode data to `createPracticeLobby`. This enum is built-in the protobuf schema and can be referenced by `Dota2.DOTA_GameMode`.
 
-## Testing
-There is no automated test suite for node-dota2 (I've no idea how I'd make one for the stuff this does :o), however there the `test` directory does contain a Steam bot with commented-out dota2 methods; you can use this bot to test the library.
-
-### Setting up
-* `npm install steam; npm install` in the repository root (install Steam first to work around a node-steam#222)
-* Copy `config.js.example` to `config.js` and edit appropriately
-* Run the test script: `node test.js`
-* If you receive Error 63 you need to provide a Steam Guard code by setting the Steam Guard code in `config.js` and launching again.
-* Make sure to use at least version 0.12 of node js
 
 

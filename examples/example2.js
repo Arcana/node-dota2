@@ -1,3 +1,13 @@
+var steam = require("steam"),
+    util = require("util"),
+    fs = require("fs"),
+    crypto = require("crypto"),
+    dota2 = require("../"),
+    steamClient = new steam.SteamClient(),
+    steamUser = new steam.SteamUser(steamClient),
+    steamFriends = new steam.SteamFriends(steamClient),
+    Dota2 = new dota2.Dota2Client(steamClient, true);
+
 global.config = require("./config");
 
 var onSteamLogOn = function onSteamLogOn(logonResp) {
@@ -34,16 +44,16 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
             // COMMUNITY
 
             var accId = 63470426;
-            var playerInfo = 0;
+            // var playerInfo = 0;
             var playerInfo2 = 0;
-            var playerInfo3 = 0;
+            // var playerInfo3 = 0;
 
-            if(playerInfo == 1){ // not working - maybe disabled by Valve
-                Dota2.requestProfile(accId, true);
-                Dota2.on("profileData", function (accId, data) {
-                    util.log(JSON.stringify(data));
-                });
-            }
+            // if(playerInfo == 1){ // not working - maybe disabled by Valve
+            //     Dota2.requestProfile(accId, true);
+            //     Dota2.on("profileData", function (accId, data) {
+            //         util.log(JSON.stringify(data));
+            //     });
+            // }
 
             if(playerInfo2 == 1){
                 Dota2.requestProfileCard(accId, function (accId, data) {
@@ -51,11 +61,11 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
                 });
             }
 
-            if(playerInfo3 == 1){
-                Dota2.requestPassportData(accId, function (accId, data) {
-                    util.log(JSON.stringify(data));
-                });
-            }
+            // if(playerInfo3 == 1){
+            //     Dota2.requestPassportData(accId, function (accId, data) {
+            //         util.log(JSON.stringify(data));
+            //     });
+            // }
 
             // ----------------------------------
 
@@ -79,9 +89,22 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
 
             if(creatingLobby == 1){ // sets only password, nothing more
                 var lobbyPassword = "ap";
-                var lobbyName = "Lobby Name";
+                var properties = {
+                    "game_name": "MyLobby",
+                    "server_region": 3,
+                    "game_mode": 2,
+                    "series_type": 2,
+                    "game_version": 1,
+                    "allow_cheats": false,
+                    "fill_with_bots": false,
+                    "allow_spectating": true,
+                    "pass_key": lobbyPassword,
+                    "radiant_series_wins": 0,
+                    "dire_series_wins": 0,
+                    "allchat": true
+                }
 
-                Dota2.createPracticeLobby(lobbyPassword, lobbyName, function(err, data){
+                Dota2.createPracticeLobby(lobbyPassword, properties, function(err, data){
                     // util.log(JSON.stringify(data));
                 });
             }
@@ -95,6 +118,30 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
             }
 
             // ----------------------------------
+            
+            // TEAM
+            
+            var myTeamInfo = 0;
+            
+            if (myTeamInfo == 1) {
+                Dota2.requestMyTeams(function(err, data){
+                    util.log(JSON.stringify(data));
+                });
+            }
+            
+            // ----------------------------------
+            
+            // SOURCETV
+            
+            var sourceGames = 0;
+            
+            if (sourceGames == 1) {
+                Dota2.requestSourceTVGames();
+                Dota2.on('sourceTVGamesData', (gamesData) => {
+                    util.log(gamesData);
+                });
+            }
+            
         });
 
         Dota2.on("unready", function onUnready() {
@@ -122,16 +169,18 @@ onSteamError = function onSteamError(error) {
 };
 
 steamUser.on('updateMachineAuth', function(sentry, callback) {
-    fs.writeFileSync('sentry', sentry.bytes)
+    var hashedSentry = crypto.createHash('sha1').update(sentry.bytes).digest();
+    fs.writeFileSync('sentry', hashedSentry)
     util.log("sentryfile saved");
 
-    callback({ sha_file: crypto.createHash('sha1').update(sentry.bytes).digest() });
+    callback({ sha_file: hashedSentry});
 });
 
 var logOnDetails = {
     "account_name": global.config.steam_user,
     "password": global.config.steam_pass,
 };
+if (global.config.steam_guard_code) logOnDetails.auth_code = global.config.steam_guard_code;
 
 try {
     var sentry = fs.readFileSync('sentry');

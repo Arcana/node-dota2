@@ -1,6 +1,6 @@
 {
   "name": "dota2",
-  "version": "2.0.2",
+  "version": "4.1.0",
   "dependencies": {
     "bignumber.js": "^2.1.0",
     "deferred": "^0.7.2",
@@ -8,15 +8,20 @@
     "protobufjs": "^5.0.0",
     "steam": "^1.2.0"
   },
+  "devDependencies": {
+    "mocha": "^3.0.2",
+    "should": "^11.0.0"
+  },
   "scripts": {
-    "update": "bash update_proto.sh"
+    "update": "bash update_proto.sh",
+    "test": "mocha"
   },
   "readmeFilename": "README.md",
   "description": "A node-steam plugin for Dota 2.",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/RJacksonm1/node-dota2.git"
+    "url": "git://github.com/Arcana/node-dota2.git"
   },
   "keywords": [
     "steam",

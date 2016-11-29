@@ -121,3 +121,17 @@ Dota2._convertCallback = function(handler, callback) {
         return undefined;
     }
 };
+
+Dota2._getMessageName = function(kMsg) {
+    //k_EMsgClientToGCGetProfileCard
+    var msgTypes = ["EDOTAGCMsg", "EGCSystemMsg", "ESOMsg", "EGCBaseClientMsg", "EGCToGCMsg", "EGCEconBaseMsg"];
+    for (var i=0; i<msgTypes.length; i++) {
+        for (var m in Dota2.schema[msgTypes[i]]) {
+            if (Dota2.schema[msgTypes[i]].hasOwnProperty(m)) {
+                if (Dota2.schema[msgTypes[i]][m] === kMsg) {
+                    return m;
+                }
+            }
+        }
+    }
+}

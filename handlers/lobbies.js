@@ -262,7 +262,22 @@ Dota2.Dota2Client.prototype.joinPracticeLobbyTeam = function(slot, team, callbac
     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCPracticeLobbySetTeamSlot, 
                     payload, 
                     onPracticeLobbyResponse, callback);
-}
+};
+// callback to onPracticeLobbyJoinResponse
+Dota2.Dota2Client.prototype.joinPracticeLobbyBroadcastChannel = function(channel, callback) {
+    callback = callback || null;
+    channel = channel || 1;
+    var _self = this;
+
+    if (this.debug) util.log("Sending match CMsgPracticeLobbyJoinBroadcastChannel request");
+
+    var payload = new Dota2.schema.CMsgPracticeLobbyJoinBroadcastChannel({
+        "channel": channel
+    });
+    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCPracticeLobbyJoinBroadcastChannel,
+                    payload,
+                    onPracticeLobbyJoinResponse, callback);
+};
 // callback to onPracticeLobbyResponse
 Dota2.Dota2Client.prototype.addBotToPracticeLobby = function(slot, team, bot_difficulty, callback) {
     callback = callback || null;

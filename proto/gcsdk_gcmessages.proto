@@ -124,6 +124,14 @@ message CGCToGCMsgMasterAck_Response {
 	optional int32 eresult = 1 [default = 2];
 }
 
+message CMsgGCToGCUniverseStartup {
+	optional bool is_initial_startup = 1;
+}
+
+message CMsgGCToGCUniverseStartupResponse {
+	optional int32 eresult = 1;
+}
+
 message CGCToGCMsgMasterStartupComplete {
 	message GCInfo {
 		optional uint32 dir_index = 1;
@@ -161,6 +169,8 @@ message CMsgGCRequestSubGCSessionInfo {
 message CMsgGCRequestSubGCSessionInfoResponse {
 	optional fixed32 ip = 1;
 	optional bool trusted = 2;
+	optional uint32 port = 3;
+	optional bool success = 4;
 }
 
 message CMsgSOCacheHaveVersion {
@@ -195,6 +205,7 @@ message CMsgClientWelcome {
 	optional bytes save_game_key = 6;
 	optional fixed32 item_schema_crc = 7;
 	optional string items_game_url = 8;
+	optional uint32 gc_socache_file_version = 9;
 }
 
 message CMsgConnectionStatus {
@@ -213,21 +224,30 @@ message CMsgGCToGCSOCacheSubscribe {
 	}
 
 	optional fixed64 subscriber = 1;
-	optional fixed64 subscribe_to = 2;
+	optional fixed64 subscribe_to_id = 2;
 	optional fixed64 sync_version = 3;
 	repeated .CMsgGCToGCSOCacheSubscribe.CMsgHaveVersions have_versions = 4;
+	optional uint32 subscribe_to_type = 5;
 }
 
 message CMsgGCToGCSOCacheUnsubscribe {
 	optional fixed64 subscriber = 1;
-	optional fixed64 unsubscribe_from = 2;
+	optional fixed64 unsubscribe_from_id = 2;
+	optional uint32 unsubscribe_from_type = 3;
 }
 
 message CMsgGCClientPing {
 }
 
+message CMsgGCToGCForwardAccountDetails {
+	optional fixed64 steamid = 1;
+	optional .CGCSystemMsg_GetAccountDetails_Response account_details = 2;
+	optional uint32 age_seconds = 3;
+}
+
 message CMsgGCToGCLoadSessionSOCache {
 	optional uint32 account_id = 1;
+	optional .CMsgGCToGCForwardAccountDetails forward_account_details = 2;
 }
 
 message CMsgGCToGCLoadSessionSOCacheResponse {
@@ -290,5 +310,39 @@ message CBroadcast_PostGameDataFrame_Request {
 	optional fixed64 steamid = 2;
 	optional fixed64 broadcast_id = 3;
 	optional bytes frame_data = 4;
+}
+
+message CMsgSerializedSOCache {
+	message TypeCache {
+		optional uint32 type = 1;
+		repeated bytes objects = 2;
+		optional uint32 service_id = 3;
+	}
+
+	message Cache {
+		message Version {
+			optional uint32 service = 1;
+			optional uint64 version = 2;
+		}
+
+		optional uint32 type = 1;
+		optional uint64 id = 2;
+		repeated .CMsgSerializedSOCache.Cache.Version versions = 3;
+		repeated .CMsgSerializedSOCache.TypeCache type_caches = 4;
+	}
+
+	optional uint32 file_version = 1;
+	repeated .CMsgSerializedSOCache.Cache caches = 2;
+	optional uint32 gc_socache_file_version = 3;
+}
+
+message CMsgGCToClientPollConvarRequest {
+	optional string convar_name = 1;
+	optional uint32 poll_id = 2;
+}
+
+message CMsgGCToClientPollConvarResponse {
+	optional uint32 poll_id = 1;
+	optional string convar_value = 2;
 }
 
