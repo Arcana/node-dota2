@@ -90,7 +90,7 @@ var onMatchesResponse = function onMatchesResponse(message, callback) {
     callback = callback || null;
     var matchResponse = Dota2.schema.CMsgDOTARequestMatchesResponse.decode(message);
     if (matchResponse.total_results > 1) {
-        if (this.debug) util.log("Reveived listing for matches");
+        if (this.debug) util.log("Received listing for matches");
         this.emit("matchesData",
             matchResponse.total_results,
             matchResponse.results_remaining,
@@ -110,8 +110,7 @@ var onMatchDetailsResponse = function onMatchDetailsResponse(message, callback) 
     var matchDetailsResponse = Dota2.schema.CMsgGCMatchDetailsResponse.decode(message);
 
     if (matchDetailsResponse.result === 1) {
-        /*if (this.debug)*/
-        util.log("Received match data for: " + matchDetailsResponse.match.match_id);
+        if (this.debug) util.log("Received match data for: " + matchDetailsResponse.match.match_id);
         this.emit("matchDetailsData",
             matchDetailsResponse.match.match_id,
             matchDetailsResponse);
@@ -128,8 +127,7 @@ var onMatchMinimalDetailsResponse = function onMatchMinimalDetailsResponse(messa
     var matchMinimalDetailsResponse = Dota2.schema.CMsgClientToGCMatchesMinimalResponse.decode(message);
 
     if (matchMinimalDetailsResponse.matches) {
-        /*if (this.debug)*/
-        util.log("Received match minimal data for: " + matchMinimalDetailsResponse.matches.match_id);
+        if (this.debug) util.log("Received match minimal data for: " + matchMinimalDetailsResponse.matches.match_id);
         this.emit("matchMinimalDetailsData",
             matchMinimalDetailsResponse.last_match,
             matchMinimalDetailsResponse);
