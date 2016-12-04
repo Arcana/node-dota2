@@ -216,9 +216,13 @@ var onOtherLeftChannel = function onOtherLeftChannel(message) {
             if (this.debug)
                 util.log(otherLeft.steam_id + " left channel " + channel.channel_name);
         } else {
-            this.emit("chatLeave", otherLeft.channel_id, otherLeft.steam_id, otherLeft);
+            var payload = new Dota2.schema.CMsgDOTALeaveChatChannel({
+                "channel_id": otherLeft.channel_id
+            });
+            this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgGCLeaveChatChannel, payload);
             if (this.debug)
-                util.log(otherLeft.steam_id + " left channel " + otherLeft.channel_id + " (PS: why do I get messages from a chat I don't know? Did you kill me D: ?)");
+                util.log(otherLeft.steam_id + " left channel " + otherLeft.channel_id);
+                util.log("Received message from unknown channel. Leaving channel. See bug: (https://github.com/Arcana/node-dota2/pull/378)");
         }
         // Delete member from cached chatChannel
         channel.members = channel.members.filter(function(item) {
