@@ -213,6 +213,10 @@ var onOtherLeftChannel = function onOtherLeftChannel(message) {
     } else {
         if (channel) {
             this.emit("chatLeave", channel.channel_name, otherLeft.steam_id, otherLeft);
+            // Delete member from cached chatChannel
+            channel.members = channel.members.filter(function(item) {
+                return ("" + item.steam_id !== "" + otherLeft.steam_id);
+            });
             if (this.debug)
                 util.log(otherLeft.steam_id + " left channel " + channel.channel_name);
         } else {
@@ -224,10 +228,6 @@ var onOtherLeftChannel = function onOtherLeftChannel(message) {
                 util.log(otherLeft.steam_id + " left channel " + otherLeft.channel_id);
                 util.log("Received message from unknown channel. Leaving channel. See bug: (https://github.com/Arcana/node-dota2/pull/378)");
         }
-        // Delete member from cached chatChannel
-        channel.members = channel.members.filter(function(item) {
-            return ("" + item.steam_id !== "" + otherLeft.steam_id);
-        });
     }
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCOtherLeftChannel] = onOtherLeftChannel;
