@@ -20,17 +20,14 @@ Dota2.Dota2Client.prototype.requestPlayerCardsByPlayer = function() {
         // Sort cards per player
         var players = playercards.reduce((players, card)=>{
             var id_attr = card.attribute.filter(attr => attr.def_index == 424)[0];
-            var account_id = Buffer.from(id_attr.value_bytes.buffer).readUInt32LE(id_attr.value_bytes.offset);
+            var account_id = id_attr.value_bytes.readUInt32(id_attr.value_bytes.offset);
             // Add player if we haven't seen him yet
             if (!players[account_id]) players[account_id] = {'account_id': account_id, 'cards': []};
             // Add this card
             var bonus = card.attribute.filter(attr => attr.def_index == 425)[0];
             players[account_id].cards.push({
                 'id': card.id,
-                'bonuses': bonus ?  new Long(Buffer.from(bonus.value_bytes.buffer).readUInt32LE(bonus.value_bytes.offset + 4),
-                                    Buffer.from(bonus.value_bytes.buffer).readUInt32LE(bonus.value_bytes.offset), 
-                                    true)
-                                :   undefined
+                'bonuses': bonus ?  bonus.value_bytes.readUInt64(bonus.value_bytes.offset) : undefined
             });
             return players;
         },{});
