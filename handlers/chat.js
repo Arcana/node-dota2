@@ -32,6 +32,17 @@ Dota2.Dota2Client.prototype._getChannelById = function(channel_id) {
     }
 }
 
+Dota2.Dota2Client.prototype._leaveUnknownChatChannel = function(userWhoLeft) {
+    var payload = new Dota2.schema.CMsgDOTALeaveChatChannel({
+        "channel_id": userWhoLeft.channel_id
+    });
+    this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgGCLeaveChatChannel, payload);
+    if (this.debug) {
+        util.log(userWhoLeft.steam_id + " left channel " + userWhoLeft.channel_id);
+        util.log("Received chat leave from channel bot was not in. Leaving channel. See bug: (https://github.com/Arcana/node-dota2/pull/378)");
+    }
+};
+
 Dota2.Dota2Client.prototype.joinChat = function(channel_name, channel_type) {
     channel_type = channel_type || Dota2.schema.DOTAChatChannelType_t.DOTAChannelType_Custom;
 
@@ -191,42 +202,32 @@ handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCOtherJoinedChannel] = onOtherJoinedChan
 
 var onOtherLeftChannel = function onOtherLeftChannel(message) {
     /* Someone left a chat channel you're in. */
-    var otherLeft = Dota2.schema.CMsgDOTAOtherLeftChatChannel.decode(message);
-    var channel = this._getChannelById(otherLeft.channel_id);
+    var userWhoLeft = Dota2.schema.CMsgDOTAOtherLeftChatChannel.decode(message);
+    var channel = this._getChannelById(userWhoLeft.channel_id);
     // Check if it is me that left the channel
-    if ("" + otherLeft.steam_id === "" + this._client.steamID) {
-        if (this.debug) {
-            if (channel) {
+    if ("" + userWhoLeft.steam_id === "" + this._client.steamID) {
+        if (channel) {
+            this.emit("chatLeave", channel.channel_name, userWhoLeft.steam_id, userWhoLeft);
+            // Delete channel from cache
+            this.chatChannels = this.chatChannels.filter(function (item) {
+                if ("" + item.channel_id == "" + channel.channel_id) return false;
+            });
+            if (this.debug)
                 util.log("Left channel " + channel.channel_name);
-            } else {    
-                util.log("This probably should be physically impossible, but whatever: you managed to leave a channel you didn't know you were in, congratulations...");
-            }
+        } else {
+            this._leaveUnknownChatChannel(userWhoLeft);
         }
-        this.emit("chatLeave",
-            channel.channel_name,
-            otherLeft.steam_id,
-            otherLeft);
-        // Delete channel from cache
-        this.chatChannels = this.chatChannels.filter(function(item) {
-            if ("" + item.channel_id == "" + channel.channel_id) return false;
-        });
     } else {
         if (channel) {
-            this.emit("chatLeave", channel.channel_name, otherLeft.steam_id, otherLeft);
+            this.emit("chatLeave", channel.channel_name, userWhoLeft.steam_id, userWhoLeft);
             // Delete member from cached chatChannel
-            channel.members = channel.members.filter(function(item) {
-                return ("" + item.steam_id !== "" + otherLeft.steam_id);
+            channel.members = channel.members.filter(function (item) {
+                return ("" + item.steam_id !== "" + userWhoLeft.steam_id);
             });
             if (this.debug)
-                util.log(otherLeft.steam_id + " left channel " + channel.channel_name);
+                util.log(userWhoLeft.steam_id + " left channel " + channel.channel_name);
         } else {
-            var payload = new Dota2.schema.CMsgDOTALeaveChatChannel({
-                "channel_id": otherLeft.channel_id
-            });
-            this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgGCLeaveChatChannel, payload);
-            if (this.debug)
-                util.log(otherLeft.steam_id + " left channel " + otherLeft.channel_id);
-                util.log("Received message from unknown channel. Leaving channel. See bug: (https://github.com/Arcana/node-dota2/pull/378)");
+            this._leaveUnknownChatChannel(userWhoLeft)
         }
     }
 };
