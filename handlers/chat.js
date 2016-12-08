@@ -32,14 +32,14 @@ Dota2.Dota2Client.prototype._getChannelById = function(channel_id) {
     }
 }
 
-Dota2.Dota2Client.prototype._leaveChatChannelById = function(channelId, steamIdOfLeaver) {
+Dota2.Dota2Client.prototype._leaveChatChannelById = function(channelId) {
     var payload = new Dota2.schema.CMsgDOTALeaveChatChannel({
         "channel_id": channelId
     });
     this.chatChannels = this.chatChannels.filter(item => item.channel_id.notEquals(channelId));
     this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgGCLeaveChatChannel, payload);
     if (this.debug) {
-        util.log(steamIdOfLeaver + " left channel " + channelId);
+        util.log("Leaving channel " + channelId);
     }
 };
 
@@ -65,7 +65,7 @@ Dota2.Dota2Client.prototype.leaveChat = function(channel_name, channel_type) {
         if (this.debug) util.log("Cannot leave a channel you have not joined.");
         return;
     }
-    this._leaveChatChannelById(cache.channel_id, this._client.steamID)
+    this._leaveChatChannelById(cache.channel_id)
 };
 
 Dota2.Dota2Client.prototype.sendMessage = function(channel_name, message, channel_type) {
@@ -209,7 +209,9 @@ var onUserLeftChannel = function onOtherLeftChannel(message) {
             if (this.debug)
                 util.log("Left channel " + channel.channel_name);
         } else {
-            this._leaveChatChannelById(userWhoLeft.channel_id, userWhoLeft.steam_id);
+            this._leaveChatChannelById(userWhoLeft.channel_id);
+            if (this.debug)
+                util.log("I left unknown channel " + userWhoLeft.channel_id);
         }
     } else {
         if (channel) {
@@ -219,7 +221,9 @@ var onUserLeftChannel = function onOtherLeftChannel(message) {
             if (this.debug)
                 util.log(userWhoLeft.steam_id + " left channel " + channel.channel_name);
         } else {
-            this._leaveChatChannelById(userWhoLeft.channel_id, userWhoLeft.steam_id)
+            this._leaveChatChannelById(userWhoLeft.channel_id);
+            if (this.debug)
+                util.log(userWhoLeft.steam_id + " left unknown channel " + userWhoLeft.channel_id);
         }
     }
 };
