@@ -31,30 +31,37 @@ var cacheTypeIDs = {
 // Handlers
 function handleSubscribedType(obj_type, object_data) {
     switch (obj_type) {
+        // Inventory item
+        case cacheTypeIDs.CSOEconItem:
+            if (this.debug) util.log("Received inventory snapshot");
+            var inv = object_data.map(obj => Dota2.schema.CSOEconItem.decode(obj));
+            this.emit("inventoryUpdate", inv);
+            this.Inventory = inv;
+            break;
         // Lobby snapshot.
         case cacheTypeIDs.CSODOTALobby:
-            var lobby = Dota2.schema.CSODOTALobby.decode(object_data);
+            var lobby = Dota2.schema.CSODOTALobby.decode(object_data[0]);
             if (this.debug) util.log("Received lobby snapshot for lobby ID " + lobby.lobby_id);
             this.emit("practiceLobbyUpdate", lobby);
             this.Lobby = lobby;
             break;
         // Lobby invite snapshot.
         case cacheTypeIDs.CSODOTALobbyInvite:
-            var lobby = Dota2.schema.CSODOTALobbyInvite.decode(object_data);
+            var lobby = Dota2.schema.CSODOTALobbyInvite.decode(object_data[0]);
             if (this.debug) util.log("Received lobby invite snapshot for group ID " + lobby.group_id);
             this.emit("lobbyInviteUpdate", lobby);
             this.LobbyInvite = lobby;
             break;
         // Party snapshot.
         case cacheTypeIDs.CSODOTAParty:
-            var party = Dota2.schema.CSODOTAParty.decode(object_data);
+            var party = Dota2.schema.CSODOTAParty.decode(object_data[0]);
             if (this.debug) util.log("Received party snapshot for party ID " + party.party_id);
             this.emit("partyUpdate", party);
             this.Party = party;
             break;
         // Party invite snapshot.
         case cacheTypeIDs.CSODOTAPartyInvite:
-            var party = Dota2.schema.CSODOTAPartyInvite.decode(object_data);
+            var party = Dota2.schema.CSODOTAPartyInvite.decode(object_data[0]);
             if (this.debug) util.log("Received party invite snapshot for group ID " + party.group_id);
             this.emit("partyInviteUpdate", party);
             this.PartyInvite = party;
@@ -84,11 +91,11 @@ var onCacheSubscribed = function onCacheSubscribed(message) {
     var _self = this;
 
     if (this.debug) {
-        util.log("Cache subscribed, type " + subscribe.objects[0].type_id);
+        util.log("Cache(s) subscribed, type(s): " + subscribe.objects.map(obj=>obj.type_id).toString());
     }
 
     subscribe.objects.forEach(function(obj) {
-        handleSubscribedType.call(_self, obj.type_id, obj.object_data[0]);
+        handleSubscribedType.call(_self, obj.type_id, obj.object_data);
     });
 };
 handlers[Dota2.schema.ESOMsg.k_ESOMsg_CacheSubscribed] = onCacheSubscribed;
