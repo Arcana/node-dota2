@@ -164,6 +164,20 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
                 });
             }
             
+            // ----------------------------------
+            
+            // FANTASY
+            
+            var fantasyCards = 0;
+            
+            if (fantasyCards == 1) {
+                Dota2.on("inventoryUpdate", inventory => {
+                    // Time-out so inventory property is updated
+                    setTimeout(()=>{
+                        Promise.all(Dota2.requestPlayerCardsByPlayer()).then(cards => console.log(cards));
+                    }, 1000);
+                });
+            }
         });
 
         Dota2.on("unready", function onUnready() {
@@ -203,6 +217,7 @@ var logOnDetails = {
     "password": global.config.steam_pass,
 };
 if (global.config.steam_guard_code) logOnDetails.auth_code = global.config.steam_guard_code;
+if (global.config.two_factor_code) logOnDetails.two_factor_code = global.config.two_factor_code;
 
 try {
     var sentry = fs.readFileSync('sentry');
