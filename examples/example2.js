@@ -13,7 +13,7 @@ global.config = require("./config");
 var onSteamLogOn = function onSteamLogOn(logonResp) {
     if (logonResp.eresult == steam.EResult.OK) {
         steamFriends.setPersonaState(steam.EPersonaState.Busy);
-        steamFriends.setPersonaName("Dota 2 Bot");
+        steamFriends.setPersonaName(global.config.steam_name);
         util.log("Logged on.");
 
         Dota2.launch();
@@ -127,7 +127,7 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
                 }
 
                 Dota2.createPracticeLobby(lobbyPassword, properties, function(err, data){
-                    // util.log(JSON.stringify(data));
+                    util.log(JSON.stringify(data));
                 });
             }
 
@@ -189,7 +189,7 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
         });
 
         Dota2.on("unhandled", function(kMsg) {
-            util.log("UNHANDLED MESSAGE #" + kMsg);
+            util.log("UNHANDLED MESSAGE " + dota2._getMessageName(kMsg));
         });
     }
 },

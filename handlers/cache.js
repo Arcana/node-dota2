@@ -40,7 +40,9 @@ function handleSubscribedType(obj_type, object_data) {
             break;
         // Lobby snapshot.
         case cacheTypeIDs.CSODOTALobby:
-            var lobby = Dota2.schema.CSODOTALobby.decode(object_data[0]);
+            // object_data is an array when called from onCacheSubscribed
+            // but an object when called from onUpdateMultiple
+            var lobby = Dota2.schema.CSODOTALobby.decode([].concat(object_data)[0]);
             if (this.debug) util.log("Received lobby snapshot for lobby ID " + lobby.lobby_id);
             this.emit("practiceLobbyUpdate", lobby);
             this.Lobby = lobby;
@@ -54,7 +56,7 @@ function handleSubscribedType(obj_type, object_data) {
             break;
         // Party snapshot.
         case cacheTypeIDs.CSODOTAParty:
-            var party = Dota2.schema.CSODOTAParty.decode(object_data[0]);
+            var party = Dota2.schema.CSODOTAParty.decode([].concat(object_data)[0]);
             if (this.debug) util.log("Received party snapshot for party ID " + party.party_id);
             this.emit("partyUpdate", party);
             this.Party = party;
