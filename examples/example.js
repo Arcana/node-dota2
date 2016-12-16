@@ -180,6 +180,7 @@ var logOnDetails = {
     "account_name": global.config.steam_user,
     "password": global.config.steam_pass,
 };
+if (global.config.steam_guard_code) logOnDetails.auth_code = global.config.steam_guard_code;
 if (global.config.two_factor_code) logOnDetails.two_factor_code = global.config.two_factor_code;
 
 try {
