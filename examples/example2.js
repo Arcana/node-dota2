@@ -106,8 +106,8 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
 
             // LOBBY
 
-            var creatingLobby = 1;
-            var leavingLobby = 1;
+            var creatingLobby = 0;
+            var leavingLobby = 0;
 
             if(creatingLobby == 1){ // sets only password, nothing more
                 var lobbyPassword = "ap";
@@ -127,13 +127,12 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
                 }
 
                 Dota2.createPracticeLobby(lobbyPassword, properties, function(err, data){
-                    // util.log(JSON.stringify(data));
+                    util.log(JSON.stringify(data));
                 });
             }
 
             if(leavingLobby == 1){
                 setTimeout(function(){
-                    console.log(Dota2.Lobby);
                     Dota2.leavePracticeLobby(function(err, data){
                         // util.log(JSON.stringify(data));
                     });
