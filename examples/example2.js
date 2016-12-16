@@ -106,8 +106,8 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
 
             // LOBBY
 
-            var creatingLobby = 0;
-            var leavingLobby = 0;
+            var creatingLobby = 1;
+            var leavingLobby = 1;
 
             if(creatingLobby == 1){ // sets only password, nothing more
                 var lobbyPassword = "ap";
@@ -133,6 +133,7 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
 
             if(leavingLobby == 1){
                 setTimeout(function(){
+                    console.log(Dota2.Lobby);
                     Dota2.leavePracticeLobby(function(err, data){
                         // util.log(JSON.stringify(data));
                     });
@@ -189,7 +190,7 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
         });
 
         Dota2.on("unhandled", function(kMsg) {
-            util.log("UNHANDLED MESSAGE #" + kMsg);
+            util.log("UNHANDLED MESSAGE " + dota2._getMessageName(kMsg));
         });
     }
 },
