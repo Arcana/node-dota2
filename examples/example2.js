@@ -195,7 +195,10 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
 },
 onSteamServers = function onSteamServers(servers) {
     util.log("Received servers.");
-    fs.writeFile('servers', JSON.stringify(servers));
+    fs.writeFile('servers', JSON.stringify(servers), (err) => {
+        if (err) {if (this.debug) util.log("Error writing ");}
+        else {if (this.debug) util.log("");}
+    });
 },
 onSteamLogOff = function onSteamLogOff(eresult) {
     util.log("Logged off from Steam.");
