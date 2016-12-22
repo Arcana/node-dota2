@@ -114,7 +114,7 @@ Attempts to delete an item. Requires the GC to be ready (listen for the `ready` 
 
 
 ### Chat
-**_Limited Steam accounts cannot interact with chat!_**
+**_In order to send a message, your account must 1. be non-Limited Steam Account 2. have at least 5 Trophy Level_**
 
 #### joinChat(channel_name, [channel_type])
 * `channel_name` - A string for the channel name.
