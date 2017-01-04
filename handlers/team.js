@@ -11,9 +11,9 @@ Dota2.Dota2Client.prototype.requestMyTeams = function requestMyTeams(callback) {
     }
 
     if (this.debug) util.log("Requesting my own team data");
-    var payload = new Dota2.schema.CMsgDOTAMyTeamInfoRequest({});
-    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCMyTeamInfoRequest,
-                    payload, 
+    var payload = {};
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgClientToGCMyTeamInfoRequest,
+                    Dota2.schema.lookupType("CMsgDOTAMyTeamInfoRequest").encode(payload).finish(), 
                     onTeamDataResponse, callback);
 }
 /*
@@ -24,11 +24,11 @@ Dota2.Dota2Client.prototype.requestTeamProfile = function requestTeamProfile(tea
     var _self = this;
 
     if (this.debug) util.log("Sending team profile request");
-    var payload = new Dota2.schema.CMsgDOTATeamProfileRequest({
+    var payload = {
         "team_id": team_id
-    });
-    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCTeamProfileRequest, 
-                    payload, 
+    };
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCTeamProfileRequest, 
+                    Dota2.schema.lookupType("CMsgDOTATeamProfileRequest").encode(payload).finish(), 
                     onTeamProfileResponse, callback);
 }
 // DEPRECATED
@@ -38,11 +38,11 @@ Dota2.Dota2Client.prototype.requestTeamIDByName = function requestTeamIDByName(t
     var _self = this;
 
     if (this.debug) util.log("Sending team ID by name request");
-    var payload = new Dota2.schema.CMsgDOTATeamIDByNameRequest({
+    var payload = {
         "name": team_name
-    });
-    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCTeamIDByNameRequest, 
-                    payload, 
+    };
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCTeamIDByNameRequest, 
+                    Dota2.schema.lookupType("CMsgDOTATeamIDByNameRequest").encode(payload).finish(), 
                     onTeamIDByNameResponse, callback);
 }
 // DEPRECATED
@@ -52,11 +52,11 @@ Dota2.Dota2Client.prototype.requestTeamMemberProfile = function requestTeamMembe
     var _self = this;
 
     if (this.debug) util.log("Sending team member profile request");
-    var payload = new Dota2.schema.CMsgDOTATeamMemberProfileRequest({
+    var payload = {
         "steam_id": steam_id
-    });
-    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCTeamMemberProfileRequest,
-                    payload, 
+    };
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCTeamMemberProfileRequest,
+                    Dota2.schema.lookupType("CMsgDOTATeamMemberProfileRequest").encode(payload).finish(), 
                     onTeamProfileResponse, callback);
 }
 */
@@ -68,9 +68,9 @@ Dota2.Dota2Client.prototype.requestProTeamList = function requestProTeamList(cal
     var _self = this;
 
     if (this.debug) util.log("Requesting list of pro teams");
-    var payload = new Dota2.schema.CMsgDOTAProTeamListRequest({});
-    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCProTeamListRequest, 
-                    payload, 
+    var payload = {};
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCProTeamListRequest, 
+                    Dota2.schema.lookupType("CMsgDOTAProTeamListRequest").encode(payload).finish(), 
                     onProTeamListResponse, callback);
 }
 
@@ -78,18 +78,18 @@ Dota2.Dota2Client.prototype.requestProTeamList = function requestProTeamList(cal
 var handlers = Dota2.Dota2Client.prototype._handlers;
 
 var onTeamDataResponse = function onTeamDataResponse(message, callback) {
-    var teamDataResponse = Dota2.schema.CMsgDOTATeamsInfo.decode(message);
+    var teamDataResponse = Dota2.schema.lookupType("CMsgDOTATeamsInfo").decode(message);
     
     if (this.debug) util.log("Received my teams response " + JSON.stringify(teamDataResponse));
     this.emit("teamData", teamDataResponse.teams, teamDataResponse.league_id);
     if (callback) callback(null, teamDataResponse);
     
 };
-handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCToClientTeamsInfo] = onTeamDataResponse;
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCToClientTeamsInfo] = onTeamDataResponse;
 /*
 // DEPRECATED
 var onTeamProfileResponse = function onTeamProfileResponse(message, callback) {
-    var teamProfileResponse = Dota2.schema.CMsgDOTATeamProfileResponse.decode(message);
+    var teamProfileResponse = Dota2.schema.lookupType("CMsgDOTATeamProfileResponse").decode(message);
     
     if (teamProfileResponse.eresult === 1) {
         if (this.debug) util.log("Received team profile response " + JSON.stringify(teamProfileResponse));
@@ -100,10 +100,10 @@ var onTeamProfileResponse = function onTeamProfileResponse(message, callback) {
         if (callback) callback(teamProfileResponse.eresult, teamProfileResponse);
     }
 };
-handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCTeamProfileResponse] = onTeamProfileResponse;
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCTeamProfileResponse] = onTeamProfileResponse;
 // DEPRECATED
 var onTeamIDByNameResponse = function onTeamIDByNameResponse(message, callback) {
-    var teamID = Dota2.schema.CMsgDOTATeamIDByNameResponse.decode(message);
+    var teamID = Dota2.schema.lookupType("CMsgDOTATeamIDByNameResponse").decode(message);
     
     if (teamID.eresult === 1) {
         if (this.debug) util.log("Received team ID " + teamID.team_id);
@@ -115,11 +115,11 @@ var onTeamIDByNameResponse = function onTeamIDByNameResponse(message, callback) 
         if (callback) callback(teamID.eresult, teamID);
     }
 };
-handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCTeamIDByNameResponse] = onTeamIDByNameResponse;*/
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCTeamIDByNameResponse] = onTeamIDByNameResponse;*/
 
 // No longer gets triggered
 var onProTeamListResponse = function onProTeamListResponse(message, callback) {
-    var teams = Dota2.schema.CMsgDOTAProTeamListResponse.decode(message);
+    var teams = Dota2.schema.lookupType("CMsgDOTAProTeamListResponse").decode(message);
     
     if (teams.eresult === 1) {
         if (this.debug) util.log("Received pro team list");
@@ -131,4 +131,4 @@ var onProTeamListResponse = function onProTeamListResponse(message, callback) {
         if (callback) callback(teams.eresult, teams);
     }
 };
-handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCProTeamListResponse] = onProTeamListResponse;
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCProTeamListResponse] = onProTeamListResponse;
