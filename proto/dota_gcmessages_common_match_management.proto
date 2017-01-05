@@ -153,6 +153,7 @@ message CDOTALobbyMember {
 	repeated uint32 custom_game_product_ids = 31;
 	optional uint32 lobby_mvp_vote_account_id = 32;
 	optional .MatchType search_match_type = 33 [default = MATCH_TYPE_CASUAL];
+	optional uint32 favorite_team_and_quality = 34;
 }
 
 message CLobbyTeamDetails {
@@ -300,5 +301,9 @@ message CSODOTALobby {
 	optional .DOTABotDifficulty bot_difficulty_dire = 93 [default = BOT_DIFFICULTY_HARD];
 	optional uint64 bot_radiant = 94;
 	optional uint64 bot_dire = 95;
+}
+
+message CMsgLobbyPlaytestDetails {
+	optional string json = 1;
 }
 

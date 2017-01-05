@@ -13,10 +13,11 @@ Dota2.Dota2Client.prototype.setItemPositions = function(item_positions) {
                 "position": item[1]
             };
         }),
-        payload = new Dota2.schema.CMsgSetItemPositions({
+        payload = {
             "itemPositions": payloadItemPositions
-        });
-    this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgGCSetItemPositions, payload);
+        };
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCSetItemPositions, 
+                    Dota2.schema.lookupType("CMsgSetItemPositions").encode(payload).finish());
 };
 
 Dota2.Dota2Client.prototype.deleteItem = function(item_id) {

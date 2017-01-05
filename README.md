@@ -66,6 +66,9 @@ You can launch the tests by running the file with mocha.
 ###AccountID
 The current steam ID of the SteamClient converted to Dota 2 Account ID format. Not available until `launch` is called.
 
+###Inventory (hats, not in-match items)
+The current player inventory (see CSOEconItem). Null if the bot hasn't received inventory information yet.
+
 ###Lobby
 The current lobby object (see CSODOTALobby). Null if the bot is not in a lobby.
 
@@ -111,7 +114,7 @@ Attempts to delete an item. Requires the GC to be ready (listen for the `ready` 
 
 
 ### Chat
-**_Limited Steam accounts cannot interact with chat!_**
+**_In order to send a message, your account must 1. be non-Limited Steam Account 2. have at least 5 Trophy Level_**
 
 #### joinChat(channel_name, [channel_type])
 * `channel_name` - A string for the channel name.
@@ -510,7 +513,22 @@ Requests info on all available official leagues from the GC. Listen for `leagueD
 
 Sends a message to the Game Coordinator requesting the top league matches. Listen for the `topLeagueMatchesData` event for the Game Coordinator's response (cannot take a callback because of Steam's backend). Requires the GC to be ready (listen for the `ready` event before calling).
 
+### Fantasy
+#### requestPlayerCardRoster(league_id, timestamp, [callback])
+* `league_id` - ID of the league for which you're requesting your player card roster
+* `timestamp` - timestamp of the day for which you want your player card roster
+* `[callback]` - optional callback` returns args: `err` response`.
+ 
+Sends a message to the Game Coordinator requesting your fantasy line-up for a specific day of a given tournament. Listen for the `playerCardRoster` event for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
+#### draftPlayerCard(league_id, timestamp, slot, player_card_id, [callback])
+* `league_id` - ID of the league for which you're drafting a player card
+* `timestamp` - timestamp of the day for which you want to draft a player card
+* `slot` - Slot in the draft which you want to fill
+* `player_card_id` - Item ID of the player card you want to draft
+* `[callback]` - optional callback` returns args: `err` response`.
+
+Sends a message to the Game Coordinator requesting to draft a certain player card in a specific slot, for a given day in a tournament. Listen for the `playerCardDrafted` event for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 ### SourceTV
 
 #### requestSourceTVGames([filterOption])
@@ -814,10 +832,8 @@ Here are the groups at the time of this sentence being written (with unecessary 
 
 Emitted when the GC responds to the `requestTopFriendMatches` method.
 
-
 ### `practiceLobbyUpdate` (`lobby`)
 * `lobby` - The full lobby object (see `CSODOTALobby`).
-
 
 Emitted when the GC sends a lobby snapshot. The GC is incredibly
 inefficient and will send the entire object even if it's a minor update.
@@ -826,20 +842,16 @@ successfully as well. Note that the `Lobby` property will be the old
 value until after this event completes to allow comparison between the
 two.
 
-
 ### `lobbyInviteCleared` ()
 
 Emitted when the Lobby Invite is cleared, for example when
 accepting/rejecting it or when the lobby is closed.
-
-
 
 ### `practiceLobbyJoinResponse`(`result`, `practiceLobbyJoinResponse`)
 * `result` - The result object from `practiceLobbyJoinResponse`.
 * `practiceLobbyJoinResponse` - The raw response object.
 
 Emitted when the GC responds to `joinPracticeLobby` method.
-
 
 ### `practiceLobbyCleared` ()
 
@@ -971,6 +983,31 @@ TODO
 * `sourceTVGamesResponse` - The raw response object
 
 Emitted when the GC responds to the `requestSourceTVGames` method.  Multiple events are emitted when `requestSourceTVGames` is passed with `start_game` > 0 or with one or more `lobby_id`s.  
+
+
+### `inventoryUpdate` (`inv`)
+* `inv` - Player inventory
+
+Emitted when the GC sends an inventory snapshot. The GC is incredibly
+inefficient and will send the entire object even if it's a minor update.
+You can use this to detect when a change was made to your inventory (e.g. drop)
+Note that the `Inventory` property will be the old value until after this event 
+completes to allow comparison between the two.
+
+### `playerCardRoster` (`playerCardRoster`)
+* `playerCardRoster` - Fantasy challenge line-up for a specific day
+* `result` - Status code indicating whether or not the request was succesful (0 = SUCCESS)
+  * `player_card_item_id` - Item ID of the player card. Can be used to cross-reference with `Inventory`
+  * `score` - Score the card got for this specific day
+  * `finalized` - Whether or not the matches for this day are over
+  * `percentile` - Percentile of all players your score falls in
+
+Emitted when the GC responds to the `requestPlayerCardRoster` method.
+
+### `playerCardDrafted` (`result`)
+* `result` - Status code indicating whether or not the card got drafted (0 = SUCCESS)
+
+Emitted when the GC responds to the `draftPlayerCard` method.
 
 ## Enums
 ### ServerRegion

@@ -7,16 +7,13 @@ var EventEmitter = require('events').EventEmitter,
     path = require("path"),
     util = require("util"),
     bignumber = require("bignumber.js"),
-    ProtoBuf = require('protobufjs'),
+    Protobuf = require('protobufjs'),
     Dota2 = exports;
 
-var builder = ProtoBuf.newBuilder();
-var folder = fs.readdirSync(__dirname + '/proto');
-folder.forEach(function(f) {
-    ProtoBuf.loadProtoFile(__dirname + '/proto/' + f, builder);
-});
-Dota2.schema = builder.build();
+Protobuf.parse.defaults.keepCase = true;
 
+var folder = fs.readdirSync(__dirname + '/proto');
+Dota2.schema = Protobuf.loadSync(folder.map(filename => __dirname + '/proto/' + filename));
 
 var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
     EventEmitter.call(this);
@@ -32,8 +29,8 @@ var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
     this.chatChannels = []; // Map channel names to channel data.
     this._gcReady = false;
     this._gcClientHelloIntervalId = null;
-    this._gcConnectionStatus = Dota2.schema.GCConnectionStatus.GCConnectionStatus_NO_SESSION;
-    // This should probably be reworked to use a CMsgProtoBufHeader object
+    this._gcConnectionStatus = Dota2.schema.lookupEnum("GCConnectionStatus").GCConnectionStatus_NO_SESSION;
+    // node-steam wants this as a simple object, so we can't use CMsgProtoBufHeader
     this._protoBufHeader = {
         "msg": "",
         "proto": {
@@ -79,14 +76,15 @@ var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
         if (!self._gc) {
             util.log("Where the fuck is _gc?");
         } else {
-            self._protoBufHeader.msg = Dota2.schema.EGCBaseClientMsg.k_EMsgGCClientHello;
-            var payload = new Dota2.schema.CMsgClientHello({});
-            payload.engine = 1;
-            payload.secret_key = "";
-            payload.client_session_need = 104;
+            self._protoBufHeader.msg = Dota2.schema.lookupEnum("EGCBaseClientMsg").k_EMsgGCClientHello;
+            var payload = {
+                engine : 1,
+                secret_key : "",
+                client_session_need : 104
+            };
             self._gc.send(
                 self._protoBufHeader,
-                payload.toBuffer()
+                Dota2.schema.lookupType("CMsgClientHello").encode(payload).finish()
             );
         }
 
@@ -112,6 +110,7 @@ Dota2Client.prototype.launch = function() {
     this.Party = null;
     this.Lobby = null;
     this.PartyInvite = null;
+    this.Inventory = null;
     this._user.gamesPlayed([{
         "game_id": this._appid
     }]);
@@ -150,7 +149,7 @@ Dota2Client.prototype.sendToGC = function(type, payload, handler, callback) {
     }
     this._protoBufHeader.msg = type;
     this._gc.send(this._protoBufHeader,                     // protobuf header, same for all messages
-                  payload.toBuffer(),                       // payload of the message
+                  payload,                                  // payload of the message
                   Dota2._convertCallback.call(self, handler, callback) // let handler treat callback so events are triggered
     );
 }
@@ -160,7 +159,7 @@ Dota2Client.prototype.sendToGC = function(type, payload, handler, callback) {
 
 var handlers = Dota2Client.prototype._handlers = {};
 
-handlers[Dota2.schema.EGCBaseClientMsg.k_EMsgGCClientWelcome] = function clientWelcomeHandler(message) {
+handlers[Dota2.schema.lookupEnum("EGCBaseClientMsg").k_EMsgGCClientWelcome] = function clientWelcomeHandler(message) {
     /* Response to our k_EMsgGCClientHello, now we can execute other GC commands. */
 
     // Only execute if _gcClientHelloIntervalID, otherwise it's already been handled (and we don't want to emit multiple 'ready');
@@ -177,14 +176,13 @@ handlers[Dota2.schema.EGCBaseClientMsg.k_EMsgGCClientWelcome] = function clientW
     this.emit("ready");
 };
 
-handlers[Dota2.schema.EGCBaseClientMsg.k_EMsgGCClientConnectionStatus] = function gcClientConnectionStatus(message) {
+handlers[Dota2.schema.lookupEnum("EGCBaseClientMsg").k_EMsgGCClientConnectionStatus] = function gcClientConnectionStatus(message) {
     /* Catch and handle changes in connection status, cuz reasons u know. */
-
-    var status = Dota2.schema.CMsgConnectionStatus.decode(message).status;
+    var status = Dota2.schema.lookupType("CMsgConnectionStatus").decode(message).status;
     if (status) this._gcConnectionStatus = status;
 
     switch (status) {
-        case Dota2.schema.GCConnectionStatus.GCConnectionStatus_HAVE_SESSION:
+        case Dota2.schema.lookupEnum("GCConnectionStatus").GCConnectionStatus_HAVE_SESSION:
             if (this.debug) util.log("GC Connection Status regained.");
 
             // Only execute if _gcClientHelloIntervalID, otherwise it's already been handled (and we don't want to emit multiple 'ready');
@@ -227,3 +225,4 @@ require("./handlers/sourcetv");
 require("./handlers/team");
 require("./handlers/custom");
 require("./handlers/general");
+require("./handlers/fantasy");

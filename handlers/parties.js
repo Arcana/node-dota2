@@ -12,20 +12,22 @@ Dota2.Dota2Client.prototype.respondPartyInvite = function(id, accept, ping_data)
 
     if (this.debug) util.log("Responding to party invite " + id + ", accept: " + accept);
     // todo: set client version here?
-    var payload = new Dota2.schema.CMsgPartyInviteResponse({
+    var payload = {
         "party_id": id,
         "accept": accept,
         "ping_data": ping_data
-    });
-    this.sendToGC(Dota2.schema.EGCBaseMsg.k_EMsgGCPartyInviteResponse, payload);
+    };
+    this.sendToGC(  Dota2.schema.lookupEnum("EGCBaseMsg").k_EMsgGCPartyInviteResponse, 
+                    Dota2.schema.lookupType("CMsgPartyInviteResponse").encode(payload).finish());
 };
 
 Dota2.Dota2Client.prototype.leaveParty = function() {
     if (this.debug) util.log("Leaving party.");
 
-    var payload = new Dota2.schema.CMsgLeaveParty({});
+    var payload = {};
     this.Party = null;
-    this.sendToGC(Dota2.schema.EGCBaseMsg.k_EMsgGCLeaveParty, payload);
+    this.sendToGC(  Dota2.schema.lookupEnum("EGCBaseMsg").k_EMsgGCLeaveParty, 
+                    Dota2.schema.lookupType("CMsgLeaveParty").encode(payload).finish());
 };
 
 Dota2.Dota2Client.prototype.setPartyLeader = function(steam_id) {
@@ -41,10 +43,11 @@ Dota2.Dota2Client.prototype.setPartyLeader = function(steam_id) {
 
     if (this.debug) util.log("Setting party leader: " + steam_id);
 
-    var payload = new Dota2.schema.CMsgDOTASetGroupLeader({
+    var payload = {
         "new_leader_steamid": steam_id
-    });
-    this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCSetPartyLeader, payload);
+    };
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgClientToGCSetPartyLeader, 
+                    Dota2.schema.lookupType("CMsgDOTASetGroupLeader").encode(payload).finish());
 }
 
 Dota2.Dota2Client.prototype.setPartyCoach = function(coach) {
@@ -59,7 +62,8 @@ Dota2.Dota2Client.prototype.setPartyCoach = function(coach) {
     var payload = new Dota2.schema.CMsgDOTAPartyMemberSetCoach({
         "wants_coach": coach
     });
-    this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgGCPartyMemberSetCoach, payload);
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCPartyMemberSetCoach, 
+                    Dota2.schema.lookupType("CMsgDOTAPartyMemberSetCoach").encode(payload).finish());
 };
 
 Dota2.Dota2Client.prototype.inviteToParty = function(steam_id) {
@@ -71,10 +75,11 @@ Dota2.Dota2Client.prototype.inviteToParty = function(steam_id) {
 
     if (this.debug) util.log("Inviting " + steam_id + " to a party.");
     // todo: set client version here?
-    var payload = new Dota2.schema.CMsgInviteToParty({
+    var payload = {
         "steam_id": steam_id
-    });
-    this.sendToGC(Dota2.schema.EGCBaseMsg.k_EMsgGCInviteToParty, payload);
+    };
+    this.sendToGC(  Dota2.schema.lookupEnum("EGCBaseMsg").k_EMsgGCInviteToParty, 
+                    Dota2.schema.lookupType("CMsgInviteToParty").encode(payload).finish());
 };
 
 Dota2.Dota2Client.prototype.kickFromParty = function(steam_id) {
@@ -86,8 +91,9 @@ Dota2.Dota2Client.prototype.kickFromParty = function(steam_id) {
 
     if (this.debug) util.log("Kicking " + steam_id + " from the party.");
     // todo: set client version here?
-    var payload = new Dota2.schema.CMsgKickFromParty({
+    var payload = {
         "steam_id": steam_id
-    });
-    this.sendToGC(Dota2.schema.EGCBaseMsg.k_EMsgGCKickFromParty, payload);
+    };
+    this.sendToGC(  Dota2.schema.lookupEnum("EGCBaseMsg").k_EMsgGCKickFromParty, 
+                    Dota2.schema.lookupType("CMsgKickFromParty").encode(payload).finish());
 };

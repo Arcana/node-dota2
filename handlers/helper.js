@@ -123,12 +123,16 @@ Dota2._convertCallback = function(handler, callback) {
 };
 
 Dota2._getMessageName = function(kMsg) {
-    //k_EMsgClientToGCGetProfileCard
-    var msgTypes = ["EDOTAGCMsg", "EGCSystemMsg", "ESOMsg", "EGCBaseClientMsg", "EGCToGCMsg", "EGCEconBaseMsg"];
+    var msgTypes = [Dota2.schema.lookupEnum("EDOTAGCMsg"), 
+                    Dota2.schema.lookupEnum("EGCSystemMsg"), 
+                    Dota2.schema.lookupEnum("ESOMsg"), 
+                    Dota2.schema.lookupEnum("EGCBaseClientMsg"),
+                    Dota2.schema.lookupEnum("EGCToGCMsg"),
+                    Dota2.schema.lookupEnum("EGCEconBaseMsg")];
     for (var i=0; i<msgTypes.length; i++) {
-        for (var m in Dota2.schema[msgTypes[i]]) {
-            if (Dota2.schema[msgTypes[i]].hasOwnProperty(m)) {
-                if (Dota2.schema[msgTypes[i]][m] === kMsg) {
+        for (var m in msgTypes[i]) {
+            if (msgTypes[i].hasOwnProperty(m)) {
+                if (msgTypes[i][m] === kMsg) {
                     return m;
                 }
             }
