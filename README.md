@@ -416,15 +416,10 @@ Sends a message to the Game Coordinator requesting to create a lobby.  Listen fo
 
 #### createTournamentLobby([password], [tournament_game_id], [tournament_id], [options], [callback])
 * `[password]` - See paramter description in [#createPracticeLobby]
-* `[tournament_game_id]` - TODO
-* `[tournament_id]` - TODO
+* `[tournament_game_id]` - Presumably the previous game id, in a series. Optional.
+* `[tournament_id]` - The league this lobby is being created for. The bot should be a league admin for this to work.
 * `[options]` - See paramter description in [#createPracticeLobby]
 * `[callback]` - optional callback, returns args: `err, response`.
-
-*Note: it is unknown what should be supplied to `tournament_game_id` (See
-[#414](https://github.com/Arcana/node-dota2/issues/414)), but ticketed lobbies can be created with
-[createPracticeLobby](https://github.com/MeLlamoPablo/node-dota2#createpracticelobbypassword-options-callback)
- as well, by using the `leagueid` option parameter.*
 
 Sends a message to the Game Coordinator requesting to create a tournament lobby. Listen for `practiceLobbyUpdate`  response for a snapshot-update of the newly created lobby. Requires the GC to be ready (listen for the `ready` event before calling).
 

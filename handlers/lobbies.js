@@ -45,12 +45,13 @@ Dota2.Dota2Client.prototype.createTournamentLobby = function(password, tournamen
     if (this.debug) util.log("Sending match CMsgPracticeLobbyCreate request");
     var lobby_details = Dota2._parseOptions(options, Dota2._lobbyOptions);
     lobby_details.pass_key = password;
+    lobby_details.leagueid = options.leagueid || tournament_id;
     var payload = {
         "lobby_details": lobby_details,
         "pass_key": password
     };
 
-    if (tournament_game_id > 0) {
+    if (tournament_id) {
         payload["tournament_game"] = true;
         payload["tournament_game_id"] = tournament_game_id;
         payload["tournament_id"] = tournament_id;
