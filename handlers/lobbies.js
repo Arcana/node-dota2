@@ -51,7 +51,7 @@ Dota2.Dota2Client.prototype.createTournamentLobby = function(password, tournamen
         "pass_key": password
     };
 
-    if (tournament_id) {
+    if (tournament_id > 0) {
         payload["tournament_game"] = true;
         payload["tournament_game_id"] = tournament_game_id;
         payload["tournament_id"] = tournament_id;
