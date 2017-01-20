@@ -327,7 +327,7 @@ var onPracticeLobbyJoinResponse = function onPracticeLobbyJoinResponse(message, 
     this.emit("practiceLobbyJoinResponse", practiceLobbyJoinResponse.result, practiceLobbyJoinResponse);
     
     if (callback) {
-        if (practiceLobbyJoinResponse.result === Dota2.schema.DOTAJoinLobbyResult.DOTA_JOIN_RESULT_SUCCESS) {
+        if (practiceLobbyJoinResponse.result === Dota2.schema.lookupEnum("DOTAJoinLobbyResult").DOTA_JOIN_RESULT_SUCCESS) {
             callback(null, practiceLobbyJoinResponse);
         } else {
             callback(practiceLobbyJoinResponse.result, practiceLobbyJoinResponse);
