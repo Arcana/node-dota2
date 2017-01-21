@@ -59,9 +59,9 @@ Dota2.Dota2Client.prototype.setPartyCoach = function(coach) {
 
     if (this.debug) util.log("Setting coach slot: " + coach);
 
-    var payload = new Dota2.schema.CMsgDOTAPartyMemberSetCoach({
+    var payload = {
         "wants_coach": coach
-    });
+    };
     this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCPartyMemberSetCoach, 
                     Dota2.schema.lookupType("CMsgDOTAPartyMemberSetCoach").encode(payload).finish());
 };
