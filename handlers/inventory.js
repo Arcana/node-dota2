@@ -29,7 +29,7 @@ Dota2.Dota2Client.prototype.deleteItem = function(item_id) {
     var buffer = new Buffer(8);
     buffer.writeUInt64LE(item_id);
     this._gc.send({
-            "msg": Dota2.schema.EGCItemMsg.k_EMsgGCDelete
+            "msg": Dota2.schema.lookupEnum("EGCItemMsg").k_EMsgGCDelete
         },
         buffer
     );
