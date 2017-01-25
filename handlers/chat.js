@@ -14,7 +14,7 @@ Dota2.Dota2Client.prototype._getChannelByName = function(channel_name, channel_t
             }
         )[0];
     } else {
-        return null;
+        return undefined;
     }
 }
 
