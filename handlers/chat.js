@@ -168,6 +168,7 @@ var onJoinChatChannelResponse = function onJoinChatChannelResponse(message) {
     var channelData = Dota2.schema.lookupType("CMsgDOTAJoinChatChannelResponse").decode(message);
     if (this.debug) util.log("Chat channel " + channelData.channel_name + " has " + channelData.members.length + " person(s) online");
     this.chatChannels.push(channelData);
+    this.emit("chatJoined", channelData);
 };
 handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCJoinChatChannelResponse] = onJoinChatChannelResponse;
 
