@@ -4,32 +4,25 @@ var Dota2 = require("../index"),
 // Methods
 Dota2.Dota2Client.prototype._getChannelByName = function(channel_name, channel_type) {
     // Returns the channel corresponding to the given channel_name
-    if (this.chatChannels) {
-        return this.chatChannels.filter(
-            function(item) {
-                if(channel_type >= 0)
-                    return (item.channel_name === channel_name && item.channel_type === channel_type);
-                else
-                    return (item.channel_name === channel_name);
-            }
-        )[0];
-    } else {
-        return undefined;
-    }
+    return this.chatChannels.filter(
+        function(item) {
+            if(channel_type >= 0)
+                return (item.channel_name === channel_name && item.channel_type === channel_type);
+            else
+                return (item.channel_name === channel_name);
+        }
+    )[0];
+    
 }
 
 Dota2.Dota2Client.prototype._getChannelById = function(channel_id) {
     // Returns the channel corresponding to the given channel_id
-    if (this.chatChannels) {
-        return this.chatChannels.filter(
-            // channel_id is a uint64 which is a compound object. Using '===' or '==' doesn't work to check the equality necessitating the cast to String
-            function(item) {
-                return ("" + item.channel_id === "" + channel_id);
-            }
-        )[0];
-    } else {
-        return null;
-    }
+    return this.chatChannels.filter(
+        // channel_id is a uint64 which is a compound object. Using '===' or '==' doesn't work to check the equality necessitating the cast to String
+        function(item) {
+            return ("" + item.channel_id === "" + channel_id);
+        }
+    )[0];
 }
 
 Dota2.Dota2Client.prototype._leaveChatChannelById = function(channelId) {
