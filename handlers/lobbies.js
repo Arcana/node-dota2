@@ -249,7 +249,7 @@ Dota2.Dota2Client.prototype.launchPracticeLobby = function(callback) {
 Dota2.Dota2Client.prototype.joinPracticeLobbyTeam = function(slot, team, callback) {
     callback = callback || null;
     slot = slot ||1;
-    if (typeof team === 'undefined') team = Dota2.schema.DOTA_GC_TEAM.DOTA_GC_TEAM_PLAYER_POOL;
+    if (typeof team === 'undefined') team = Dota2.schema.lookupEnum("DOTA_GC_TEAM").DOTA_GC_TEAM_PLAYER_POOL;
     
     var _self = this;
 
@@ -282,8 +282,8 @@ Dota2.Dota2Client.prototype.joinPracticeLobbyBroadcastChannel = function(channel
 Dota2.Dota2Client.prototype.addBotToPracticeLobby = function(slot, team, bot_difficulty, callback) {
     callback = callback || null;
     slot = slot || 1;
-    team = team || Dota2.schema.DOTA_GC_TEAM.DOTA_GC_TEAM_GOOD_GUYS;
-    bot_difficulty = bot_difficulty || Dota2.schema.DOTABotDifficulty.BOT_DIFFICULTY_PASSIVE;
+    team = team || Dota2.schema.lookupEnum("DOTA_GC_TEAM").DOTA_GC_TEAM_GOOD_GUYS;
+    bot_difficulty = bot_difficulty || Dota2.schema.lookupEnum("DOTABotDifficulty").BOT_DIFFICULTY_PASSIVE;
     var _self = this;
 
     if (this.debug) util.log("Sending match CMsgPracticeLobbySetTeamSlot request");
@@ -328,7 +328,7 @@ var onPracticeLobbyJoinResponse = function onPracticeLobbyJoinResponse(message, 
     this.emit("practiceLobbyJoinResponse", practiceLobbyJoinResponse.result, practiceLobbyJoinResponse);
     
     if (callback) {
-        if (practiceLobbyJoinResponse.result === Dota2.schema.DOTAJoinLobbyResult.DOTA_JOIN_RESULT_SUCCESS) {
+        if (practiceLobbyJoinResponse.result === Dota2.schema.lookupEnum("DOTAJoinLobbyResult").DOTA_JOIN_RESULT_SUCCESS) {
             callback(null, practiceLobbyJoinResponse);
         } else {
             callback(practiceLobbyJoinResponse.result, practiceLobbyJoinResponse);
