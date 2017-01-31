@@ -388,33 +388,32 @@ Sends a message to the Game Coordinator confirming a lobby invitation. The `Lobb
 
 Sends a message to the Game Coordinator requesting to join a lobby.  Provide a callback or listen for `practiceLobbyJoinResponse` for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
-#### createPracticeLobby([password], [options], [callback])
-* `[password]` - Password to restrict access to the lobby (optional).
+#### createPracticeLobby([options])
 * `[options]` - Options available for the lobby. All are optional, but send at least one.
   * `game_name`: String, lobby title.
-  * `server_region`: Use the ServerRegion enum.
-  * `game_mode`: Use the DOTA_GameMode enum.
-  * `game_version`: Use the game version enum.
-  * `cm_pick`: Use the DOTA_CM_PICK enum.
-  * `allow_cheats`: Boolean, allow cheats.
-  * `fill_with_bots`: Boolean, fill available slots with bots?
-  * `allow_spectating`: Boolean, allow spectating?
   * `pass_key`: Password.
-  * `series_type`: Use the series type enum.
-  * `radiant_series_wins`: # of games won so far, e.g. for a Bo3 or Bo5.
-  * `dire_series_wins`: # of games won so far, e.g. for a Bo3 or Bo5.
-  * `allchat`: Boolean, enable all chat for VOIP
-  * `leagueid`: The league this lobby is being created for. The bot should be a league admin for this to work. Optional
-  * `dota_tv_delay`: Number of seconds the game should be delayed for DotaTV.
-  * `custom_game_mode`: TODO.
-  * `custom_map_name`: TODO.
-  * `custom_difficulty`: TODO.
-  * `custom_game_id`: TODO.
-* `[callback]` - optional callback, returns args: `err, response`.
+  * `server_region`: Use the ServerRegion enum. *Default: `UNSPECIFIED`*.
+  * `game_mode`: Use the DOTA_GameMode enum. *Default: `DOTA_GAMEMODE_AP`*.
+  * `game_version`: Use the game version enum. *Default: `GAME_VERSION_STABLE`*.
+  * `cm_pick`: Use the DOTA_CM_PICK enum. *Default: `DOTA_CM_RANDOM`*.
+  * `allow_cheats`: Boolean, allow cheats. *Default: `false`*.
+  * `fill_with_bots`: Boolean, fill available slots with bots? *Default: `false`*.
+  * `allow_spectating`: Boolean, allow spectating? *Default: `true`*.
+  * `series_type`: Use the series type enum. *Default: `NONE`*.
+  * `radiant_series_wins`: # of games won so far, e.g. for a Bo3 or Bo5. *Default: `0`*.
+  * `dire_series_wins`: # of games won so far, e.g. for a Bo3 or Bo5. *Default: `0`*.
+  * `previous_match_override` In a series, the match ID of the previous game. If not supplied, the GC will try to find it automatically based on the teams and the players. *Default: `0`*.
+  * `allchat`: Boolean, enable all chat for VOIP. *Default: `false`*.
+  * `leagueid`: The league this lobby is being created for. The bot should be a league admin for this to work. *Default: `0`*.
+  * `dota_tv_delay`: How much time the game should be delayed for DotaTV. Use the LobbyDotaTVDelay enum. *Default: `LobbyDotaTV_120`*.
+  * `custom_game_mode`: TODO. *Default: `0`*.
+  * `custom_map_name`: TODO. *Default: `0`*.
+  * `custom_difficulty`: TODO. *Default: `0`*.
+  * `custom_game_id`: TODO. *Default: `0`*.
 
 Sends a message to the Game Coordinator requesting to create a lobby.  Listen for `practiceLobbyUpdate`  response for a snapshot-update of the newly created lobby. Requires the GC to be ready (listen for the `ready` event before calling).
 
-#### createTournamentLobby([password], [tournament_game_id], [tournament_id], [options], [callback])
+#### createTournamentLobby([password], [tournament_game_id], [tournament_id], [options], [callback]) - DEPRECATED
 * `[password]` - See paramter description in [#createPracticeLobby]
 * `[tournament_game_id]` - Presumably the previous game id, in a series. Optional.
 * `[tournament_id]` - The league this lobby is being created for. The bot should be a league admin for this to work.

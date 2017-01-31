@@ -22,6 +22,7 @@ Dota2._lobbyOptions = {
     dire_series_wins: "number",
     allchat: "boolean",
     leagueid: "number",
+    previous_match_override: "number",
     dota_tv_delay: "number",
     custom_game_mode: "string",
     custom_map_name: "string",
@@ -30,11 +31,128 @@ Dota2._lobbyOptions = {
 };
 
 // Methods
-Dota2.Dota2Client.prototype.createPracticeLobby = function(password, options, callback) {
+
+/**
+ * Sends a message to the Game Coordinator requesting to create a lobby. Listen for
+ * practiceLobbyUpdate response for a snapshot-update of the newly created lobby.
+ *
+ * @param {object} options
+ * @param {string} options.game_name
+ * @param {string} options.pass_key
+ * @param {ServerRegion} [options.server_region]
+ * @param {DOTA_GameMode} [options.game_mode=DOTA_GAMEMODE_AP]
+ * @param {DOTAGameVersion} [options.game_version=GAME_VERSION_STABLE]
+ * @param {DOTA_CM_PICK} [options.cm_pick=DOTA_CM_RANDOM]
+ * @param {boolean} [options.allow_cheats=false]
+ * @param {boolean} [options.fill_with_bots=false]
+ * @param {boolean} [options.allow_spectating=true]
+ * @param {SeriesType} [options.series_type=NONE]
+ *
+ * Whether or not the game is part of a series (Bo3, Bo5).
+ *
+ * @param {number} [options.radiant_series_wins=0]
+ *
+ * # of games won so far, e.g. for a Bo3 or Bo5.
+ *
+ * @param {number} [options.dire_series_wins=0]
+ *
+ * # of games won so far, e.g. for a Bo3 or Bo5.
+ *
+ * @param {number} [options.previous_match_override]
+ *
+ * In a series, the match ID of the previous game. If not supplied, the GC will try
+ * to find it automatically based on the teams and the players.
+ *
+ * @param {boolean} [options.allchat=false]
+ * @param {LobbyDotaTVDelay} [options.dota_tv_delay=LobbyDotaTV_120]
+ *
+ * How much time the game should be delayed for DotaTV.
+ *
+ * @param {number} [options.leagueid]
+ *
+ * The league this lobby is being created for. The bot should be a league admin for
+ * this to work.
+ *
+ * @param {number} [options.custom_game_mode]
+ * @param {number} [options.custom_map_name]
+ * @param {number} [options.custom_difficulty]
+ * @param {number} [options.custom_game_id]
+ *
+ * @param {function} [callback] Deprecated! Use .then().catch() instead.
+ */
+Dota2.Dota2Client.prototype.createPracticeLobby = function(options, callback) {
+    return new Promise((resolve, reject) => {
+        var userCallback = callback || null;
+        var _self = this;
+
+        var defaults = {
+            game_name: "",
+            server_region: 0,
+            game_mode: Dota2.schema.lookupEnum("DOTA_GameMode").DOTA_GAMEMODE_AP,
+            game_version: Dota2.schema.lookupEnum("DOTAGameVersion").GAME_VERSION_STABLE,
+            cm_pick: Dota2.schema.lookupEnum("DOTA_CM_PICK").DOTA_CM_RANDOM,
+            allow_cheats: false,
+            fill_with_bots: false,
+            allow_spectating: true,
+            pass_key: "",
+            series_type: Dota2.SeriesType.NONE,
+            radiant_series_wins: 0,
+            dire_series_wins: 0,
+            allchat: false,
+            dota_tv_delay: Dota2.schema.lookupEnum("LobbyDotaTVDelay").LobbyDotaTV_120,
+            leagueid: 0,
+            previous_match_override: 0,
+            custom_game_mode: 0,
+            custom_map_name: 0,
+            custom_difficulty: 0,
+            custom_game_id: 0
+        };
+        var finalOptions = Object.assign(defaults, options);
+
+        if (this.debug) util.log("Sending match CMsgPracticeLobbyCreate request");
+        var lobby_details = Dota2._parseOptions(finalOptions, Dota2._lobbyOptions);
+        lobby_details.pass_key = password;
+        lobby_details.leagueid = finalOptions.leagueid || tournament_id;
+        var payload = {
+            "lobby_details": lobby_details,
+            "pass_key": password
+        };
+
+        if (tournament_id > 0) {
+            payload["tournament_game"] = true;
+            payload["tournament_game_id"] = tournament_game_id;
+            payload["tournament_id"] = tournament_id;
+        }
+
+        // The internal callback takes care of resolving the promise, and also maintains
+        // backwards compatibility so that the method works with the supplied callback parameter
+        var internalCallback = (err, response) => {
+            if (userCallback) userCallback(err, response);
+
+            if (err) {
+                return reject(err);
+            } else {
+                return resolve(response);
+            }
+        };
+
+        this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCPracticeLobbyCreate,
+            Dota2.schema.lookupType("CMsgPracticeLobbyCreate").encode(payload).finish(),
+            onPracticeLobbyResponse, internalCallback);
+    });
+}
+
+/**
+ * @deprecated since 5.0.0
+ */
+Dota2.Dota2Client.prototype._createPracticeLobby = function(password, options, callback) {
         callback = callback || null;
         this.createTournamentLobby(password, -1, -1, options, callback);
     }
     // callback to onPracticeLobbyResponse
+/**
+ * @deprecated since 5.0.0
+ */
 Dota2.Dota2Client.prototype.createTournamentLobby = function(password, tournament_game_id, tournament_id, options, callback) {
     callback = callback || null;
     password = password || "";
