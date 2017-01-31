@@ -111,18 +111,10 @@ Dota2.Dota2Client.prototype.createPracticeLobby = function(options, callback) {
 
         if (this.debug) util.log("Sending match CMsgPracticeLobbyCreate request");
         var lobby_details = Dota2._parseOptions(finalOptions, Dota2._lobbyOptions);
-        lobby_details.pass_key = password;
-        lobby_details.leagueid = finalOptions.leagueid || tournament_id;
         var payload = {
             "lobby_details": lobby_details,
-            "pass_key": password
+            "pass_key": finalOptions.pass_key
         };
-
-        if (tournament_id > 0) {
-            payload["tournament_game"] = true;
-            payload["tournament_game_id"] = tournament_game_id;
-            payload["tournament_id"] = tournament_id;
-        }
 
         // The internal callback takes care of resolving the promise, and also maintains
         // backwards compatibility so that the method works with the supplied callback parameter
