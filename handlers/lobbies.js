@@ -78,60 +78,65 @@ Dota2._lobbyOptions = {
  * @param {number} [options.custom_difficulty]
  * @param {number} [options.custom_game_id]
  *
- * @param {function} [callback] Deprecated! Use .then().catch() instead.
+ * @param {createPracticeLobbyCallback} [callback]
+ *
+ * The callback that handles the response.
  */
 Dota2.Dota2Client.prototype.createPracticeLobby = function(options, callback) {
-    return new Promise((resolve, reject) => {
-        var userCallback = callback || null;
-        var _self = this;
+    /**
+     * @callback createPracticeLobbyCallback
+     * @param {*} err
+     * @param {*} response
+     */ // TODO properly document
+    callback = callback || null;
+    var _self = this;
 
-        var defaults = {
-            game_name: "",
-            server_region: 0,
-            game_mode: Dota2.schema.lookupEnum("DOTA_GameMode").DOTA_GAMEMODE_AP,
-            game_version: Dota2.schema.lookupEnum("DOTAGameVersion").GAME_VERSION_STABLE,
-            cm_pick: Dota2.schema.lookupEnum("DOTA_CM_PICK").DOTA_CM_RANDOM,
-            allow_cheats: false,
-            fill_with_bots: false,
-            allow_spectating: true,
-            pass_key: "",
-            series_type: Dota2.SeriesType.NONE,
-            radiant_series_wins: 0,
-            dire_series_wins: 0,
-            allchat: false,
-            dota_tv_delay: Dota2.schema.lookupEnum("LobbyDotaTVDelay").LobbyDotaTV_120,
-            leagueid: 0,
-            previous_match_override: 0,
-            custom_game_mode: 0,
-            custom_map_name: 0,
-            custom_difficulty: 0,
-            custom_game_id: 0
-        };
-        var finalOptions = Object.assign(defaults, options);
+    var defaults = {
+        game_name: "",
+        server_region: 0,
+        game_mode: Dota2.schema.lookupEnum("DOTA_GameMode").DOTA_GAMEMODE_AP,
+        game_version: Dota2.schema.lookupEnum("DOTAGameVersion").GAME_VERSION_STABLE,
+        cm_pick: Dota2.schema.lookupEnum("DOTA_CM_PICK").DOTA_CM_RANDOM,
+        allow_cheats: false,
+        fill_with_bots: false,
+        allow_spectating: true,
+        pass_key: "",
+        series_type: Dota2.SeriesType.NONE,
+        radiant_series_wins: 0,
+        dire_series_wins: 0,
+        allchat: false,
+        dota_tv_delay: Dota2.schema.lookupEnum("LobbyDotaTVDelay").LobbyDotaTV_120,
+        leagueid: 0,
+        previous_match_override: 0,
+        custom_game_mode: 0,
+        custom_map_name: 0,
+        custom_difficulty: 0,
+        custom_game_id: 0
+    };
+    var finalOptions = Object.assign(defaults, options);
 
-        if (this.debug) util.log("Sending match CMsgPracticeLobbyCreate request");
-        var lobby_details = Dota2._parseOptions(finalOptions, Dota2._lobbyOptions);
-        var payload = {
-            "lobby_details": lobby_details,
-            "pass_key": finalOptions.pass_key
-        };
+    if (this.debug) util.log("Sending match CMsgPracticeLobbyCreate request");
+    var lobby_details = Dota2._parseOptions(finalOptions, Dota2._lobbyOptions);
+    var payload = {
+        "lobby_details": lobby_details,
+        "pass_key": finalOptions.pass_key
+    };
 
-        // The internal callback takes care of resolving the promise, and also maintains
-        // backwards compatibility so that the method works with the supplied callback parameter
-        var internalCallback = (err, response) => {
-            if (userCallback) userCallback(err, response);
+    // The internal callback takes care of resolving the promise, and also maintains
+    // backwards compatibility so that the method works with the supplied callback parameter
+    var internalCallback = (err, response) => {
+        if (userCallback) userCallback(err, response);
 
-            if (err) {
-                return reject(err);
-            } else {
-                return resolve(response);
-            }
-        };
+        if (err) {
+            return reject(err);
+        } else {
+            return resolve(response);
+        }
+    };
 
-        this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCPracticeLobbyCreate,
-            Dota2.schema.lookupType("CMsgPracticeLobbyCreate").encode(payload).finish(),
-            onPracticeLobbyResponse, internalCallback);
-    });
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCPracticeLobbyCreate,
+        Dota2.schema.lookupType("CMsgPracticeLobbyCreate").encode(payload).finish(),
+        onPracticeLobbyResponse, callback);
 }
 
 /**

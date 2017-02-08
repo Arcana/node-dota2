@@ -388,7 +388,7 @@ Sends a message to the Game Coordinator confirming a lobby invitation. The `Lobb
 
 Sends a message to the Game Coordinator requesting to join a lobby.  Provide a callback or listen for `practiceLobbyJoinResponse` for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
-#### createPracticeLobby([options])
+#### createPracticeLobby([options], [callback])
 * `[options]` - Options available for the lobby. All are optional, but send at least one.
   * `game_name`: String, lobby title.
   * `pass_key`: Password.
@@ -410,6 +410,7 @@ Sends a message to the Game Coordinator requesting to join a lobby.  Provide a c
   * `custom_map_name`: TODO. *Default: `0`*.
   * `custom_difficulty`: TODO. *Default: `0`*.
   * `custom_game_id`: TODO. *Default: `0`*.
+* `[callback]` - optional callback, returns args: `err, response`.
 
 Sends a message to the Game Coordinator requesting to create a lobby.  Listen for `practiceLobbyUpdate`  response for a snapshot-update of the newly created lobby. Requires the GC to be ready (listen for the `ready` event before calling).
 
