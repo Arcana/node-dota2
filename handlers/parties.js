@@ -2,6 +2,12 @@ var Dota2 = require("../index"),
     util = require("util");
 
 // Methods
+/** 
+ * Responds to a party invite
+ * @param {Long} id - The party's ID
+ * @param {Boolean} [accept=false] - Whether or not you accept the invite
+ * @param {Object} [ping_data=undefined] - Optional argument that can be provided when accepting an invite. Contains a.o. the ping to the different servers. See `CMsgClientPingData`for contents.
+ */
 Dota2.Dota2Client.prototype.respondPartyInvite = function(id, accept, ping_data) {
     id = id || null;
     accept = accept || false;
@@ -11,7 +17,7 @@ Dota2.Dota2Client.prototype.respondPartyInvite = function(id, accept, ping_data)
     }
 
     if (this.debug) util.log("Responding to party invite " + id + ", accept: " + accept);
-    // todo: set client version here?
+    
     var payload = {
         "party_id": id,
         "accept": accept,
@@ -21,6 +27,9 @@ Dota2.Dota2Client.prototype.respondPartyInvite = function(id, accept, ping_data)
                     Dota2.schema.lookupType("CMsgPartyInviteResponse").encode(payload).finish());
 };
 
+/**
+ * Leaves the current party 
+ */
 Dota2.Dota2Client.prototype.leaveParty = function() {
     if (this.debug) util.log("Leaving party.");
 
@@ -30,6 +39,12 @@ Dota2.Dota2Client.prototype.leaveParty = function() {
                     Dota2.schema.lookupType("CMsgLeaveParty").encode(payload).finish());
 };
 
+/**
+ * Tries to assign a party member as party leader. 
+ * Only works if you are a party leader and the proposed user is a member of 
+ * the current party
+ * @param {Long} steam_id - The Steam ID of the new party leader
+ */
 Dota2.Dota2Client.prototype.setPartyLeader = function(steam_id) {
     steam_id = steam_id || null;
     if (this.Party == null) {
@@ -50,6 +65,10 @@ Dota2.Dota2Client.prototype.setPartyLeader = function(steam_id) {
                     Dota2.schema.lookupType("CMsgDOTASetGroupLeader").encode(payload).finish());
 }
 
+/**
+ * Announces whether or not you want to be coach of the current party. GC will take action accordingly.
+ * @param {Boolean} coach - True if you want to be coach, false if you no longer want to be coach
+ */
 Dota2.Dota2Client.prototype.setPartyCoach = function(coach) {
     coach = coach || false;
     if (this.Party == null) {
@@ -66,6 +85,10 @@ Dota2.Dota2Client.prototype.setPartyCoach = function(coach) {
                     Dota2.schema.lookupType("CMsgDOTAPartyMemberSetCoach").encode(payload).finish());
 };
 
+/**
+ * Invite a player to your party
+ * @param {Long} steam_id - Steam ID of the player you want to invite
+ */
 Dota2.Dota2Client.prototype.inviteToParty = function(steam_id) {
     steam_id = steam_id || null;
     if (steam_id == null) {
@@ -74,7 +97,7 @@ Dota2.Dota2Client.prototype.inviteToParty = function(steam_id) {
     }
 
     if (this.debug) util.log("Inviting " + steam_id + " to a party.");
-    // todo: set client version here?
+    
     var payload = {
         "steam_id": steam_id
     };
@@ -82,6 +105,10 @@ Dota2.Dota2Client.prototype.inviteToParty = function(steam_id) {
                     Dota2.schema.lookupType("CMsgInviteToParty").encode(payload).finish());
 };
 
+/**
+ * Kick a player from your party. Only works if you're party leader
+ * @param {Long} steam_id - Steam ID of the player you want to kick
+ */
 Dota2.Dota2Client.prototype.kickFromParty = function(steam_id) {
     steam_id = steam_id || null;
     if (steam_id == null) {
@@ -90,7 +117,7 @@ Dota2.Dota2Client.prototype.kickFromParty = function(steam_id) {
     }
 
     if (this.debug) util.log("Kicking " + steam_id + " from the party.");
-    // todo: set client version here?
+    
     var payload = {
         "steam_id": steam_id
     };
