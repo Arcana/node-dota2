@@ -398,6 +398,10 @@ Sends a message to the Game Coordinator requesting to join a lobby.  Provide a c
   * `cm_pick`: Use the DOTA_CM_PICK enum. *Default: `DOTA_CM_RANDOM`*.
   * `allow_cheats`: Boolean, allow cheats. *Default: `false`*.
   * `fill_with_bots`: Boolean, fill available slots with bots? *Default: `false`*.
+  * `bot_difficulty_radiant`: The bot difficulty for radiant bots, if `fill_with_bots is true`. Use the `Dota2.SeriesType` enum. *Default: `PASSIVE`*.
+  * `bot_difficulty_dire`: The bot difficulty for dire bots, if `fill_with_bots is true`. Use the `Dota2.SeriesType` enum. *Default: `PASSIVE`*.
+  * `bot_radiant`: Number. Presumably the ID of the custom AI to be applied to radiant bots.
+  * `bot_dire`: Number. Presumably the ID of the custom AI to be applied to dire bots.
   * `allow_spectating`: Boolean, allow spectating? *Default: `true`*.
   * `series_type`: Use the series type enum. *Default: `NONE`*.
   * `radiant_series_wins`: # of games won so far, e.g. for a Bo3 or Bo5. *Default: `0`*.

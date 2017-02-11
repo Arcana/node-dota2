@@ -7,6 +7,14 @@ Dota2.SeriesType = {
     BEST_OF_FIVE: 2
 };
 
+Dota2.BotDifficulty = {
+    PASSIVE: 0,
+    EASY: 1,
+    MEDIUM: 2,
+    HARD: 3,
+    UNFAIR: 4
+};
+
 Dota2._lobbyOptions = {
     game_name: "string",
     server_region: "number",
@@ -28,6 +36,8 @@ Dota2._lobbyOptions = {
     custom_map_name: "string",
     custom_difficulty: "number",
     custom_game_id: "number",
+    bot_difficulty_radiant: "number",
+    bot_difficulty_dire: "number",
 };
 
 // Methods
@@ -45,6 +55,22 @@ Dota2._lobbyOptions = {
  * @param {DOTA_CM_PICK} [options.cm_pick=DOTA_CM_RANDOM]
  * @param {boolean} [options.allow_cheats=false]
  * @param {boolean} [options.fill_with_bots=false]
+ * @param {BotDifficulty} [options.bot_difficulty_radiant=PASSIVE]
+ *
+ * The bot difficulty for radiant bots, if fill_with_bots is true.
+ *
+ * @param {BotDifficulty} [options.bot_difficulty_dire=PASSIVE]
+ *
+ * The bot difficulty for dire bots, if fill_with_bots is true.
+ *
+ * @param {number} [options.bot_radiant]
+ *
+ * Presumably the ID of the custom AI to be applied to radiant bots.
+ *
+ * @param {number} [options.bot_dire]
+ *
+ * Presumably the ID of the custom AI to be applied to dire bots.
+ *
  * @param {boolean} [options.allow_spectating=true]
  * @param {SeriesType} [options.series_type=NONE]
  *
@@ -85,9 +111,15 @@ Dota2._lobbyOptions = {
 Dota2.Dota2Client.prototype.createPracticeLobby = function(options, callback) {
     /**
      * @callback createPracticeLobbyCallback
-     * @param {*} err
-     * @param {*} response
-     */ // TODO properly document
+     * @param {number|null} err
+     *
+     * Null if everything was successful, or a number corresponding to the error.
+     *
+     * @param {CMsgPracticeLobbyJoinResponse} response
+     *
+     * @typedef {object} CMsgPracticeLobbyJoinResponse
+     * @property {*} result
+     */
     callback = callback || null;
     var _self = this;
 
@@ -99,6 +131,8 @@ Dota2.Dota2Client.prototype.createPracticeLobby = function(options, callback) {
         cm_pick: Dota2.schema.lookupEnum("DOTA_CM_PICK").DOTA_CM_RANDOM,
         allow_cheats: false,
         fill_with_bots: false,
+        bot_difficulty_radiant: Dota2.BotDifficulty.PASSIVE,
+        bot_difficulty_dire: Dota2.BotDifficulty.PASSIVE,
         allow_spectating: true,
         pass_key: "",
         series_type: Dota2.SeriesType.NONE,
