@@ -1,6 +1,8 @@
 files:
   - index.js
-dir: handlers
+  - handlers/cache.js
+  - handlers/helper.js
+  - handlers/sourcetv.js
 packageJson: package.json
 branches:
   - doc
