@@ -1,3 +1,9 @@
+/**
+ * Dota 2 module
+ * @module Dota2
+ */
+
+
 var steam = require("steam");
 
 const DOTA_APP_ID = 570;
@@ -13,20 +19,60 @@ var EventEmitter = require('events').EventEmitter,
 Protobuf.parse.defaults.keepCase = true;
 
 var folder = fs.readdirSync(__dirname + '/proto');
+
+/**
+ * Protobuf schema. See {@link Protobuf#Root}
+ */ 
 Dota2.schema = Protobuf.loadSync(folder.map(filename => __dirname + '/proto/' + filename));
 
-var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
+/**
+ * The Dota 2 client that communicates with the GC
+ * @class 
+ * @param {Object} steamClient - Node-steam client instanc
+ * @param {Boolean} debug - Print debug information to console
+ * @param {Boolean} debugMore - Print even more debug information to console
+ * @extends {EventEmitter} EventEmitter
+ * @fires Dota2Client#sourceTVGamesData
+ * @fires Dota2Client#inventoryUpdate
+ * @fires Dota2Client#practiceLobbyUpdate
+ * @fires Dota2Client#lobbyInviteUpdate
+ * @fires Dota2Client#partyUpdate
+ * @fires Dota2Client#partyInviteUpdate
+ */
+Dota2.Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
     EventEmitter.call(this);
-
     this.debug = debug || false;
     this.debugMore = debugMore || false;
+    
+    /** The current state of the bot's inventory. Contains cosmetics, player cards, ... 
+    * @type {CSOEconItem []} 
+    */
+    this.Inventory = [];
+    /** The chat channels the bot has joined */
+    this.chatChannels = []; // Map channel names to channel data.
+    /** The lobby the bot is currently in. Falsy if the bot isn't in a lobby. 
+    * @type {CSODOTALobby}
+    */
+    this.Lobby = null;
+    /** The currently active lobby invitation. Falsy if the bot has not been invited. 
+    * @type {CSODOTALobbyInvite}
+    */
+    this.LobbyInvite = null;
+    /** The party the bot is currently in. Falsy if the bot isn't in a party.
+    * @type {CSODOTAParty}
+    */
+    this.Party = null;
+    /** The currently active party invitation. Falsy if the bot has not been invited.
+    * @type {CSODOTAPartyInvite}
+    */
+    this.PartyInvite = null;
 
     var steamUser = new steam.SteamUser(steamClient);
     this._user = steamUser;
     this._client = steamClient;
     this._gc = new steam.SteamGameCoordinator(steamClient, DOTA_APP_ID);
     this._appid = DOTA_APP_ID;
-    this.chatChannels = []; // Map channel names to channel data.
+    
     this._gcReady = false;
     this._gcClientHelloIntervalId = null;
     this._gcConnectionStatus = Dota2.schema.lookupEnum("GCConnectionStatus").GCConnectionStatus_NO_SESSION;
@@ -91,19 +137,30 @@ var Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
         self._gcClientHelloCount++;
     };
 };
-util.inherits(Dota2Client, EventEmitter);
+util.inherits(exports.Dota2Client, EventEmitter);
 
 // Expose enums
-Dota2Client.prototype.ServerRegion = Dota2.ServerRegion;
-Dota2Client.prototype.ToAccountID = function(accid) {
-    return new bignumber(accid).minus('76561197960265728') - 0;
-};
-Dota2Client.prototype.ToSteamID = function(accid) {
-    return new bignumber(accid).plus('76561197960265728') + "";
-};
+Dota2.Dota2Client.prototype.ServerRegion = Dota2.ServerRegion;
 
 // Methods
-Dota2Client.prototype.launch = function() {
+/**
+ * Converts a 64bit Steam ID to a Dota2 account ID
+ * @param {String} steamID - String representation of a 64bit Steam ID
+ */
+Dota2.Dota2Client.prototype.ToAccountID = function(steamID) {
+    return new bignumber(steamID).minus('76561197960265728') - 0;
+};
+/**
+ * Converts a Dota2 account ID to a 64bit Steam ID
+ * @param {String} accid - String representation of a Dota 2 account ID
+ */
+Dota2.Dota2Client.prototype.ToSteamID = function(accid) {
+    return new bignumber(accid).plus('76561197960265728') + "";
+};
+/**
+ * Reports to Steam that you're playing Dota 2, and then initiates communication with the Game Coordinator.
+ */
+Dota2.Dota2Client.prototype.launch = function() {
     /* Reports to Steam that we are running Dota 2. Initiates communication with GC with EMsgGCClientHello */
     if (this.debug) util.log("Launching Dota 2");
     this.AccountID = this.ToAccountID(this._client.steamID);
@@ -125,8 +182,10 @@ Dota2Client.prototype.launch = function() {
     //Also immediately send clienthello
     setTimeout(this._sendClientHello, 1000);
 };
-
-Dota2Client.prototype.exit = function() {
+/**
+ * Stop sending a heartbeat to the GC and report to steam you're no longer playing Dota 2
+ */
+Dota2.Dota2Client.prototype.exit = function() {
     /* Reports to Steam we are not running any apps. */
     if (this.debug) util.log("Exiting Dota 2");
 
@@ -140,7 +199,7 @@ Dota2Client.prototype.exit = function() {
     if (this._client.loggedOn) this._user.gamesPlayed([]);
 };
 
-Dota2Client.prototype.sendToGC = function(type, payload, handler, callback) {
+Dota2.Dota2Client.prototype.sendToGC = function(type, payload, handler, callback) {
     var self = this;
     if (!this._gcReady) {
         if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
@@ -157,7 +216,7 @@ Dota2Client.prototype.sendToGC = function(type, payload, handler, callback) {
 
 // Handlers
 
-var handlers = Dota2Client.prototype._handlers = {};
+var handlers = Dota2.Dota2Client.prototype._handlers = {};
 
 handlers[Dota2.schema.lookupEnum("EGCBaseClientMsg").k_EMsgGCClientWelcome] = function clientWelcomeHandler(message) {
     /* Response to our k_EMsgGCClientHello, now we can execute other GC commands. */
@@ -209,7 +268,8 @@ handlers[Dota2.schema.lookupEnum("EGCBaseClientMsg").k_EMsgGCClientConnectionSta
     }
 };
 
-Dota2.Dota2Client = Dota2Client;
+
+//Dota2.Dota2Client = Dota2Client;
 
 require("./handlers/cache");
 require("./handlers/inventory");

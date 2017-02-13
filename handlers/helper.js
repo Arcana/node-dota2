@@ -2,6 +2,11 @@ var Dota2 = require("../index"),
     util = require("util");
 
 // Enums
+/**
+ * Enum for all possible `EResult` values
+ * @readonly 
+ * @enum {Number}
+ */
 Dota2.EResult = {
     k_EResultOK : 1, // success
     k_EResultFail : 2, // generic failure 
@@ -59,7 +64,11 @@ Dota2.EResult = {
     k_EResultDiskFull : 54,
     k_EResultRemoteCallFailed : 55,
 };
-
+/**
+ * Enum for all server regions
+ * @readonly 
+ * @enum {Number}
+ */
 Dota2.ServerRegion = {
     UNSPECIFIED : 0,
     USWEST : 1,

@@ -27,6 +27,32 @@ var cacheTypeIDs = {
     CSODOTAPlayerChallenge : 2010,
     CSODOTALobbyInvite : 2011
 };
+// Events
+/**
+ * inventoryUpdate event
+ * @event Dota2Client#inventoryUpdate
+ * @param {CSOEconItem []} inventory - A list of `CSOEconItem` objects
+ */
+ /**
+ * practiceLobbyUpdate event
+ * @event Dota2Client#practiceLobbyUpdate
+ * @param {CSODOTALobby} lobby - The new state of the lobby.
+ */
+ /**
+ * lobbyInviteUpdate event
+ * @event Dota2Client#lobbyInviteUpdate
+ * @param {CSODOTALobbyInvite} lobbyInvite - The invitation to a lobby.
+ */
+ /**
+ * partyUpdate event
+ * @event Dota2Client#partyUpdate
+ * @param {CSODOTAParty} party - The new state of the party.
+ */
+ /**
+ * partyInviteUpdate event
+ * @event Dota2Client#partyInviteUpdate
+ * @param {CSODOTAPartyInvite} partyInvite - The invitation to a party.
+ */
 
 // Handlers
 function handleSubscribedType(obj_type, object_data) {
@@ -49,10 +75,10 @@ function handleSubscribedType(obj_type, object_data) {
             break;
         // Lobby invite snapshot.
         case cacheTypeIDs.CSODOTALobbyInvite:
-            var lobby = Dota2.schema.lookupType("CSODOTALobbyInvite").decode(object_data[0]);
-            if (this.debug) util.log("Received lobby invite snapshot for group ID " + lobby.group_id);
-            this.emit("lobbyInviteUpdate", lobby);
-            this.LobbyInvite = lobby;
+            var lobbyInvite = Dota2.schema.lookupType("CSODOTALobbyInvite").decode(object_data[0]);
+            if (this.debug) util.log("Received lobby invite snapshot for group ID " + lobbyInvite.group_id);
+            this.emit("lobbyInviteUpdate", lobbyInvite);
+            this.LobbyInvite = lobbyInvite;
             break;
         // Party snapshot.
         case cacheTypeIDs.CSODOTAParty:
