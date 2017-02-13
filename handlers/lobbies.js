@@ -1,9 +1,6 @@
 var Dota2 = require("../index"),
     util = require("util");
 
-/**
- * @class Dota2.Dota2Client
- */
 Dota2.SeriesType = {
     NONE: 0,
     BEST_OF_THREE: 1,
@@ -116,7 +113,6 @@ Dota2._lobbyOptions = {
 Dota2.Dota2Client.prototype.createPracticeLobby = function(options, callback) {
     /**
      * @callback createPracticeLobbyCallback
-     * @memberOf Dota2.Dota2Client
      * @param {number|null} err
      *
      * Null if everything was successful, or a number corresponding to the error.
@@ -126,7 +122,6 @@ Dota2.Dota2Client.prototype.createPracticeLobby = function(options, callback) {
 
     /**
      * @typedef {object} CMsgPracticeLobbyJoinResponse
-     * @memberOf Dota2.Dota2Client
      * @property {*} result
      */
     callback = callback || null;
