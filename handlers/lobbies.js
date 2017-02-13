@@ -1,6 +1,9 @@
 var Dota2 = require("../index"),
     util = require("util");
 
+/**
+ * @class Dota2.Dota2Client
+ */
 Dota2.SeriesType = {
     NONE: 0,
     BEST_OF_THREE: 1,
@@ -17,27 +20,29 @@ Dota2.BotDifficulty = {
 
 Dota2._lobbyOptions = {
     game_name: "string",
+    pass_key: "string",
     server_region: "number",
     game_mode: "number",
     game_version: "number",
     cm_pick: "number",
     allow_cheats: "boolean",
     fill_with_bots: "boolean",
+    bot_difficulty_radiant: "number",
+    bot_difficulty_dire: "number",
+    bot_radiant: "number",
+    bot_dire: "number",
     allow_spectating: "boolean",
-    pass_key: "string",
     series_type: "number",
     radiant_series_wins: "number",
     dire_series_wins: "number",
-    allchat: "boolean",
-    leagueid: "number",
     previous_match_override: "number",
+    allchat: "boolean",
     dota_tv_delay: "number",
+    leagueid: "number",
     custom_game_mode: "string",
     custom_map_name: "string",
     custom_difficulty: "number",
     custom_game_id: "number",
-    bot_difficulty_radiant: "number",
-    bot_difficulty_dire: "number",
 };
 
 // Methods
@@ -111,13 +116,17 @@ Dota2._lobbyOptions = {
 Dota2.Dota2Client.prototype.createPracticeLobby = function(options, callback) {
     /**
      * @callback createPracticeLobbyCallback
+     * @memberOf Dota2.Dota2Client
      * @param {number|null} err
      *
      * Null if everything was successful, or a number corresponding to the error.
      *
      * @param {CMsgPracticeLobbyJoinResponse} response
-     *
+     */
+
+    /**
      * @typedef {object} CMsgPracticeLobbyJoinResponse
+     * @memberOf Dota2.Dota2Client
      * @property {*} result
      */
     callback = callback || null;
