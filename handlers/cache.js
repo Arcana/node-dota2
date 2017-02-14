@@ -91,16 +91,16 @@ Dota2.Dota2Client.prototype._handleWelcomeCaches = function handleWelcomeCaches(
  * Emitted when the GC sends an inventory snapshot. The GC is incredibly
  * inefficient and will send the entire object even if it's a minor update.
  * You can use this to detect when a change was made to your inventory (e.g. drop)
- * Note that the {@link Dota2Client#Inventory|Inventory} property will be the old value until after this event 
+ * Note that the {@link Dota2.Dota2Client#Inventory|Inventory} property will be the old value until after this event 
  * completes to allow comparison between the two.
- * @event Dota2Client#inventoryUpdate
+ * @event Dota2.Dota2Client#inventoryUpdate
  * @param {CSOEconItem []} inventory - A list of `CSOEconItem` objects
  */
  /**
  * Emitted when the GC sends a lobby snapshot. The GC is incredibly
  * inefficient and will send the entire object even if it's a minor update.
  * You can use this to detect when a lobby has been entered / created
- * successfully as well. Note that the {@link Dota2Client#Lobby|Lobby} property will be the old
+ * successfully as well. Note that the {@link Dota2.Dota2Client#Lobby|Lobby} property will be the old
  * value until after this event completes to allow comparison between the
  * two.
  * @event Dota2Client#practiceLobbyUpdate
@@ -126,7 +126,7 @@ Dota2.Dota2Client.prototype._handleWelcomeCaches = function handleWelcomeCaches(
  * Emitted when the GC sends a party snapshot. The GC is incredibly
  * inefficient and will send the entire object even if it's a minor update.
  * You can use this to detect when a party has been entered / created
- * successfully as well. Note that the {@link Dota2Client#Party|Party} property will be the old
+ * successfully as well. Note that the {@link Dota2.Dota2Client#Party|Party} property will be the old
  * value until after this event completes to allow comparison between the
  * two.
  * @event Dota2Client#partyUpdate
@@ -142,7 +142,7 @@ Dota2.Dota2Client.prototype._handleWelcomeCaches = function handleWelcomeCaches(
  * Emitted when the GC sends a party invite snapshot. The GC is incredibly
  * inefficient and will send the entire object even if it's a minor update.
  * You can use this to detect when an incoming party invite has been sent.
- * Note that the {@link Dota2Client#PartyInvite|PartyInvite} property will be the old
+ * Note that the {@link Dota2.Dota2Client#PartyInvite|PartyInvite} property will be the old
  * value until after this event completes to allow comparison between the two.
  * @event Dota2Client#partyInviteUpdate
  * @param {CSODOTAPartyInvite} partyInvite - The invitation to a party.
