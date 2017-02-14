@@ -141,7 +141,7 @@ exports.Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
 util.inherits(exports.Dota2Client, EventEmitter);
 
 // Expose enums
-Dota2.Dota2Client.prototype.ServerRegion = Dota2.ServerRegion;
+exports.Dota2Client.prototype.ServerRegion = Dota2.ServerRegion;
 
 // Methods
 /**
@@ -154,17 +154,16 @@ exports.Dota2Client.prototype.ToAccountID = function(steamID) {
 };
 /**
  * Converts a Dota2 account ID to a 64bit Steam ID
- * @memberof Dota2:Dota2Client
  * @param {String} accid - String representation of a Dota 2 account ID
  * @returns {String} 64bit Steam ID corresponding to the given Dota 2 account ID
  */
-Dota2.Dota2Client.prototype.ToSteamID = function(accid) {
+exports.Dota2Client.prototype.ToSteamID = function(accid) {
     return new bignumber(accid).plus('76561197960265728') + "";
 };
 /**
  * Reports to Steam that you're playing Dota 2, and then initiates communication with the Game Coordinator.
  */
-Dota2.Dota2Client.prototype.launch = function() {
+exports.Dota2Client.prototype.launch = function() {
     /* Reports to Steam that we are running Dota 2. Initiates communication with GC with EMsgGCClientHello */
     if (this.debug) util.log("Launching Dota 2");
     this.AccountID = this.ToAccountID(this._client.steamID);
@@ -189,7 +188,7 @@ Dota2.Dota2Client.prototype.launch = function() {
 /**
  * Stop sending a heartbeat to the GC and report to steam you're no longer playing Dota 2
  */
-Dota2.Dota2Client.prototype.exit = function() {
+exports.Dota2Client.prototype.exit = function() {
     /* Reports to Steam we are not running any apps. */
     if (this.debug) util.log("Exiting Dota 2");
 
@@ -203,7 +202,7 @@ Dota2.Dota2Client.prototype.exit = function() {
     if (this._client.loggedOn) this._user.gamesPlayed([]);
 };
 
-Dota2.Dota2Client.prototype.sendToGC = function(type, payload, handler, callback) {
+exports.Dota2Client.prototype.sendToGC = function(type, payload, handler, callback) {
     var self = this;
     if (!this._gcReady) {
         if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
