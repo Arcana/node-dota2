@@ -34,6 +34,9 @@ Dota2.schema = Protobuf.loadSync(folder.map(filename => __dirname + '/proto/' + 
  * @param {Boolean} debug - Print debug information to console
  * @param {Boolean} debugMore - Print even more debug information to console
  * @extends {EventEmitter} EventEmitter
+ * @fires module:Dota2.Dota2Client#event:ready
+ * @fires module:Dota2.Dota2Client#event:unhandled
+ * @fires module:Dota2.Dota2Client#event:hellotimeout
  * @fires module:Dota2.Dota2Client#event:sourceTVGamesData
  * @fires module:Dota2.Dota2Client#event:inventoryUpdate
  * @fires module:Dota2.Dota2Client#event:practiceLobbyUpdate
@@ -114,7 +117,7 @@ Dota2.Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
                 self._handlers[kMsg].call(self, body);
             }
         } else {
-            self.emit("unhandled", kMsg);
+            self.emit("unhandled", kMsg, Dota2._getMessageName(kMsg));
         }
     });
 
@@ -230,6 +233,22 @@ Dota2.Dota2Client.prototype.sendToGC = function(type, payload, handler, callback
     );
 }
 
+// Events
+/**
+ * Emitted when the connection with the GC has been established 
+ * and the client is ready to take requests.
+ * @event module:Dota2.Dota2Client#ready
+ */
+/**
+ * Emitted when the GC sends a message that isn't yet treated by the library.
+ * @event module:Dota2.Dota2Client#unhandled
+ * @param {Number} kMsg - Proto message type ID
+ * @param {String} KMsg_name - Proto message type name
+ */
+/**
+ * Emitted when the connection with the GC takes longer than 30s
+ * @event module:Dota2.Dota2Client#hellotimeout
+ */
 
 // Handlers
 
