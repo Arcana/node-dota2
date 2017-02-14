@@ -48,7 +48,7 @@ Dota2.Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
     this.debugMore = debugMore || false;
     
     /** The current state of the bot's inventory. Contains cosmetics, player cards, ... 
-    * @type {CSOEconItem []} 
+    * @type {CSOEconItem[]} 
     */
     this.Inventory = [];
     /** The chat channels the bot has joined */
