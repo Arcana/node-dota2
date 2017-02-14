@@ -34,13 +34,22 @@ Dota2.schema = Protobuf.loadSync(folder.map(filename => __dirname + '/proto/' + 
  * @param {Boolean} debug - Print debug information to console
  * @param {Boolean} debugMore - Print even more debug information to console
  * @extends {EventEmitter} EventEmitter
- * @fires sourceTVGamesData
- * @fires inventoryUpdate
- * @fires practiceLobbyUpdate
- * @fires lobbyInviteUpdate
- * @fires partyUpdate
- * @fires partyInviteUpdate
- * @fires joinableCustomGameModes
+ * @fires module:Dota2.Dota2Client#event:sourceTVGamesData
+ * @fires module:Dota2.Dota2Client#event:inventoryUpdate
+ * @fires module:Dota2.Dota2Client#event:practiceLobbyUpdate
+ * @fires module:Dota2.Dota2Client#event:practiceLobbyCleared
+ * @fires module:Dota2.Dota2Client#event:lobbyInviteUpdate
+ * @fires module:Dota2.Dota2Client#event:lobbyInviteCleared
+ * @fires module:Dota2.Dota2Client#event:partyUpdate
+ * @fires module:Dota2.Dota2Client#event:partyCleared
+ * @fires module:Dota2.Dota2Client#event:partyInviteUpdate
+ * @fires module:Dota2.Dota2Client#event:partyInviteCleared
+ * @fires module:Dota2.Dota2Client#event:joinableCustomGameModes
+ * @fires module:Dota2.Dota2Client#event:chatChannelsData
+ * @fires module:Dota2.Dota2Client#event:chatJoin
+ * @fires module:Dota2.Dota2Client#event:chatJoined
+ * @fires module:Dota2.Dota2Client#event:chatLeave
+ * @fires module:Dota2.Dota2Client#event:chatMessage
  */
 Dota2.Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
     EventEmitter.call(this);
