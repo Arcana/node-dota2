@@ -45,7 +45,7 @@ Dota2.Dota2Client.prototype.leaveParty = function() {
  * Tries to assign a party member as party leader. 
  * Only works if you are a party leader and the proposed user is a member of 
  * the current party
- * @alias Dota2.Dota2Client#setPartyLeader
+ * @alias module:Dota2.Dota2Client#setPartyLeader
  * @param {Long} steam_id - The Steam ID of the new party leader
  */
 Dota2.Dota2Client.prototype.setPartyLeader = function(steam_id) {
