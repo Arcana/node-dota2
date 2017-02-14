@@ -183,6 +183,7 @@ Dota2.Dota2Client.prototype.rollDice = function(min, max, channel_name, channel_
 
 /**
  * Requests a list of chat channels from the GC. Listen for the `chatChannelsData` event for the GC's response.
+ * @alias module:Dota2.Dota2Client#requestChatChannels
  */
 Dota2.Dota2Client.prototype.requestChatChannels = function() {
     /* Requests a list of chat channels from the GC. */

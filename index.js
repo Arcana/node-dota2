@@ -140,16 +140,14 @@ exports.Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
 };
 util.inherits(exports.Dota2Client, EventEmitter);
 
-// Expose enums
-exports.Dota2Client.prototype.ServerRegion = Dota2.ServerRegion;
-
 // Methods
 /**
  * Converts a 64bit Steam ID to a Dota2 account ID
+ * @alias module:Dota2.Dota2Client.ToAccountID
  * @param {String} steamID - String representation of a 64bit Steam ID
  * @returns {Number} Dota2 account ID corresponding with steamID
  */
-exports.Dota2Client.prototype.ToAccountID = function(steamID) {
+Dota2.Dota2Client.prototype.ToAccountID = function(steamID) {
     return new bignumber(steamID).minus('76561197960265728') - 0;
 };
 /**
