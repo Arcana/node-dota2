@@ -4,7 +4,7 @@ var Dota2 = require("../index"),
 // Enums
 /**
  * Enum for all possible `EResult` values
- * @memberof module:Dota2
+ * @alias module:Dota2.EResult
  * @readonly 
  * @enum {Number}
  */
@@ -67,7 +67,7 @@ Dota2.EResult = {
 };
 /**
  * Enum for all server regions
- * @memberof module:Dota2
+ * @alias module:Dota2.ServerRegion
  * @readonly 
  * @enum {Number}
  */
