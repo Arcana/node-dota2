@@ -51,7 +51,9 @@ Dota2.Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
     * @type {CSOEconItem[]} 
     */
     this.Inventory = [];
-    /** The chat channels the bot has joined */
+    /** The chat channels the bot has joined 
+    * @type {CMsgDOTAJoinChatChannelResponse[]}
+    */
     this.chatChannels = []; // Map channel names to channel data.
     /** The lobby the bot is currently in. Falsy if the bot isn't in a lobby. 
     * @type {CSODOTALobby}
