@@ -37,6 +37,12 @@ Dota2.Dota2Client.prototype._leaveChatChannelById = function(channelId) {
     }
 };
 
+/**
+ * Joins a chat channel. If the chat channel with the given name doesn't exist, it 
+ * is created. Listen for the `chatMessage` event for other people's chat messages.
+ * @param {String} channel_name - Name of the chat channel
+ * @param {DOTAChatChannelType_t} [channel_type=DOTAChatChannelType_t.DOTAChatChannelType_Custom] - The type of the channel being joined
+ */
 Dota2.Dota2Client.prototype.joinChat = function(channel_name, channel_type) {
     channel_type = channel_type || Dota2.schema.lookupEnum("DOTAChatChannelType_t").DOTAChannelType_Custom;
 
@@ -51,6 +57,12 @@ Dota2.Dota2Client.prototype.joinChat = function(channel_name, channel_type) {
                     Dota2.schema.lookupType("CMsgDOTAJoinChatChannel").encode(payload).finish());
 };
 
+/**
+ * Leaves a chat channel. If you've joined different channels with the same name,
+ * specify the type to prevent unexpected behaviour.
+ * @param {String} channel_name - Name of the chat channel
+ * @param {DOTAChatChannelType_t} [channel_type] - The type of the channel being joined
+ */
 Dota2.Dota2Client.prototype.leaveChat = function(channel_name, channel_type) {
     /* Attempts to leave a chat channel. GC does not send a response. */
     if (this.debug) util.log("Leaving chat channel: " + channel_name);
@@ -63,7 +75,14 @@ Dota2.Dota2Client.prototype.leaveChat = function(channel_name, channel_type) {
     this._leaveChatChannelById(cache.channel_id)
 };
 
-Dota2.Dota2Client.prototype.sendMessage = function(channel_name, message, channel_type) {
+/**
+ * Sends a message to the specified chat channel. Won't send if you're not in the channel you try to send to.
+ * If you've joined different channels with the same name, specify the type to prevent unexpected behaviour.
+ * @param {String} message - The message you want to send
+ * @param {String} channel_name - Name of the chat channel
+ * @param {DOTAChatChannelType_t} [channel_type] - The type of the channel being joined
+ */
+Dota2.Dota2Client.prototype.sendMessage = function(message, channel_name, channel_type) {
     /* Attempts to send a message to a chat channel. GC does not send a response. */
     if (this.debug) util.log("Sending message to " + channel_name);
     // Check cache
@@ -81,6 +100,11 @@ Dota2.Dota2Client.prototype.sendMessage = function(channel_name, message, channe
                     Dota2.schema.lookupType("CMsgDOTAChatMessage").encode(payload).finish());
 };
 
+/**
+ * Shares the lobby you're currently in with the chat so other people can join.
+ * @param {String} channel_name - Name of the chat channel
+ * @param {DOTAChatChannelType_t} [channel_type] - The type of the channel being joined
+ */
 Dota2.Dota2Client.prototype.shareLobby = function(channel_name, channel_type) {
     /* Attempts to send a message to a chat channel. GC does not send a response. */
     if (this.debug) util.log("Sharing lobby to " + channel_name);
@@ -104,6 +128,12 @@ Dota2.Dota2Client.prototype.shareLobby = function(channel_name, channel_type) {
                     Dota2.schema.lookupType("CMsgDOTAChatMessage").encode(payload).finish());
 };
 
+/**
+ * Sends a coin flip to the specified chat channel. Won't send if you're not in the channel you try to send to.
+ * If you've joined different channels with the same name, specify the type to prevent unexpected behaviour.
+ * @param {String} channel_name - Name of the chat channel
+ * @param {DOTAChatChannelType_t} [channel_type] - The type of the channel being joined
+ */
 Dota2.Dota2Client.prototype.flipCoin = function(channel_name, channel_type) {
     /* Attempts to send a coin flip to a chat channel. Expect a chatmessage in response. */
     if (this.debug) util.log("Sending coin flip to " + channel_name);
@@ -122,7 +152,15 @@ Dota2.Dota2Client.prototype.flipCoin = function(channel_name, channel_type) {
                     Dota2.schema.lookupType("CMsgDOTAChatMessage").encode(payload).finish());
 };
 
-Dota2.Dota2Client.prototype.rollDice = function(channel_name, min, max, channel_type) {
+/**
+ * Sends a dice roll to the specified chat channel. Won't send if you're not in the channel you try to send to.
+ * If you've joined different channels with the same name, specify the type to prevent unexpected behaviour.
+ * @param {Number} min - Lower bound of the dice roll
+ * @param {Number} max - Upper bound of the dice roll
+ * @param {String} channel_name - Name of the chat channel
+ * @param {DOTAChatChannelType_t} [channel_type] - The type of the channel being joined
+ */
+Dota2.Dota2Client.prototype.rollDice = function(min, max, channel_name, channel_type) {
     /* Attempts to send a dice roll to a chat channel. Expect a chatmessage in response. */
     if (this.debug) util.log("Sending dice roll to " + channel_name);
     // Check cache
@@ -143,6 +181,9 @@ Dota2.Dota2Client.prototype.rollDice = function(channel_name, min, max, channel_
                     Dota2.schema.lookupType("CMsgDOTAChatMessage").encode(payload).finish());
 };
 
+/**
+ * Requests a list of chat channels from the GC. Listen for the `chatChannelsData` event for the GC's response.
+ */
 Dota2.Dota2Client.prototype.requestChatChannels = function() {
     /* Requests a list of chat channels from the GC. */
     if (this.debug) util.log("Requesting channel list");
@@ -152,8 +193,45 @@ Dota2.Dota2Client.prototype.requestChatChannels = function() {
                     Dota2.schema.lookupType("CMsgDOTAChatMessage").encode(payload).finish());
 };
 
-// Handlers
+// Events
+/**
+ * Event that's emitted whenever the bot joins a chat channel
+ * @event Dota2Client#chatJoined
+ * @param {Object} channelData - A `CMsgDOTAJoinChatChannelResponse` object containing information about the chat channel.
+ */
+/**
+ * Event that's emitted whenever someone else joins a chat channel the bot is in
+ * @event Dota2Client#chatJoin
+ * @param {String} channel - Name of the chat channel someone joined
+ * @param {String} joiner_name - Persona name of the person that joined the channel
+ * @param {Long} joiner_steam_id - Steam ID of the person that joined the channel
+ * @param {Object} otherJoined_object - A `CMsgDOTAOtherJoinedChatChannel` object containing the join data
+ */
+/**
+ * Event that's emitted whenever someone else leaves a chat channel the bot is in
+ * @event Dota2Client#chatLeave
+ * @param {String} channel - Name of the chat channel someone left
+ * @param {String} leaver_steam_id - Persona name of the person that left the channel
+ * @param {Object} otherLeft_object - A `CMsgDOTAOtherLeftChatChannel` object containing the leave data.
+ */
+/**
+ * Event that's emitted whenever someone sends a message in a channel the bot is in
+ * @event Dota2Client#chatMessage
+ * @param {String} channel - Name of the chat channel the message was sent to
+ * @param {String} sender_name - Persona name of the sender of the message
+ * @param {String} message - The message that was sent
+ * @param {Object} chatData - A `CMsgDOTAChatMessage` object containing the message and its metadata.
+ */
+/**
+ * Event that's emitted after requesting a list of chat channels via {@link requestChatChannels}
+ * @event Dota2Client#chatChannelsData
+ * @param {Object []} channels - An array of ChatChannel objects
+ * @param {String} channels[].channel_name - Name of the chat channel
+ * @param {Number} channels[].num_members - Number of members in the channel
+ * @param {DOTAChatChannelType_t} channels[].channel_type - The type of the channel
+ */
 
+// Handlers
 var handlers = Dota2.Dota2Client.prototype._handlers;
 
 var onJoinChatChannelResponse = function onJoinChatChannelResponse(message) {

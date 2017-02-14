@@ -21,7 +21,7 @@ Protobuf.parse.defaults.keepCase = true;
 var folder = fs.readdirSync(__dirname + '/proto');
 
 /**
- * Protobuf schema. See {@link Protobuf#Root}
+ * Protobuf schema. See {@link http://dcode.io/protobuf.js/Root.html|Protobufjs#Root}
  */ 
 Dota2.schema = Protobuf.loadSync(folder.map(filename => __dirname + '/proto/' + filename));
 
@@ -32,12 +32,13 @@ Dota2.schema = Protobuf.loadSync(folder.map(filename => __dirname + '/proto/' + 
  * @param {Boolean} debug - Print debug information to console
  * @param {Boolean} debugMore - Print even more debug information to console
  * @extends {EventEmitter} EventEmitter
- * @fires Dota2Client#sourceTVGamesData
- * @fires Dota2Client#inventoryUpdate
- * @fires Dota2Client#practiceLobbyUpdate
- * @fires Dota2Client#lobbyInviteUpdate
- * @fires Dota2Client#partyUpdate
- * @fires Dota2Client#partyInviteUpdate
+ * @fires sourceTVGamesData
+ * @fires inventoryUpdate
+ * @fires practiceLobbyUpdate
+ * @fires lobbyInviteUpdate
+ * @fires partyUpdate
+ * @fires partyInviteUpdate
+ * @fires joinableCustomGameModes
  */
 Dota2.Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
     EventEmitter.call(this);
@@ -146,6 +147,7 @@ Dota2.Dota2Client.prototype.ServerRegion = Dota2.ServerRegion;
 /**
  * Converts a 64bit Steam ID to a Dota2 account ID
  * @param {String} steamID - String representation of a 64bit Steam ID
+ * @returns {Number} Dota2 account ID corresponding with steamID
  */
 Dota2.Dota2Client.prototype.ToAccountID = function(steamID) {
     return new bignumber(steamID).minus('76561197960265728') - 0;
@@ -153,6 +155,7 @@ Dota2.Dota2Client.prototype.ToAccountID = function(steamID) {
 /**
  * Converts a Dota2 account ID to a 64bit Steam ID
  * @param {String} accid - String representation of a Dota 2 account ID
+ * @returns {String} 64bit Steam ID corresponding to the given Dota 2 account ID
  */
 Dota2.Dota2Client.prototype.ToSteamID = function(accid) {
     return new bignumber(accid).plus('76561197960265728') + "";
