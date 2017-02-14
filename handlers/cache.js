@@ -88,44 +88,68 @@ Dota2.Dota2Client.prototype._handleWelcomeCaches = function handleWelcomeCaches(
 
 // Events
 /**
- * Event emitted when there's been a change in the bot's inventory
+ * Emitted when the GC sends an inventory snapshot. The GC is incredibly
+ * inefficient and will send the entire object even if it's a minor update.
+ * You can use this to detect when a change was made to your inventory (e.g. drop)
+ * Note that the {@link Dota2Client#Inventory|Inventory} property will be the old value until after this event 
+ * completes to allow comparison between the two.
  * @event Dota2Client#inventoryUpdate
  * @param {CSOEconItem []} inventory - A list of `CSOEconItem` objects
  */
  /**
- * Event emitted when there's been a change in the lobby state
+ * Emitted when the GC sends a lobby snapshot. The GC is incredibly
+ * inefficient and will send the entire object even if it's a minor update.
+ * You can use this to detect when a lobby has been entered / created
+ * successfully as well. Note that the {@link Dota2Client#Lobby|Lobby} property will be the old
+ * value until after this event completes to allow comparison between the
+ * two.
  * @event Dota2Client#practiceLobbyUpdate
  * @param {CSODOTALobby} lobby - The new state of the lobby.
  */
  /**
- * Event emitted when the current lobby got disolved
+ * Emitted when leaving a lobby (aka, the lobby is cleared). This can
+ * happen when kicked, upon leaving a lobby, etc. There are other events
+ * to tell when the bot has been kicked.
  * @event Dota2Client#practiceLobbyCleared
  */
  /**
- * Event emitted when the bot received an invite to a lobby
+ * Emitted when the bot received an invite to a lobby
  * @event Dota2Client#lobbyInviteUpdate
  * @param {CSODOTALobbyInvite} lobbyInvite - The invitation to a lobby.
  */
  /**
- * Event emitted when the current lobby invite got revoked
+ * Emitted when the Lobby Invite is cleared, for example when
+ * accepting/rejecting it or when the lobby is closed.
  * @event Dota2Client#lobbyInviteCleared
  */
  /**
- * Event emitted when there's been a change in the party state
+ * Emitted when the GC sends a party snapshot. The GC is incredibly
+ * inefficient and will send the entire object even if it's a minor update.
+ * You can use this to detect when a party has been entered / created
+ * successfully as well. Note that the {@link Dota2Client#Party|Party} property will be the old
+ * value until after this event completes to allow comparison between the
+ * two.
  * @event Dota2Client#partyUpdate
  * @param {CSODOTAParty} party - The new state of the party.
  */
  /**
- * Event emitted when the current party got disolved
+ * Emitted when leaving a party (aka, the party is cleared). This can
+ * happen when kicked, upon leaving a party, etc. There are other callbacks
+ * to tell when the bot has been kicked.
  * @event Dota2Client#partyCleared
  */
  /**
- * Event emitted when the bot received an invite to a party
+ * Emitted when the GC sends a party invite snapshot. The GC is incredibly
+ * inefficient and will send the entire object even if it's a minor update.
+ * You can use this to detect when an incoming party invite has been sent.
+ * Note that the {@link Dota2Client#PartyInvite|PartyInvite} property will be the old
+ * value until after this event completes to allow comparison between the two.
  * @event Dota2Client#partyInviteUpdate
  * @param {CSODOTAPartyInvite} partyInvite - The invitation to a party.
  */
  /**
- * Event emitted when the current party invite got revoked
+ * Emitted when the Party Invite is cleared, for example when
+ * accepting/rejecting it or when the party is closed
  * @event Dota2Client#partyInviteCleared
  */
 
