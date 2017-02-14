@@ -33,7 +33,7 @@ Dota2.Dota2Client.prototype.requestSourceTVGames = function(filter_options) {
 // Events
 /**
  * sourceTVGamesData event
- * @event Dota2.Dota2Client#sourceTVGamesData
+ * @event module:Dota2.Dota2Client#sourceTVGamesData
  * @param {Object} sourceTVGamesResponse - A `CMsgGCToClientFindTopSourceTVGamesResponse` object or null if a bad response was received
  */
  

@@ -196,12 +196,12 @@ Dota2.Dota2Client.prototype.requestChatChannels = function() {
 // Events
 /**
  * Event that's emitted whenever the bot joins a chat channel
- * @event Dota2.Dota2Client#chatJoined
+ * @event module:Dota2.Dota2Client#chatJoined
  * @param {Object} channelData - A `CMsgDOTAJoinChatChannelResponse` object containing information about the chat channel.
  */
 /**
  * Event that's emitted whenever someone else joins a chat channel the bot is in
- * @event Dota2.Dota2Client#chatJoin
+ * @event module:Dota2.Dota2Client#chatJoin
  * @param {String} channel - Name of the chat channel someone joined
  * @param {String} joiner_name - Persona name of the person that joined the channel
  * @param {Long} joiner_steam_id - Steam ID of the person that joined the channel
@@ -209,14 +209,14 @@ Dota2.Dota2Client.prototype.requestChatChannels = function() {
  */
 /**
  * Event that's emitted whenever someone else leaves a chat channel the bot is in
- * @event Dota2.Dota2Client#chatLeave
+ * @event module:Dota2.Dota2Client#chatLeave
  * @param {String} channel - Name of the chat channel someone left
  * @param {String} leaver_steam_id - Persona name of the person that left the channel
  * @param {Object} otherLeft_object - A `CMsgDOTAOtherLeftChatChannel` object containing the leave data.
  */
 /**
  * Event that's emitted whenever someone sends a message in a channel the bot is in
- * @event Dota2.Dota2Client#chatMessage
+ * @event module:Dota2.Dota2Client#chatMessage
  * @param {String} channel - Name of the chat channel the message was sent to
  * @param {String} sender_name - Persona name of the sender of the message
  * @param {String} message - The message that was sent
@@ -224,7 +224,7 @@ Dota2.Dota2Client.prototype.requestChatChannels = function() {
  */
 /**
  * Event that's emitted after requesting a list of chat channels via {@link Dota2.Dota2Client#requestChatChannels}
- * @event Dota2.Dota2Client#chatChannelsData
+ * @event module:Dota2.Dota2Client#chatChannelsData
  * @param {Object[]} channels - An array of ChatChannel objects
  * @param {String} channels[].channel_name - Name of the chat channel
  * @param {Number} channels[].num_members - Number of members in the channel

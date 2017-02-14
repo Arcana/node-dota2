@@ -20,7 +20,7 @@ Dota2.Dota2Client.prototype.requestJoinableCustomGameModes = function requestJoi
 // Events
 /**
  * joinableCustomGameModes event.
- * @event Dota2.Dota2Client#joinableCustomGameModes
+ * @event module:Dota2.Dota2Client#joinableCustomGameModes
  * @param {CMsgJoinableCustomGameModesResponseEntry[]} joinableCustomGameModes - List of joinable custom game modes
  */ 
 

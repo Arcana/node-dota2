@@ -144,7 +144,7 @@ Dota2.Dota2Client.prototype._handleWelcomeCaches = function handleWelcomeCaches(
  * You can use this to detect when an incoming party invite has been sent.
  * Note that the {@link module:Dota2.Dota2Client#PartyInvite|PartyInvite} property will be the old
  * value until after this event completes to allow comparison between the two.
- * @event Dota2.Dota2Client#partyInviteUpdate
+ * @event module:Dota2.Dota2Client#partyInviteUpdate
  * @param {CSODOTAPartyInvite} partyInvite - The invitation to a party.
  */
  /**
