@@ -27,32 +27,6 @@ var cacheTypeIDs = {
     CSODOTAPlayerChallenge : 2010,
     CSODOTALobbyInvite : 2011
 };
-// Events
-/**
- * inventoryUpdate event
- * @event Dota2Client#inventoryUpdate
- * @param {CSOEconItem []} inventory - A list of `CSOEconItem` objects
- */
- /**
- * practiceLobbyUpdate event
- * @event Dota2Client#practiceLobbyUpdate
- * @param {CSODOTALobby} lobby - The new state of the lobby.
- */
- /**
- * lobbyInviteUpdate event
- * @event Dota2Client#lobbyInviteUpdate
- * @param {CSODOTALobbyInvite} lobbyInvite - The invitation to a lobby.
- */
- /**
- * partyUpdate event
- * @event Dota2Client#partyUpdate
- * @param {CSODOTAParty} party - The new state of the party.
- */
- /**
- * partyInviteUpdate event
- * @event Dota2Client#partyInviteUpdate
- * @param {CSODOTAPartyInvite} partyInvite - The invitation to a party.
- */
 
 // Handlers
 function handleSubscribedType(obj_type, object_data) {
@@ -111,6 +85,49 @@ Dota2.Dota2Client.prototype._handleWelcomeCaches = function handleWelcomeCaches(
             });
         });
 };
+
+// Events
+/**
+ * Event emitted when there's been a change in the bot's inventory
+ * @event Dota2Client#inventoryUpdate
+ * @param {CSOEconItem []} inventory - A list of `CSOEconItem` objects
+ */
+ /**
+ * Event emitted when there's been a change in the lobby state
+ * @event Dota2Client#practiceLobbyUpdate
+ * @param {CSODOTALobby} lobby - The new state of the lobby.
+ */
+ /**
+ * Event emitted when the current lobby got disolved
+ * @event Dota2Client#practiceLobbyCleared
+ */
+ /**
+ * Event emitted when the bot received an invite to a lobby
+ * @event Dota2Client#lobbyInviteUpdate
+ * @param {CSODOTALobbyInvite} lobbyInvite - The invitation to a lobby.
+ */
+ /**
+ * Event emitted when the current lobby invite got revoked
+ * @event Dota2Client#lobbyInviteCleared
+ */
+ /**
+ * Event emitted when there's been a change in the party state
+ * @event Dota2Client#partyUpdate
+ * @param {CSODOTAParty} party - The new state of the party.
+ */
+ /**
+ * Event emitted when the current party got disolved
+ * @event Dota2Client#partyCleared
+ */
+ /**
+ * Event emitted when the bot received an invite to a party
+ * @event Dota2Client#partyInviteUpdate
+ * @param {CSODOTAPartyInvite} partyInvite - The invitation to a party.
+ */
+ /**
+ * Event emitted when the current party invite got revoked
+ * @event Dota2Client#partyInviteCleared
+ */
 
 var handlers = Dota2.Dota2Client.prototype._handlers;
 
