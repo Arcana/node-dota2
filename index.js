@@ -40,7 +40,7 @@ exports.schema = Protobuf.loadSync(folder.map(filename => __dirname + '/proto/' 
  * @fires partyInviteUpdate
  * @fires joinableCustomGameModes
  */
-Dota2.Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
+exports.Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
     EventEmitter.call(this);
     this.debug = debug || false;
     this.debugMore = debugMore || false;
@@ -271,8 +271,6 @@ handlers[Dota2.schema.lookupEnum("EGCBaseClientMsg").k_EMsgGCClientConnectionSta
     }
 };
 
-
-//Dota2.Dota2Client = Dota2Client;
 
 require("./handlers/cache");
 require("./handlers/inventory");

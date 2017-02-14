@@ -223,7 +223,7 @@ Dota2.Dota2Client.prototype.requestChatChannels = function() {
  * @param {Object} chatData - A `CMsgDOTAChatMessage` object containing the message and its metadata.
  */
 /**
- * Event that's emitted after requesting a list of chat channels via {@link requestChatChannels}
+ * Event that's emitted after requesting a list of chat channels via {@link Dota2.Dota2Client#requestChatChannels}
  * @event Dota2.Dota2Client#chatChannelsData
  * @param {Object[]} channels - An array of ChatChannel objects
  * @param {String} channels[].channel_name - Name of the chat channel
