@@ -91,9 +91,9 @@ Dota2.Dota2Client.prototype._handleWelcomeCaches = function handleWelcomeCaches(
  * Emitted when the GC sends an inventory snapshot. The GC is incredibly
  * inefficient and will send the entire object even if it's a minor update.
  * You can use this to detect when a change was made to your inventory (e.g. drop)
- * Note that the {@link Dota2:Dota2Client#Inventory|Inventory} property will be the old value until after this event 
+ * Note that the {@link module:Dota2.Dota2Client#Inventory|Inventory} property will be the old value until after this event 
  * completes to allow comparison between the two.
- * @event Dota2.Dota2Client#inventoryUpdate
+ * @event module:Dota2.Dota2Client#inventoryUpdate
  * @param {CSOEconItem[]} inventory - A list of `CSOEconItem` objects
  */
  /**
@@ -103,46 +103,46 @@ Dota2.Dota2Client.prototype._handleWelcomeCaches = function handleWelcomeCaches(
  * successfully as well. Note that the {@link module:Dota2.Dota2Client#Lobby|Lobby} property will be the old
  * value until after this event completes to allow comparison between the
  * two.
- * @event Dota2.Dota2Client#practiceLobbyUpdate
+ * @event module:Dota2.Dota2Client#practiceLobbyUpdate
  * @param {CSODOTALobby} lobby - The new state of the lobby.
  */
  /**
  * Emitted when leaving a lobby (aka, the lobby is cleared). This can
  * happen when kicked, upon leaving a lobby, etc. There are other events
  * to tell when the bot has been kicked.
- * @event Dota2.Dota2Client#practiceLobbyCleared
+ * @event module:Dota2.Dota2Client#practiceLobbyCleared
  */
  /**
  * Emitted when the bot received an invite to a lobby
- * @event Dota2.Dota2Client#lobbyInviteUpdate
+ * @event module:Dota2.Dota2Client#lobbyInviteUpdate
  * @param {CSODOTALobbyInvite} lobbyInvite - The invitation to a lobby.
  */
  /**
  * Emitted when the Lobby Invite is cleared, for example when
  * accepting/rejecting it or when the lobby is closed.
- * @event Dota2.Dota2Client#lobbyInviteCleared
+ * @event module:Dota2.Dota2Client#lobbyInviteCleared
  */
  /**
  * Emitted when the GC sends a party snapshot. The GC is incredibly
  * inefficient and will send the entire object even if it's a minor update.
  * You can use this to detect when a party has been entered / created
- * successfully as well. Note that the {@link Dota2.Dota2Client#Party|Party} property will be the old
+ * successfully as well. Note that the {@link module:Dota2.Dota2Client#Party|Party} property will be the old
  * value until after this event completes to allow comparison between the
  * two.
- * @event Dota2.Dota2Client#partyUpdate
+ * @event module:Dota2.Dota2Client#partyUpdate
  * @param {CSODOTAParty} party - The new state of the party.
  */
  /**
  * Emitted when leaving a party (aka, the party is cleared). This can
  * happen when kicked, upon leaving a party, etc. There are other callbacks
  * to tell when the bot has been kicked.
- * @event Dota2.Dota2Client#partyCleared
+ * @event module:Dota2.Dota2Client#partyCleared
  */
  /**
  * Emitted when the GC sends a party invite snapshot. The GC is incredibly
  * inefficient and will send the entire object even if it's a minor update.
  * You can use this to detect when an incoming party invite has been sent.
- * Note that the {@link Dota2.Dota2Client#PartyInvite|PartyInvite} property will be the old
+ * Note that the {@link module:Dota2.Dota2Client#PartyInvite|PartyInvite} property will be the old
  * value until after this event completes to allow comparison between the two.
  * @event Dota2.Dota2Client#partyInviteUpdate
  * @param {CSODOTAPartyInvite} partyInvite - The invitation to a party.
@@ -150,7 +150,7 @@ Dota2.Dota2Client.prototype._handleWelcomeCaches = function handleWelcomeCaches(
  /**
  * Emitted when the Party Invite is cleared, for example when
  * accepting/rejecting it or when the party is closed
- * @event Dota2.Dota2Client#partyInviteCleared
+ * @event module:Dota2.Dota2Client#partyInviteCleared
  */
 
 var handlers = Dota2.Dota2Client.prototype._handlers;
