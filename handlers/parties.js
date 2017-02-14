@@ -4,6 +4,7 @@ var Dota2 = require("../index"),
 // Methods
 /** 
  * Responds to a party invite
+ * @alias module:Dota2.Dota2Client#respondPartyInvite
  * @param {Long} id - The party's ID
  * @param {Boolean} [accept=false] - Whether or not you accept the invite
  * @param {Object} [ping_data=undefined] - Optional argument that can be provided when accepting an invite. Contains a.o. the ping to the different servers. See `CMsgClientPingData`for contents.
@@ -29,6 +30,7 @@ Dota2.Dota2Client.prototype.respondPartyInvite = function(id, accept, ping_data)
 
 /**
  * Leaves the current party 
+ * @alias module:Dota2.Dota2Client#leaveParty
  */
 Dota2.Dota2Client.prototype.leaveParty = function() {
     if (this.debug) util.log("Leaving party.");
@@ -43,6 +45,7 @@ Dota2.Dota2Client.prototype.leaveParty = function() {
  * Tries to assign a party member as party leader. 
  * Only works if you are a party leader and the proposed user is a member of 
  * the current party
+ * @alias Dota2.Dota2Client#setPartyLeader
  * @param {Long} steam_id - The Steam ID of the new party leader
  */
 Dota2.Dota2Client.prototype.setPartyLeader = function(steam_id) {
@@ -67,6 +70,7 @@ Dota2.Dota2Client.prototype.setPartyLeader = function(steam_id) {
 
 /**
  * Announces whether or not you want to be coach of the current party. GC will take action accordingly.
+ * @alias module:Dota2.Dota2Client#setPartyCoach
  * @param {Boolean} coach - True if you want to be coach, false if you no longer want to be coach
  */
 Dota2.Dota2Client.prototype.setPartyCoach = function(coach) {
@@ -87,6 +91,7 @@ Dota2.Dota2Client.prototype.setPartyCoach = function(coach) {
 
 /**
  * Invite a player to your party
+ * @alias module:Dota2.Dota2Client#inviteToParty
  * @param {Long} steam_id - Steam ID of the player you want to invite
  */
 Dota2.Dota2Client.prototype.inviteToParty = function(steam_id) {
@@ -107,6 +112,7 @@ Dota2.Dota2Client.prototype.inviteToParty = function(steam_id) {
 
 /**
  * Kick a player from your party. Only works if you're party leader
+ * @alias module:Dota2.Dota2Client#kickFromParty
  * @param {Long} steam_id - Steam ID of the player you want to kick
  */
 Dota2.Dota2Client.prototype.kickFromParty = function(steam_id) {
