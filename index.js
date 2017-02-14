@@ -23,7 +23,7 @@ var folder = fs.readdirSync(__dirname + '/proto');
 /**
  * Protobuf schema. See {@link http://dcode.io/protobuf.js/Root.html|Protobufjs#Root}
  */ 
-Dota2.schema = Protobuf.loadSync(folder.map(filename => __dirname + '/proto/' + filename));
+exports.schema = Protobuf.loadSync(folder.map(filename => __dirname + '/proto/' + filename));
 
 /**
  * The Dota 2 client that communicates with the GC
