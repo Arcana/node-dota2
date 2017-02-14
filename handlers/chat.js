@@ -40,6 +40,7 @@ Dota2.Dota2Client.prototype._leaveChatChannelById = function(channelId) {
 /**
  * Joins a chat channel. If the chat channel with the given name doesn't exist, it 
  * is created. Listen for the `chatMessage` event for other people's chat messages.
+ * @alias module:Dota2.Dota2Client#joinChat
  * @param {String} channel_name - Name of the chat channel
  * @param {DOTAChatChannelType_t} [channel_type=DOTAChatChannelType_t.DOTAChatChannelType_Custom] - The type of the channel being joined
  */
@@ -60,6 +61,7 @@ Dota2.Dota2Client.prototype.joinChat = function(channel_name, channel_type) {
 /**
  * Leaves a chat channel. If you've joined different channels with the same name,
  * specify the type to prevent unexpected behaviour.
+ * @alias module:Dota2.Dota2Client#leaveChat
  * @param {String} channel_name - Name of the chat channel
  * @param {DOTAChatChannelType_t} [channel_type] - The type of the channel being joined
  */
@@ -78,6 +80,7 @@ Dota2.Dota2Client.prototype.leaveChat = function(channel_name, channel_type) {
 /**
  * Sends a message to the specified chat channel. Won't send if you're not in the channel you try to send to.
  * If you've joined different channels with the same name, specify the type to prevent unexpected behaviour.
+ * @alias module:Dota2.Dota2Client#sendMessage
  * @param {String} message - The message you want to send
  * @param {String} channel_name - Name of the chat channel
  * @param {DOTAChatChannelType_t} [channel_type] - The type of the channel being joined
@@ -102,6 +105,7 @@ Dota2.Dota2Client.prototype.sendMessage = function(message, channel_name, channe
 
 /**
  * Shares the lobby you're currently in with the chat so other people can join.
+ * @alias module:Dota2.Dota2Client#shareLobby
  * @param {String} channel_name - Name of the chat channel
  * @param {DOTAChatChannelType_t} [channel_type] - The type of the channel being joined
  */
@@ -131,6 +135,7 @@ Dota2.Dota2Client.prototype.shareLobby = function(channel_name, channel_type) {
 /**
  * Sends a coin flip to the specified chat channel. Won't send if you're not in the channel you try to send to.
  * If you've joined different channels with the same name, specify the type to prevent unexpected behaviour.
+ * @alias module:Dota2.Dota2Client#flipCoin
  * @param {String} channel_name - Name of the chat channel
  * @param {DOTAChatChannelType_t} [channel_type] - The type of the channel being joined
  */
@@ -155,6 +160,7 @@ Dota2.Dota2Client.prototype.flipCoin = function(channel_name, channel_type) {
 /**
  * Sends a dice roll to the specified chat channel. Won't send if you're not in the channel you try to send to.
  * If you've joined different channels with the same name, specify the type to prevent unexpected behaviour.
+ * @alias module:Dota2.Dota2Client#rollDice
  * @param {Number} min - Lower bound of the dice roll
  * @param {Number} max - Upper bound of the dice roll
  * @param {String} channel_name - Name of the chat channel
