@@ -46,7 +46,10 @@ Dota2._lobbyOptions = {
 
 /**
  * Sends a message to the Game Coordinator requesting to create a lobby. Listen for
- * practiceLobbyUpdate response for a snapshot-update of the newly created lobby.
+ * {@link module:Dota2.Dota2Client#event:practiceLobbyUpdate|practiceLobbyUpdate} response for a
+ * snapshot-update of the newly created lobby.
+ *
+ * @alias module:Dota2.Dota2Client#createPracticeLobby
  *
  * @param {object} options
  * @param {string} options.game_name
