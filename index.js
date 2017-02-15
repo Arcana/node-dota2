@@ -30,9 +30,9 @@ Dota2.schema = Protobuf.loadSync(folder.map(filename => __dirname + '/proto/' + 
  * The Dota 2 client that communicates with the GC
  * @class 
  * @alias module:Dota2.Dota2Client
- * @param {Object} steamClient - Node-steam client instanc
- * @param {Boolean} debug - Print debug information to console
- * @param {Boolean} debugMore - Print even more debug information to console
+ * @param {Object} steamClient - Node-steam client instance
+ * @param {boolean} debug - Print debug information to console
+ * @param {boolean} debugMore - Print even more debug information to console
  * @extends {EventEmitter} EventEmitter
  * @fires module:Dota2.Dota2Client#event:ready
  * @fires module:Dota2.Dota2Client#event:unhandled
@@ -166,8 +166,8 @@ util.inherits(Dota2.Dota2Client, EventEmitter);
 /**
  * Converts a 64bit Steam ID to a Dota2 account ID by deleting the 32 most significant bits
  * @alias module:Dota2.Dota2Client.ToAccountID
- * @param {String} steamID - String representation of a 64bit Steam ID
- * @returns {Number} Dota2 account ID corresponding with steamID
+ * @param {string} steamID - String representation of a 64bit Steam ID
+ * @returns {number} Dota2 account ID corresponding with steamID
  */
 Dota2.Dota2Client.prototype.ToAccountID = function(steamID) {
     return new bignumber(steamID).minus('76561197960265728') - 0;
@@ -175,8 +175,8 @@ Dota2.Dota2Client.prototype.ToAccountID = function(steamID) {
 /**
  * Converts a Dota2 account ID to a 64bit Steam ID
  * @alias module:Dota2.Dota2Client.ToSteamID
- * @param {String} accid - String representation of a Dota 2 account ID
- * @returns {String} 64bit Steam ID corresponding to the given Dota 2 account ID
+ * @param {string} accid - String representation of a Dota 2 account ID
+ * @returns {string} 64bit Steam ID corresponding to the given Dota 2 account ID
  */
 Dota2.Dota2Client.prototype.ToSteamID = function(accid) {
     return new bignumber(accid).plus('76561197960265728') + "";
@@ -248,8 +248,8 @@ Dota2.Dota2Client.prototype.sendToGC = function(type, payload, handler, callback
 /**
  * Emitted when the GC sends a message that isn't yet treated by the library.
  * @event module:Dota2.Dota2Client#unhandled
- * @param {Number} kMsg - Proto message type ID
- * @param {String} kMsg_name - Proto message type name
+ * @param {number} kMsg - Proto message type ID
+ * @param {string} kMsg_name - Proto message type name
  */
 /**
  * Emitted when the connection with the GC takes longer than 30s

@@ -6,7 +6,7 @@ var Dota2 = require("../index"),
  * Responds to a party invite
  * @alias module:Dota2.Dota2Client#respondPartyInvite
  * @param {Long} id - The party's ID
- * @param {Boolean} [accept=false] - Whether or not you accept the invite
+ * @param {boolean} [accept=false] - Whether or not you accept the invite
  * @param {Object} [ping_data=undefined] - Optional argument that can be provided when accepting an invite. Contains a.o. the ping to the different servers. See `CMsgClientPingData`for contents.
  */
 Dota2.Dota2Client.prototype.respondPartyInvite = function(id, accept, ping_data) {
@@ -71,7 +71,7 @@ Dota2.Dota2Client.prototype.setPartyLeader = function(steam_id) {
 /**
  * Announces whether or not you want to be coach of the current party. GC will take action accordingly.
  * @alias module:Dota2.Dota2Client#setPartyCoach
- * @param {Boolean} coach - True if you want to be coach, false if you no longer want to be coach
+ * @param {boolean} coach - True if you want to be coach, false if you no longer want to be coach
  */
 Dota2.Dota2Client.prototype.setPartyCoach = function(coach) {
     coach = coach || false;

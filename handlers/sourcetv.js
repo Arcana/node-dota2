@@ -10,9 +10,9 @@ var Dota2 = require("../index"),
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
  * @alias module:Dota2.Dota2Client#requestSourceTVGames
  * @param {Object} filter_options - See `CSourceTVGameSmall` for a full list of options.
- * @param {Number} filter_options.league_id - ID of a league
- * @param {Number} filter_options.hero_id - ID of a hero that must be present in the game
- * @param {Number} filter_options.start_game - Number of pages sent, only values in [0, 10, 20, ... 90] are valid, and yield [1,2,3 ... 10] responses
+ * @param {number} filter_options.league_id - ID of a league
+ * @param {number} filter_options.hero_id - ID of a hero that must be present in the game
+ * @param {number} filter_options.start_game - Number of pages sent, only values in [0, 10, 20, ... 90] are valid, and yield [1,2,3 ... 10] responses
  */
 Dota2.Dota2Client.prototype.requestSourceTVGames = function(filter_options) {
     // Unfortunately this does not seem to support callbacks

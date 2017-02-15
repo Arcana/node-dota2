@@ -6,7 +6,7 @@ var Dota2 = require("../index"),
  * Enum for all possible `EResult` values
  * @alias module:Dota2.EResult
  * @readonly 
- * @enum {Number}
+ * @enum {number}
  */
 Dota2.EResult = {
     k_EResultOK : 1, // success
@@ -69,7 +69,7 @@ Dota2.EResult = {
  * Enum for all server regions
  * @alias module:Dota2.ServerRegion
  * @readonly 
- * @enum {Number}
+ * @enum {number}
  */
 Dota2.ServerRegion = {
     UNSPECIFIED : 0,

@@ -42,7 +42,7 @@ Dota2.Dota2Client.prototype._leaveChatChannelById = function(channelId) {
  * is created. Listen for the `chatMessage` event for other people's chat messages.
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
  * @alias module:Dota2.Dota2Client#joinChat
- * @param {String} channel_name - Name of the chat channel
+ * @param {string} channel_name - Name of the chat channel
  * @param {DOTAChatChannelType_t} [channel_type=DOTAChatChannelType_t.DOTAChatChannelType_Custom] - The type of the channel being joined
  */
 Dota2.Dota2Client.prototype.joinChat = function(channel_name, channel_type) {
@@ -64,7 +64,7 @@ Dota2.Dota2Client.prototype.joinChat = function(channel_name, channel_type) {
  * specify the type to prevent unexpected behaviour.
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
  * @alias module:Dota2.Dota2Client#leaveChat
- * @param {String} channel_name - Name of the chat channel
+ * @param {string} channel_name - Name of the chat channel
  * @param {DOTAChatChannelType_t} [channel_type] - The type of the channel being joined
  */
 Dota2.Dota2Client.prototype.leaveChat = function(channel_name, channel_type) {
@@ -84,8 +84,8 @@ Dota2.Dota2Client.prototype.leaveChat = function(channel_name, channel_type) {
  * If you've joined different channels with the same name, specify the type to prevent unexpected behaviour.
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
  * @alias module:Dota2.Dota2Client#sendMessage
- * @param {String} message - The message you want to send
- * @param {String} channel_name - Name of the chat channel
+ * @param {string} message - The message you want to send
+ * @param {string} channel_name - Name of the chat channel
  * @param {DOTAChatChannelType_t} [channel_type] - The type of the channel being joined
  */
 Dota2.Dota2Client.prototype.sendMessage = function(message, channel_name, channel_type) {
@@ -110,7 +110,7 @@ Dota2.Dota2Client.prototype.sendMessage = function(message, channel_name, channe
  * Shares the lobby you're currently in with the chat so other people can join.
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
  * @alias module:Dota2.Dota2Client#shareLobby
- * @param {String} channel_name - Name of the chat channel
+ * @param {string} channel_name - Name of the chat channel
  * @param {DOTAChatChannelType_t} [channel_type] - The type of the channel being joined
  */
 Dota2.Dota2Client.prototype.shareLobby = function(channel_name, channel_type) {
@@ -141,7 +141,7 @@ Dota2.Dota2Client.prototype.shareLobby = function(channel_name, channel_type) {
  * If you've joined different channels with the same name, specify the type to prevent unexpected behaviour.
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
  * @alias module:Dota2.Dota2Client#flipCoin
- * @param {String} channel_name - Name of the chat channel
+ * @param {string} channel_name - Name of the chat channel
  * @param {DOTAChatChannelType_t} [channel_type] - The type of the channel being joined
  */
 Dota2.Dota2Client.prototype.flipCoin = function(channel_name, channel_type) {
@@ -167,9 +167,9 @@ Dota2.Dota2Client.prototype.flipCoin = function(channel_name, channel_type) {
  * If you've joined different channels with the same name, specify the type to prevent unexpected behaviour.
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
  * @alias module:Dota2.Dota2Client#rollDice
- * @param {Number} min - Lower bound of the dice roll
- * @param {Number} max - Upper bound of the dice roll
- * @param {String} channel_name - Name of the chat channel
+ * @param {number} min - Lower bound of the dice roll
+ * @param {number} max - Upper bound of the dice roll
+ * @param {string} channel_name - Name of the chat channel
  * @param {DOTAChatChannelType_t} [channel_type] - The type of the channel being joined
  */
 Dota2.Dota2Client.prototype.rollDice = function(min, max, channel_name, channel_type) {
@@ -216,32 +216,32 @@ Dota2.Dota2Client.prototype.requestChatChannels = function() {
 /**
  * Event that's emitted whenever someone else joins a chat channel the bot is in
  * @event module:Dota2.Dota2Client#chatJoin
- * @param {String} channel - Name of the chat channel someone joined
- * @param {String} joiner_name - Persona name of the person that joined the channel
+ * @param {string} channel - Name of the chat channel someone joined
+ * @param {string} joiner_name - Persona name of the person that joined the channel
  * @param {Long} joiner_steam_id - Steam ID of the person that joined the channel
  * @param {Object} otherJoined_object - A `CMsgDOTAOtherJoinedChatChannel` object containing the join data
  */
 /**
  * Event that's emitted whenever someone else leaves a chat channel the bot is in
  * @event module:Dota2.Dota2Client#chatLeave
- * @param {String} channel - Name of the chat channel someone left
- * @param {String} leaver_steam_id - Persona name of the person that left the channel
+ * @param {string} channel - Name of the chat channel someone left
+ * @param {string} leaver_steam_id - Persona name of the person that left the channel
  * @param {Object} otherLeft_object - A `CMsgDOTAOtherLeftChatChannel` object containing the leave data.
  */
 /**
  * Event that's emitted whenever someone sends a message in a channel the bot is in
  * @event module:Dota2.Dota2Client#chatMessage
- * @param {String} channel - Name of the chat channel the message was sent to
- * @param {String} sender_name - Persona name of the sender of the message
- * @param {String} message - The message that was sent
+ * @param {string} channel - Name of the chat channel the message was sent to
+ * @param {string} sender_name - Persona name of the sender of the message
+ * @param {string} message - The message that was sent
  * @param {Object} chatData - A `CMsgDOTAChatMessage` object containing the message and its metadata.
  */
 /**
  * Event that's emitted after requesting a list of chat channels via {@link Dota2.Dota2Client#requestChatChannels}
  * @event module:Dota2.Dota2Client#chatChannelsData
  * @param {Object[]} channels - An array of ChatChannel objects
- * @param {String} channels[].channel_name - Name of the chat channel
- * @param {Number} channels[].num_members - Number of members in the channel
+ * @param {string} channels[].channel_name - Name of the chat channel
+ * @param {number} channels[].num_members - Number of members in the channel
  * @param {DOTAChatChannelType_t} channels[].channel_type - The type of the channel
  */
 
