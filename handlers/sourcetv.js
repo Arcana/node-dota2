@@ -5,7 +5,9 @@ var Dota2 = require("../index"),
 
 // Methods
 /**
- * Requests a list of SourceTV games based on the given criteria. Listen for {@link module:Dota2.Dota2Client#event:sourceTVGamesData|sourceTVGamesData} for results
+ * Requests a list of SourceTV games based on the given criteria. 
+ * Listen for {@link module:Dota2.Dota2Client#event:sourceTVGamesData|sourceTVGamesData} for results
+ * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
  * @alias module:Dota2.Dota2Client#requestSourceTVGames
  * @param {Object} filter_options - See `CSourceTVGameSmall` for a full list of options.
  * @param {Number} filter_options.league_id - ID of a league

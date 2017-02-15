@@ -3,6 +3,7 @@ var Dota2 = require("../index"),
 
 /**
  * Requests a list of custom game modes for which there are currently lobbies available
+ * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
  * @alias module:Dota2.Dota2Client#requestJoinableCustomGameModes
  * @param {ServerRegion} [server_region=ServerRegion.UNSPECIFIED] - The server region for which you'd like to obtain the joinable custom game modes
  */

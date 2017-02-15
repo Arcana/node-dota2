@@ -95,6 +95,13 @@ Dota2.ServerRegion = {
     PWTELECOMWUHAN : 20
 };
 
+/**
+ * @callback module:Dota2~requestCallback
+ * @param {number} errorCode - Null if everything went well, else the error code
+ * @param {string} responseMessage - The response message the GC sent
+ */
+
+
 // Helper methods
 Dota2._parseOptions = function(options, possibleOptions) {
     var details, option, type, value;

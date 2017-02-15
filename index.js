@@ -53,6 +53,12 @@ Dota2.schema = Protobuf.loadSync(folder.map(filename => __dirname + '/proto/' + 
  * @fires module:Dota2.Dota2Client#event:chatJoined
  * @fires module:Dota2.Dota2Client#event:chatLeave
  * @fires module:Dota2.Dota2Client#event:chatMessage
+ * @fires module:Dota2.Dota2Client#event:playerMatchHistoryData
+ * @fires module:Dota2.Dota2Client#event:profileCardData
+ * @fires module:Dota2.Dota2Client#event:hallOfFameData
+ * @fires module:Dota2.Dota2Client#event:playerInfoData
+ * @fires module:Dota2.Dota2Client#event:trophyListData
+ * @fires module:Dota2.Dota2Client#event:playerStatsData
  */
 Dota2.Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
     EventEmitter.call(this);
@@ -158,7 +164,7 @@ util.inherits(Dota2.Dota2Client, EventEmitter);
 
 // Methods
 /**
- * Converts a 64bit Steam ID to a Dota2 account ID
+ * Converts a 64bit Steam ID to a Dota2 account ID by deleting the 32 most significant bits
  * @alias module:Dota2.Dota2Client.ToAccountID
  * @param {String} steamID - String representation of a 64bit Steam ID
  * @returns {Number} Dota2 account ID corresponding with steamID
@@ -243,7 +249,7 @@ Dota2.Dota2Client.prototype.sendToGC = function(type, payload, handler, callback
  * Emitted when the GC sends a message that isn't yet treated by the library.
  * @event module:Dota2.Dota2Client#unhandled
  * @param {Number} kMsg - Proto message type ID
- * @param {String} KMsg_name - Proto message type name
+ * @param {String} kMsg_name - Proto message type name
  */
 /**
  * Emitted when the connection with the GC takes longer than 30s
