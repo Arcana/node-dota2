@@ -5,19 +5,19 @@ var Dota2 = require("../index"),
 // Methods
 /**
  * Player with player cards
- * @typedef {Object} FantasyPlayer
+ * @typedef {Object} module:Dota2.Dota2Client#requestPlayerCardsByPlayer.FantasyPlayer
  * @property {number} account_id - Dota2 account ID of the player
  * @property {Object[]} cards - Player cards of this player in the bot's inventory
  * @property {number} cards[].id - ID of the card
  * @property {Long} cards[].bonuses - 64bit bitmask for the bonuses of this card
- * @property {CMsgGCToClientPlayerStatsResponse} stats - Player stats
+ * @property {module:Dota2.schema.CMsgGCToClientPlayerStatsResponse} stats - Player stats
  */
 
 /**
  * Requests the player stats for each of the players for which you have one or multiple player cards.
  * All requests are staggered in 200ms intervals and time out after 2s.
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
- * @async Returns a list of promises that resolve to {@link FantasyPlayer} objects
+ * @async Returns a list of promises that resolve to {@link module:Dota2.Dota2Client#requestPlayerCardsByPlayer.FantasyPlayer} objects
  * @alias module:Dota2.Dota2Client#requestPlayerCardsByPlayer
  * @returns {FantasyPlayer[]}
  */

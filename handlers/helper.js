@@ -66,7 +66,8 @@ Dota2.EResult = {
     k_EResultRemoteCallFailed : 55,
 };
 /**
- * Enum for all server regions
+ * Enum for all server regions. This enum is kept up to date on a best effort base.
+ * For the up-to-date values, check your game's regions.txt or {@link https://github.com/SteamDatabase/GameTracking-Dota2/blob/master/game/dota/pak01_dir/scripts/regions.txt|SteamDB's version}
  * @alias module:Dota2.ServerRegion
  * @readonly 
  * @enum {number}
@@ -98,7 +99,7 @@ Dota2.ServerRegion = {
 /**
  * @callback module:Dota2~requestCallback
  * @param {number} errorCode - Null if everything went well, else the error code
- * @param {string} responseMessage - The response message the GC sent
+ * @param {Object} responseMessage - The response message the GC sent
  */
 
 

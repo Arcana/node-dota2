@@ -23,8 +23,8 @@ Dota2._playerHistoryOptions = {
  * @param {number} [options.matches_requested] - How many matches to retrieve
  * @param {number} [options.hero_id] - Show only matches where player played the given hero
  * @param {number} [options.request_id=account_id] - A unique identifier that identifies this request
- * @param {number} [options.include_practice_matches] - Whether or not to include practice matches in the results
- * @param {number} [options.include_custom_games] - Whether or not to include custom games in the results
+ * @param {boolean} [options.include_practice_matches] - Whether or not to include practice matches in the results
+ * @param {boolean} [options.include_custom_games] - Whether or not to include custom games in the results
  * @param {module:Dota2~requestCallback} [callback] - Called with `err, CMsgDOTAGetPlayerMatchHistoryResponse`
  */
 Dota2.Dota2Client.prototype.requestPlayerMatchHistory = function(account_id, options, callback) {
@@ -227,7 +227,7 @@ Dota2.Dota2Client.prototype.requestPlayerStats = function(account_id, callback) 
  
  /**
   * Player statistics
-  * @typedef {Object} CMsgGCToClientPlayerStatsResponse
+  * @typedef {Object} module:Dota2.schema.CMsgGCToClientPlayerStatsResponse
   * @property {number} account_id - Dota2 account ID of the player
   * @property {number[]} player_stats 
   * @property {number} match_count - Number of matches played
@@ -253,8 +253,7 @@ Dota2.Dota2Client.prototype.requestPlayerStats = function(account_id, callback) 
  * Emitted in response to a {@link module:Dota2.Dota2Client#requestPlayerStats|request for a player's stats}
  * @event module:Dota2.Dota2Client#playerStatsData
  * @param {number} account_id - Dota2 account ID of the player
- * @param {CMsgGCToClientPlayerStatsResponse} playerStatsResponse -The player's stats.
-
+ * @param {module:Dota2.schema.CMsgGCToClientPlayerStatsResponse} playerStatsResponse -The player's stats.
  */
 
 // Handlers

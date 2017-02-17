@@ -55,6 +55,8 @@ Dota2.Dota2Client.prototype.requestProTeamList = function requestProTeamList(cal
  */
  /**
  * Emitted in response to a {@link module:Dota2.Dota2Client#requestProTeamList|request for pro teams}.
+ * @deprecated
+ * @ignore
  * @event module:Dota2.Dota2Client#proTeamListData
  * @param {Object[]} teams - A list pro teams
  * @param {number} teams[].team_id - ID of the team

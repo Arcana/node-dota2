@@ -70,7 +70,11 @@ Dota2.schema = Protobuf.loadSync(folder.map(filename => __dirname + '/proto/' + 
  * @fires module:Dota2.Dota2Client#event:leagueData
  * @fires module:Dota2.Dota2Client#event:topLeagueMatchesData
  * @fires module:Dota2.Dota2Client#event:teamData
- * @fires module:Dota2.Dota2Client#event:proTeamListData
+ * @fires module:Dota2.Dota2Client#event:matchesData
+ * @fires module:Dota2.Dota2Client#event:matchDetailsData
+ * @fires module:Dota2.Dota2Client#event:matchMinimalDetailsData
+ * @fires module:Dota2.Dota2Client#event:matchmakingStatsData
+ * @fires module:Dota2.Dota2Client#event:topFriendMatchesData
  */
 Dota2.Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
     EventEmitter.call(this);
