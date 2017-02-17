@@ -3,16 +3,24 @@ var Dota2 = require("../index"),
     Long = require('long');
 
 // Methods
+/**
+ * Player with player cards
+ * @typedef {Object} FantasyPlayer
+ * @property {number} account_id - Dota2 account ID of the player
+ * @property {Object[]} cards - Player cards of this player in the bot's inventory
+ * @property {number} cards[].id - ID of the card
+ * @property {Long} cards[].bonuses - 64bit bitmask for the bonuses of this card
+ * @property {CMsgGCToClientPlayerStatsResponse} stats - Player stats
+ */
 
-// Returns a list of promises which resolve to a list of players, with player stats if the call to the GC was succesful.
-// Maximum delay before promises resolve is ~20s. 
-// A player object looks like this:
-// {
-//     'account_id' : uint32,
-//     'cards' : [{'id' : uint32, 'bonuses' : uint64}],
-//     'stats' : CMsgGCToClientPlayerStatsResponse (if GC responded before 2s timeout)
-// }
-// For magic numbers, see -> https://raw.githubusercontent.com/SteamDatabase/GameTracking/master/dota/game/dota/pak01_dir/scripts/items/items_game.txt
+/**
+ * Requests the player stats for each of the players for which you have one or multiple player cards.
+ * All requests are staggered in 200ms intervals and time out after 2s.
+ * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
+ * @async Returns a list of promises that resolve to {@link FantasyPlayer} objects
+ * @alias module:Dota2.Dota2Client#requestPlayerCardsByPlayer
+ * @returns {FantasyPlayer[]}
+ */
 Dota2.Dota2Client.prototype.requestPlayerCardsByPlayer = function() {
     if(this.Inventory) {
         var playercards = this.Inventory.filter(item => item.def_index == 11953);
@@ -79,6 +87,15 @@ Dota2.Dota2Client.prototype.requestPlayerCardsByPlayer = function() {
 //                     onPlayerCardInfoResponse, callback);
 // }
 
+/**
+ * Sends a message to the Game Coordinator requesting your fantasy line-up for a specific day of a given tournament. 
+ * Provide a callback or listen for the {@link module:Dota2.Dota2Client#event:playerCardRoster|playerCardRoster} event for the Game Coordinator's response.
+ * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
+ * @alias module:Dota2.Dota2Client#requestPlayerCardRoster
+ * @param {number} league_id - ID of the league
+ * @param {number} timestamp - Date in timeframe of the league
+ * @param {module:Dota2~requestCallback} [callback] - Called with `err, CMsgClientToGCGetPlayerCardRosterResponse`
+ */
 Dota2.Dota2Client.prototype.requestPlayerCardRoster = function(league_id, timestamp, callback) {
     callback = callback || null;
     var _self = this;
@@ -96,6 +113,17 @@ Dota2.Dota2Client.prototype.requestPlayerCardRoster = function(league_id, timest
                     onGetPlayerCardRosterResponse, callback);
 }
 
+/**
+ * Sends a message to the Game Coordinator requesting to draft a certain player card in a specific slot, for a given day in a tournament. 
+ * Provide a callback or listen for the {@link module:Dota2.Dota2Client#event:playerCardDrafted|playerCardDrafted} event for the Game Coordinator's response.
+ * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
+ * @alias module:Dota2.Dota2Client#draftPlayerCard
+ * @param {number} league_id - ID of the league for which you're drafting a player card
+ * @param {number} timestamp - Timestamp of the day for which you want to draft a player card
+ * @param {number} slot - Slot in the draft which you want to fill
+ * @param {number} player_card_id - Item ID of the player card you want to draft
+ * @param {module:Dota2~requestCallback} [callback] - Called with `err, CMsgClientToGCSetPlayerCardRosterResponse`
+ */
 Dota2.Dota2Client.prototype.draftPlayerCard = function(league_id, timestamp, slot, player_card_id, callback) {
     callback = callback || null;
     var _self = this;
@@ -113,6 +141,17 @@ Dota2.Dota2Client.prototype.draftPlayerCard = function(league_id, timestamp, slo
                     onSetPlayerCardRosterResponse, callback);
 }
 
+// Events
+/**
+ * Emitted in response to a {@link module:Dota2.Dota2Client#requestPlayerCardRoster|request for a player's fantasy roster}
+ * @event module:Dota2.Dota2Client#playerCardRoster
+ * @param {Object} playerCardRoster - A `CMsgClientToGCGetPlayerCardRosterResponse` object containing the fantasy draft and score if available.
+ */
+/**
+ * Emitted in response to a {@link module:Dota2.Dota2Client#draftPlayerCard|draft of a player card}
+ * @event module:Dota2.Dota2Client#playerCardDrafted
+ * @param {number} playerCardRoster - The result of the operation. See `CMsgClientToGCSetPlayerCardRosterResponse.result`.
+ */
 
 // Handlers
 var handlers = Dota2.Dota2Client.prototype._handlers;
@@ -147,6 +186,6 @@ var onSetPlayerCardRosterResponse = function onSetPlayerCardRosterResponse(messa
     var playerCardRoster = Dota2.schema.lookupType("CMsgClientToGCSetPlayerCardRosterResponse").decode(message);
     if (this.debug) util.log("Received player card draft result: "+playerCardRoster.result);
     this.emit("playerCardDrafted", playerCardRoster.result);
-    if (callback) callback(playerCardRoster.result);
+    if (callback) callback(playerCardRoster.result, playerCardRoster);
 };
 handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgClientToGCSetPlayerCardRosterResponse] = onSetPlayerCardRosterResponse;

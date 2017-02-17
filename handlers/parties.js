@@ -3,7 +3,8 @@ var Dota2 = require("../index"),
 
 // Methods
 /** 
- * Responds to a party invite
+ * Responds to a party invite.
+ * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
  * @alias module:Dota2.Dota2Client#respondPartyInvite
  * @param {Long} id - The party's ID
  * @param {boolean} [accept=false] - Whether or not you accept the invite
@@ -29,7 +30,8 @@ Dota2.Dota2Client.prototype.respondPartyInvite = function(id, accept, ping_data)
 };
 
 /**
- * Leaves the current party 
+ * Leaves the current party. 
+ * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
  * @alias module:Dota2.Dota2Client#leaveParty
  */
 Dota2.Dota2Client.prototype.leaveParty = function() {
@@ -44,7 +46,8 @@ Dota2.Dota2Client.prototype.leaveParty = function() {
 /**
  * Tries to assign a party member as party leader. 
  * Only works if you are a party leader and the proposed user is a member of 
- * the current party
+ * the current party.
+ * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
  * @alias module:Dota2.Dota2Client#setPartyLeader
  * @param {Long} steam_id - The Steam ID of the new party leader
  */
@@ -70,6 +73,7 @@ Dota2.Dota2Client.prototype.setPartyLeader = function(steam_id) {
 
 /**
  * Announces whether or not you want to be coach of the current party. GC will take action accordingly.
+ * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
  * @alias module:Dota2.Dota2Client#setPartyCoach
  * @param {boolean} coach - True if you want to be coach, false if you no longer want to be coach
  */
@@ -90,7 +94,8 @@ Dota2.Dota2Client.prototype.setPartyCoach = function(coach) {
 };
 
 /**
- * Invite a player to your party
+ * Invite a player to your party.
+ * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
  * @alias module:Dota2.Dota2Client#inviteToParty
  * @param {Long} steam_id - Steam ID of the player you want to invite
  */
@@ -111,7 +116,8 @@ Dota2.Dota2Client.prototype.inviteToParty = function(steam_id) {
 };
 
 /**
- * Kick a player from your party. Only works if you're party leader
+ * Kick a player from your party. Only works if you're party leader.
+ * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
  * @alias module:Dota2.Dota2Client#kickFromParty
  * @param {Long} steam_id - Steam ID of the player you want to kick
  */

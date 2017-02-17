@@ -224,30 +224,37 @@ Dota2.Dota2Client.prototype.requestPlayerStats = function(account_id, callback) 
  * @param {number} trophyListResponse.trophies[].last_updated - The last time the trophy has been updated, in Unix time
  * @param {string} trophyListResponse.profile_name - The name displayed on the user's dota profile page and profile card
  */
+ 
+ /**
+  * Player statistics
+  * @typedef {Object} CMsgGCToClientPlayerStatsResponse
+  * @property {number} account_id - Dota2 account ID of the player
+  * @property {number[]} player_stats 
+  * @property {number} match_count - Number of matches played
+  * @property {number} mean_gpm - Mean GPM per match over the last 20 matches
+  * @property {number} mean_xppm - Mean XPPM per match over the last 20 matches
+  * @property {number} mean_lasthits - Mean last hits per match over the last 20 matches
+  * @property {number} rampages - All time number of rampages
+  * @property {number} triple_kills - All time number of triple kills
+  * @property {number} first_blood_claimed - All time number of times the player claimed first blood
+  * @property {number} first_blood_given - All time number of times the player fed first blood
+  * @property {number} couriers_killed - All time number of couriers killed
+  * @property {number} aegises_snatched - All time number of aegises snatched
+  * @property {number} cheeses_eaten - All time amount of cheese eaten
+  * @property {number} creeps_stacked - All time number of camps stacked
+  * @property {number} fight_score - Fighting score over the last 20 matches
+  * @property {number} farm_score - Farming score over the last 20 matches
+  * @property {number} support_score - Support score over the last 20 matches
+  * @property {number} push_score - Push score over the last 20 matches
+  * @property {number} versatility_score - Hero versatility over the last 20 matches
+  */
+ 
  /**
  * Emitted in response to a {@link module:Dota2.Dota2Client#requestPlayerStats|request for a player's stats}
  * @event module:Dota2.Dota2Client#playerStatsData
  * @param {number} account_id - Dota2 account ID of the player
- * @param {Object} playerStatsResponse - A `CMsgGCToClientPlayerStatsResponse` object containing the player's stats.
- * @param {number} playerStatsResponse.account_id - Dota2 account ID of the player
- * @param {number[]} playerStatsResponse.player_stats 
- * @param {number} playerStatsResponse.match_count - Number of matches played
- * @param {number} playerStatsResponse.mean_gpm - Mean GPM per match over the last 20 matches
- * @param {number} playerStatsResponse.mean_xppm - Mean XPPM per match over the last 20 matches
- * @param {number} playerStatsResponse.mean_lasthits - Mean last hits per match over the last 20 matches
- * @param {number} playerStatsResponse.rampages - All time number of rampages
- * @param {number} playerStatsResponse.triple_kills - All time number of triple kills
- * @param {number} playerStatsResponse.first_blood_claimed - All time number of times the player claimed first blood
- * @param {number} playerStatsResponse.first_blood_given - All time number of times the player fed first blood
- * @param {number} playerStatsResponse.couriers_killed - All time number of couriers killed
- * @param {number} playerStatsResponse.aegises_snatched - All time number of aegises snatched
- * @param {number} playerStatsResponse.cheeses_eaten - All time amount of cheese eaten
- * @param {number} playerStatsResponse.creeps_stacked - All time number of camps stacked
- * @param {number} playerStatsResponse.fight_score - Fighting score over the last 20 matches
- * @param {number} playerStatsResponse.farm_score - Farming score over the last 20 matches
- * @param {number} playerStatsResponse.support_score - Support score over the last 20 matches
- * @param {number} playerStatsResponse.push_score - Push score over the last 20 matches
- * @param {number} playerStatsResponse.versatility_score - Hero versatility over the last 20 matches
+ * @param {CMsgGCToClientPlayerStatsResponse} playerStatsResponse -The player's stats.
+
  */
 
 // Handlers

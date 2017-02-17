@@ -21,7 +21,10 @@ Protobuf.parse.defaults.keepCase = true;
 var folder = fs.readdirSync(__dirname + '/proto');
 
 /**
- * Protobuf schema. See {@link http://dcode.io/protobuf.js/Root.html|Protobufjs#Root}
+ * Protobuf schema. See {@link http://dcode.io/protobuf.js/Root.html|Protobufjs#Root}. 
+ * This object can be used to obtain special protobuf types.
+ * Object types can be created by `Dota2.schema.lookupType("TypeName").encode(payload :Object).finish();`.
+ * Enum types can be referenced by `Dota2.schema.lookupEnum("EnumName")`, which returns an object array representing the enum.
  * @alias module:Dota2.schema
  */ 
 Dota2.schema = Protobuf.loadSync(folder.map(filename => __dirname + '/proto/' + filename));
@@ -37,6 +40,7 @@ Dota2.schema = Protobuf.loadSync(folder.map(filename => __dirname + '/proto/' + 
  * @fires module:Dota2.Dota2Client#event:ready
  * @fires module:Dota2.Dota2Client#event:unhandled
  * @fires module:Dota2.Dota2Client#event:hellotimeout
+ * @fires module:Dota2.Dota2Client#event:popup
  * @fires module:Dota2.Dota2Client#event:sourceTVGamesData
  * @fires module:Dota2.Dota2Client#event:inventoryUpdate
  * @fires module:Dota2.Dota2Client#event:practiceLobbyUpdate
@@ -53,12 +57,20 @@ Dota2.schema = Protobuf.loadSync(folder.map(filename => __dirname + '/proto/' + 
  * @fires module:Dota2.Dota2Client#event:chatJoined
  * @fires module:Dota2.Dota2Client#event:chatLeave
  * @fires module:Dota2.Dota2Client#event:chatMessage
- * @fires module:Dota2.Dota2Client#event:playerMatchHistoryData
  * @fires module:Dota2.Dota2Client#event:profileCardData
- * @fires module:Dota2.Dota2Client#event:hallOfFameData
+ * @fires module:Dota2.Dota2Client#event:playerMatchHistoryData
  * @fires module:Dota2.Dota2Client#event:playerInfoData
- * @fires module:Dota2.Dota2Client#event:trophyListData
  * @fires module:Dota2.Dota2Client#event:playerStatsData
+ * @fires module:Dota2.Dota2Client#event:trophyListData
+ * @fires module:Dota2.Dota2Client#event:hallOfFameData
+ * @fires module:Dota2.Dota2Client#event:playerCardRoster
+ * @fires module:Dota2.Dota2Client#event:playerCardDrafted
+ * @fires module:Dota2.Dota2Client#event:leaguesInMonthData
+ * @fires module:Dota2.Dota2Client#event:liveLeagueGamesUpdate
+ * @fires module:Dota2.Dota2Client#event:leagueData
+ * @fires module:Dota2.Dota2Client#event:topLeagueMatchesData
+ * @fires module:Dota2.Dota2Client#event:teamData
+ * @fires module:Dota2.Dota2Client#event:proTeamListData
  */
 Dota2.Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
     EventEmitter.call(this);
@@ -66,28 +78,28 @@ Dota2.Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
     this.debugMore = debugMore || false;
     
     /** The current state of the bot's inventory. Contains cosmetics, player cards, ... 
-    * @type {CSOEconItem[]} 
-    */
+     * @type {CSOEconItem[]} 
+     */
     this.Inventory = [];
     /** The chat channels the bot has joined 
-    * @type {CMsgDOTAJoinChatChannelResponse[]}
-    */
+     * @type {CMsgDOTAJoinChatChannelResponse[]}
+     */
     this.chatChannels = []; // Map channel names to channel data.
     /** The lobby the bot is currently in. Falsy if the bot isn't in a lobby. 
-    * @type {CSODOTALobby}
-    */
+     * @type {CSODOTALobby}
+     */
     this.Lobby = null;
     /** The currently active lobby invitation. Falsy if the bot has not been invited. 
-    * @type {CSODOTALobbyInvite}
-    */
+     * @type {CSODOTALobbyInvite}
+     */
     this.LobbyInvite = null;
     /** The party the bot is currently in. Falsy if the bot isn't in a party.
     * @type {CSODOTAParty}
     */
     this.Party = null;
     /** The currently active party invitation. Falsy if the bot has not been invited.
-    * @type {CSODOTAPartyInvite}
-    */
+     * @type {CSODOTAPartyInvite}
+     */
     this.PartyInvite = null;
 
     var steamUser = new steam.SteamUser(steamClient);

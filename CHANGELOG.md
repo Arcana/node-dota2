@@ -15,3 +15,9 @@ in correspondence with all other enums.
 ### profileData
 This event has been deprecated for a year now and there are no indications of this 
 functionality ever coming back. The event has therefore been deleted.
+
+### setItemPositions
+Changed the parameter type from an array of tuples to an array of objects
+
+### requestProTeamList
+Deprecated since it hasn't produced a response in a long time
