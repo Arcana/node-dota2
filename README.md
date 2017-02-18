@@ -47,18 +47,18 @@ var Steam = require('steam'),
 ```
 
 ## Disclaimer
-We do not in any way encourage people to use their own accounts when using this library. 
-This library tries to mimic the behavior of the Dota 2 client to allow people to programmatically interact with the Dota 2 GC, 
-however we make no efforts to hide this fact and it's pretty easy for Valve to detect clients using this library based on the generated traffic. 
-While Valve has not yet expressed a dislike regarding reverse engineering projects like this one, 
+We do not in any way encourage people to use their own accounts when using this library.
+This library tries to mimic the behavior of the Dota 2 client to allow people to programmatically interact with the Dota 2 GC,
+however we make no efforts to hide this fact and it's pretty easy for Valve to detect clients using this library based on the generated traffic.
+While Valve has not yet expressed a dislike regarding reverse engineering projects like this one,
 it's not unimaginable that this might one day change and result in VAC bans.
 
 ## Examples
-The `examples` directory contains two Dota2 bots as an example. One contains commented-out dota2 methods, the other has boolean activated methods. 
+The `examples` directory contains two Dota2 bots as an example. One contains commented-out dota2 methods, the other has boolean activated methods.
 Both examples show how to interact with the library.
 
 ## Testing
-There is a partial automated test suite for node-dota2, which is located in the test directory. 
+There is a partial automated test suite for node-dota2, which is located in the test directory.
 You need to configure the `STEAM_USERNAME` and `STEAM_PASSWORD` environment variables to be able to run it.
 You can launch the tests by running the file with mocha.
 
@@ -120,7 +120,7 @@ Attempts to delete an item. Requires the GC to be ready (listen for the `ready` 
 * `channel_name` - A string for the channel name.
 * `[channel_type]` - The type of the channel being joined.  Defaults to `Dota2.schema.DOTAChatChannelType_t.DOTAChannelType_Custom`.
 
-Joins a chat channel. If the chat channel with the given name doesn't exist, it 
+Joins a chat channel. If the chat channel with the given name doesn't exist, it
 is created. Listen for the `chatMessage` event for other people's chat messages.
 
 Notable channels:
@@ -129,7 +129,7 @@ Notable channels:
 
 #### leaveChat(channel_name, [channel_type])
 * `channel_name` - A string for the channel name.
-* `[channel_type]` - The type of the channel you want to leave. Use the `Dota2.schema.DOTAChatChannelType_t` enum. 
+* `[channel_type]` - The type of the channel you want to leave. Use the `Dota2.schema.DOTAChatChannelType_t` enum.
 
 Leaves a chat channel. If you've joined different channels with the same name, specify the type to prevent unexpected behaviour.
 
@@ -143,7 +143,7 @@ If you've joined different channels with the same name, specify the type to prev
 
 #### flipCoin(channel, [channel_type])
 * `channel` - A string for the channel name.
-* `[channel_type]` - The type of the channel you want to flip a coin in. Use the `Dota2.schema.DOTAChatChannelType_t` enum. 
+* `[channel_type]` - The type of the channel you want to flip a coin in. Use the `Dota2.schema.DOTAChatChannelType_t` enum.
 
 Sends a coin flip to the specified chat channel. Won't send if you're not in the channel you try to send to.
 If you've joined different channels with the same name, specify the type to prevent unexpected behaviour.
@@ -152,7 +152,7 @@ If you've joined different channels with the same name, specify the type to prev
 * `channel` - A string for the channel name.
 * `min` - Lower bound of the dice roll.
 * `max` - Upper bound of the dice roll.
-* `[channel_type]` - The type of the channel you want to roll a dice in. Use the `Dota2.schema.DOTAChatChannelType_t` enum. 
+* `[channel_type]` - The type of the channel you want to roll a dice in. Use the `Dota2.schema.DOTAChatChannelType_t` enum.
 
 Sends a dice roll to the specified chat channel. Won't send if you're not in the channel you try to send to.
 If you've joined different channels with the same name, specify the type to prevent unexpected behaviour.
@@ -198,7 +198,7 @@ Attempts to set a user's role within a guild; use this with your own account ID 
 #### requestMyTeams([callback])
 * `[callback]` - optional callback, returns args: `err, response`.
 
-Requests the authenticated user's team data. 
+Requests the authenticated user's team data.
 
 #### requestTeamProfile(team_id, [callback]) - DEPRECATED
 * `team_id` - ID of a team
@@ -297,7 +297,7 @@ Sends a message to the Game Coordinator requesting `account_id`'s player stats. 
 #### requestMatches(criteria, [callback])
 * `[criteria]` - The options available for searching matches:
   * `[hero_id]`
-  * `[game_mode]` 
+  * `[game_mode]`
   * `[date_min]`
   * `[date_max]`
   * `[matches_requested]`
@@ -388,36 +388,40 @@ Sends a message to the Game Coordinator confirming a lobby invitation. The `Lobb
 
 Sends a message to the Game Coordinator requesting to join a lobby.  Provide a callback or listen for `practiceLobbyJoinResponse` for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
-#### createPracticeLobby([password], [options], [callback])
-* `[password]` - Password to restrict access to the lobby (optional).
+#### createPracticeLobby([options], [callback])
 * `[options]` - Options available for the lobby. All are optional, but send at least one.
   * `game_name`: String, lobby title.
-  * `server_region`: Use the ServerRegion enum.
-  * `game_mode`: Use the DOTA_GameMode enum.
-  * `game_version`: Use the game version enum.
-  * `cm_pick`: Use the DOTA_CM_PICK enum.
-  * `allow_cheats`: Boolean, allow cheats.
-  * `fill_with_bots`: Boolean, fill available slots with bots?
-  * `allow_spectating`: Boolean, allow spectating?
   * `pass_key`: Password.
-  * `series_type`: Use the series type enum.
-  * `radiant_series_wins`: # of games won so far, e.g. for a Bo3 or Bo5.
-  * `dire_series_wins`: # of games won so far, e.g. for a Bo3 or Bo5.
-  * `allchat`: Enable all chat for VOIP
-  * `league_id`: The league this lobby is being created for. Optional
-  * `dota_tv_delay`: Number of seconds the game should be delayed for DotaTV.
-  * `custom_game_mode`: TODO.
-  * `custom_map_name`: TODO.
-  * `custom_difficulty`: TODO.
-  * `custom_game_id`: TODO.
+  * `server_region`: Use the ServerRegion enum. *Default: `UNSPECIFIED`*.
+  * `game_mode`: Use the DOTA_GameMode enum. *Default: `DOTA_GAMEMODE_AP`*.
+  * `game_version`: Use the game version enum. *Default: `GAME_VERSION_STABLE`*.
+  * `cm_pick`: Use the DOTA_CM_PICK enum. *Default: `DOTA_CM_RANDOM`*.
+  * `allow_cheats`: Boolean, allow cheats. *Default: `false`*.
+  * `fill_with_bots`: Boolean, fill available slots with bots? *Default: `false`*.
+  * `bot_difficulty_radiant`: The bot difficulty for radiant bots, if `fill_with_bots is true`. Use the `Dota2.SeriesType` enum. *Default: `PASSIVE`*.
+  * `bot_difficulty_dire`: The bot difficulty for dire bots, if `fill_with_bots is true`. Use the `Dota2.SeriesType` enum. *Default: `PASSIVE`*.
+  * `bot_radiant`: Number. Presumably the ID of the custom AI to be applied to radiant bots.
+  * `bot_dire`: Number. Presumably the ID of the custom AI to be applied to dire bots.
+  * `allow_spectating`: Boolean, allow spectating? *Default: `true`*.
+  * `series_type`: Use the series type enum. *Default: `NONE`*.
+  * `radiant_series_wins`: # of games won so far, e.g. for a Bo3 or Bo5. *Default: `0`*.
+  * `dire_series_wins`: # of games won so far, e.g. for a Bo3 or Bo5. *Default: `0`*.
+  * `previous_match_override` In a series, the match ID of the previous game. If not supplied, the GC will try to find it automatically based on the teams and the players. *Default: `0`*.
+  * `allchat`: Boolean, enable all chat for VOIP. *Default: `false`*.
+  * `leagueid`: The league this lobby is being created for. The bot should be a league admin for this to work. *Default: `0`*.
+  * `dota_tv_delay`: How much time the game should be delayed for DotaTV. Use the LobbyDotaTVDelay enum. *Default: `LobbyDotaTV_120`*.
+  * `custom_game_mode`: TODO. *Default: `0`*.
+  * `custom_map_name`: TODO. *Default: `0`*.
+  * `custom_difficulty`: TODO. *Default: `0`*.
+  * `custom_game_id`: TODO. *Default: `0`*.
 * `[callback]` - optional callback, returns args: `err, response`.
 
 Sends a message to the Game Coordinator requesting to create a lobby.  Listen for `practiceLobbyUpdate`  response for a snapshot-update of the newly created lobby. Requires the GC to be ready (listen for the `ready` event before calling).
 
-#### createTournamentLobby([password], [tournament_game_id], [tournament_id], [options], [callback])
+#### createTournamentLobby([password], [tournament_game_id], [tournament_id], [options], [callback]) - DEPRECATED
 * `[password]` - See paramter description in [#createPracticeLobby]
-* `[tournament_game_id]` - TODO
-* `[tournament_id]` - TODO
+* `[tournament_game_id]` - Presumably the previous game id, in a series. Optional.
+* `[tournament_id]` - The league this lobby is being created for. The bot should be a league admin for this to work.
 * `[options]` - See paramter description in [#createPracticeLobby]
 * `[callback]` - optional callback, returns args: `err, response`.
 
@@ -518,7 +522,7 @@ Sends a message to the Game Coordinator requesting the top league matches. Liste
 * `league_id` - ID of the league for which you're requesting your player card roster
 * `timestamp` - timestamp of the day for which you want your player card roster
 * `[callback]` - optional callback` returns args: `err` response`.
- 
+
 Sends a message to the Game Coordinator requesting your fantasy line-up for a specific day of a given tournament. Listen for the `playerCardRoster` event for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
 
 #### draftPlayerCard(league_id, timestamp, slot, player_card_id, [callback])
@@ -560,7 +564,7 @@ Emitted when the GC is ready to receive messages.  Be careful not to declare ano
 Emitted when the connection status to the GC changes, and renders the library unavailable to interact.  You should clear any event handlers set in the `ready` event here, otherwise you'll have multiple handlers for each message every time a new `ready` event is sent.
 
 ### `popup` (`type`, `popup`)
-* `type` - The type of the popup. See `CMsgDOTAPopup.PopupID` 
+* `type` - The type of the popup. See `CMsgDOTAPopup.PopupID`
 * `popup` - The raw popup data
 
 Generic popup, can be produced for a plethora of reasons.
@@ -791,9 +795,9 @@ See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/5acc8bb72bb7f
 * `match_groups` - Array of CMsgMatchmakingMatchGroupInfo objects. Contains info on the number of people searching and ping penalty.
 * `matchmakingStatsResponse` - Raw response object.
 
-Emitted when te GC response to the `requestMatchmakingStats` method.  The array order dictates which matchmaking groups the figure belongs to. 
-The groups are discoverable through [regions.txt](https://github.com/SteamDatabase/GameTracking/blob/master/dota/game/dota/pak01_dir/scripts/regions.txt) in Dota 2's game files.  We maintain an indicative list *without guarantees* in this README. 
-This list is manually updated only when changes are detected by community members, so it can be out of date. 
+Emitted when te GC response to the `requestMatchmakingStats` method.  The array order dictates which matchmaking groups the figure belongs to.
+The groups are discoverable through [regions.txt](https://github.com/SteamDatabase/GameTracking/blob/master/dota/game/dota/pak01_dir/scripts/regions.txt) in Dota 2's game files.  We maintain an indicative list *without guarantees* in this README.
+This list is manually updated only when changes are detected by community members, so it can be out of date.
 Here are the groups at the time of this sentence being written (with unecessary data trimmed out):
 
 ```
@@ -864,7 +868,7 @@ to tell when the bot has been kicked.
 * `practiceLobbyResponse` - The raw response object.
 
 Emitted when an operation changing the state of a lobby was sent to the GC and
-processed. This event only contains the acknowledgement by the GC. The actual 
+processed. This event only contains the acknowledgement by the GC. The actual
 update of the lobby state is communicated via `practiceLobbyUpdate` events.
 
 ### `friendPracticeLobbyListData` ()
@@ -991,7 +995,7 @@ Emitted when the GC responds to the `requestSourceTVGames` method.  Multiple eve
 Emitted when the GC sends an inventory snapshot. The GC is incredibly
 inefficient and will send the entire object even if it's a minor update.
 You can use this to detect when a change was made to your inventory (e.g. drop)
-Note that the `Inventory` property will be the old value until after this event 
+Note that the `Inventory` property will be the old value until after this event
 completes to allow comparison between the two.
 
 ### `playerCardRoster` (`playerCardRoster`)
@@ -1061,6 +1065,3 @@ Use this to pass valid server region data to `createPracticeLobby`.
 * `DOTA_GAMEMODE_ALL_DRAFT: 22` - All Draft a.k.a. ranked all pick
 
 Use this to pass valid game mode data to `createPracticeLobby`. This enum is built-in the protobuf schema and can be referenced by `Dota2.DOTA_GameMode`.
-
-
-
