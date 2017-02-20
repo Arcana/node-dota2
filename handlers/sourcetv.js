@@ -9,7 +9,7 @@ var Dota2 = require("../index"),
  * Listen for {@link module:Dota2.Dota2Client#event:sourceTVGamesData|sourceTVGamesData} for results
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
  * @alias module:Dota2.Dota2Client#requestSourceTVGames
- * @param {Object} filter_options - See `CSourceTVGameSmall` for a full list of options.
+ * @param {CSourceTVGameSmall} filter_options - Filter options. Check the protobuf for a full list.
  * @param {number} filter_options.league_id - ID of a league
  * @param {number} filter_options.hero_id - ID of a hero that must be present in the game
  * @param {number} filter_options.start_game - Number of pages sent, only values in [0, 10, 20, ... 90] are valid, and yield [1,2,3 ... 10] responses
@@ -37,7 +37,7 @@ Dota2.Dota2Client.prototype.requestSourceTVGames = function(filter_options) {
 /**
  * sourceTVGamesData event
  * @event module:Dota2.Dota2Client#sourceTVGamesData
- * @param {Object} sourceTVGamesResponse - A `CMsgGCToClientFindTopSourceTVGamesResponse` object or null if a bad response was received
+ * @param {CMsgGCToClientFindTopSourceTVGamesResponse} sourceTVGamesResponse - The raw response data or null if a bad response was received
  */
  
 // Handlers

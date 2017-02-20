@@ -8,7 +8,7 @@ var Dota2 = require("../index"),
  * @alias module:Dota2.Dota2Client#respondPartyInvite
  * @param {external:Long} id - The party's ID
  * @param {boolean} [accept=false] - Whether or not you accept the invite
- * @param {Object} [ping_data=undefined] - Optional argument that can be provided when accepting an invite. Contains a.o. the ping to the different servers. See `CMsgClientPingData`for contents.
+ * @param {CMsgClientPingData} [ping_data=undefined] - Optional argument that can be provided when accepting an invite. Contains a.o. the ping to the different servers. 
  */
 Dota2.Dota2Client.prototype.respondPartyInvite = function(id, accept, ping_data) {
     id = id || null;

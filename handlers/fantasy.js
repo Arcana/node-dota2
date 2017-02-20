@@ -145,7 +145,7 @@ Dota2.Dota2Client.prototype.draftPlayerCard = function(league_id, timestamp, slo
 /**
  * Emitted in response to a {@link module:Dota2.Dota2Client#requestPlayerCardRoster|request for a player's fantasy roster}
  * @event module:Dota2.Dota2Client#playerCardRoster
- * @param {Object} playerCardRoster - A `CMsgClientToGCGetPlayerCardRosterResponse` object containing the fantasy draft and score if available.
+ * @param {CMsgClientToGCGetPlayerCardRosterResponse} playerCardRoster - The raw response data containing the fantasy draft and score if available.
  */
 /**
  * Emitted in response to a {@link module:Dota2.Dota2Client#draftPlayerCard|draft of a player card}

@@ -171,13 +171,13 @@ Dota2.Dota2Client.prototype.requestPlayerStats = function(account_id, callback) 
  * Emitted in response to a {@link module:Dota2.Dota2Client#requestPlayerMatchHistory|request for a player's match history}
  * @event module:Dota2.Dota2Client#playerMatchHistoryData
  * @param {number} requestId - Id of the request to which this event is the answer
- * @param {Object} matchHistoryResponse - A `CMsgDOTAGetPlayerMatchHistoryResponse` object containing the user's match history.
+ * @param {CMsgDOTAGetPlayerMatchHistoryResponse} matchHistoryResponse - The raw response data containing the user's match history.
  */
  /**
  * Emitted in response to a {@link module:Dota2.Dota2Client#requestProfileCard|request for a player's profile card}
  * @event module:Dota2.Dota2Client#profileCardData
  * @param {number} account_id - Dota2 account ID of the player whose profile card was fetched.
- * @param {Object} profileCardResponse - A `CMsgDOTAProfileCard` object containing the user's profile card.
+ * @param {CMsgDOTAProfileCard} profileCardResponse - The raw response data containing the user's profile card.
  */
  /**
  * Emitted in response to a {@link module:Dota2.Dota2Client#requestHallOfFame|request for a player's profile card}
@@ -193,7 +193,7 @@ Dota2.Dota2Client.prototype.requestPlayerStats = function(account_id, callback) 
  * @param {number} featured_farmer.hero_id - ID of the hero
  * @param {number} featured_farmer.gold_per_min - GPM for the featured match
  * @param {number} featured_farmer.match_id - Match ID of the featured match
- * @param {Object} hallOfFameResponse - A `CMsgDOTAHallOfFameResponse` object containing the requested week's hall of fame.
+ * @param {CMsgDOTAHallOfFameResponse} hallOfFameResponse - The raw response data containing the requested week's hall of fame.
  */
  /**
  * Emitted in response to a {@link module:Dota2.Dota2Client#requestPlayerInfo|request for a player's info}

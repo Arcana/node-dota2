@@ -219,14 +219,14 @@ Dota2.Dota2Client.prototype.requestChatChannels = function() {
  * @param {string} channel - Name of the chat channel someone joined
  * @param {string} joiner_name - Persona name of the person that joined the channel
  * @param {external:Long} joiner_steam_id - Steam ID of the person that joined the channel
- * @param {Object} otherJoined_object - A `CMsgDOTAOtherJoinedChatChannel` object containing the join data
+ * @param {CMsgDOTAOtherJoinedChatChannel} otherJoined_object - The raw message data.
  */
 /**
  * Event that's emitted whenever someone else leaves a chat channel the bot is in
  * @event module:Dota2.Dota2Client#chatLeave
  * @param {string} channel - Name of the chat channel someone left
  * @param {string} leaver_steam_id - Persona name of the person that left the channel
- * @param {Object} otherLeft_object - A `CMsgDOTAOtherLeftChatChannel` object containing the leave data.
+ * @param {CMsgDOTAOtherLeftChatChannel} otherLeft_object - The raw message data.
  */
 /**
  * Event that's emitted whenever someone sends a message in a channel the bot is in
@@ -234,7 +234,7 @@ Dota2.Dota2Client.prototype.requestChatChannels = function() {
  * @param {string} channel - Name of the chat channel the message was sent to
  * @param {string} sender_name - Persona name of the sender of the message
  * @param {string} message - The message that was sent
- * @param {Object} chatData - A `CMsgDOTAChatMessage` object containing the message and its metadata.
+ * @param {CMsgDOTAChatMessage} chatData - The raw message data containing the message and its metadata.
  */
 /**
  * Event that's emitted after requesting a list of chat channels via {@link module:Dota2.Dota2Client#requestChatChannels}

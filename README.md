@@ -773,7 +773,7 @@ Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 | --- | --- | --- | --- |
 | id | <code>[Long](#external_Long)</code> |  | The party's ID |
 | [accept] | <code>boolean</code> | <code>false</code> | Whether or not you accept the invite |
-| [ping_data] | <code>Object</code> |  | Optional argument that can be provided when accepting an invite. Contains a.o. the ping to the different servers. See `CMsgClientPingData`for contents. |
+| [ping_data] | <code>CMsgClientPingData</code> |  | Optional argument that can be provided when accepting an invite. Contains a.o. the ping to the different servers. |
 
 <a name="module_Dota2.Dota2Client+leaveParty"></a>
 
@@ -843,7 +843,7 @@ Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
 | Param | Type | Description |
 | --- | --- | --- |
-| filter_options | <code>Object</code> | See `CSourceTVGameSmall` for a full list of options. |
+| filter_options | <code>CSourceTVGameSmall</code> | Filter options. Check the protobuf for a full list. |
 | filter_options.league_id | <code>number</code> | ID of a league |
 | filter_options.hero_id | <code>number</code> | ID of a hero that must be present in the game |
 | filter_options.start_game | <code>number</code> | Number of pages sent, only values in [0, 10, 20, ... 90] are valid, and yield [1,2,3 ... 10] responses |
@@ -1012,7 +1012,7 @@ Event that's emitted whenever someone else joins a chat channel the bot is in
 | channel | <code>string</code> | Name of the chat channel someone joined |
 | joiner_name | <code>string</code> | Persona name of the person that joined the channel |
 | joiner_steam_id | <code>[Long](#external_Long)</code> | Steam ID of the person that joined the channel |
-| otherJoined_object | <code>Object</code> | A `CMsgDOTAOtherJoinedChatChannel` object containing the join data |
+| otherJoined_object | <code>CMsgDOTAOtherJoinedChatChannel</code> | The raw message data. |
 
 <a name="module_Dota2.Dota2Client+event_chatLeave"></a>
 
@@ -1025,7 +1025,7 @@ Event that's emitted whenever someone else leaves a chat channel the bot is in
 | --- | --- | --- |
 | channel | <code>string</code> | Name of the chat channel someone left |
 | leaver_steam_id | <code>string</code> | Persona name of the person that left the channel |
-| otherLeft_object | <code>Object</code> | A `CMsgDOTAOtherLeftChatChannel` object containing the leave data. |
+| otherLeft_object | <code>CMsgDOTAOtherLeftChatChannel</code> | The raw message data. |
 
 <a name="module_Dota2.Dota2Client+event_chatMessage"></a>
 
@@ -1039,7 +1039,7 @@ Event that's emitted whenever someone sends a message in a channel the bot is in
 | channel | <code>string</code> | Name of the chat channel the message was sent to |
 | sender_name | <code>string</code> | Persona name of the sender of the message |
 | message | <code>string</code> | The message that was sent |
-| chatData | <code>Object</code> | A `CMsgDOTAChatMessage` object containing the message and its metadata. |
+| chatData | <code>CMsgDOTAChatMessage</code> | The raw message data containing the message and its metadata. |
 
 <a name="module_Dota2.Dota2Client+event_chatChannelsData"></a>
 
@@ -1065,7 +1065,7 @@ Emitted in response to a [request for a player's match history](#module_Dota2.Do
 | Param | Type | Description |
 | --- | --- | --- |
 | requestId | <code>number</code> | Id of the request to which this event is the answer |
-| matchHistoryResponse | <code>Object</code> | A `CMsgDOTAGetPlayerMatchHistoryResponse` object containing the user's match history. |
+| matchHistoryResponse | <code>CMsgDOTAGetPlayerMatchHistoryResponse</code> | The raw response data containing the user's match history. |
 
 <a name="module_Dota2.Dota2Client+event_profileCardData"></a>
 
@@ -1077,7 +1077,7 @@ Emitted in response to a [request for a player's profile card](#module_Dota2.Dot
 | Param | Type | Description |
 | --- | --- | --- |
 | account_id | <code>number</code> | Dota2 account ID of the player whose profile card was fetched. |
-| profileCardResponse | <code>Object</code> | A `CMsgDOTAProfileCard` object containing the user's profile card. |
+| profileCardResponse | <code>CMsgDOTAProfileCard</code> | The raw response data containing the user's profile card. |
 
 <a name="module_Dota2.Dota2Client+event_hallOfFameData"></a>
 
@@ -1099,7 +1099,7 @@ Emitted in response to a [request for a player's profile card](#module_Dota2.Dot
 | featured_farmer.hero_id | <code>number</code> | ID of the hero |
 | featured_farmer.gold_per_min | <code>number</code> | GPM for the featured match |
 | featured_farmer.match_id | <code>number</code> | Match ID of the featured match |
-| hallOfFameResponse | <code>Object</code> | A `CMsgDOTAHallOfFameResponse` object containing the requested week's hall of fame. |
+| hallOfFameResponse | <code>CMsgDOTAHallOfFameResponse</code> | The raw response data containing the requested week's hall of fame. |
 
 <a name="module_Dota2.Dota2Client+event_playerInfoData"></a>
 
@@ -1174,7 +1174,7 @@ Emitted in response to a [request for a player's fantasy roster](#module_Dota2.D
 
 | Param | Type | Description |
 | --- | --- | --- |
-| playerCardRoster | <code>Object</code> | A `CMsgClientToGCGetPlayerCardRosterResponse` object containing the fantasy draft and score if available. |
+| playerCardRoster | <code>CMsgClientToGCGetPlayerCardRosterResponse</code> | The raw response data containing the fantasy draft and score if available. |
 
 <a name="module_Dota2.Dota2Client+event_playerCardDrafted"></a>
 
@@ -1197,7 +1197,7 @@ Emitted when the server wants the client to create a pop-up
 | Param | Type | Description |
 | --- | --- | --- |
 | id | <code>number</code> | Type of the pop-up. |
-| popup | <code>Object</code> | A `CMsgDOTAPopup` object. Can contain further specifications like formattable text |
+| popup | <code>CMsgDOTAPopup</code> | The raw pop-up object. Can contain further specifications like formattable text |
 
 <a name="module_Dota2.Dota2Client+event_leaguesInMonthData"></a>
 
@@ -1415,7 +1415,7 @@ sourceTVGamesData event
 
 | Param | Type | Description |
 | --- | --- | --- |
-| sourceTVGamesResponse | <code>Object</code> | A `CMsgGCToClientFindTopSourceTVGamesResponse` object or null if a bad response was received |
+| sourceTVGamesResponse | <code>CMsgGCToClientFindTopSourceTVGamesResponse</code> | The raw response data or null if a bad response was received |
 
 <a name="module_Dota2.Dota2Client+event_teamData"></a>
 
