@@ -46,7 +46,7 @@ Dota2.Dota2Client.prototype._leaveChatChannelById = function(channelId) {
  * @param {DOTAChatChannelType_t} [channel_type=DOTAChatChannelType_t.DOTAChatChannelType_Custom] - The type of the channel being joined
  */
 Dota2.Dota2Client.prototype.joinChat = function(channel_name, channel_type) {
-    channel_type = channel_type || Dota2.schema.lookupEnum("DOTAChatChannelType_t").DOTAChannelType_Custom;
+    channel_type = channel_type == null ? Dota2.schema.lookupEnum("DOTAChatChannelType_t").DOTAChannelType_Custom : channel_type;
 
     /* Attempts to join a chat channel.  Expect k_EMsgGCJoinChatChannelResponse from GC */
     if (this.debug) util.log("Joining chat channel: " + channel_name);

@@ -47,6 +47,11 @@ Dota2.schema = Protobuf.loadSync(folder.map(filename => __dirname + '/proto/' + 
  * @fires module:Dota2.Dota2Client#event:practiceLobbyCleared
  * @fires module:Dota2.Dota2Client#event:lobbyInviteUpdate
  * @fires module:Dota2.Dota2Client#event:lobbyInviteCleared
+ * @fires module:Dota2.Dota2Client#event:practiceLobbyJoinResponse
+ * @fires module:Dota2.Dota2Client#event:practiceLobbyListData
+ * @fires module:Dota2.Dota2Client#event:practiceLobbyResponse
+ * @fires module:Dota2.Dota2Client#event:friendPracticeLobbyListData
+ * @fires module:Dota2.Dota2Client#event:inviteCreated
  * @fires module:Dota2.Dota2Client#event:partyUpdate
  * @fires module:Dota2.Dota2Client#event:partyCleared
  * @fires module:Dota2.Dota2Client#event:partyInviteUpdate

@@ -97,11 +97,37 @@ Dota2.ServerRegion = {
 };
 
 /**
+ * Enum for different types of series.
+ * @alias module:Dota2.SeriesType
+ * @readonly
+ * @enum {number}
+ */
+Dota2.SeriesType = {
+    NONE: 0,
+    BEST_OF_THREE: 1,
+    BEST_OF_FIVE: 2
+};
+
+/**
+ * Enum for different bot difficulty levels.
+ * @alias module:Dota2.BotDifficulty
+ * @readonly
+ * @enum {number}
+ */
+Dota2.BotDifficulty = {
+    PASSIVE: 0,
+    EASY: 1,
+    MEDIUM: 2,
+    HARD: 3,
+    UNFAIR: 4
+};
+
+
+/**
  * @callback module:Dota2~requestCallback
  * @param {number} errorCode - Null if everything went well, else the error code
  * @param {Object} responseMessage - The response message the GC sent
  */
-
 
 // Helper methods
 Dota2._parseOptions = function(options, possibleOptions) {

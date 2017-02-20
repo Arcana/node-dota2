@@ -16,9 +16,18 @@ in correspondence with all other enums.
 #### setItemPositions
 Changed the parameter type from an array of tuples to an array of objects
 
+#### createPracticeLobby
+Changed parameters to `(options, callback)` to reduce confusion. CreateTournamentLobby is now deprecated.
+
 ### Events
 #### matchesData
 Event parameters are now `(request_id, total_results, results_remaining, matches, series)`
+
+#### practiceLobbyListData
+Removed the null parameter
+
+#### friendPracticeLobbyListData
+Removed the null parameter
 
 ## Deprecation
 There's a whole series of functions for which the GC hasn't responded in a long time.
