@@ -18,9 +18,9 @@ Dota2.Dota2Client.prototype._getChannelByName = function(channel_name, channel_t
 Dota2.Dota2Client.prototype._getChannelById = function(channel_id) {
     // Returns the channel corresponding to the given channel_id
     return this.chatChannels.filter(
-        // channel_id is a uint64 which is a compound object. Using '===' or '==' doesn't work to check the equality necessitating the cast to String
+        // channel_id is a uint64 so it's mapped to a Long.js type
         function(item) {
-            return ("" + item.channel_id === "" + channel_id);
+            return (item.channel_id.eq(channel_id));
         }
     )[0];
 }

@@ -197,16 +197,16 @@ var onCacheUnsubscribed = function onCacheUnsubscribed(message) {
 
     if (this.debug) util.log("Cache unsubscribed, " + unsubscribe.owner_soid.id);
 
-    if (this.Lobby && "" + unsubscribe.owner_soid.id === "" + this.Lobby.lobby_id) {
+    if (this.Lobby && unsubscribe.owner_soid.id.eq(this.Lobby.lobby_id)) {
         this.Lobby = null;
         this.emit("practiceLobbyCleared");
-    } else if (this.LobbyInvite && "" + unsubscribe.owner_soid.id === "" + this.LobbyInvite.group_id) {
+    } else if (this.LobbyInvite && unsubscribe.owner_soid.id.eq(this.LobbyInvite.group_id)) {
         this.LobbyInvite = null;
         this.emit("lobbyInviteCleared");
-    } else if (this.Party && "" + unsubscribe.owner_soid.id === "" + this.Party.party_id) {
+    } else if (this.Party && unsubscribe.owner_soid.id.eq(this.Party.party_id)) {
         this.Party = null;
         this.emit("partyCleared");
-    } else if (this.PartyInvite && "" + unsubscribe.owner_soid.id === "" + this.PartyInvite.group_id) {
+    } else if (this.PartyInvite && unsubscribe.owner_soid.id.eq(this.PartyInvite.group_id)) {
         this.PartyInvite = null;
         this.emit("partyInviteCleared");
     }
