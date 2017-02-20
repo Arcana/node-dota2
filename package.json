@@ -2,7 +2,7 @@
   "name": "dota2",
   "version": "5.0.0",
   "dependencies": {
-    "bignumber.js": "^3.0.0",
+    "long": "^3.0.0",
     "deferred": "^0.7.2",
     "merge": "^1.2.0",
     "protobufjs": "^6.0.0",

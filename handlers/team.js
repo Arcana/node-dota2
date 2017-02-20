@@ -31,6 +31,7 @@ Dota2.Dota2Client.prototype.requestMyTeams = function requestMyTeams(callback) {
  * 
  * This function hasn't been responded to by the GC for a long time.
  * @deprecated
+ * @ignore
  * @alias module:Dota2.Dota2Client#requestProTeamList
  * @param {module:Dota2~requestCallback} [callback] - Called with `err, CMsgDOTAProTeamListResponse`
  */
@@ -62,7 +63,7 @@ Dota2.Dota2Client.prototype.requestProTeamList = function requestProTeamList(cal
  * @param {number} teams[].team_id - ID of the team
  * @param {string} teams[].tag - Tag of the team
  * @param {number} teams[].time_created - Unix timestamp of the moment the team was created
- * @param {Long} teams[].logo - Logo of the team
+ * @param {external:Long} teams[].logo - Logo of the team
  * @param {string} teams[].country_code - Two-letter country code for the team
  * @param {number} teams[].member_count - Number of members in the team
  */

@@ -1,7 +1,12 @@
 # Changelog
+## Dependency changes
+* Deleted the dependency on bignumber.js and replaced it by Long.js since protobufjs uses it.
 
 ## API changes
 ### Methods 
+#### ToSteamID
+Now returns a Long value instead of a string.
+
 #### sendMessage
 Order of the parameters has changed to `(message, channel_name, channel_type)`.
 

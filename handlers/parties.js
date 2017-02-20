@@ -6,7 +6,7 @@ var Dota2 = require("../index"),
  * Responds to a party invite.
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
  * @alias module:Dota2.Dota2Client#respondPartyInvite
- * @param {Long} id - The party's ID
+ * @param {external:Long} id - The party's ID
  * @param {boolean} [accept=false] - Whether or not you accept the invite
  * @param {Object} [ping_data=undefined] - Optional argument that can be provided when accepting an invite. Contains a.o. the ping to the different servers. See `CMsgClientPingData`for contents.
  */
@@ -49,7 +49,7 @@ Dota2.Dota2Client.prototype.leaveParty = function() {
  * the current party.
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
  * @alias module:Dota2.Dota2Client#setPartyLeader
- * @param {Long} steam_id - The Steam ID of the new party leader
+ * @param {external:Long} steam_id - The Steam ID of the new party leader
  */
 Dota2.Dota2Client.prototype.setPartyLeader = function(steam_id) {
     steam_id = steam_id || null;
@@ -97,7 +97,7 @@ Dota2.Dota2Client.prototype.setPartyCoach = function(coach) {
  * Invite a player to your party.
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
  * @alias module:Dota2.Dota2Client#inviteToParty
- * @param {Long} steam_id - Steam ID of the player you want to invite
+ * @param {external:Long} steam_id - Steam ID of the player you want to invite
  */
 Dota2.Dota2Client.prototype.inviteToParty = function(steam_id) {
     steam_id = steam_id || null;
@@ -119,7 +119,7 @@ Dota2.Dota2Client.prototype.inviteToParty = function(steam_id) {
  * Kick a player from your party. Only works if you're party leader.
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
  * @alias module:Dota2.Dota2Client#kickFromParty
- * @param {Long} steam_id - Steam ID of the player you want to kick
+ * @param {external:Long} steam_id - Steam ID of the player you want to kick
  */
 Dota2.Dota2Client.prototype.kickFromParty = function(steam_id) {
     steam_id = steam_id || null;

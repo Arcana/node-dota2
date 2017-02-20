@@ -84,7 +84,7 @@ Dota2.Dota2Client.prototype.requestTopLeagueMatches = function() {
  * @param {Object[]} leagues[].schedule[].teams - The teams duking it out in this match
  * @param {number} leagues[].schedule[].teams[].team_id - ID of the team. Not every participating team seems to be hooked up to Dota 2's team system, so 0 entries can happen
  * @param {string} leagues[].schedule[].teams[].name - Name of the team
- * @param {Long} leagues[].schedule[].teams[].logo - Logo of the team
+ * @param {external:Long} leagues[].schedule[].teams[].logo - Logo of the team
  */
 /**
  * Emitted when the GC sends a `CMsgDOTALiveLeagueGameUpdate`.
@@ -107,7 +107,7 @@ Dota2.Dota2Client.prototype.requestTopLeagueMatches = function() {
  * Emitted in response to a {@link module:Dota2.Dota2Client#requestTopLeagueMatches|request for top league matches}.
  * @event module:Dota2.Dota2Client#topLeagueMatchesData
  * @param {Object[]} matches - List of top matches
- * @param {Long} matches[].match_id - Match ID
+ * @param {external:Long} matches[].match_id - Match ID
  * @param {number} matches[].start_time - Unix timestamp of the start of the match
  * @param {number} matches[].duration - Duration of the match in seconds
  * @param {DOTA_GameMode} matches[].game_mode - Game mode

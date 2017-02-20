@@ -78,7 +78,7 @@ Dota2._lobbyOptions = {
  * 
  * @property {number} [custom_difficulty] - Difficulty of the custom game
  * 
- * @property {Long} [custom_game_id] - 64bit ID of the custom game mode
+ * @property {external:Long} [custom_game_id] - 64bit ID of the custom game mode
  */
 
 // Methods
@@ -179,7 +179,7 @@ Dota2.Dota2Client.prototype.createTournamentLobby = function(password, tournamen
  * Listen for {@link module:Dota2.Dota2Client#event:practiceLobbyUpdate|practiceLobbyUpdate} response 
  * for a snapshot-update of the newly created lobby.
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
- * @param {Long} lobby_id - ID of the lobby
+ * @param {external:Long} lobby_id - ID of the lobby
  * @param {module:Dota2.Dota2Client#Lobby.Options} options - The new option values
  * @param {module:Dota2~requestCallback} [callback] - Called with `err, CMsgPracticeLobbyJoinResponse`
  */
@@ -271,7 +271,7 @@ Dota2.Dota2Client.prototype.flipLobbyTeams = function(callback) {
  * Asks to invite a player to your lobby. This creates a new default lobby when you are not already in one.
  * Listen for the {@link module:Dota2.Dota2Client#event:inviteCreated|inviteCreated} event for the GC's response. 
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
- * @param {Long} steam_id - The Steam ID of the player you want to invite.
+ * @param {external:Long} steam_id - The Steam ID of the player you want to invite.
  */
 Dota2.Dota2Client.prototype.inviteToLobby = function(steam_id) {
     steam_id = steam_id.toString() || null;
@@ -338,7 +338,7 @@ Dota2.Dota2Client.prototype.practiceLobbyKickFromTeam = function(account_id, cal
  * Sends a message to the Game Coordinator requesting to join a lobby.
  * Provide a callback or listen for the {@link module:Dota2.Dota2Client#event:practiceLobbyJoinResponse|practiceLobbyJoinResponse} event for the GC's response. 
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
- * @param {Long} id - The ID of the lobby
+ * @param {externalLong} id - The ID of the lobby
  * @param {number} password - The password of the lobby
  * @param {module:Dota2~requestCallback} [callback] - Called with `err, CMsgPracticeLobbyJoinResponse`
  */
@@ -497,7 +497,7 @@ Dota2.Dota2Client.prototype.addBotToPracticeLobby = function(slot, team, bot_dif
  * Sends a message to the Game Coordinator confirming/denying a lobby invitation
  * Provide a callback or listen for the {@link module:Dota2.Dota2Client#event:practiceLobbyResponse|practiceLobbyResponse} event for the GC's response. 
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
- * @param {Long} id - The ID of the lobby
+ * @param {external:Long} id - The ID of the lobby
  * @param {boolean} accept - Whether or not you accept the invitation.
  */
 Dota2.Dota2Client.prototype.respondLobbyInvite = function(id, accept) {
@@ -551,8 +551,8 @@ Dota2.Dota2Client.prototype.respondLobbyInvite = function(id, accept) {
  /**
  * Event that's emitted whenever the bot attempts to invite someone to a lobby
  * @event module:Dota2.Dota2Client#inviteCreated
- * @param {Long} steam_id - Steam ID of the person that was invited to the lobby
- * @param {Long} group_id - Group ID of the invitation
+ * @param {external:Long} steam_id - Steam ID of the person that was invited to the lobby
+ * @param {external:Long} group_id - Group ID of the invitation
  * @param {boolean} is_online - Whether or not the invitee is online
  */
 

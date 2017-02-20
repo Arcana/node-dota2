@@ -218,7 +218,7 @@ Dota2.Dota2Client.prototype.requestChatChannels = function() {
  * @event module:Dota2.Dota2Client#chatJoin
  * @param {string} channel - Name of the chat channel someone joined
  * @param {string} joiner_name - Persona name of the person that joined the channel
- * @param {Long} joiner_steam_id - Steam ID of the person that joined the channel
+ * @param {external:Long} joiner_steam_id - Steam ID of the person that joined the channel
  * @param {Object} otherJoined_object - A `CMsgDOTAOtherJoinedChatChannel` object containing the join data
  */
 /**

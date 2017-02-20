@@ -9,7 +9,7 @@ var Dota2 = require("../index"),
  * @property {number} account_id - Dota2 account ID of the player
  * @property {Object[]} cards - Player cards of this player in the bot's inventory
  * @property {number} cards[].id - ID of the card
- * @property {Long} cards[].bonuses - 64bit bitmask for the bonuses of this card
+ * @property {external:Long} cards[].bonuses - 64bit bitmask for the bonuses of this card
  * @property {module:Dota2.schema.CMsgGCToClientPlayerStatsResponse} stats - Player stats
  */
 

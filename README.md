@@ -12,7 +12,7 @@ A fair warning, while the way you search for new functionality is still the same
 It is now easier to implement new functionality than it was back when this blog was written.
 
 ## Installation and setup
-* `npm install steam; npm install` in the repository root (install Steam first to work around a node-steam#222)
+* `npm install` in the repository root
 * Copy `config.js.example` to `config.js` and edit appropriately
 * Run the example script: `node example.js`
 * If you receive Error 63 you need to provide a Steam Guard code by setting the Steam Guard code in `config.js` and launching again.
@@ -105,7 +105,6 @@ Dota 2 module
                 * [.kickFromParty(steam_id)](#module_Dota2.Dota2Client+kickFromParty)
                 * [.requestSourceTVGames(filter_options)](#module_Dota2.Dota2Client+requestSourceTVGames)
                 * [.requestMyTeams([callback])](#module_Dota2.Dota2Client+requestMyTeams)
-                * ~~[.requestProTeamList([callback])](#module_Dota2.Dota2Client+requestProTeamList)~~
                 * ["ready"](#module_Dota2.Dota2Client+event_ready)
                 * ["unhandled" (kMsg, kMsg_name)](#module_Dota2.Dota2Client+event_unhandled)
                 * ["hellotimeout"](#module_Dota2.Dota2Client+event_hellotimeout)
@@ -151,7 +150,7 @@ Dota 2 module
                 * ["teamData" (teams, league_id)](#module_Dota2.Dota2Client+event_teamData)
             * _static_
                 * [.ToAccountID(steamID)](#module_Dota2.Dota2Client.ToAccountID) ⇒ <code>number</code>
-                * [.ToSteamID(accid)](#module_Dota2.Dota2Client.ToSteamID) ⇒ <code>string</code>
+                * [.ToSteamID(accid)](#module_Dota2.Dota2Client.ToSteamID) ⇒ <code>[Long](#external_Long)</code>
         * [.schema](#module_Dota2.schema)
             * [.CMsgGCToClientPlayerStatsResponse](#module_Dota2.schema.CMsgGCToClientPlayerStatsResponse) : <code>Object</code>
         * [.EResult](#module_Dota2.EResult) : <code>enum</code>
@@ -160,6 +159,7 @@ Dota 2 module
         * [.BotDifficulty](#module_Dota2.BotDifficulty) : <code>enum</code>
     * _inner_
         * [~requestCallback](#module_Dota2..requestCallback) : <code>function</code>
+        * [~Long](#external_Long)
 
 <a name="module_Dota2.Dota2Client"></a>
 
@@ -217,7 +217,6 @@ Dota 2 module
         * [.kickFromParty(steam_id)](#module_Dota2.Dota2Client+kickFromParty)
         * [.requestSourceTVGames(filter_options)](#module_Dota2.Dota2Client+requestSourceTVGames)
         * [.requestMyTeams([callback])](#module_Dota2.Dota2Client+requestMyTeams)
-        * ~~[.requestProTeamList([callback])](#module_Dota2.Dota2Client+requestProTeamList)~~
         * ["ready"](#module_Dota2.Dota2Client+event_ready)
         * ["unhandled" (kMsg, kMsg_name)](#module_Dota2.Dota2Client+event_unhandled)
         * ["hellotimeout"](#module_Dota2.Dota2Client+event_hellotimeout)
@@ -263,7 +262,7 @@ Dota 2 module
         * ["teamData" (teams, league_id)](#module_Dota2.Dota2Client+event_teamData)
     * _static_
         * [.ToAccountID(steamID)](#module_Dota2.Dota2Client.ToAccountID) ⇒ <code>number</code>
-        * [.ToSteamID(accid)](#module_Dota2.Dota2Client.ToSteamID) ⇒ <code>string</code>
+        * [.ToSteamID(accid)](#module_Dota2.Dota2Client.ToSteamID) ⇒ <code>[Long](#external_Long)</code>
 
 <a name="new_module_Dota2.Dota2Client_new"></a>
 
@@ -326,7 +325,7 @@ The lobby the bot is currently in. Falsy if the bot isn't in a lobby.
 | custom_game_mode | <code>string</code> |  | Name of the custom game |
 | custom_map_name | <code>string</code> |  | Which map the custom game should be played on |
 | custom_difficulty | <code>number</code> |  | Difficulty of the custom game |
-| custom_game_id | <code>Long</code> |  | 64bit ID of the custom game mode |
+| custom_game_id | <code>[Long](#external_Long)</code> |  | 64bit ID of the custom game mode |
 
 <a name="module_Dota2.Dota2Client+LobbyInvite"></a>
 
@@ -580,7 +579,7 @@ Player with player cards
 | account_id | <code>number</code> | Dota2 account ID of the player |
 | cards | <code>Array.&lt;Object&gt;</code> | Player cards of this player in the bot's inventory |
 | cards[].id | <code>number</code> | ID of the card |
-| cards[].bonuses | <code>Long</code> | 64bit bitmask for the bonuses of this card |
+| cards[].bonuses | <code>[Long](#external_Long)</code> | 64bit bitmask for the bonuses of this card |
 | stats | <code>[CMsgGCToClientPlayerStatsResponse](#module_Dota2.schema.CMsgGCToClientPlayerStatsResponse)</code> | Player stats |
 
 <a name="module_Dota2.Dota2Client+requestPlayerCardRoster"></a>
@@ -772,7 +771,7 @@ Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| id | <code>Long</code> |  | The party's ID |
+| id | <code>[Long](#external_Long)</code> |  | The party's ID |
 | [accept] | <code>boolean</code> | <code>false</code> | Whether or not you accept the invite |
 | [ping_data] | <code>Object</code> |  | Optional argument that can be provided when accepting an invite. Contains a.o. the ping to the different servers. See `CMsgClientPingData`for contents. |
 
@@ -795,7 +794,7 @@ Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
 | Param | Type | Description |
 | --- | --- | --- |
-| steam_id | <code>Long</code> | The Steam ID of the new party leader |
+| steam_id | <code>[Long](#external_Long)</code> | The Steam ID of the new party leader |
 
 <a name="module_Dota2.Dota2Client+setPartyCoach"></a>
 
@@ -819,7 +818,7 @@ Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
 | Param | Type | Description |
 | --- | --- | --- |
-| steam_id | <code>Long</code> | Steam ID of the player you want to invite |
+| steam_id | <code>[Long](#external_Long)</code> | Steam ID of the player you want to invite |
 
 <a name="module_Dota2.Dota2Client+kickFromParty"></a>
 
@@ -831,7 +830,7 @@ Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
 | Param | Type | Description |
 | --- | --- | --- |
-| steam_id | <code>Long</code> | Steam ID of the player you want to kick |
+| steam_id | <code>[Long](#external_Long)</code> | Steam ID of the player you want to kick |
 
 <a name="module_Dota2.Dota2Client+requestSourceTVGames"></a>
 
@@ -861,23 +860,6 @@ Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 | Param | Type | Description |
 | --- | --- | --- |
 | [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgDOTATeamsInfo` |
-
-<a name="module_Dota2.Dota2Client+requestProTeamList"></a>
-
-#### ~~dota2Client.requestProTeamList([callback])~~
-***Deprecated***
-
-Sends a message to the Game Coordinator requesting The list of pro teams.  
-Provide a callback or listen for [proTeamListData](module:Dota2.Dota2Client#event:proTeamListData) for the Game Coordinator's response. 
-Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
-
-This function hasn't been responded to by the GC for a long time.
-
-**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgDOTAProTeamListResponse` |
 
 <a name="module_Dota2.Dota2Client+event_ready"></a>
 
@@ -1029,7 +1011,7 @@ Event that's emitted whenever someone else joins a chat channel the bot is in
 | --- | --- | --- |
 | channel | <code>string</code> | Name of the chat channel someone joined |
 | joiner_name | <code>string</code> | Persona name of the person that joined the channel |
-| joiner_steam_id | <code>Long</code> | Steam ID of the person that joined the channel |
+| joiner_steam_id | <code>[Long](#external_Long)</code> | Steam ID of the person that joined the channel |
 | otherJoined_object | <code>Object</code> | A `CMsgDOTAOtherJoinedChatChannel` object containing the join data |
 
 <a name="module_Dota2.Dota2Client+event_chatLeave"></a>
@@ -1240,7 +1222,7 @@ They can however also have other matches in a different month.
 | leagues[].schedule[].teams | <code>Array.&lt;Object&gt;</code> | The teams duking it out in this match |
 | leagues[].schedule[].teams[].team_id | <code>number</code> | ID of the team. Not every participating team seems to be hooked up to Dota 2's team system, so 0 entries can happen |
 | leagues[].schedule[].teams[].name | <code>string</code> | Name of the team |
-| leagues[].schedule[].teams[].logo | <code>Long</code> | Logo of the team |
+| leagues[].schedule[].teams[].logo | <code>[Long](#external_Long)</code> | Logo of the team |
 
 <a name="module_Dota2.Dota2Client+event_liveLeagueGamesUpdate"></a>
 
@@ -1281,7 +1263,7 @@ Emitted in response to a [request for top league matches](#module_Dota2.Dota2Cli
 | Param | Type | Description |
 | --- | --- | --- |
 | matches | <code>Array.&lt;Object&gt;</code> | List of top matches |
-| matches[].match_id | <code>Long</code> | Match ID |
+| matches[].match_id | <code>[Long](#external_Long)</code> | Match ID |
 | matches[].start_time | <code>number</code> | Unix timestamp of the start of the match |
 | matches[].duration | <code>number</code> | Duration of the match in seconds |
 | matches[].game_mode | <code>DOTA_GameMode</code> | Game mode |
@@ -1351,8 +1333,8 @@ Event that's emitted whenever the bot attempts to invite someone to a lobby
 
 | Param | Type | Description |
 | --- | --- | --- |
-| steam_id | <code>Long</code> | Steam ID of the person that was invited to the lobby |
-| group_id | <code>Long</code> | Group ID of the invitation |
+| steam_id | <code>[Long](#external_Long)</code> | Steam ID of the person that was invited to the lobby |
+| group_id | <code>[Long](#external_Long)</code> | Group ID of the invitation |
 | is_online | <code>boolean</code> | Whether or not the invitee is online |
 
 <a name="module_Dota2.Dota2Client+event_matchesData"></a>
@@ -1461,11 +1443,11 @@ Converts a 64bit Steam ID to a Dota2 account ID by deleting the 32 most signific
 
 <a name="module_Dota2.Dota2Client.ToSteamID"></a>
 
-#### Dota2Client.ToSteamID(accid) ⇒ <code>string</code>
+#### Dota2Client.ToSteamID(accid) ⇒ <code>[Long](#external_Long)</code>
 Converts a Dota2 account ID to a 64bit Steam ID
 
 **Kind**: static method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
-**Returns**: <code>string</code> - 64bit Steam ID corresponding to the given Dota 2 account ID  
+**Returns**: <code>[Long](#external_Long)</code> - 64bit Steam ID corresponding to the given Dota 2 account ID  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1652,3 +1634,11 @@ Enum for different bot difficulty levels.
 | errorCode | <code>number</code> | Null if everything went well, else the error code |
 | responseMessage | <code>Object</code> | The response message the GC sent |
 
+<a name="external_Long"></a>
+
+### Dota2~Long
+A Long class for representing a 64 bit two's-complement integer value 
+derived from the Closure Library for stand-alone use and extended with unsigned support.
+
+**Kind**: inner external of <code>[Dota2](#module_Dota2)</code>  
+**See**: [long](https://www.npmjs.com/package/long) npm package  

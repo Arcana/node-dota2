@@ -3,6 +3,12 @@
  * @module Dota2
  */
 
+/**
+ * A Long class for representing a 64 bit two's-complement integer value 
+ * derived from the Closure Library for stand-alone use and extended with unsigned support.
+ * @external Long
+ * @see {@link https://www.npmjs.com/package/long|long} npm package
+ */
 
 var steam = require("steam");
 
@@ -12,7 +18,7 @@ var EventEmitter = require('events').EventEmitter,
     fs = require("fs"),
     path = require("path"),
     util = require("util"),
-    bignumber = require("bignumber.js"),
+    Long = require("long"),
     Protobuf = require('protobufjs'),
     Dota2 = exports;
 
@@ -191,16 +197,16 @@ util.inherits(Dota2.Dota2Client, EventEmitter);
  * @returns {number} Dota2 account ID corresponding with steamID
  */
 Dota2.Dota2Client.prototype.ToAccountID = function(steamID) {
-    return new bignumber(steamID).minus('76561197960265728') - 0;
+    return new Long.fromString(steamID).sub('76561197960265728').toNumber();
 };
 /**
  * Converts a Dota2 account ID to a 64bit Steam ID
  * @alias module:Dota2.Dota2Client.ToSteamID
  * @param {string} accid - String representation of a Dota 2 account ID
- * @returns {string} 64bit Steam ID corresponding to the given Dota 2 account ID
+ * @returns {external:Long} 64bit Steam ID corresponding to the given Dota 2 account ID
  */
 Dota2.Dota2Client.prototype.ToSteamID = function(accid) {
-    return new bignumber(accid).plus('76561197960265728') + "";
+    return new Long.fromString(accid).add('76561197960265728');
 };
 /**
  * Reports to Steam that you're playing Dota 2, and then initiates communication with the Game Coordinator.
