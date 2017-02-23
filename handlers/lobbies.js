@@ -179,6 +179,7 @@ Dota2.Dota2Client.prototype.createTournamentLobby = function(password, tournamen
  * Listen for {@link module:Dota2.Dota2Client#event:practiceLobbyUpdate|practiceLobbyUpdate} response 
  * for a snapshot-update of the newly created lobby.
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
+ * @alias module:Dota2.Dota2Client#configPracticeLobby
  * @param {external:Long} lobby_id - ID of the lobby
  * @param {module:Dota2.Dota2Client#Lobby.Options} options - The new option values
  * @param {module:Dota2~requestCallback} [callback] - Called with `err, CMsgPracticeLobbyJoinResponse`
@@ -199,6 +200,7 @@ Dota2.Dota2Client.prototype.configPracticeLobby = function(lobby_id, options, ca
  * Requests a lists of joinable practice lobbies.
  * Provide a callback or listen for the {@link module:Dota2.Dota2Client#event:practiceLobbyListData|practiceLobbyListData} event for the GC's response. 
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
+ * @alias module:Dota2.Dota2Client#requestPracticeLobbyList
  * @param {module:Dota2~requestCallback} [callback] - Called with `err, CMsgPracticeLobbyListResponse`
  */
 Dota2.Dota2Client.prototype.requestPracticeLobbyList = function(callback) {
@@ -217,6 +219,7 @@ Dota2.Dota2Client.prototype.requestPracticeLobbyList = function(callback) {
  * Requests a lists of joinable practice lobbies which have one of your friends in them.
  * Provide a callback or listen for the {@link module:Dota2.Dota2Client#event:friendPracticeLobbyListData|friendPracticeLobbyListData} event for the GC's response. 
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
+ * @alias module:Dota2.Dota2Client#requestFriendPracticeLobbyList
  * @param {module:Dota2~requestCallback} [callback] - Called with `err, CMsgFriendPracticeLobbyListResponse`
  */
 Dota2.Dota2Client.prototype.requestFriendPracticeLobbyList = function(callback) {
@@ -235,6 +238,7 @@ Dota2.Dota2Client.prototype.requestFriendPracticeLobbyList = function(callback) 
  * Shuffles the lobby based on skill level. Requires you to be in a lobby and to be the host.
  * Provide a callback or listen for the {@link module:Dota2.Dota2Client#event:practiceLobbyResponse|practiceLobbyResponse} event for the GC's response. 
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
+ * @alias module:Dota2.Dota2Client#balancedShuffleLobby
  * @param {module:Dota2~requestCallback} [callback] - Called with `err, CMsgPracticeLobbyJoinResponse`
  */
 Dota2.Dota2Client.prototype.balancedShuffleLobby = function(callback) {
@@ -253,6 +257,7 @@ Dota2.Dota2Client.prototype.balancedShuffleLobby = function(callback) {
  * Flips the radiant and dire team players. Requires you to be in a lobby and to be the host.
  * Provide a callback or listen for the {@link module:Dota2.Dota2Client#event:practiceLobbyResponse|practiceLobbyResponse} event for the GC's response. 
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
+ * @alias module:Dota2.Dota2Client#flipLobbyTeams
  * @param {module:Dota2~requestCallback} [callback] - Called with `err, CMsgPracticeLobbyJoinResponse`
  */
 Dota2.Dota2Client.prototype.flipLobbyTeams = function(callback) {
@@ -271,6 +276,7 @@ Dota2.Dota2Client.prototype.flipLobbyTeams = function(callback) {
  * Asks to invite a player to your lobby. This creates a new default lobby when you are not already in one.
  * Listen for the {@link module:Dota2.Dota2Client#event:inviteCreated|inviteCreated} event for the GC's response. 
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
+ * @alias module:Dota2.Dota2Client#inviteToLobby
  * @param {external:Long} steam_id - The Steam ID of the player you want to invite.
  */
 Dota2.Dota2Client.prototype.inviteToLobby = function(steam_id) {
@@ -293,6 +299,7 @@ Dota2.Dota2Client.prototype.inviteToLobby = function(steam_id) {
  * Asks to kick someone from your current practice lobby. Requires you to be in a lobby and to be the host.
  * Provide a callback or listen for the {@link module:Dota2.Dota2Client#event:practiceLobbyResponse|practiceLobbyResponse} event for the GC's response. 
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
+ * @alias module:Dota2.Dota2Client#practiceLobbyKick
  * @param {number} account_id - The Dota2 account ID of the player you want to kick.
  * @param {module:Dota2~requestCallback} [callback] - Called with `err, CMsgPracticeLobbyJoinResponse`
  */
@@ -316,6 +323,7 @@ Dota2.Dota2Client.prototype.practiceLobbyKick = function(account_id, callback) {
  * The player will be added to the player pool
  * Provide a callback or listen for the {@link module:Dota2.Dota2Client#event:practiceLobbyResponse|practiceLobbyResponse} event for the GC's response. 
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
+ * @alias module:Dota2.Dota2Client#practiceLobbyKickFromTeam
  * @param {number} account_id - The Dota2 account ID of the player you want to kick from his team.
  * @param {module:Dota2~requestCallback} [callback] - Called with `err, CMsgPracticeLobbyJoinResponse`
  */
@@ -338,6 +346,7 @@ Dota2.Dota2Client.prototype.practiceLobbyKickFromTeam = function(account_id, cal
  * Sends a message to the Game Coordinator requesting to join a lobby.
  * Provide a callback or listen for the {@link module:Dota2.Dota2Client#event:practiceLobbyJoinResponse|practiceLobbyJoinResponse} event for the GC's response. 
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
+ * @alias module:Dota2.Dota2Client#joinPracticeLobby
  * @param {externalLong} id - The ID of the lobby
  * @param {number} password - The password of the lobby
  * @param {module:Dota2~requestCallback} [callback] - Called with `err, CMsgPracticeLobbyJoinResponse`
@@ -362,6 +371,7 @@ Dota2.Dota2Client.prototype.joinPracticeLobby = function(id, password, callback)
  * Sends a message to the Game Coordinator requesting to leave the current lobby.
  * Provide a callback or listen for the {@link module:Dota2.Dota2Client#event:practiceLobbyResponse|practiceLobbyResponse} event for the GC's response. 
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
+ * @alias module:Dota2.Dota2Client#leavePracticeLobby
  * @param {module:Dota2~requestCallback} [callback] - Called with `err, CMsgPracticeLobbyJoinResponse`
  */
 Dota2.Dota2Client.prototype.leavePracticeLobby = function(callback) {
@@ -381,6 +391,7 @@ Dota2.Dota2Client.prototype.leavePracticeLobby = function(callback) {
  * Abandons the current game.
  * Provide a callback or listen for the {@link module:Dota2.Dota2Client#event:practiceLobbyResponse|practiceLobbyResponse} event for the GC's response. 
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
+ * @alias module:Dota2.Dota2Client#abandonCurrentGame
  * @param {module:Dota2~requestCallback} [callback] - Called with `err, CMsgPracticeLobbyJoinResponse`
  */
 Dota2.Dota2Client.prototype.abandonCurrentGame = function(callback) {
@@ -400,6 +411,7 @@ Dota2.Dota2Client.prototype.abandonCurrentGame = function(callback) {
  * Requires you to be in a lobby and to be the host.
  * Provide a callback or listen for the {@link module:Dota2.Dota2Client#event:practiceLobbyResponse|practiceLobbyResponse} event for the GC's response. 
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
+ * @alias module:Dota2.Dota2Client#launchPracticeLobby
  * @param {module:Dota2~requestCallback} [callback] - Called with `err, CMsgPracticeLobbyJoinResponse`
  */
 Dota2.Dota2Client.prototype.launchPracticeLobby = function(callback) {
@@ -419,6 +431,7 @@ Dota2.Dota2Client.prototype.launchPracticeLobby = function(callback) {
  * Requires you to be in a lobby.
  * Provide a callback or listen for the {@link module:Dota2.Dota2Client#event:practiceLobbyResponse|practiceLobbyResponse} event for the GC's response. 
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
+ * @alias module:Dota2.Dota2Client#joinPracticeLobbyTeam
  * @param {number} slot - The slot you want to join
  * @param {number} team - The team you want to join
  * @param {module:Dota2~requestCallback} [callback] - Called with `err, CMsgPracticeLobbyJoinResponse`
@@ -446,6 +459,7 @@ Dota2.Dota2Client.prototype.joinPracticeLobbyTeam = function(slot, team, callbac
  * Requires you to be in a lobby.
  * Provide a callback or listen for the {@link module:Dota2.Dota2Client#event:practiceLobbyResponse|practiceLobbyResponse} event for the GC's response. 
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
+ * @alias module:Dota2.Dota2Client#joinPracticeLobbyBroadcastChannel
  * @param {number} [channel=1] -  The channel slot you want to fill
  * @param {module:Dota2~requestCallback} [callback] - Called with `err, CMsgPracticeLobbyJoinResponse`
  */
@@ -469,6 +483,7 @@ Dota2.Dota2Client.prototype.joinPracticeLobbyBroadcastChannel = function(channel
  * Requires you to be in a lobby and to be the host
  * Provide a callback or listen for the {@link module:Dota2.Dota2Client#event:practiceLobbyResponse|practiceLobbyResponse} event for the GC's response. 
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
+ * @alias module:Dota2.Dota2Client#addBotToPracticeLobby
  * @param {number} slot - The slot you want to add a bot to
  * @param {number} team - The team you want to add a bot to
  * @param {module:Dota2.BotDifficulty} bot_difficulty - The difficulty setting of the bot.
@@ -497,6 +512,7 @@ Dota2.Dota2Client.prototype.addBotToPracticeLobby = function(slot, team, bot_dif
  * Sends a message to the Game Coordinator confirming/denying a lobby invitation
  * Provide a callback or listen for the {@link module:Dota2.Dota2Client#event:practiceLobbyResponse|practiceLobbyResponse} event for the GC's response. 
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
+ * @alias module:Dota2.Dota2Client#respondLobbyInvite
  * @param {external:Long} id - The ID of the lobby
  * @param {boolean} accept - Whether or not you accept the invitation.
  */
