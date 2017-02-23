@@ -139,6 +139,7 @@ Dota2.Dota2Client.prototype.createPracticeLobby = function(options, callback) {
 
 /**
  * @deprecated since 5.0.0
+ * @alias module:Dota2.Dota2Client#_createPracticeLobby
  */
 Dota2.Dota2Client.prototype._createPracticeLobby = function(password, options, callback) {
     callback = callback || null;
@@ -146,6 +147,7 @@ Dota2.Dota2Client.prototype._createPracticeLobby = function(password, options, c
 }
 /**
  * @deprecated since 5.0.0
+ * @alias module:Dota2.Dota2Client#createTournamentLobby
  */
 Dota2.Dota2Client.prototype.createTournamentLobby = function(password, tournament_game_id, tournament_id, options, callback) {
     callback = callback || null;
