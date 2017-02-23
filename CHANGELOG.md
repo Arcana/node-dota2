@@ -1,4 +1,7 @@
 # Changelog
+## General
+* examples will no longer be pushed to npm
+
 ## Dependency changes
 * Deleted the dependency on bignumber.js and replaced it by Long.js since protobufjs uses it.
 

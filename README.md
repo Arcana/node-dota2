@@ -48,6 +48,7 @@ You need to configure the `STEAM_USERNAME` and `STEAM_PASSWORD` environment vari
 You can launch the tests by running the file with mocha.
 
 # API
+The API doc can be consulted here or at [doclets.io](https://doclets.io/Arcana/node-dota2)
 <a name="module_Dota2"></a>
 
 ## Dota2
@@ -92,6 +93,24 @@ Dota 2 module
                 * [.requestLeagueInfo()](#module_Dota2.Dota2Client+requestLeagueInfo)
                 * [.requestTopLeagueMatches()](#module_Dota2.Dota2Client+requestTopLeagueMatches)
                 * [.createPracticeLobby(options, [callback])](#module_Dota2.Dota2Client+createPracticeLobby)
+                * ~~[._createPracticeLobby()](#module_Dota2.Dota2Client+_createPracticeLobby)~~
+                * ~~[.createTournamentLobby()](#module_Dota2.Dota2Client+createTournamentLobby)~~
+                * [.configPracticeLobby(lobby_id, options, [callback])](#module_Dota2.Dota2Client+configPracticeLobby)
+                * [.requestPracticeLobbyList([callback])](#module_Dota2.Dota2Client+requestPracticeLobbyList)
+                * [.requestFriendPracticeLobbyList([callback])](#module_Dota2.Dota2Client+requestFriendPracticeLobbyList)
+                * [.balancedShuffleLobby([callback])](#module_Dota2.Dota2Client+balancedShuffleLobby)
+                * [.flipLobbyTeams([callback])](#module_Dota2.Dota2Client+flipLobbyTeams)
+                * [.inviteToLobby(steam_id)](#module_Dota2.Dota2Client+inviteToLobby)
+                * [.practiceLobbyKick(account_id, [callback])](#module_Dota2.Dota2Client+practiceLobbyKick)
+                * [.practiceLobbyKickFromTeam(account_id, [callback])](#module_Dota2.Dota2Client+practiceLobbyKickFromTeam)
+                * [.joinPracticeLobby(id, password, [callback])](#module_Dota2.Dota2Client+joinPracticeLobby)
+                * [.leavePracticeLobby([callback])](#module_Dota2.Dota2Client+leavePracticeLobby)
+                * [.abandonCurrentGame([callback])](#module_Dota2.Dota2Client+abandonCurrentGame)
+                * [.launchPracticeLobby([callback])](#module_Dota2.Dota2Client+launchPracticeLobby)
+                * [.joinPracticeLobbyTeam(slot, team, [callback])](#module_Dota2.Dota2Client+joinPracticeLobbyTeam)
+                * [.joinPracticeLobbyBroadcastChannel([channel], [callback])](#module_Dota2.Dota2Client+joinPracticeLobbyBroadcastChannel)
+                * [.addBotToPracticeLobby(slot, team, bot_difficulty, [callback])](#module_Dota2.Dota2Client+addBotToPracticeLobby)
+                * [.respondLobbyInvite(id, accept)](#module_Dota2.Dota2Client+respondLobbyInvite)
                 * [.requestMatches([criteria], [callback])](#module_Dota2.Dota2Client+requestMatches)
                 * [.requestMatchDetails(match_ids, [callback])](#module_Dota2.Dota2Client+requestMatchDetails)
                 * [.requestMatchMinimalDetails(match_id, [callback])](#module_Dota2.Dota2Client+requestMatchMinimalDetails)
@@ -204,6 +223,24 @@ Dota 2 module
         * [.requestLeagueInfo()](#module_Dota2.Dota2Client+requestLeagueInfo)
         * [.requestTopLeagueMatches()](#module_Dota2.Dota2Client+requestTopLeagueMatches)
         * [.createPracticeLobby(options, [callback])](#module_Dota2.Dota2Client+createPracticeLobby)
+        * ~~[._createPracticeLobby()](#module_Dota2.Dota2Client+_createPracticeLobby)~~
+        * ~~[.createTournamentLobby()](#module_Dota2.Dota2Client+createTournamentLobby)~~
+        * [.configPracticeLobby(lobby_id, options, [callback])](#module_Dota2.Dota2Client+configPracticeLobby)
+        * [.requestPracticeLobbyList([callback])](#module_Dota2.Dota2Client+requestPracticeLobbyList)
+        * [.requestFriendPracticeLobbyList([callback])](#module_Dota2.Dota2Client+requestFriendPracticeLobbyList)
+        * [.balancedShuffleLobby([callback])](#module_Dota2.Dota2Client+balancedShuffleLobby)
+        * [.flipLobbyTeams([callback])](#module_Dota2.Dota2Client+flipLobbyTeams)
+        * [.inviteToLobby(steam_id)](#module_Dota2.Dota2Client+inviteToLobby)
+        * [.practiceLobbyKick(account_id, [callback])](#module_Dota2.Dota2Client+practiceLobbyKick)
+        * [.practiceLobbyKickFromTeam(account_id, [callback])](#module_Dota2.Dota2Client+practiceLobbyKickFromTeam)
+        * [.joinPracticeLobby(id, password, [callback])](#module_Dota2.Dota2Client+joinPracticeLobby)
+        * [.leavePracticeLobby([callback])](#module_Dota2.Dota2Client+leavePracticeLobby)
+        * [.abandonCurrentGame([callback])](#module_Dota2.Dota2Client+abandonCurrentGame)
+        * [.launchPracticeLobby([callback])](#module_Dota2.Dota2Client+launchPracticeLobby)
+        * [.joinPracticeLobbyTeam(slot, team, [callback])](#module_Dota2.Dota2Client+joinPracticeLobbyTeam)
+        * [.joinPracticeLobbyBroadcastChannel([channel], [callback])](#module_Dota2.Dota2Client+joinPracticeLobbyBroadcastChannel)
+        * [.addBotToPracticeLobby(slot, team, bot_difficulty, [callback])](#module_Dota2.Dota2Client+addBotToPracticeLobby)
+        * [.respondLobbyInvite(id, accept)](#module_Dota2.Dota2Client+respondLobbyInvite)
         * [.requestMatches([criteria], [callback])](#module_Dota2.Dota2Client+requestMatches)
         * [.requestMatchDetails(match_ids, [callback])](#module_Dota2.Dota2Client+requestMatchDetails)
         * [.requestMatchMinimalDetails(match_id, [callback])](#module_Dota2.Dota2Client+requestMatchMinimalDetails)
@@ -687,6 +724,245 @@ Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 | --- | --- | --- |
 | options | <code>[Options](#module_Dota2.Dota2Client+Lobby.Options)</code> | Configuration options for the lobby |
 | [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgPracticeLobbyJoinResponse` |
+
+<a name="module_Dota2.Dota2Client+_createPracticeLobby"></a>
+
+#### ~~dota2Client._createPracticeLobby()~~
+***Deprecated***
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+<a name="module_Dota2.Dota2Client+createTournamentLobby"></a>
+
+#### ~~dota2Client.createTournamentLobby()~~
+***Deprecated***
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+<a name="module_Dota2.Dota2Client+configPracticeLobby"></a>
+
+#### dota2Client.configPracticeLobby(lobby_id, options, [callback])
+Sends a message to the Game Coordinator requesting to configure some options of the active lobby. 
+Listen for [practiceLobbyUpdate](#module_Dota2.Dota2Client+event_practiceLobbyUpdate) response 
+for a snapshot-update of the newly created lobby.
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| lobby_id | <code>[Long](#external_Long)</code> | ID of the lobby |
+| options | <code>[Options](#module_Dota2.Dota2Client+Lobby.Options)</code> | The new option values |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgPracticeLobbyJoinResponse` |
+
+<a name="module_Dota2.Dota2Client+requestPracticeLobbyList"></a>
+
+#### dota2Client.requestPracticeLobbyList([callback])
+Requests a lists of joinable practice lobbies.
+Provide a callback or listen for the [practiceLobbyListData](#module_Dota2.Dota2Client+event_practiceLobbyListData) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgPracticeLobbyListResponse` |
+
+<a name="module_Dota2.Dota2Client+requestFriendPracticeLobbyList"></a>
+
+#### dota2Client.requestFriendPracticeLobbyList([callback])
+Requests a lists of joinable practice lobbies which have one of your friends in them.
+Provide a callback or listen for the [friendPracticeLobbyListData](#module_Dota2.Dota2Client+event_friendPracticeLobbyListData) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgFriendPracticeLobbyListResponse` |
+
+<a name="module_Dota2.Dota2Client+balancedShuffleLobby"></a>
+
+#### dota2Client.balancedShuffleLobby([callback])
+Shuffles the lobby based on skill level. Requires you to be in a lobby and to be the host.
+Provide a callback or listen for the [practiceLobbyResponse](#module_Dota2.Dota2Client+event_practiceLobbyResponse) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgPracticeLobbyJoinResponse` |
+
+<a name="module_Dota2.Dota2Client+flipLobbyTeams"></a>
+
+#### dota2Client.flipLobbyTeams([callback])
+Flips the radiant and dire team players. Requires you to be in a lobby and to be the host.
+Provide a callback or listen for the [practiceLobbyResponse](#module_Dota2.Dota2Client+event_practiceLobbyResponse) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgPracticeLobbyJoinResponse` |
+
+<a name="module_Dota2.Dota2Client+inviteToLobby"></a>
+
+#### dota2Client.inviteToLobby(steam_id)
+Asks to invite a player to your lobby. This creates a new default lobby when you are not already in one.
+Listen for the [inviteCreated](#module_Dota2.Dota2Client+event_inviteCreated) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| steam_id | <code>[Long](#external_Long)</code> | The Steam ID of the player you want to invite. |
+
+<a name="module_Dota2.Dota2Client+practiceLobbyKick"></a>
+
+#### dota2Client.practiceLobbyKick(account_id, [callback])
+Asks to kick someone from your current practice lobby. Requires you to be in a lobby and to be the host.
+Provide a callback or listen for the [practiceLobbyResponse](#module_Dota2.Dota2Client+event_practiceLobbyResponse) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| account_id | <code>number</code> | The Dota2 account ID of the player you want to kick. |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgPracticeLobbyJoinResponse` |
+
+<a name="module_Dota2.Dota2Client+practiceLobbyKickFromTeam"></a>
+
+#### dota2Client.practiceLobbyKickFromTeam(account_id, [callback])
+Asks to kick someone from his chosen team in your current practice lobby.
+The player will be added to the player pool
+Provide a callback or listen for the [practiceLobbyResponse](#module_Dota2.Dota2Client+event_practiceLobbyResponse) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| account_id | <code>number</code> | The Dota2 account ID of the player you want to kick from his team. |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgPracticeLobbyJoinResponse` |
+
+<a name="module_Dota2.Dota2Client+joinPracticeLobby"></a>
+
+#### dota2Client.joinPracticeLobby(id, password, [callback])
+Sends a message to the Game Coordinator requesting to join a lobby.
+Provide a callback or listen for the [practiceLobbyJoinResponse](#module_Dota2.Dota2Client+event_practiceLobbyJoinResponse) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>externalLong</code> | The ID of the lobby |
+| password | <code>number</code> | The password of the lobby |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgPracticeLobbyJoinResponse` |
+
+<a name="module_Dota2.Dota2Client+leavePracticeLobby"></a>
+
+#### dota2Client.leavePracticeLobby([callback])
+Sends a message to the Game Coordinator requesting to leave the current lobby.
+Provide a callback or listen for the [practiceLobbyResponse](#module_Dota2.Dota2Client+event_practiceLobbyResponse) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgPracticeLobbyJoinResponse` |
+
+<a name="module_Dota2.Dota2Client+abandonCurrentGame"></a>
+
+#### dota2Client.abandonCurrentGame([callback])
+Abandons the current game.
+Provide a callback or listen for the [practiceLobbyResponse](#module_Dota2.Dota2Client+event_practiceLobbyResponse) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgPracticeLobbyJoinResponse` |
+
+<a name="module_Dota2.Dota2Client+launchPracticeLobby"></a>
+
+#### dota2Client.launchPracticeLobby([callback])
+Start the practice lobby. The bot will continue to receive lobby updates, but won't join the actual game.
+Requires you to be in a lobby and to be the host.
+Provide a callback or listen for the [practiceLobbyResponse](#module_Dota2.Dota2Client+event_practiceLobbyResponse) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgPracticeLobbyJoinResponse` |
+
+<a name="module_Dota2.Dota2Client+joinPracticeLobbyTeam"></a>
+
+#### dota2Client.joinPracticeLobbyTeam(slot, team, [callback])
+Sends a message to the Game Coordinator requesting to join a particular team in the lobby.
+Requires you to be in a lobby.
+Provide a callback or listen for the [practiceLobbyResponse](#module_Dota2.Dota2Client+event_practiceLobbyResponse) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| slot | <code>number</code> | The slot you want to join |
+| team | <code>number</code> | The team you want to join |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgPracticeLobbyJoinResponse` |
+
+<a name="module_Dota2.Dota2Client+joinPracticeLobbyBroadcastChannel"></a>
+
+#### dota2Client.joinPracticeLobbyBroadcastChannel([channel], [callback])
+Sends a message to the Game Coordinator requesting to add a bot to the broadcast channel.
+Requires you to be in a lobby.
+Provide a callback or listen for the [practiceLobbyResponse](#module_Dota2.Dota2Client+event_practiceLobbyResponse) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [channel] | <code>number</code> | <code>1</code> | The channel slot you want to fill |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> |  | Called with `err, CMsgPracticeLobbyJoinResponse` |
+
+<a name="module_Dota2.Dota2Client+addBotToPracticeLobby"></a>
+
+#### dota2Client.addBotToPracticeLobby(slot, team, bot_difficulty, [callback])
+Sends a message to the Game Coordinator requesting to add a bot to the given team in the lobby.
+Requires you to be in a lobby and to be the host
+Provide a callback or listen for the [practiceLobbyResponse](#module_Dota2.Dota2Client+event_practiceLobbyResponse) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| slot | <code>number</code> | The slot you want to add a bot to |
+| team | <code>number</code> | The team you want to add a bot to |
+| bot_difficulty | <code>[BotDifficulty](#module_Dota2.BotDifficulty)</code> | The difficulty setting of the bot. |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgPracticeLobbyJoinResponse` |
+
+<a name="module_Dota2.Dota2Client+respondLobbyInvite"></a>
+
+#### dota2Client.respondLobbyInvite(id, accept)
+Sends a message to the Game Coordinator confirming/denying a lobby invitation
+Provide a callback or listen for the [practiceLobbyResponse](#module_Dota2.Dota2Client+event_practiceLobbyResponse) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>[Long](#external_Long)</code> | The ID of the lobby |
+| accept | <code>boolean</code> | Whether or not you accept the invitation. |
 
 <a name="module_Dota2.Dota2Client+requestMatches"></a>
 
@@ -1287,7 +1563,7 @@ Event that's emitted whenever the bot joins a lobby
 <a name="module_Dota2.Dota2Client+event_practiceLobbyListData"></a>
 
 #### "practiceLobbyListData" (practiceLobbyListResponse)
-Event that's emitted in response to a [request for the list of lobbies](module:Dota2.Dota2Client#requestPracticeLobbyList)
+Event that's emitted in response to a [request for the list of lobbies](#module_Dota2.Dota2Client+requestPracticeLobbyList)
 
 **Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
@@ -1315,7 +1591,7 @@ update of the lobby state is communicated via [module:Dota2.Dota2Client#practice
 <a name="module_Dota2.Dota2Client+event_friendPracticeLobbyListData"></a>
 
 #### "friendPracticeLobbyListData" (practiceLobbyListResponse)
-Event that's emitted in response to a [request for the list of your friends' lobbies](module:Dota2.Dota2Client#requestPracticeLobbyList)
+Event that's emitted in response to a [request for the list of your friends' lobbies](#module_Dota2.Dota2Client+requestPracticeLobbyList)
 
 **Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
