@@ -342,7 +342,7 @@ The lobby the bot is currently in. Falsy if the bot isn't in a lobby.
 | game_name | <code>string</code> |  | Name of the lobby |
 | pass_key | <code>string</code> |  | Lobby password |
 | server_region | <code>[ServerRegion](#module_Dota2.ServerRegion)</code> | <code>module:Dota2.ServerRegion.UNSPECIFIED</code> | Server region where the lobby will be created |
-| game_mode | <code>DOTA_GameMode</code> | <code>DOTA_GameModeDOTA_GAMEMODE_AP</code> | Game mode |
+| game_mode | <code>DOTA_GameMode</code> | <code>DOTA_GameMode.DOTA_GAMEMODE_AP</code> | Game mode |
 | game_version | <code>DOTAGameVersion</code> | <code>DOTAGameVersion.GAME_VERSION_STABLE</code> | Version of the game |
 | cm_pick | <code>DOTA_CM_PICK</code> | <code>DOTA_CM_PICK.DOTA_CM_RANDOM</code> | Who gets first pick |
 | allow_cheats | <code>boolean</code> | <code>false</code> | Whether or not to allow cheats |

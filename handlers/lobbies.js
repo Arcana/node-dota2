@@ -37,7 +37,7 @@ Dota2._lobbyOptions = {
  * 
  * @property {module:Dota2.ServerRegion} [server_region=module:Dota2.ServerRegion.UNSPECIFIED] - Server region where the lobby will be created
  * 
- * @property {DOTA_GameMode} [game_mode=DOTA_GameModeDOTA_GAMEMODE_AP] - Game mode
+ * @property {DOTA_GameMode} [game_mode=DOTA_GameMode.DOTA_GAMEMODE_AP] - Game mode
  * 
  * @property {DOTAGameVersion} [game_version=DOTAGameVersion.GAME_VERSION_STABLE] - Version of the game
  * 
