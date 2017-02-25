@@ -1,6 +1,13 @@
 var Dota2 = require("../index"),
     util = require("util");
 
+/**
+ * Sends a message to the Game Coordinator requesting the authenticated user's team data.
+ * Provide a callback or listen for {@link module:Dota2.Dota2Client#event:teamData|teamData} for the Game Coordinator's response. 
+ * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
+ * @alias module:Dota2.Dota2Client#requestMyTeams
+ * @param {module:Dota2~requestCallback} [callback] - Called with `err, CMsgDOTATeamsInfo`
+ */
 Dota2.Dota2Client.prototype.requestMyTeams = function requestMyTeams(callback) {
     // Request the team data for the currently logged in user
     callback = callback || null;
@@ -16,52 +23,18 @@ Dota2.Dota2Client.prototype.requestMyTeams = function requestMyTeams(callback) {
                     Dota2.schema.lookupType("CMsgDOTAMyTeamInfoRequest").encode(payload).finish(), 
                     onTeamDataResponse, callback);
 }
-/*
-// DEPRECATED
-Dota2.Dota2Client.prototype.requestTeamProfile = function requestTeamProfile(team_id, callback) {
-    // Request the profile of a given team
-    callback = callback || null;
-    var _self = this;
 
-    if (this.debug) util.log("Sending team profile request");
-    var payload = {
-        "team_id": team_id
-    };
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCTeamProfileRequest, 
-                    Dota2.schema.lookupType("CMsgDOTATeamProfileRequest").encode(payload).finish(), 
-                    onTeamProfileResponse, callback);
-}
-// DEPRECATED
-Dota2.Dota2Client.prototype.requestTeamIDByName = function requestTeamIDByName(team_name, callback) {
-    // Request the ID of a given team
-    callback = callback || null;
-    var _self = this;
-
-    if (this.debug) util.log("Sending team ID by name request");
-    var payload = {
-        "name": team_name
-    };
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCTeamIDByNameRequest, 
-                    Dota2.schema.lookupType("CMsgDOTATeamIDByNameRequest").encode(payload).finish(), 
-                    onTeamIDByNameResponse, callback);
-}
-// DEPRECATED
-Dota2.Dota2Client.prototype.requestTeamMemberProfile = function requestTeamMemberProfile(steam_id, callback) {
-    // Request the profile of a given team member
-    callback = callback || null;
-    var _self = this;
-
-    if (this.debug) util.log("Sending team member profile request");
-    var payload = {
-        "steam_id": steam_id
-    };
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCTeamMemberProfileRequest,
-                    Dota2.schema.lookupType("CMsgDOTATeamMemberProfileRequest").encode(payload).finish(), 
-                    onTeamProfileResponse, callback);
-}
-*/
-
-// No longer gets a response from the GC
+/**
+ * Sends a message to the Game Coordinator requesting The list of pro teams.  
+ * Provide a callback or listen for {@link module:Dota2.Dota2Client#event:proTeamListData|proTeamListData} for the Game Coordinator's response. 
+ * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
+ * 
+ * This function hasn't been responded to by the GC for a long time.
+ * @deprecated
+ * @ignore
+ * @alias module:Dota2.Dota2Client#requestProTeamList
+ * @param {module:Dota2~requestCallback} [callback] - Called with `err, CMsgDOTAProTeamListResponse`
+ */
 Dota2.Dota2Client.prototype.requestProTeamList = function requestProTeamList(callback) {
     // Request the list of pro teams
     callback = callback || null;
@@ -74,7 +47,28 @@ Dota2.Dota2Client.prototype.requestProTeamList = function requestProTeamList(cal
                     onProTeamListResponse, callback);
 }
 
+// Events
+/**
+ * Emitted in response to a {@link module:Dota2.Dota2Client#requestMyTeams|request for your teams}.
+ * @event module:Dota2.Dota2Client#teamData
+ * @param {CMsgDOTATeamInfo[]} teams - A list of `CMsgDOTATeamInfo` objects containing information about the teams you're in (name, members, stats, ...)
+ * @param {number} league_id - No clue why this is here, nor what it signifies
+ */
+ /**
+ * Emitted in response to a {@link module:Dota2.Dota2Client#requestProTeamList|request for pro teams}.
+ * @deprecated
+ * @ignore
+ * @event module:Dota2.Dota2Client#proTeamListData
+ * @param {Object[]} teams - A list pro teams
+ * @param {number} teams[].team_id - ID of the team
+ * @param {string} teams[].tag - Tag of the team
+ * @param {number} teams[].time_created - Unix timestamp of the moment the team was created
+ * @param {external:Long} teams[].logo - Logo of the team
+ * @param {string} teams[].country_code - Two-letter country code for the team
+ * @param {number} teams[].member_count - Number of members in the team
+ */
 
+// Handlers
 var handlers = Dota2.Dota2Client.prototype._handlers;
 
 var onTeamDataResponse = function onTeamDataResponse(message, callback) {
@@ -86,36 +80,6 @@ var onTeamDataResponse = function onTeamDataResponse(message, callback) {
     
 };
 handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCToClientTeamsInfo] = onTeamDataResponse;
-/*
-// DEPRECATED
-var onTeamProfileResponse = function onTeamProfileResponse(message, callback) {
-    var teamProfileResponse = Dota2.schema.lookupType("CMsgDOTATeamProfileResponse").decode(message);
-    
-    if (teamProfileResponse.eresult === 1) {
-        if (this.debug) util.log("Received team profile response " + JSON.stringify(teamProfileResponse));
-        this.emit("teamProfile", teamProfileResponse.team.team_id, teamProfileResponse.team);
-        if (callback) callback(null, teamProfileResponse);
-    } else {
-        if (this.debug) util.log("Couldn't find team profile " + JSON.stringify(teamProfileResponse));
-        if (callback) callback(teamProfileResponse.eresult, teamProfileResponse);
-    }
-};
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCTeamProfileResponse] = onTeamProfileResponse;
-// DEPRECATED
-var onTeamIDByNameResponse = function onTeamIDByNameResponse(message, callback) {
-    var teamID = Dota2.schema.lookupType("CMsgDOTATeamIDByNameResponse").decode(message);
-    
-    if (teamID.eresult === 1) {
-        if (this.debug) util.log("Received team ID " + teamID.team_id);
-        this.emit("teamID", teamID.team_id);
-        if (callback) callback(null, teamID);
-    } else {
-        if (this.debug) util.log("Couldn't find team ID " + JSON.stringify(teamID));
-        this.emit("teamID", null);
-        if (callback) callback(teamID.eresult, teamID);
-    }
-};
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCTeamIDByNameResponse] = onTeamIDByNameResponse;*/
 
 // No longer gets triggered
 var onProTeamListResponse = function onProTeamListResponse(message, callback) {
