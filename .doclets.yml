@@ -5,4 +5,4 @@ files:
   - handlers/sourcetv.js
 packageJson: package.json
 branches:
-  - doc
+  - staging
