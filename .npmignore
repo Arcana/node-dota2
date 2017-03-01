@@ -7,3 +7,4 @@ sentry
 servers
 *.log
 update_proto.sh
+*.hbs

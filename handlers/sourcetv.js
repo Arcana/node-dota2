@@ -2,8 +2,18 @@ var Dota2 = require("../index"),
     merge = require("merge"),
     util = require("util");
 
-// Methods
 
+// Methods
+/**
+ * Requests a list of SourceTV games based on the given criteria. 
+ * Listen for {@link module:Dota2.Dota2Client#event:sourceTVGamesData|sourceTVGamesData} for results
+ * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
+ * @alias module:Dota2.Dota2Client#requestSourceTVGames
+ * @param {CSourceTVGameSmall} filter_options - Filter options. Check the protobuf for a full list.
+ * @param {number} filter_options.league_id - ID of a league
+ * @param {number} filter_options.hero_id - ID of a hero that must be present in the game
+ * @param {number} filter_options.start_game - Number of pages sent, only values in [0, 10, 20, ... 90] are valid, and yield [1,2,3 ... 10] responses
+ */
 Dota2.Dota2Client.prototype.requestSourceTVGames = function(filter_options) {
     // Unfortunately this does not seem to support callbacks
     filter_options = filter_options || null;
@@ -23,8 +33,14 @@ Dota2.Dota2Client.prototype.requestSourceTVGames = function(filter_options) {
                     Dota2.schema.lookupType("CMsgClientToGCFindTopSourceTVGames").encode(payload).finish());
 };
 
+// Events
+/**
+ * sourceTVGamesData event
+ * @event module:Dota2.Dota2Client#sourceTVGamesData
+ * @param {CMsgGCToClientFindTopSourceTVGamesResponse} sourceTVGamesResponse - The raw response data or null if a bad response was received
+ */
+ 
 // Handlers
-
 var handlers = Dota2.Dota2Client.prototype._handlers;
 
 var onSourceTVGamesResponse = function onSourceTVGamesResponse(message) {
@@ -53,3 +69,4 @@ var onSourceTVGamesResponse = function onSourceTVGamesResponse(message) {
     }
 };
 handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCToClientFindTopSourceTVGamesResponse] = onSourceTVGamesResponse;
+

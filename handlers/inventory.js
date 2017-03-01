@@ -2,24 +2,30 @@ var Dota2 = require("../index"),
     util = require("util");
 
 // Methods
-
+/**
+ * Attempts to change the position of one or more items in your inventory.
+ * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
+ * @alias module:Dota2.Dota2Client#setItemPositions
+ * @param {Object[]} item_positions - The new positions of the items
+ * @param {number} item_positions[].item_id - ID of the item
+ * @param {number} item_positions[].position - New position of the item
+ */
 Dota2.Dota2Client.prototype.setItemPositions = function(item_positions) {
-    /* Attempts to move inventory items to positions as noted itemPositions - which is interpreted as a [itemid, position] tuple. */
     if (this.debug) util.log("Setting item positions.");
     
-    var payloadItemPositions = item_positions.map(function(item) {
-            return {
-                "itemId": item[0],
-                "position": item[1]
-            };
-        }),
-        payload = {
-            "itemPositions": payloadItemPositions
-        };
+    let payload = {
+        "itemPositions": item_positions
+    };
     this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCSetItemPositions, 
                     Dota2.schema.lookupType("CMsgSetItemPositions").encode(payload).finish());
 };
 
+/**
+ * Attempts to delete an item in your inventory.
+ * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
+ * @alias module:Dota2.Dota2Client#deleteItem
+ * @param {number} item_id - ID of the item
+ */
 Dota2.Dota2Client.prototype.deleteItem = function(item_id) {
     /* Attempts to delete item by itemid. */
     if (!this._gcReady) {
