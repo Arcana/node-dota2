@@ -173,7 +173,7 @@ var onChatMessage = function onChatMessage(message) {
         if (channel) {
             util.log("Received chat message from " + chatData.persona_name + " in channel " + channel.channel_name);
         } else {
-            util.log("Received chat message from " + chatData.persona_name + " in unknown channel";
+            util.log("Received chat message from " + chatData.persona_name + " in unknown channel");
         }
     }
     this.emit("chatMessage",
