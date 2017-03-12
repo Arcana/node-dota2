@@ -196,7 +196,7 @@ var onOtherJoinedChannel = function onOtherJoinedChannel(message) {
           otherJoined.steam_id,
           otherJoined);
         // Add member to cached chatChannels
-        channel.members.push(new Dota2.schema.CMsgDOTAChatMember({
+        channel.members.push(Dota2.schema.lookupType("CMsgDOTAChatMember").create({
             steam_id: otherJoined.steam_id,
             persona_name: otherJoined.persona_name
         }));
