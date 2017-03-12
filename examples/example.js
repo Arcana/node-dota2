@@ -15,7 +15,7 @@ global.config = require("./config");
 var onSteamLogOn = function onSteamLogOn(logonResp) {
         if (logonResp.eresult == steam.EResult.OK) {
             steamFriends.setPersonaState(steam.EPersonaState.Busy); // to display your steamClient's status as "Online"
-            steamFriends.setPersonaName("dhdeubot"); // to change its nickname
+            steamFriends.setPersonaName(global.config.steam_name); // to change its nickname
             util.log("Logged on.");
             Dota2.launch();
             Dota2.on("ready", function() {
@@ -146,20 +146,23 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
                 // Dota2.setGuildAccountRole(guildId, 75028261, 3);
             });
             Dota2.on("unhandled", function(kMsg) {
-                util.log("UNHANDLED MESSAGE " + kMsg);
+                util.log("UNHANDLED MESSAGE " + dota2._getMessageName(kMsg));
             });
             // setTimeout(function(){ Dota2.exit(); }, 5000);
         }
     },
     onSteamServers = function onSteamServers(servers) {
         util.log("Received servers.");
-        fs.writeFile('servers', JSON.stringify(servers));
+        fs.writeFile('servers', JSON.stringify(servers), (err)=>{
+            if (err) {if (this.debug) util.log("Error writing ");}
+            else {if (this.debug) util.log("");}
+        });
     },
     onSteamLogOff = function onSteamLogOff(eresult) {
         util.log("Logged off from Steam.");
     },
     onSteamError = function onSteamError(error) {
-        util.log("Connection closed by server.");
+        util.log("Connection closed by server: "+error);
     };
 
 steamUser.on('updateMachineAuth', function(sentry, callback) {
@@ -178,6 +181,7 @@ var logOnDetails = {
     "password": global.config.steam_pass,
 };
 if (global.config.steam_guard_code) logOnDetails.auth_code = global.config.steam_guard_code;
+if (global.config.two_factor_code) logOnDetails.two_factor_code = global.config.two_factor_code;
 
 try {
     var sentry = fs.readFileSync('sentry');

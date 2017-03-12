@@ -90,7 +90,7 @@ var steam = require("steam"),
 	
 	var invertKMsgTypeID = function() {
 		var msg_type_id = "k_EMsgClientToGCGetProfileCard";
-		var calculated_msg_type_id = dota2._getMessageName(dota2.schema.EDOTAGCMsg.k_EMsgClientToGCGetProfileCard);
+		var calculated_msg_type_id = dota2._getMessageName(dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgClientToGCGetProfileCard);
 		should(calculated_msg_type_id).equal(msg_type_id);
 	}
  
@@ -179,23 +179,23 @@ var steam = require("steam"),
 			});
 		});
 		
-		describe('Guild', function () {
-			describe('#requestGuildData', function () {
-				it('should return a list of guid IDs and a list of any open parties they have'); // TODO
-			});
+		// describe('Guild', function () {
+		// 	describe('#requestGuildData', function () {
+		// 		it('should return a list of guid IDs and a list of any open parties they have'); // TODO
+		// 	});
 			
-			describe('#inviteToGuild', function () {
-				it('should invite an account to join a guild'); // TODO
-			});
+		// 	describe('#inviteToGuild', function () {
+		// 		it('should invite an account to join a guild'); // TODO
+		// 	});
 			
-			describe('#cancelInviteToGuild', function () {
-				it('should cancel a pending guild invitation'); // TODO
-			});
+		// 	describe('#cancelInviteToGuild', function () {
+		// 		it('should cancel a pending guild invitation'); // TODO
+		// 	});
 			
-			describe('#setGuildAccountRole', function () {
-				it('should set a given account\'s role within a guild'); // TODO
-			});
-		});
+		// 	describe('#setGuildAccountRole', function () {
+		// 		it('should set a given account\'s role within a guild'); // TODO
+		// 	});
+		// });
 		
 		describe('Community', function () {
 			describe('#requestPlayerMatchHistory', function () {
@@ -323,16 +323,24 @@ var steam = require("steam"),
 		
 		describe('Lobbies', function () {
 			describe('#joinPracticeLobby', function () {
-				it('should join a lobby with the given id'); // TODO
+				it('should join a lobby with the given id'); //TODO
 			});
 			
 			describe('#createPracticeLobby', function () {
-				it('should create a lobby'); // TODO
+				it('should create a lobby', function (done) {
+					Dota2.createPracticeLobby({
+						"game_name": "node-dota2 test",
+						"server_region": dota2.ServerRegion.EUROPE,
+						"pass_key": "IShouldNotJoinThisBecauseItWillSoonBeGone"
+					} , function (err, response) {
+						done(err);
+					});
+				});
 			});
 			
-			describe('#createTournamentLobby', function () {
-				it('should create a tournament lobby'); // TODO
-			});
+			// describe('#createTournamentLobby', function () {
+			// 	it('should create a tournament lobby'); // TODO
+			// });
 			
 			describe('#balancedShuffleLobby', function () {
 				it('should shuffle the teams within the lobby'); // TODO
@@ -359,7 +367,11 @@ var steam = require("steam"),
 			});
 			
 			describe('#leavePracticeLobby', function () {
-				it('should leave a lobby'); // TODO
+				it('should leave a lobby', function (done) {
+					Dota2.leavePracticeLobby(function (err, response) {
+						done(err);
+					});
+				});
 			});
 			
 			describe('#requestPracticeLobbyList', function () {

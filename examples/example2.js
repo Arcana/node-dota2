@@ -13,7 +13,7 @@ global.config = require("./config");
 var onSteamLogOn = function onSteamLogOn(logonResp) {
     if (logonResp.eresult == steam.EResult.OK) {
         steamFriends.setPersonaState(steam.EPersonaState.Busy);
-        steamFriends.setPersonaName("Dota 2 Bot");
+        steamFriends.setPersonaName(global.config.steam_name);
         util.log("Logged on.");
 
         Dota2.launch();
@@ -127,7 +127,7 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
                 }
 
                 Dota2.createPracticeLobby(lobbyPassword, properties, function(err, data){
-                    // util.log(JSON.stringify(data));
+                    util.log(JSON.stringify(data));
                 });
             }
 
@@ -164,6 +164,20 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
                 });
             }
             
+            // ----------------------------------
+            
+            // FANTASY
+            
+            var fantasyCards = 0;
+            
+            if (fantasyCards == 1) {
+                Dota2.on("inventoryUpdate", inventory => {
+                    // Time-out so inventory property is updated
+                    setTimeout(()=>{
+                        Promise.all(Dota2.requestPlayerCardsByPlayer()).then(cards => console.log(cards));
+                    }, 1000);
+                });
+            }
         });
 
         Dota2.on("unready", function onUnready() {
@@ -175,13 +189,16 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
         });
 
         Dota2.on("unhandled", function(kMsg) {
-            util.log("UNHANDLED MESSAGE #" + kMsg);
+            util.log("UNHANDLED MESSAGE " + dota2._getMessageName(kMsg));
         });
     }
 },
 onSteamServers = function onSteamServers(servers) {
     util.log("Received servers.");
-    fs.writeFile('servers', JSON.stringify(servers));
+    fs.writeFile('servers', JSON.stringify(servers), (err) => {
+        if (err) {if (this.debug) util.log("Error writing ");}
+        else {if (this.debug) util.log("");}
+    });
 },
 onSteamLogOff = function onSteamLogOff(eresult) {
     util.log("Logged off from Steam.");
@@ -203,6 +220,7 @@ var logOnDetails = {
     "password": global.config.steam_pass,
 };
 if (global.config.steam_guard_code) logOnDetails.auth_code = global.config.steam_guard_code;
+if (global.config.two_factor_code) logOnDetails.two_factor_code = global.config.two_factor_code;
 
 try {
     var sentry = fs.readFileSync('sentry');

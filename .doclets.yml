@@ -1,0 +1,19 @@
+files:
+  - index.js
+  - handlers/cache.js
+  - handlers/chat.js
+  - handlers/community.js
+  - handlers/custom.js
+  - handlers/fantasy.js
+  - handlers/general.js
+  - handlers/helper.js
+  - handlers/inventory.js
+  - handlers/leagues.js
+  - handlers/lobbies.js
+  - handlers/match.js
+  - handlers/parties.js
+  - handlers/sourcetv.js
+  - handlers/team.js
+packageJson: package.json
+branches:
+  - staging
