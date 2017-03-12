@@ -188,17 +188,19 @@ var onOtherJoinedChannel = function onOtherJoinedChannel(message) {
     /* Someone joined a chat channel you're in. */
     var otherJoined = Dota2.schema.CMsgDOTAOtherJoinedChatChannel.decode(message);
     var channel = this._getChannelById(otherJoined.channel_id);
-    if (this.debug) util.log(otherJoined.steam_id + " joined channel " + channel.channel_name);
-    this.emit("chatJoin",
-        channel.channel_name,
-        otherJoined.persona_name,
-        otherJoined.steam_id,
-        otherJoined);
-    // Add member to cached chatChannels
-    channel.members.push(new Dota2.schema.CMsgDOTAChatMember({
-        steam_id: otherJoined.steam_id,
-        persona_name: otherJoined.persona_name
-    }));
+    if (channel) {
+        if (this.debug) util.log(otherJoined.steam_id + " joined channel " + channel.channel_name);
+        this.emit("chatJoin",
+          channel.channel_name,
+          otherJoined.persona_name,
+          otherJoined.steam_id,
+          otherJoined);
+        // Add member to cached chatChannels
+        channel.members.push(new Dota2.schema.CMsgDOTAChatMember({
+            steam_id: otherJoined.steam_id,
+            persona_name: otherJoined.persona_name
+        }));
+    }
 };
 handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCOtherJoinedChannel] = onOtherJoinedChannel;
 
