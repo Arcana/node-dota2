@@ -347,8 +347,8 @@ The lobby the bot is currently in. Falsy if the bot isn't in a lobby.
 | cm_pick | <code>DOTA_CM_PICK</code> | <code>DOTA_CM_PICK.DOTA_CM_RANDOM</code> | Who gets first pick |
 | allow_cheats | <code>boolean</code> | <code>false</code> | Whether or not to allow cheats |
 | fill_with_bots | <code>boolean</code> | <code>false</code> | Whether or not to fill empty slots with bots |
-| bot_difficulty_radiant | <code>BotDifficulty</code> | <code>PASSIVE</code> | The bot difficulty for radiant bots, if fill_with_bots is true. |
-| bot_difficulty_dire | <code>BotDifficulty</code> | <code>PASSIVE</code> | The bot difficulty for dire bots, if fill_with_bots is true. |
+| bot_difficulty_radiant | <code>BotDifficulty</code> | <code>module:Dota2.BotDifficulty.PASSIVE</code> | The bot difficulty for radiant bots, if fill_with_bots is true. |
+| bot_difficulty_dire | <code>BotDifficulty</code> | <code>module:Dota2.BotDifficulty.PASSIVE</code> | The bot difficulty for dire bots, if fill_with_bots is true. |
 | bot_radiant | <code>number</code> |  | Presumably the ID of the custom AI to be applied to radiant bots. |
 | bot_dire | <code>number</code> |  | Presumably the ID of the custom AI to be applied to dire bots. |
 | allow_spectating | <code>boolean</code> | <code>true</code> | Whether or not to allow spectating |
