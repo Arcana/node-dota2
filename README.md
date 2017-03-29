@@ -11,23 +11,8 @@ Check out RJackson1's blog post (his only blog post), [Extending node-dota2](htt
 A fair warning, while the way you search for new functionality is still the same, quite a lot has changed (and been simplified) implementation wise.
 It is now easier to implement new functionality than it was back when this blog was written.
 
-## Upgrade guide
-
-### `3.*.*` to `4.*.0`
-
-A few backwards incompatible API changes were included with version 4.0.0.
-
-* The following functions are no longer supported by Valve so they have been commented:
-  * `requestPassportData`
-  * `requestTeamProfile`
-  * `requestTeamIDByName`
-  * `requestTeamMemberProfile`
-* The `teamData` event now throws an extra parameter `league_id`
-* The `matchMakingStatsData` event's first two parameters changed as the old values no longer exist.
-* The `matchMinimalDetailsData` event now returns the `last_match` bool as first argument.
-
 ## Installation and setup
-* `npm install steam; npm install` in the repository root (install Steam first to work around a node-steam#222)
+* `npm install` in the repository root
 * Copy `config.js.example` to `config.js` and edit appropriately
 * Run the example script: `node example.js`
 * If you receive Error 63 you need to provide a Steam Guard code by setting the Steam Guard code in `config.js` and launching again.
@@ -47,1020 +32,1889 @@ var Steam = require('steam'),
 ```
 
 ## Disclaimer
-We do not in any way encourage people to use their own accounts when using this library. 
-This library tries to mimic the behavior of the Dota 2 client to allow people to programmatically interact with the Dota 2 GC, 
-however we make no efforts to hide this fact and it's pretty easy for Valve to detect clients using this library based on the generated traffic. 
-While Valve has not yet expressed a dislike regarding reverse engineering projects like this one, 
+We do not in any way encourage people to use their own accounts when using this library.
+This library tries to mimic the behavior of the Dota 2 client to allow people to programmatically interact with the Dota 2 GC,
+however we make no efforts to hide this fact and it's pretty easy for Valve to detect clients using this library based on the generated traffic.
+While Valve has not yet expressed a dislike regarding reverse engineering projects like this one,
 it's not unimaginable that this might one day change and result in VAC bans.
 
 ## Examples
-The `examples` directory contains two Dota2 bots as an example. One contains commented-out dota2 methods, the other has boolean activated methods. 
+The `examples` directory contains two Dota2 bots as an example. One contains commented-out dota2 methods, the other has boolean activated methods.
 Both examples show how to interact with the library.
 
 ## Testing
-There is a partial automated test suite for node-dota2, which is located in the test directory. 
+There is a partial automated test suite for node-dota2, which is located in the test directory.
 You need to configure the `STEAM_USERNAME` and `STEAM_PASSWORD` environment variables to be able to run it.
 You can launch the tests by running the file with mocha.
 
-##Properties
-###AccountID
-The current steam ID of the SteamClient converted to Dota 2 Account ID format. Not available until `launch` is called.
+# API
+The API doc can be consulted here or at [doclets.io](https://doclets.io/Arcana/node-dota2)
+<a name="module_Dota2"></a>
 
-###Inventory (hats, not in-match items)
-The current player inventory (see CSOEconItem). Null if the bot hasn't received inventory information yet.
+## Dota2
+Dota 2 module
 
-###Lobby
-The current lobby object (see CSODOTALobby). Null if the bot is not in a lobby.
 
-###Party
-The current party object (see CSODOTAParty). Null if the bot is not in a party.
+* [Dota2](#module_Dota2)
+    * _static_
+        * [.Dota2Client](#module_Dota2.Dota2Client) ⇐ <code>EventEmitter</code>
+            * [new Dota2.Dota2Client(steamClient, debug, debugMore)](#new_module_Dota2.Dota2Client_new)
+            * _instance_
+                * [.Inventory](#module_Dota2.Dota2Client+Inventory) : <code>Array.&lt;CSOEconItem&gt;</code>
+                * [.chatChannels](#module_Dota2.Dota2Client+chatChannels) : <code>Array.&lt;CMsgDOTAJoinChatChannelResponse&gt;</code>
+                * [.Lobby](#module_Dota2.Dota2Client+Lobby) : <code>CSODOTALobby</code>
+                    * [.Options](#module_Dota2.Dota2Client+Lobby.Options) : <code>Object</code>
+                * [.LobbyInvite](#module_Dota2.Dota2Client+LobbyInvite) : <code>CSODOTALobbyInvite</code>
+                * [.Party](#module_Dota2.Dota2Client+Party) : <code>CSODOTAParty</code>
+                * [.PartyInvite](#module_Dota2.Dota2Client+PartyInvite) : <code>CSODOTAPartyInvite</code>
+                * [.launch()](#module_Dota2.Dota2Client+launch)
+                * [.exit()](#module_Dota2.Dota2Client+exit)
+                * [.joinChat(channel_name, [channel_type])](#module_Dota2.Dota2Client+joinChat)
+                * [.leaveChat(channel_name, [channel_type])](#module_Dota2.Dota2Client+leaveChat)
+                * [.sendMessage(message, channel_name, [channel_type])](#module_Dota2.Dota2Client+sendMessage)
+                * [.shareLobby(channel_name, [channel_type])](#module_Dota2.Dota2Client+shareLobby)
+                * [.flipCoin(channel_name, [channel_type])](#module_Dota2.Dota2Client+flipCoin)
+                * [.rollDice(min, max, channel_name, [channel_type])](#module_Dota2.Dota2Client+rollDice)
+                * [.requestChatChannels()](#module_Dota2.Dota2Client+requestChatChannels)
+                * [.requestPlayerMatchHistory(account_id, [options], [callback])](#module_Dota2.Dota2Client+requestPlayerMatchHistory)
+                * [.requestProfileCard(account_id, [callback])](#module_Dota2.Dota2Client+requestProfileCard)
+                * [.requestHallOfFame(week, [callback])](#module_Dota2.Dota2Client+requestHallOfFame)
+                * [.requestPlayerInfo(account_ids)](#module_Dota2.Dota2Client+requestPlayerInfo)
+                * [.requestTrophyList(account_id, [callback])](#module_Dota2.Dota2Client+requestTrophyList)
+                * [.requestPlayerStats(account_id, [callback])](#module_Dota2.Dota2Client+requestPlayerStats)
+                * [.requestJoinableCustomGameModes([server_region])](#module_Dota2.Dota2Client+requestJoinableCustomGameModes)
+                * [.requestPlayerCardsByPlayer()](#module_Dota2.Dota2Client+requestPlayerCardsByPlayer) ⇒ <code>Array.&lt;FantasyPlayer&gt;</code>
+                    * [.FantasyPlayer](#module_Dota2.Dota2Client+requestPlayerCardsByPlayer.FantasyPlayer) : <code>Object</code>
+                * [.requestPlayerCardRoster(league_id, timestamp, [callback])](#module_Dota2.Dota2Client+requestPlayerCardRoster)
+                * [.draftPlayerCard(league_id, timestamp, slot, player_card_id, [callback])](#module_Dota2.Dota2Client+draftPlayerCard)
+                * [.setItemPositions(item_positions)](#module_Dota2.Dota2Client+setItemPositions)
+                * [.deleteItem(item_id)](#module_Dota2.Dota2Client+deleteItem)
+                * [.requestLeaguesInMonth([month], [year], [tier], [callback])](#module_Dota2.Dota2Client+requestLeaguesInMonth)
+                * [.requestLeagueInfo()](#module_Dota2.Dota2Client+requestLeagueInfo)
+                * [.requestTopLeagueMatches()](#module_Dota2.Dota2Client+requestTopLeagueMatches)
+                * [.createPracticeLobby(options, [callback])](#module_Dota2.Dota2Client+createPracticeLobby)
+                * ~~[._createPracticeLobby()](#module_Dota2.Dota2Client+_createPracticeLobby)~~
+                * ~~[.createTournamentLobby()](#module_Dota2.Dota2Client+createTournamentLobby)~~
+                * [.configPracticeLobby(lobby_id, options, [callback])](#module_Dota2.Dota2Client+configPracticeLobby)
+                * [.requestPracticeLobbyList([callback])](#module_Dota2.Dota2Client+requestPracticeLobbyList)
+                * [.requestFriendPracticeLobbyList([callback])](#module_Dota2.Dota2Client+requestFriendPracticeLobbyList)
+                * [.balancedShuffleLobby([callback])](#module_Dota2.Dota2Client+balancedShuffleLobby)
+                * [.flipLobbyTeams([callback])](#module_Dota2.Dota2Client+flipLobbyTeams)
+                * [.inviteToLobby(steam_id)](#module_Dota2.Dota2Client+inviteToLobby)
+                * [.practiceLobbyKick(account_id, [callback])](#module_Dota2.Dota2Client+practiceLobbyKick)
+                * [.practiceLobbyKickFromTeam(account_id, [callback])](#module_Dota2.Dota2Client+practiceLobbyKickFromTeam)
+                * [.joinPracticeLobby(id, password, [callback])](#module_Dota2.Dota2Client+joinPracticeLobby)
+                * [.leavePracticeLobby([callback])](#module_Dota2.Dota2Client+leavePracticeLobby)
+                * [.abandonCurrentGame([callback])](#module_Dota2.Dota2Client+abandonCurrentGame)
+                * [.launchPracticeLobby([callback])](#module_Dota2.Dota2Client+launchPracticeLobby)
+                * [.joinPracticeLobbyTeam(slot, team, [callback])](#module_Dota2.Dota2Client+joinPracticeLobbyTeam)
+                * [.joinPracticeLobbyBroadcastChannel([channel], [callback])](#module_Dota2.Dota2Client+joinPracticeLobbyBroadcastChannel)
+                * [.addBotToPracticeLobby(slot, team, bot_difficulty, [callback])](#module_Dota2.Dota2Client+addBotToPracticeLobby)
+                * [.respondLobbyInvite(id, accept)](#module_Dota2.Dota2Client+respondLobbyInvite)
+                * [.requestMatches([criteria], [callback])](#module_Dota2.Dota2Client+requestMatches)
+                * [.requestMatchDetails(match_ids, [callback])](#module_Dota2.Dota2Client+requestMatchDetails)
+                * [.requestMatchMinimalDetails(match_id, [callback])](#module_Dota2.Dota2Client+requestMatchMinimalDetails)
+                * [.requestMatchmakingStats()](#module_Dota2.Dota2Client+requestMatchmakingStats)
+                * [.requestTopFriendMatches()](#module_Dota2.Dota2Client+requestTopFriendMatches)
+                * [.respondPartyInvite(id, [accept], [ping_data])](#module_Dota2.Dota2Client+respondPartyInvite)
+                * [.leaveParty()](#module_Dota2.Dota2Client+leaveParty)
+                * [.setPartyLeader(steam_id)](#module_Dota2.Dota2Client+setPartyLeader)
+                * [.setPartyCoach(coach)](#module_Dota2.Dota2Client+setPartyCoach)
+                * [.inviteToParty(steam_id)](#module_Dota2.Dota2Client+inviteToParty)
+                * [.kickFromParty(steam_id)](#module_Dota2.Dota2Client+kickFromParty)
+                * [.requestSourceTVGames(filter_options)](#module_Dota2.Dota2Client+requestSourceTVGames)
+                * [.requestMyTeams([callback])](#module_Dota2.Dota2Client+requestMyTeams)
+                * ["ready"](#module_Dota2.Dota2Client+event_ready)
+                * ["unhandled" (kMsg, kMsg_name)](#module_Dota2.Dota2Client+event_unhandled)
+                * ["hellotimeout"](#module_Dota2.Dota2Client+event_hellotimeout)
+                * ["inventoryUpdate" (inventory)](#module_Dota2.Dota2Client+event_inventoryUpdate)
+                * ["practiceLobbyUpdate" (lobby)](#module_Dota2.Dota2Client+event_practiceLobbyUpdate)
+                * ["practiceLobbyCleared"](#module_Dota2.Dota2Client+event_practiceLobbyCleared)
+                * ["lobbyInviteUpdate" (lobbyInvite)](#module_Dota2.Dota2Client+event_lobbyInviteUpdate)
+                * ["lobbyInviteCleared"](#module_Dota2.Dota2Client+event_lobbyInviteCleared)
+                * ["partyUpdate" (party)](#module_Dota2.Dota2Client+event_partyUpdate)
+                * ["partyCleared"](#module_Dota2.Dota2Client+event_partyCleared)
+                * ["partyInviteUpdate" (partyInvite)](#module_Dota2.Dota2Client+event_partyInviteUpdate)
+                * ["partyInviteCleared"](#module_Dota2.Dota2Client+event_partyInviteCleared)
+                * ["chatJoined" (channelData)](#module_Dota2.Dota2Client+event_chatJoined)
+                * ["chatJoin" (channel, joiner_name, joiner_steam_id, otherJoined_object)](#module_Dota2.Dota2Client+event_chatJoin)
+                * ["chatLeave" (channel, leaver_steam_id, otherLeft_object)](#module_Dota2.Dota2Client+event_chatLeave)
+                * ["chatMessage" (channel, sender_name, message, chatData)](#module_Dota2.Dota2Client+event_chatMessage)
+                * ["chatChannelsData" (channels)](#module_Dota2.Dota2Client+event_chatChannelsData)
+                * ["playerMatchHistoryData" (requestId, matchHistoryResponse)](#module_Dota2.Dota2Client+event_playerMatchHistoryData)
+                * ["profileCardData" (account_id, profileCardResponse)](#module_Dota2.Dota2Client+event_profileCardData)
+                * ["hallOfFameData" (week, featured_players, featured_farmer, hallOfFameResponse)](#module_Dota2.Dota2Client+event_hallOfFameData)
+                * ["playerInfoData" (playerInfoData)](#module_Dota2.Dota2Client+event_playerInfoData)
+                * ["trophyListData" (trophyListResponse)](#module_Dota2.Dota2Client+event_trophyListData)
+                * ["playerStatsData" (account_id, playerStatsResponse)](#module_Dota2.Dota2Client+event_playerStatsData)
+                * ["joinableCustomGameModes" (joinableCustomGameModes)](#module_Dota2.Dota2Client+event_joinableCustomGameModes)
+                * ["playerCardRoster" (playerCardRoster)](#module_Dota2.Dota2Client+event_playerCardRoster)
+                * ["playerCardDrafted" (playerCardRoster)](#module_Dota2.Dota2Client+event_playerCardDrafted)
+                * ["popup" (id, popup)](#module_Dota2.Dota2Client+event_popup)
+                * ["leaguesInMonthData" (month, year, leagues)](#module_Dota2.Dota2Client+event_leaguesInMonthData)
+                * ["liveLeagueGamesUpdate" (live_league_games)](#module_Dota2.Dota2Client+event_liveLeagueGamesUpdate)
+                * ["leagueData" (leagues)](#module_Dota2.Dota2Client+event_leagueData)
+                * ["topLeagueMatchesData" (matches)](#module_Dota2.Dota2Client+event_topLeagueMatchesData)
+                * ["practiceLobbyJoinResponse" (result, response)](#module_Dota2.Dota2Client+event_practiceLobbyJoinResponse)
+                * ["practiceLobbyListData" (practiceLobbyListResponse)](#module_Dota2.Dota2Client+event_practiceLobbyListData)
+                * ["practiceLobbyResponse" (result, response)](#module_Dota2.Dota2Client+event_practiceLobbyResponse)
+                * ["friendPracticeLobbyListData" (practiceLobbyListResponse)](#module_Dota2.Dota2Client+event_friendPracticeLobbyListData)
+                * ["inviteCreated" (steam_id, group_id, is_online)](#module_Dota2.Dota2Client+event_inviteCreated)
+                * ["matchesData" (requestId, total_results, results_remaining, matches, series, matchResponse)](#module_Dota2.Dota2Client+event_matchesData)
+                * ["matchDetailsData" (match_id, matchDetailsResponse)](#module_Dota2.Dota2Client+event_matchDetailsData)
+                * ["matchMinimalDetailsData" (last_match, matchMinimalDetailsResponse)](#module_Dota2.Dota2Client+event_matchMinimalDetailsData)
+                * ["matchmakingStatsData" (matchgroups_version, match_groups, matchmakingStatsResponse)](#module_Dota2.Dota2Client+event_matchmakingStatsData)
+                * ["topFriendMatchesData" (matches)](#module_Dota2.Dota2Client+event_topFriendMatchesData)
+                * ["sourceTVGamesData" (sourceTVGamesResponse)](#module_Dota2.Dota2Client+event_sourceTVGamesData)
+                * ["teamData" (teams, league_id)](#module_Dota2.Dota2Client+event_teamData)
+            * _static_
+                * [.ToAccountID(steamID)](#module_Dota2.Dota2Client.ToAccountID) ⇒ <code>number</code>
+                * [.ToSteamID(accid)](#module_Dota2.Dota2Client.ToSteamID) ⇒ <code>[Long](#external_Long)</code>
+        * [.schema](#module_Dota2.schema)
+            * [.CMsgGCToClientPlayerStatsResponse](#module_Dota2.schema.CMsgGCToClientPlayerStatsResponse) : <code>Object</code>
+        * [.EResult](#module_Dota2.EResult) : <code>enum</code>
+        * [.ServerRegion](#module_Dota2.ServerRegion) : <code>enum</code>
+        * [.SeriesType](#module_Dota2.SeriesType) : <code>enum</code>
+        * [.BotDifficulty](#module_Dota2.BotDifficulty) : <code>enum</code>
+    * _inner_
+        * [~requestCallback](#module_Dota2..requestCallback) : <code>function</code>
+        * [~Long](#external_Long)
 
-###PartyInvite
-The current party invite object (see CSODOTAPartyInvite). Null if the bot does not have an active incoming party invite.
+<a name="module_Dota2.Dota2Client"></a>
 
-###LobbyInvite
-The current lobby invite object (see CSODOTALobbyInvite). Null if the bot does not have an active incoming lobby invite.
+### Dota2.Dota2Client ⇐ <code>EventEmitter</code>
+**Kind**: static class of <code>[Dota2](#module_Dota2)</code>  
+**Extends:** <code>EventEmitter</code>  
+**Emits**: <code>[ready](#module_Dota2.Dota2Client+event_ready)</code>, <code>[unhandled](#module_Dota2.Dota2Client+event_unhandled)</code>, <code>[hellotimeout](#module_Dota2.Dota2Client+event_hellotimeout)</code>, <code>[popup](#module_Dota2.Dota2Client+event_popup)</code>, <code>[sourceTVGamesData](#module_Dota2.Dota2Client+event_sourceTVGamesData)</code>, <code>[inventoryUpdate](#module_Dota2.Dota2Client+event_inventoryUpdate)</code>, <code>[practiceLobbyUpdate](#module_Dota2.Dota2Client+event_practiceLobbyUpdate)</code>, <code>[practiceLobbyCleared](#module_Dota2.Dota2Client+event_practiceLobbyCleared)</code>, <code>[lobbyInviteUpdate](#module_Dota2.Dota2Client+event_lobbyInviteUpdate)</code>, <code>[lobbyInviteCleared](#module_Dota2.Dota2Client+event_lobbyInviteCleared)</code>, <code>[practiceLobbyJoinResponse](#module_Dota2.Dota2Client+event_practiceLobbyJoinResponse)</code>, <code>[practiceLobbyListData](#module_Dota2.Dota2Client+event_practiceLobbyListData)</code>, <code>[practiceLobbyResponse](#module_Dota2.Dota2Client+event_practiceLobbyResponse)</code>, <code>[friendPracticeLobbyListData](#module_Dota2.Dota2Client+event_friendPracticeLobbyListData)</code>, <code>[inviteCreated](#module_Dota2.Dota2Client+event_inviteCreated)</code>, <code>[partyUpdate](#module_Dota2.Dota2Client+event_partyUpdate)</code>, <code>[partyCleared](#module_Dota2.Dota2Client+event_partyCleared)</code>, <code>[partyInviteUpdate](#module_Dota2.Dota2Client+event_partyInviteUpdate)</code>, <code>[partyInviteCleared](#module_Dota2.Dota2Client+event_partyInviteCleared)</code>, <code>[joinableCustomGameModes](#module_Dota2.Dota2Client+event_joinableCustomGameModes)</code>, <code>[chatChannelsData](#module_Dota2.Dota2Client+event_chatChannelsData)</code>, <code>[chatJoin](#module_Dota2.Dota2Client+event_chatJoin)</code>, <code>[chatJoined](#module_Dota2.Dota2Client+event_chatJoined)</code>, <code>[chatLeave](#module_Dota2.Dota2Client+event_chatLeave)</code>, <code>[chatMessage](#module_Dota2.Dota2Client+event_chatMessage)</code>, <code>[profileCardData](#module_Dota2.Dota2Client+event_profileCardData)</code>, <code>[playerMatchHistoryData](#module_Dota2.Dota2Client+event_playerMatchHistoryData)</code>, <code>[playerInfoData](#module_Dota2.Dota2Client+event_playerInfoData)</code>, <code>[playerStatsData](#module_Dota2.Dota2Client+event_playerStatsData)</code>, <code>[trophyListData](#module_Dota2.Dota2Client+event_trophyListData)</code>, <code>[hallOfFameData](#module_Dota2.Dota2Client+event_hallOfFameData)</code>, <code>[playerCardRoster](#module_Dota2.Dota2Client+event_playerCardRoster)</code>, <code>[playerCardDrafted](#module_Dota2.Dota2Client+event_playerCardDrafted)</code>, <code>[leaguesInMonthData](#module_Dota2.Dota2Client+event_leaguesInMonthData)</code>, <code>[liveLeagueGamesUpdate](#module_Dota2.Dota2Client+event_liveLeagueGamesUpdate)</code>, <code>[leagueData](#module_Dota2.Dota2Client+event_leagueData)</code>, <code>[topLeagueMatchesData](#module_Dota2.Dota2Client+event_topLeagueMatchesData)</code>, <code>[teamData](#module_Dota2.Dota2Client+event_teamData)</code>, <code>[matchesData](#module_Dota2.Dota2Client+event_matchesData)</code>, <code>[matchDetailsData](#module_Dota2.Dota2Client+event_matchDetailsData)</code>, <code>[matchMinimalDetailsData](#module_Dota2.Dota2Client+event_matchMinimalDetailsData)</code>, <code>[matchmakingStatsData](#module_Dota2.Dota2Client+event_matchmakingStatsData)</code>, <code>[topFriendMatchesData](#module_Dota2.Dota2Client+event_topFriendMatchesData)</code>  
 
-## Methods
-All methods require the SteamClient instance to be logged on.
+* [.Dota2Client](#module_Dota2.Dota2Client) ⇐ <code>EventEmitter</code>
+    * [new Dota2.Dota2Client(steamClient, debug, debugMore)](#new_module_Dota2.Dota2Client_new)
+    * _instance_
+        * [.Inventory](#module_Dota2.Dota2Client+Inventory) : <code>Array.&lt;CSOEconItem&gt;</code>
+        * [.chatChannels](#module_Dota2.Dota2Client+chatChannels) : <code>Array.&lt;CMsgDOTAJoinChatChannelResponse&gt;</code>
+        * [.Lobby](#module_Dota2.Dota2Client+Lobby) : <code>CSODOTALobby</code>
+            * [.Options](#module_Dota2.Dota2Client+Lobby.Options) : <code>Object</code>
+        * [.LobbyInvite](#module_Dota2.Dota2Client+LobbyInvite) : <code>CSODOTALobbyInvite</code>
+        * [.Party](#module_Dota2.Dota2Client+Party) : <code>CSODOTAParty</code>
+        * [.PartyInvite](#module_Dota2.Dota2Client+PartyInvite) : <code>CSODOTAPartyInvite</code>
+        * [.launch()](#module_Dota2.Dota2Client+launch)
+        * [.exit()](#module_Dota2.Dota2Client+exit)
+        * [.joinChat(channel_name, [channel_type])](#module_Dota2.Dota2Client+joinChat)
+        * [.leaveChat(channel_name, [channel_type])](#module_Dota2.Dota2Client+leaveChat)
+        * [.sendMessage(message, channel_name, [channel_type])](#module_Dota2.Dota2Client+sendMessage)
+        * [.shareLobby(channel_name, [channel_type])](#module_Dota2.Dota2Client+shareLobby)
+        * [.flipCoin(channel_name, [channel_type])](#module_Dota2.Dota2Client+flipCoin)
+        * [.rollDice(min, max, channel_name, [channel_type])](#module_Dota2.Dota2Client+rollDice)
+        * [.requestChatChannels()](#module_Dota2.Dota2Client+requestChatChannels)
+        * [.requestPlayerMatchHistory(account_id, [options], [callback])](#module_Dota2.Dota2Client+requestPlayerMatchHistory)
+        * [.requestProfileCard(account_id, [callback])](#module_Dota2.Dota2Client+requestProfileCard)
+        * [.requestHallOfFame(week, [callback])](#module_Dota2.Dota2Client+requestHallOfFame)
+        * [.requestPlayerInfo(account_ids)](#module_Dota2.Dota2Client+requestPlayerInfo)
+        * [.requestTrophyList(account_id, [callback])](#module_Dota2.Dota2Client+requestTrophyList)
+        * [.requestPlayerStats(account_id, [callback])](#module_Dota2.Dota2Client+requestPlayerStats)
+        * [.requestJoinableCustomGameModes([server_region])](#module_Dota2.Dota2Client+requestJoinableCustomGameModes)
+        * [.requestPlayerCardsByPlayer()](#module_Dota2.Dota2Client+requestPlayerCardsByPlayer) ⇒ <code>Array.&lt;FantasyPlayer&gt;</code>
+            * [.FantasyPlayer](#module_Dota2.Dota2Client+requestPlayerCardsByPlayer.FantasyPlayer) : <code>Object</code>
+        * [.requestPlayerCardRoster(league_id, timestamp, [callback])](#module_Dota2.Dota2Client+requestPlayerCardRoster)
+        * [.draftPlayerCard(league_id, timestamp, slot, player_card_id, [callback])](#module_Dota2.Dota2Client+draftPlayerCard)
+        * [.setItemPositions(item_positions)](#module_Dota2.Dota2Client+setItemPositions)
+        * [.deleteItem(item_id)](#module_Dota2.Dota2Client+deleteItem)
+        * [.requestLeaguesInMonth([month], [year], [tier], [callback])](#module_Dota2.Dota2Client+requestLeaguesInMonth)
+        * [.requestLeagueInfo()](#module_Dota2.Dota2Client+requestLeagueInfo)
+        * [.requestTopLeagueMatches()](#module_Dota2.Dota2Client+requestTopLeagueMatches)
+        * [.createPracticeLobby(options, [callback])](#module_Dota2.Dota2Client+createPracticeLobby)
+        * ~~[._createPracticeLobby()](#module_Dota2.Dota2Client+_createPracticeLobby)~~
+        * ~~[.createTournamentLobby()](#module_Dota2.Dota2Client+createTournamentLobby)~~
+        * [.configPracticeLobby(lobby_id, options, [callback])](#module_Dota2.Dota2Client+configPracticeLobby)
+        * [.requestPracticeLobbyList([callback])](#module_Dota2.Dota2Client+requestPracticeLobbyList)
+        * [.requestFriendPracticeLobbyList([callback])](#module_Dota2.Dota2Client+requestFriendPracticeLobbyList)
+        * [.balancedShuffleLobby([callback])](#module_Dota2.Dota2Client+balancedShuffleLobby)
+        * [.flipLobbyTeams([callback])](#module_Dota2.Dota2Client+flipLobbyTeams)
+        * [.inviteToLobby(steam_id)](#module_Dota2.Dota2Client+inviteToLobby)
+        * [.practiceLobbyKick(account_id, [callback])](#module_Dota2.Dota2Client+practiceLobbyKick)
+        * [.practiceLobbyKickFromTeam(account_id, [callback])](#module_Dota2.Dota2Client+practiceLobbyKickFromTeam)
+        * [.joinPracticeLobby(id, password, [callback])](#module_Dota2.Dota2Client+joinPracticeLobby)
+        * [.leavePracticeLobby([callback])](#module_Dota2.Dota2Client+leavePracticeLobby)
+        * [.abandonCurrentGame([callback])](#module_Dota2.Dota2Client+abandonCurrentGame)
+        * [.launchPracticeLobby([callback])](#module_Dota2.Dota2Client+launchPracticeLobby)
+        * [.joinPracticeLobbyTeam(slot, team, [callback])](#module_Dota2.Dota2Client+joinPracticeLobbyTeam)
+        * [.joinPracticeLobbyBroadcastChannel([channel], [callback])](#module_Dota2.Dota2Client+joinPracticeLobbyBroadcastChannel)
+        * [.addBotToPracticeLobby(slot, team, bot_difficulty, [callback])](#module_Dota2.Dota2Client+addBotToPracticeLobby)
+        * [.respondLobbyInvite(id, accept)](#module_Dota2.Dota2Client+respondLobbyInvite)
+        * [.requestMatches([criteria], [callback])](#module_Dota2.Dota2Client+requestMatches)
+        * [.requestMatchDetails(match_ids, [callback])](#module_Dota2.Dota2Client+requestMatchDetails)
+        * [.requestMatchMinimalDetails(match_id, [callback])](#module_Dota2.Dota2Client+requestMatchMinimalDetails)
+        * [.requestMatchmakingStats()](#module_Dota2.Dota2Client+requestMatchmakingStats)
+        * [.requestTopFriendMatches()](#module_Dota2.Dota2Client+requestTopFriendMatches)
+        * [.respondPartyInvite(id, [accept], [ping_data])](#module_Dota2.Dota2Client+respondPartyInvite)
+        * [.leaveParty()](#module_Dota2.Dota2Client+leaveParty)
+        * [.setPartyLeader(steam_id)](#module_Dota2.Dota2Client+setPartyLeader)
+        * [.setPartyCoach(coach)](#module_Dota2.Dota2Client+setPartyCoach)
+        * [.inviteToParty(steam_id)](#module_Dota2.Dota2Client+inviteToParty)
+        * [.kickFromParty(steam_id)](#module_Dota2.Dota2Client+kickFromParty)
+        * [.requestSourceTVGames(filter_options)](#module_Dota2.Dota2Client+requestSourceTVGames)
+        * [.requestMyTeams([callback])](#module_Dota2.Dota2Client+requestMyTeams)
+        * ["ready"](#module_Dota2.Dota2Client+event_ready)
+        * ["unhandled" (kMsg, kMsg_name)](#module_Dota2.Dota2Client+event_unhandled)
+        * ["hellotimeout"](#module_Dota2.Dota2Client+event_hellotimeout)
+        * ["inventoryUpdate" (inventory)](#module_Dota2.Dota2Client+event_inventoryUpdate)
+        * ["practiceLobbyUpdate" (lobby)](#module_Dota2.Dota2Client+event_practiceLobbyUpdate)
+        * ["practiceLobbyCleared"](#module_Dota2.Dota2Client+event_practiceLobbyCleared)
+        * ["lobbyInviteUpdate" (lobbyInvite)](#module_Dota2.Dota2Client+event_lobbyInviteUpdate)
+        * ["lobbyInviteCleared"](#module_Dota2.Dota2Client+event_lobbyInviteCleared)
+        * ["partyUpdate" (party)](#module_Dota2.Dota2Client+event_partyUpdate)
+        * ["partyCleared"](#module_Dota2.Dota2Client+event_partyCleared)
+        * ["partyInviteUpdate" (partyInvite)](#module_Dota2.Dota2Client+event_partyInviteUpdate)
+        * ["partyInviteCleared"](#module_Dota2.Dota2Client+event_partyInviteCleared)
+        * ["chatJoined" (channelData)](#module_Dota2.Dota2Client+event_chatJoined)
+        * ["chatJoin" (channel, joiner_name, joiner_steam_id, otherJoined_object)](#module_Dota2.Dota2Client+event_chatJoin)
+        * ["chatLeave" (channel, leaver_steam_id, otherLeft_object)](#module_Dota2.Dota2Client+event_chatLeave)
+        * ["chatMessage" (channel, sender_name, message, chatData)](#module_Dota2.Dota2Client+event_chatMessage)
+        * ["chatChannelsData" (channels)](#module_Dota2.Dota2Client+event_chatChannelsData)
+        * ["playerMatchHistoryData" (requestId, matchHistoryResponse)](#module_Dota2.Dota2Client+event_playerMatchHistoryData)
+        * ["profileCardData" (account_id, profileCardResponse)](#module_Dota2.Dota2Client+event_profileCardData)
+        * ["hallOfFameData" (week, featured_players, featured_farmer, hallOfFameResponse)](#module_Dota2.Dota2Client+event_hallOfFameData)
+        * ["playerInfoData" (playerInfoData)](#module_Dota2.Dota2Client+event_playerInfoData)
+        * ["trophyListData" (trophyListResponse)](#module_Dota2.Dota2Client+event_trophyListData)
+        * ["playerStatsData" (account_id, playerStatsResponse)](#module_Dota2.Dota2Client+event_playerStatsData)
+        * ["joinableCustomGameModes" (joinableCustomGameModes)](#module_Dota2.Dota2Client+event_joinableCustomGameModes)
+        * ["playerCardRoster" (playerCardRoster)](#module_Dota2.Dota2Client+event_playerCardRoster)
+        * ["playerCardDrafted" (playerCardRoster)](#module_Dota2.Dota2Client+event_playerCardDrafted)
+        * ["popup" (id, popup)](#module_Dota2.Dota2Client+event_popup)
+        * ["leaguesInMonthData" (month, year, leagues)](#module_Dota2.Dota2Client+event_leaguesInMonthData)
+        * ["liveLeagueGamesUpdate" (live_league_games)](#module_Dota2.Dota2Client+event_liveLeagueGamesUpdate)
+        * ["leagueData" (leagues)](#module_Dota2.Dota2Client+event_leagueData)
+        * ["topLeagueMatchesData" (matches)](#module_Dota2.Dota2Client+event_topLeagueMatchesData)
+        * ["practiceLobbyJoinResponse" (result, response)](#module_Dota2.Dota2Client+event_practiceLobbyJoinResponse)
+        * ["practiceLobbyListData" (practiceLobbyListResponse)](#module_Dota2.Dota2Client+event_practiceLobbyListData)
+        * ["practiceLobbyResponse" (result, response)](#module_Dota2.Dota2Client+event_practiceLobbyResponse)
+        * ["friendPracticeLobbyListData" (practiceLobbyListResponse)](#module_Dota2.Dota2Client+event_friendPracticeLobbyListData)
+        * ["inviteCreated" (steam_id, group_id, is_online)](#module_Dota2.Dota2Client+event_inviteCreated)
+        * ["matchesData" (requestId, total_results, results_remaining, matches, series, matchResponse)](#module_Dota2.Dota2Client+event_matchesData)
+        * ["matchDetailsData" (match_id, matchDetailsResponse)](#module_Dota2.Dota2Client+event_matchDetailsData)
+        * ["matchMinimalDetailsData" (last_match, matchMinimalDetailsResponse)](#module_Dota2.Dota2Client+event_matchMinimalDetailsData)
+        * ["matchmakingStatsData" (matchgroups_version, match_groups, matchmakingStatsResponse)](#module_Dota2.Dota2Client+event_matchmakingStatsData)
+        * ["topFriendMatchesData" (matches)](#module_Dota2.Dota2Client+event_topFriendMatchesData)
+        * ["sourceTVGamesData" (sourceTVGamesResponse)](#module_Dota2.Dota2Client+event_sourceTVGamesData)
+        * ["teamData" (teams, league_id)](#module_Dota2.Dota2Client+event_teamData)
+    * _static_
+        * [.ToAccountID(steamID)](#module_Dota2.Dota2Client.ToAccountID) ⇒ <code>number</code>
+        * [.ToSteamID(accid)](#module_Dota2.Dota2Client.ToSteamID) ⇒ <code>[Long](#external_Long)</code>
 
-### Steam
-#### launch()
+<a name="new_module_Dota2.Dota2Client_new"></a>
 
+#### new Dota2.Dota2Client(steamClient, debug, debugMore)
+The Dota 2 client that communicates with the GC
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| steamClient | <code>Object</code> | Node-steam client instance |
+| debug | <code>boolean</code> | Print debug information to console |
+| debugMore | <code>boolean</code> | Print even more debug information to console |
+
+<a name="module_Dota2.Dota2Client+Inventory"></a>
+
+#### dota2Client.Inventory : <code>Array.&lt;CSOEconItem&gt;</code>
+The current state of the bot's inventory. Contains cosmetics, player cards, ...
+
+**Kind**: instance property of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+<a name="module_Dota2.Dota2Client+chatChannels"></a>
+
+#### dota2Client.chatChannels : <code>Array.&lt;CMsgDOTAJoinChatChannelResponse&gt;</code>
+The chat channels the bot has joined
+
+**Kind**: instance property of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+<a name="module_Dota2.Dota2Client+Lobby"></a>
+
+#### dota2Client.Lobby : <code>CSODOTALobby</code>
+The lobby the bot is currently in. Falsy if the bot isn't in a lobby.
+
+**Kind**: instance property of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+<a name="module_Dota2.Dota2Client+Lobby.Options"></a>
+
+##### Lobby.Options : <code>Object</code>
+**Kind**: static typedef of <code>[Lobby](#module_Dota2.Dota2Client+Lobby)</code>  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| game_name | <code>string</code> |  | Name of the lobby |
+| pass_key | <code>string</code> |  | Lobby password |
+| server_region | <code>[ServerRegion](#module_Dota2.ServerRegion)</code> | <code>module:Dota2.ServerRegion.UNSPECIFIED</code> | Server region where the lobby will be created |
+| game_mode | <code>DOTA_GameMode</code> | <code>DOTA_GameMode.DOTA_GAMEMODE_AP</code> | Game mode |
+| game_version | <code>DOTAGameVersion</code> | <code>DOTAGameVersion.GAME_VERSION_STABLE</code> | Version of the game |
+| cm_pick | <code>DOTA_CM_PICK</code> | <code>DOTA_CM_PICK.DOTA_CM_RANDOM</code> | Who gets first pick |
+| allow_cheats | <code>boolean</code> | <code>false</code> | Whether or not to allow cheats |
+| fill_with_bots | <code>boolean</code> | <code>false</code> | Whether or not to fill empty slots with bots |
+| bot_difficulty_radiant | <code>BotDifficulty</code> | <code>module:Dota2.BotDifficulty.PASSIVE</code> | The bot difficulty for radiant bots, if fill_with_bots is true. |
+| bot_difficulty_dire | <code>BotDifficulty</code> | <code>module:Dota2.BotDifficulty.PASSIVE</code> | The bot difficulty for dire bots, if fill_with_bots is true. |
+| bot_radiant | <code>number</code> |  | Presumably the ID of the custom AI to be applied to radiant bots. |
+| bot_dire | <code>number</code> |  | Presumably the ID of the custom AI to be applied to dire bots. |
+| allow_spectating | <code>boolean</code> | <code>true</code> | Whether or not to allow spectating |
+| series_type | <code>SeriesType</code> | <code>NONE</code> | Whether or not the game is part of a series (Bo3, Bo5). |
+| radiant_series_wins | <code>number</code> | <code>0</code> | # of games won so far, e.g. for a Bo3 or Bo5. |
+| dire_series_wins | <code>number</code> | <code>0</code> | # of games won so far, e.g. for a Bo3 or Bo5. |
+| previous_match_override | <code>number</code> |  | In a series, the match ID of the previous game. If not supplied, the GC will try to find it automatically based on the teams and the players. |
+| allchat | <code>boolean</code> | <code>false</code> | Whether or not it's allowed to all-chat |
+| dota_tv_delay | <code>LobbyDotaTVDelay</code> | <code>LobbyDotaTV_120</code> | How much time the game should be delayed for DotaTV. |
+| leagueid | <code>number</code> |  | The league this lobby is being created for. The bot should be a league admin for this to work. |
+| custom_game_mode | <code>string</code> |  | Name of the custom game |
+| custom_map_name | <code>string</code> |  | Which map the custom game should be played on |
+| custom_difficulty | <code>number</code> |  | Difficulty of the custom game |
+| custom_game_id | <code>[Long](#external_Long)</code> |  | 64bit ID of the custom game mode |
+
+<a name="module_Dota2.Dota2Client+LobbyInvite"></a>
+
+#### dota2Client.LobbyInvite : <code>CSODOTALobbyInvite</code>
+The currently active lobby invitation. Falsy if the bot has not been invited.
+
+**Kind**: instance property of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+<a name="module_Dota2.Dota2Client+Party"></a>
+
+#### dota2Client.Party : <code>CSODOTAParty</code>
+The party the bot is currently in. Falsy if the bot isn't in a party.
+
+**Kind**: instance property of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+<a name="module_Dota2.Dota2Client+PartyInvite"></a>
+
+#### dota2Client.PartyInvite : <code>CSODOTAPartyInvite</code>
+The currently active party invitation. Falsy if the bot has not been invited.
+
+**Kind**: instance property of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+<a name="module_Dota2.Dota2Client+launch"></a>
+
+#### dota2Client.launch()
 Reports to Steam that you're playing Dota 2, and then initiates communication with the Game Coordinator.
 
-#### exit()
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+<a name="module_Dota2.Dota2Client+exit"></a>
 
-Tells Steam you were feeding.
+#### dota2Client.exit()
+Stop sending a heartbeat to the GC and report to steam you're no longer playing Dota 2
 
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+<a name="module_Dota2.Dota2Client+joinChat"></a>
 
-###Utilities
-#### ToAccountID(steamID)
-* Takes an input steam ID in any format and converts it into an int Account ID.
-
-#### ToSteamID(accountID)
-* Takes an input Dota 2 acount ID in any format and converts it into a string steam ID.
-
-
-### Inventory
-#### setItemPositions(item_positions)
-* `item_positions` - An array of tuples (itemid, position).
-
-Attempts to move items within your inventory to the positions you set. Requires the GC to be ready (listen for the `ready` event before calling).
-
-#### deleteItem(item_id)
-
-Attempts to delete an item. Requires the GC to be ready (listen for the `ready` event before calling).
-
-
-### Chat
-**_In order to send a message, your account must 1. be non-Limited Steam Account 2. have at least 5 Trophy Level_**
-
-#### joinChat(channel_name, [channel_type])
-* `channel_name` - A string for the channel name.
-* `[channel_type]` - The type of the channel being joined.  Defaults to `Dota2.schema.DOTAChatChannelType_t.DOTAChannelType_Custom`.
-
+#### dota2Client.joinChat(channel_name, [channel_type])
 Joins a chat channel. If the chat channel with the given name doesn't exist, it 
 is created. Listen for the `chatMessage` event for other people's chat messages.
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-Notable channels:
-* `Guild_##########` - The chat channel of the guild with guild_id = ##########
-* `Lobby_##########` - The chat channel of the lobby with lobby_id = ##########
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-#### leaveChat(channel_name, [channel_type])
-* `channel_name` - A string for the channel name.
-* `[channel_type]` - The type of the channel you want to leave. Use the `Dota2.schema.DOTAChatChannelType_t` enum. 
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| channel_name | <code>string</code> |  | Name of the chat channel |
+| [channel_type] | <code>DOTAChatChannelType_t</code> | <code>DOTAChatChannelType_t.DOTAChatChannelType_Custom</code> | The type of the channel being joined |
 
-Leaves a chat channel. If you've joined different channels with the same name, specify the type to prevent unexpected behaviour.
+<a name="module_Dota2.Dota2Client+leaveChat"></a>
 
-#### sendMessage(channel, message, [channel_type])
-* `channel` - A string for the channel name.
-* `message` - The message you want to send.
-* `[channel_type]` - The type of the channel you want to send a message to. Use the `Dota2.schema.DOTAChatChannelType_t` enum.
+#### dota2Client.leaveChat(channel_name, [channel_type])
+Leaves a chat channel. If you've joined different channels with the same name,
+specify the type to prevent unexpected behaviour.
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| channel_name | <code>string</code> | Name of the chat channel |
+| [channel_type] | <code>DOTAChatChannelType_t</code> | The type of the channel being joined |
+
+<a name="module_Dota2.Dota2Client+sendMessage"></a>
+
+#### dota2Client.sendMessage(message, channel_name, [channel_type])
 Sends a message to the specified chat channel. Won't send if you're not in the channel you try to send to.
 If you've joined different channels with the same name, specify the type to prevent unexpected behaviour.
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-#### flipCoin(channel, [channel_type])
-* `channel` - A string for the channel name.
-* `[channel_type]` - The type of the channel you want to flip a coin in. Use the `Dota2.schema.DOTAChatChannelType_t` enum. 
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
+| Param | Type | Description |
+| --- | --- | --- |
+| message | <code>string</code> | The message you want to send |
+| channel_name | <code>string</code> | Name of the chat channel |
+| [channel_type] | <code>DOTAChatChannelType_t</code> | The type of the channel being joined |
+
+<a name="module_Dota2.Dota2Client+shareLobby"></a>
+
+#### dota2Client.shareLobby(channel_name, [channel_type])
+Shares the lobby you're currently in with the chat so other people can join.
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| channel_name | <code>string</code> | Name of the chat channel |
+| [channel_type] | <code>DOTAChatChannelType_t</code> | The type of the channel being joined |
+
+<a name="module_Dota2.Dota2Client+flipCoin"></a>
+
+#### dota2Client.flipCoin(channel_name, [channel_type])
 Sends a coin flip to the specified chat channel. Won't send if you're not in the channel you try to send to.
 If you've joined different channels with the same name, specify the type to prevent unexpected behaviour.
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-#### rollDice(channel, min, max, [channel_type])
-* `channel` - A string for the channel name.
-* `min` - Lower bound of the dice roll.
-* `max` - Upper bound of the dice roll.
-* `[channel_type]` - The type of the channel you want to roll a dice in. Use the `Dota2.schema.DOTAChatChannelType_t` enum. 
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
+| Param | Type | Description |
+| --- | --- | --- |
+| channel_name | <code>string</code> | Name of the chat channel |
+| [channel_type] | <code>DOTAChatChannelType_t</code> | The type of the channel being joined |
+
+<a name="module_Dota2.Dota2Client+rollDice"></a>
+
+#### dota2Client.rollDice(min, max, channel_name, [channel_type])
 Sends a dice roll to the specified chat channel. Won't send if you're not in the channel you try to send to.
 If you've joined different channels with the same name, specify the type to prevent unexpected behaviour.
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-#### requestChatChannels()
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
+| Param | Type | Description |
+| --- | --- | --- |
+| min | <code>number</code> | Lower bound of the dice roll |
+| max | <code>number</code> | Upper bound of the dice roll |
+| channel_name | <code>string</code> | Name of the chat channel |
+| [channel_type] | <code>DOTAChatChannelType_t</code> | The type of the channel being joined |
+
+<a name="module_Dota2.Dota2Client+requestChatChannels"></a>
+
+#### dota2Client.requestChatChannels()
 Requests a list of chat channels from the GC. Listen for the `chatChannelsData` event for the GC's response.
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+<a name="module_Dota2.Dota2Client+requestPlayerMatchHistory"></a>
 
-### Guild
-#### requestGuildData()
+#### dota2Client.requestPlayerMatchHistory(account_id, [options], [callback])
+Requests the given player's match history. The responses are paginated, 
+but you can use the `start_at_match_id` and `matches_requested` options to loop through them.
+Provide a callback or listen for the [playerMatchHistoryData](#module_Dota2.Dota2Client+event_playerMatchHistoryData) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-Sends a request to the GC for new guild data, which returns `guildOpenPartyData` events - telling the client the status of current open parties for each guild, as well as exposing `guildIds` to the client.
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| account_id | <code>number</code> |  | Dota 2 account ID of the player whose match history the bot should fetch |
+| [options] | <code>Object</code> |  | Filtering options |
+| [options.start_at_match_id] | <code>number</code> |  | Which match ID to start searching at (pagination) |
+| [options.matches_requested] | <code>number</code> |  | How many matches to retrieve |
+| [options.hero_id] | <code>number</code> |  | Show only matches where player played the given hero |
+| [options.request_id] | <code>number</code> | <code>account_id</code> | A unique identifier that identifies this request |
+| [options.include_practice_matches] | <code>boolean</code> |  | Whether or not to include practice matches in the results |
+| [options.include_custom_games] | <code>boolean</code> |  | Whether or not to include custom games in the results |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> |  | Called with `err, CMsgDOTAGetPlayerMatchHistoryResponse` |
 
-#### inviteToGuild(guild_id, target_account_id, [callback])
-* `guild_id` - ID of a guild.
-* `target_account_id` - Account ID (lower 32-bits of a 64-bit steam id) of user to invite to guild.
-* `[callback]` - optional callback, returns args: `err, response`.
+<a name="module_Dota2.Dota2Client+requestProfileCard"></a>
 
-Attempts to invite a user to guild. Requires the GC to be ready (listen for the `ready` event before calling).
+#### dota2Client.requestProfileCard(account_id, [callback])
+Sends a message to the Game Coordinator requesting `account_id`'s profile card. 
+This method is heavily rate limited. When abused, the GC just stops responding.
+Even the regular client runs into this limit when you check too many profiles.
+Provide a callback or listen for [profileCardData](#module_Dota2.Dota2Client+event_profileCardData) event for Game Coordinator's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-#### cancelInviteToGuild(guild_id, target_account_id, [callback])
-* `guild_id` - ID of a guild.
-* `target_account_id` - Account ID (lower 32-bits of a 64-bit steam id) of user whoms guild invite you wish to cancel.
-* `[callback]` - optional callback, returns args: `err, response`.
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-Attempts to cancel a user's guild invitation; use this on your own account ID to reject guild invitations. Requires the GC to be ready (listen for the `ready` event before calling).
+| Param | Type | Description |
+| --- | --- | --- |
+| account_id | <code>number</code> | Dota 2 account ID of the player whose profile card the bot should fetch |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgDOTAProfileCard` |
 
-#### setGuildAccountRole(guild_id, target_account_id, target_role, [callback])
-* `guild_id` - ID of a guild.
-* `target_account_id` - Account ID (lower 32-bits of a 64-bit steam id) of user whoms guild invite you wish to cancel.
-* `target_role` - Role in guild to have.
-  * `0` - Kick member from guild.
-  * `1` - Leader.
-  * `2` - Officer.
-  * `3` - Member.
-* `[callback]` - optional callback, returns args: `err, response`.
+<a name="module_Dota2.Dota2Client+requestHallOfFame"></a>
 
-Attempts to set a user's role within a guild; use this with your own account ID and the 'Member' role to accept guild invitations. Requires the GC to be ready (listen for the `ready` event before calling).
+#### dota2Client.requestHallOfFame(week, [callback])
+Sends a message to the Game Coordinator requesting the Hall of Fame data for `week`. 
+Provide a callback or listen for the [hallOfFameData](#module_Dota2.Dota2Client+event_hallOfFameData) event for the Game Coordinator's response.
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-### Team
-#### requestMyTeams([callback])
-* `[callback]` - optional callback, returns args: `err, response`.
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-Requests the authenticated user's team data. 
+| Param | Type | Description |
+| --- | --- | --- |
+| week | <code>number</code> | The week of which you wish to know the Hall of Fame members; will return latest week if omitted. Weeks are counted from start of unix epoch with a lower bound of 2233 (2012-10-18) |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgDOTAHallOfFameResponse` |
 
-#### requestTeamProfile(team_id, [callback]) - DEPRECATED
-* `team_id` - ID of a team
-* `[callback]` - optional callback, returns args: `err, response`.
+<a name="module_Dota2.Dota2Client+requestPlayerInfo"></a>
 
-Requests the profile for a given team.
+#### dota2Client.requestPlayerInfo(account_ids)
+Sends a message to the Game Coordinator requesting one or multiple `account_ids` player information. 
+This includes their display name, country code, team info and sponsor, fantasy role, official information lock status, and if the user is marked as a pro player. 
+Listen for the [playerInfoData](#module_Dota2.Dota2Client+event_playerInfoData) event for the Game Coordinator's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-**Warning** protobuf no longer exists, function is now deprecated.
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-#### requestTeamMemberProfile(steam_id, [callback]) - DEPRECATED
-* `steam_id` - Steam ID of the user whose team profile you want
-* `[callback]` - optional callback, returns args: `err, response`.
+| Param | Type | Description |
+| --- | --- | --- |
+| account_ids | <code>number</code> &#124; <code>Array.&lt;number&gt;</code> | Either a single or array of Account IDs (lower 32-bits of a 64-bit Steam ID) of desired user(s) player info. |
 
-Requests the profile of the team a given user belongs to.
+<a name="module_Dota2.Dota2Client+requestTrophyList"></a>
 
-**Warning** protobuf no longer exists, function is now deprecated.
+#### dota2Client.requestTrophyList(account_id, [callback])
+Sends a message to the Game Coordinator requesting `account_id`'s trophy data. 
+Provide a callback or listen for [trophyListData](#module_Dota2.Dota2Client+event_trophyListData) event for Game Coordinator's response.
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-#### requestTeamIDByName(team_name, [callback]) - DEPRECATED
-* `team_name` - Name of a team
-* `[callback]` - optional callback, returns args: `err, response`.
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-Requests the ID for a given team name.
+| Param | Type | Description |
+| --- | --- | --- |
+| account_id | <code>number</code> | Dota 2 account ID of the player whose trophy data the bot should fetch |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgClientToGCGetTrophyListResponse` |
 
-**Warning** protobuf no longer exists, function is now deprecated.
+<a name="module_Dota2.Dota2Client+requestPlayerStats"></a>
 
-#### requestProTeamList([callback]) - STATUS UNKNOWN
-* `[callback]` - optional callback, returns args: `err, response`.
+#### dota2Client.requestPlayerStats(account_id, [callback])
+Sends a message to the Game Coordinator requesting `account_id`'s player stats. 
+Provide a callback or listen for [playerStatsData](#module_Dota2.Dota2Client+event_playerStatsData) event for Game Coordinator's response. 
+This data contains all stats shown on a player's profile page.
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-Requests the list of pro teams.
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-**Warning** this request no longer triggers a response from the GC. This might be temporary.
+| Param | Type | Description |
+| --- | --- | --- |
+| account_id | <code>number</code> | Dota 2 account ID of the player whose player stats the bot should fetch |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgGCToClientPlayerStatsResponse` |
 
-### Community
-#### requestPlayerMatchHistory(account_id, [options], [callback])
-* `account_id` - Account ID of the user whose match history you wish to retrieve.
-* `[options]` - A mapping of options for the query he results:
-  * `[start_at_match_id]` - Which match ID to start searching at (pagination)
-  * `[matches_requested]` - How many matches to retrieve
-  * `[hero_id]` - The ID of the hero the given account ID had played
-  * `[request_id]` - I have no idea.
-  * `[include_practice_matches]` - Do you want practice matches in the result sets?
-  * `[include_custom_games]` - Do you want custom games in the result sets?
-* `[callback]` - optional callback, returns args: `err, response`.
+<a name="module_Dota2.Dota2Client+requestJoinableCustomGameModes"></a>
 
-Requests the given player's match history. The responses are paginated, but you can use the `start_at_match_id` and `matches_requested` options to loop through them.
+#### dota2Client.requestJoinableCustomGameModes([server_region])
+Requests a list of custom game modes for which there are currently lobbies available.
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-Provide a callback or listen for the `playerMatchHistoryData` for the GC's response. Requires the GC to be ready (listen for the `ready` event before calling).
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-#### requestProfile(account_id, request_name, [callback]) - DEPRECATED
-* `account_id` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose profile data you wish to view.
-* `request_name` - Boolean, whether you want the GC to return the accounts current display name.
-* `[callback]` - optional callback, returns args: `err, response`.
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [server_region] | <code>ServerRegion</code> | <code>ServerRegion.UNSPECIFIED</code> | The server region for which you'd like to obtain the joinable custom game modes |
 
-Sends a message to the Game Coordinator requesting `account_id`'s profile data. Provide a callback or listen for `profileData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+<a name="module_Dota2.Dota2Client+requestPlayerCardsByPlayer"></a>
 
-**Warning** Valve's privacy policy has become stricter since reborn. This function is now reserved for internal use.
+#### dota2Client.requestPlayerCardsByPlayer() ⇒ <code>Array.&lt;FantasyPlayer&gt;</code>
+Requests the player stats for each of the players for which you have one or multiple player cards.
+All requests are staggered in 200ms intervals and time out after 2s.
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-#### requestProfileCard (account_id, [callback])
-* `account_id` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose profile card you wish to view.
-* `[callback]` - optional callback, returns args: `err, response`.
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+**Async**: Returns a list of promises that resolve to [FantasyPlayer](#module_Dota2.Dota2Client+requestPlayerCardsByPlayer.FantasyPlayer) objects  
+<a name="module_Dota2.Dota2Client+requestPlayerCardsByPlayer.FantasyPlayer"></a>
 
-Sends a message to the Game Coordinator requesting `account_id`'s profile card. Provide a callback or listen for `profileCardData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+##### requestPlayerCardsByPlayer.FantasyPlayer : <code>Object</code>
+Player with player cards
 
-#### requestPassportData(account_id, [callback]) - DEPRECATED
-* `account_id` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose passport data you wish to view.
-* `[callback]` - optional callback, returns args: `err, response`.
+**Kind**: static typedef of <code>[requestPlayerCardsByPlayer](#module_Dota2.Dota2Client+requestPlayerCardsByPlayer)</code>  
+**Properties**
 
-Sends a message to the Game Coordinator requesting `account_id`'s passport data. Provide a callback or listen for `passportData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
-This function is no longer supported by Valve, it's only left here for historical purposes. It will be removed in a future release.
+| Name | Type | Description |
+| --- | --- | --- |
+| account_id | <code>number</code> | Dota2 account ID of the player |
+| cards | <code>Array.&lt;Object&gt;</code> | Player cards of this player in the bot's inventory |
+| cards[].id | <code>number</code> | ID of the card |
+| cards[].bonuses | <code>[Long](#external_Long)</code> | 64bit bitmask for the bonuses of this card |
+| stats | <code>[CMsgGCToClientPlayerStatsResponse](#module_Dota2.schema.CMsgGCToClientPlayerStatsResponse)</code> | Player stats |
 
-#### requestHallOfFame([week], [callback])
-* `[week]` - The week of which you wish to know the Hall of Fame members; will return latest week if omitted.  Weeks also randomly start at 2233 for some reason, valf please.
-* `[callback]` - optional callback, returns args: `err, response`.
+<a name="module_Dota2.Dota2Client+requestPlayerCardRoster"></a>
 
-Sends a message to the Game Coordinator requesting the Hall of Fame data for `week`. Provide a callback or listen for the `hallOfFameData` event for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+#### dota2Client.requestPlayerCardRoster(league_id, timestamp, [callback])
+Sends a message to the Game Coordinator requesting your fantasy line-up for a specific day of a given tournament. 
+Provide a callback or listen for the [playerCardRoster](#module_Dota2.Dota2Client+event_playerCardRoster) event for the Game Coordinator's response.
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-#### requestPlayerInfo(account_ids)
-* `account_ids` - Either a single or array of Account IDs (lower 32-bits of a 64-bit Steam ID) of desired user(s) player info.  
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-Sends a message to the Game Coordinator requesting one or multiple `account_ids` player information. This includes their display name, country code, team info and sponsor, fantasy role, official information lock status, and if the user is marked as a pro player. Listen for the `playerInfoData` event for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+| Param | Type | Description |
+| --- | --- | --- |
+| league_id | <code>number</code> | ID of the league |
+| timestamp | <code>number</code> | Date in timeframe of the league |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgClientToGCGetPlayerCardRosterResponse` |
 
-#### requestTrophyList(account_id, [callback])
-* `account_id` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose trophy data you wish to view.
-* `[callback]` - optional callback, returns args: `err, response`.
+<a name="module_Dota2.Dota2Client+draftPlayerCard"></a>
 
-Sends a message to the Game Coordinator requesting `account_id`'s trophy data. Provide a callback or listen for `trophyListData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling). Notably, this data contains the `profile_name` field, which is the user's name displayed on their profile page in dota.
+#### dota2Client.draftPlayerCard(league_id, timestamp, slot, player_card_id, [callback])
+Sends a message to the Game Coordinator requesting to draft a certain player card in a specific slot, for a given day in a tournament. 
+Provide a callback or listen for the [playerCardDrafted](#module_Dota2.Dota2Client+event_playerCardDrafted) event for the Game Coordinator's response.
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-#### requestPlayerStats(account_id, [callback])
-* `account_id` - Account ID (lower 32-bits of a 64-bit Steam ID) of the user whose player stats you wish to view.
-* `[callback]` - optional callback, returns args: `err, response`.
-*
-Sends a message to the Game Coordinator requesting `account_id`'s player stats. Provide a callback or listen for `playerStatsData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling). This data contains all stats shown on a player's profile page.
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
+| Param | Type | Description |
+| --- | --- | --- |
+| league_id | <code>number</code> | ID of the league for which you're drafting a player card |
+| timestamp | <code>number</code> | Timestamp of the day for which you want to draft a player card |
+| slot | <code>number</code> | Slot in the draft which you want to fill |
+| player_card_id | <code>number</code> | Item ID of the player card you want to draft |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgClientToGCSetPlayerCardRosterResponse` |
 
-### Matches
-#### requestMatches(criteria, [callback])
-* `[criteria]` - The options available for searching matches:
-  * `[hero_id]`
-  * `[game_mode]` 
-  * `[date_min]`
-  * `[date_max]`
-  * `[matches_requested]`
-  * `[start_at_match_id]`
-  * `[min_players]`
-  * `[tournament_games_only]`
-  * `[account_id]`
-  * `[league_id]`
-  * `[skill]`
-  * `[team_id]` -
-* `[callback]` - optional callback, returns args: `err, response`.
+<a name="module_Dota2.Dota2Client+setItemPositions"></a>
 
-Requests matches from the GC matching the given criteria.  Provide a callback or listen for the `matchesData` event for teh Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+#### dota2Client.setItemPositions(item_positions)
+Attempts to change the position of one or more items in your inventory.
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-#### requestMatchDetails(match_id, [callback])
-* `match_id` - The match's ID
-* `[callback]` - optional callback, returns args: `err, response`.
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-Sends a message to the Game Coordinator requesting `match_id`'s match details. Provide a callback or listen for `matchDetailsData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+| Param | Type | Description |
+| --- | --- | --- |
+| item_positions | <code>Array.&lt;Object&gt;</code> | The new positions of the items |
+| item_positions[].item_id | <code>number</code> | ID of the item |
+| item_positions[].position | <code>number</code> | New position of the item |
 
-Note:  There is a server-side rate-limit of 100 requests per 24 hours on this method.
+<a name="module_Dota2.Dota2Client+deleteItem"></a>
 
-#### requestMatchMinimalDetails(match_ids, [callback])
- * `match_ids` - The match IDs that you want concise details of
- * `[callback]` - optional callback, returns args: `err, response`.
+#### dota2Client.deleteItem(item_id)
+Attempts to delete an item in your inventory.
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-Sends a message to the Game Coordinator requesting the match details for matches corresponding to `match_ids`. Provide a callback or listen for `matchMinimalDetailsData` event for Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-#### requestMatchmakingStats()
+| Param | Type | Description |
+| --- | --- | --- |
+| item_id | <code>number</code> | ID of the item |
 
-Sends a message to the Game Coordinator requesting some matchmaking stats. Listen for the `matchmakingStatsData` event for the Game Coordinator's response (cannot take a callback because of Steam's backend, or RJackson's incompetence; not sure which). Requires the GC to be ready (listen for the `ready` event before calling).
+<a name="module_Dota2.Dota2Client+requestLeaguesInMonth"></a>
 
-#### requestTopFriendMatches()
+#### dota2Client.requestLeaguesInMonth([month], [year], [tier], [callback])
+Sends a message to the Game Coordinator requesting data on leagues being played in the given month.  
+Provide a callback or listen for [leaguesInMonthData](#module_Dota2.Dota2Client+event_leaguesInMonthData) for the Game Coordinator's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-Sends a message to the Game Coordinator requesting the top matches of your friends. Listen for the `topFriendMatchesData` event for the Game Coordinator's response (cannot take a callback because of Steam's backend). Requires the GC to be ready (listen for the `ready` event before calling).
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [month] | <code>number</code> | <code>(new Date()).getMonth()</code> | Month (MM) you want to query data for. **IMPORTANT NOTE**:  Month is zero-aligned, not one-aligned; so Jan = 00, Feb = 01, etc. |
+| [year] | <code>number</code> | <code>(new Date()).getFullYear()</code> | Year (YYYY) you want to query data for. |
+| [tier] | <code>number</code> | <code>0</code> | Search only for a specific tier of tournaments. |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> |  | Called with `err, CMsgDOTALeaguesInMonthResponse` |
 
-### Parties
+<a name="module_Dota2.Dota2Client+requestLeagueInfo"></a>
 
-### respondPartyInvite(id, accept, [ping_data])
-* `id` - Number, party ID.
-* `accept` - Accept or decline the invite.
-* `[ping_data]` - Optional argument to be provided when accepting a party invite. For contents see `CMsgClientPingData`.
+#### dota2Client.requestLeagueInfo()
+Requests info on all available official leagues from the GC.
+Listen for the [leagueData](#module_Dota2.Dota2Client+event_leagueData) event for the Game Coordinator's response.
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-Responds to an incoming party invite. The `PartyInvite` property is cleared after the response has been sent.
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+<a name="module_Dota2.Dota2Client+requestTopLeagueMatches"></a>
 
+#### dota2Client.requestTopLeagueMatches()
+Sends a message to the Game Coordinator requesting the top league matches.
+Listen for the [topLeagueMatchesData](#module_Dota2.Dota2Client+event_topLeagueMatchesData) event for the Game Coordinator's response.
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-### inviteToParty(id)
-* `[id]` - The steam ID to invite.
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+<a name="module_Dota2.Dota2Client+createPracticeLobby"></a>
 
-Invites a player to a party. This will create a new party if you aren't in one.
+#### dota2Client.createPracticeLobby(options, [callback])
+Sends a message to the Game Coordinator requesting to create a lobby. 
+This will automatically make the bot join the first slot on radiant team. Listen for
+[practiceLobbyUpdate](#module_Dota2.Dota2Client+event_practiceLobbyUpdate) response for a
+snapshot-update of the newly created lobby.
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-### kickFromParty(id)
-* `[id]` - The steam ID to kick.
+| Param | Type | Description |
+| --- | --- | --- |
+| options | <code>[Options](#module_Dota2.Dota2Client+Lobby.Options)</code> | Configuration options for the lobby |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgPracticeLobbyJoinResponse` |
 
-Kicks a player from the party. This will create a new party if you aren't in one.
+<a name="module_Dota2.Dota2Client+_createPracticeLobby"></a>
 
+#### ~~dota2Client._createPracticeLobby()~~
+***Deprecated***
 
-### setPartyCoach(coach)
-* `[coach]` - Boolean, if the bot wants to be coach or not.
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+<a name="module_Dota2.Dota2Client+createTournamentLobby"></a>
 
-Set the bot's status as a coach.
+#### ~~dota2Client.createTournamentLobby()~~
+***Deprecated***
 
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+<a name="module_Dota2.Dota2Client+configPracticeLobby"></a>
 
-### setPartyLeader(id)
-* `[id]` - The steam ID of new party leader.
+#### dota2Client.configPracticeLobby(lobby_id, options, [callback])
+Sends a message to the Game Coordinator requesting to configure some options of the active lobby. 
+Listen for [practiceLobbyUpdate](#module_Dota2.Dota2Client+event_practiceLobbyUpdate) response 
+for a snapshot-update of the newly created lobby.
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-Set the new party leader.
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
+| Param | Type | Description |
+| --- | --- | --- |
+| lobby_id | <code>[Long](#external_Long)</code> | ID of the lobby |
+| options | <code>[Options](#module_Dota2.Dota2Client+Lobby.Options)</code> | The new option values |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgPracticeLobbyJoinResponse` |
 
-### leaveParty()
+<a name="module_Dota2.Dota2Client+requestPracticeLobbyList"></a>
 
-Leaves the current party. See the `Party` property.
+#### dota2Client.requestPracticeLobbyList([callback])
+Requests a lists of joinable practice lobbies.
+Provide a callback or listen for the [practiceLobbyListData](#module_Dota2.Dota2Client+event_practiceLobbyListData) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-### Lobbies
-### respondLobbyInvite(id, accept)
-* `[id]` - Practice lobby ID
-* `[accept]` - Boolean, whether or not you accept the invitation.
+| Param | Type | Description |
+| --- | --- | --- |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgPracticeLobbyListResponse` |
 
-Sends a message to the Game Coordinator confirming a lobby invitation. The `LobbyInvite` property is cleared after the response is sent.
+<a name="module_Dota2.Dota2Client+requestFriendPracticeLobbyList"></a>
 
-### joinPracticeLobby(id, [password], [callback])
-* `[id]` - Practice lobby ID
-* `[password]` - Practice lobby password
-* `[callback]` - Optional callback, returns args: `err, response`.
+#### dota2Client.requestFriendPracticeLobbyList([callback])
+Requests a lists of joinable practice lobbies which have one of your friends in them.
+Provide a callback or listen for the [friendPracticeLobbyListData](#module_Dota2.Dota2Client+event_friendPracticeLobbyListData) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-Sends a message to the Game Coordinator requesting to join a lobby.  Provide a callback or listen for `practiceLobbyJoinResponse` for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-#### createPracticeLobby([password], [options], [callback])
-* `[password]` - Password to restrict access to the lobby (optional).
-* `[options]` - Options available for the lobby. All are optional, but send at least one.
-  * `game_name`: String, lobby title.
-  * `server_region`: Use the ServerRegion enum.
-  * `game_mode`: Use the DOTA_GameMode enum.
-  * `game_version`: Use the game version enum.
-  * `cm_pick`: Use the DOTA_CM_PICK enum.
-  * `allow_cheats`: Boolean, allow cheats.
-  * `fill_with_bots`: Boolean, fill available slots with bots?
-  * `allow_spectating`: Boolean, allow spectating?
-  * `pass_key`: Password.
-  * `series_type`: Use the series type enum.
-  * `radiant_series_wins`: # of games won so far, e.g. for a Bo3 or Bo5.
-  * `dire_series_wins`: # of games won so far, e.g. for a Bo3 or Bo5.
-  * `allchat`: Enable all chat for VOIP
-  * `league_id`: The league this lobby is being created for. Optional
-  * `dota_tv_delay`: Number of seconds the game should be delayed for DotaTV.
-  * `custom_game_mode`: TODO.
-  * `custom_map_name`: TODO.
-  * `custom_difficulty`: TODO.
-  * `custom_game_id`: TODO.
-* `[callback]` - optional callback, returns args: `err, response`.
+| Param | Type | Description |
+| --- | --- | --- |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgFriendPracticeLobbyListResponse` |
 
-Sends a message to the Game Coordinator requesting to create a lobby.  Listen for `practiceLobbyUpdate`  response for a snapshot-update of the newly created lobby. Requires the GC to be ready (listen for the `ready` event before calling).
+<a name="module_Dota2.Dota2Client+balancedShuffleLobby"></a>
 
-#### createTournamentLobby([password], [tournament_game_id], [tournament_id], [options], [callback])
-* `[password]` - See paramter description in [#createPracticeLobby]
-* `[tournament_game_id]` - TODO
-* `[tournament_id]` - TODO
-* `[options]` - See paramter description in [#createPracticeLobby]
-* `[callback]` - optional callback, returns args: `err, response`.
+#### dota2Client.balancedShuffleLobby([callback])
+Shuffles the lobby based on skill level. Requires you to be in a lobby and to be the host.
+Provide a callback or listen for the [practiceLobbyResponse](#module_Dota2.Dota2Client+event_practiceLobbyResponse) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-Sends a message to the Game Coordinator requesting to create a tournament lobby. Listen for `practiceLobbyUpdate`  response for a snapshot-update of the newly created lobby. Requires the GC to be ready (listen for the `ready` event before calling).
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-#### joinPracticeLobbyTeam(slot, team, [callback])
-* `slot` - The slot you want to fill (1-10)
-* `team` - The team you want to be on. Use the `GOTA_GC_TEAM` enum
-* `[callback]` - optional callback, returns args: `err, response`.
+| Param | Type | Description |
+| --- | --- | --- |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgPracticeLobbyJoinResponse` |
 
-Sends a message to the Game Coordinator requesting to join a particular team in the lobby. Provide a callback or listen for `practiceLobbyResponse` for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+<a name="module_Dota2.Dota2Client+flipLobbyTeams"></a>
 
-#### addBotToPracticeLobby(slot, team, bot_difficulty, [callback])
-* `slot` - The slot you want to fill (1-10)
-* `team` - The team you want to be on. Use the `DOTA_GC_TEAM` enum
-* `bot_difficulty` - The difficulty setting of the bot. Use the `DOTABotDifficulty`enum
-* `[callback]` - optional callback, returns args: `err, response`.
+#### dota2Client.flipLobbyTeams([callback])
+Flips the radiant and dire team players. Requires you to be in a lobby and to be the host.
+Provide a callback or listen for the [practiceLobbyResponse](#module_Dota2.Dota2Client+event_practiceLobbyResponse) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-Sends a message to the Game Coordinator requesting to add a bot to the given team in the lobby. Provide a callback or listen for `practiceLobbyResponse` for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-#### joinPracticeLobbyBroadcastChannel(channel, [callback])
-  * `channel` - The channel slot you want to fill (default: 1)
-  * `[callback]` - optional callback, returns args: `err, response`.
+| Param | Type | Description |
+| --- | --- | --- |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgPracticeLobbyJoinResponse` |
 
- Sends a message to the Game Coordinator requesting to add a bot to the broadcast channel. Provide a callback or listen for `practiceLobbyResponse` for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+<a name="module_Dota2.Dota2Client+inviteToLobby"></a>
 
-#### balancedShuffleLobby()
-
-Shuffles the lobby teams.
-
-#### flipLobbyTeams()
-
-Flips the teams in a lobby.
-
-#### configPracticeLobby(lobby_id, options, [callback])
-* `lobby_id` - Lobby ID
-* `options` - See paramter description in [#createPracticeLobby]
-* `[callback]` - optional callback, returns args: `err, response`.
-
-Sends a message to the Game Coordinator requesting to configure some options of the active lobby. Requires the GC to be ready (listen for the `ready` event before calling).
-
-#### launchPracticeLobby()
-
-Sends a message to the GC requesting the currrent lobby be started (server found and game begins). You will receive updates in the `practiceLobbyUpdate` response.
-
-#### inviteToLobby(steam_id)
-* `steam_id` The Steam ID of the player you want to invite.
-
+#### dota2Client.inviteToLobby(steam_id)
 Asks to invite a player to your lobby. This creates a new default lobby when you are not already in one.
+Listen for the [inviteCreated](#module_Dota2.Dota2Client+event_inviteCreated) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-#### practiceLobbyKick(account_id, [callback])
-* `account_id` The ID of the player you want to kick.
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-Asks to kick someone from your current practice lobby.
+| Param | Type | Description |
+| --- | --- | --- |
+| steam_id | <code>[Long](#external_Long)</code> | The Steam ID of the player you want to invite. |
 
-#### practiceLobbyKickFromTeam(account_id, [callback])
-* `account_id` The ID of the player you want to kick from the team.
+<a name="module_Dota2.Dota2Client+practiceLobbyKick"></a>
 
+#### dota2Client.practiceLobbyKick(account_id, [callback])
+Asks to kick someone from your current practice lobby. Requires you to be in a lobby and to be the host.
+Provide a callback or listen for the [practiceLobbyResponse](#module_Dota2.Dota2Client+event_practiceLobbyResponse) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| account_id | <code>number</code> | The Dota2 account ID of the player you want to kick. |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgPracticeLobbyJoinResponse` |
+
+<a name="module_Dota2.Dota2Client+practiceLobbyKickFromTeam"></a>
+
+#### dota2Client.practiceLobbyKickFromTeam(account_id, [callback])
 Asks to kick someone from his chosen team in your current practice lobby.
+The player will be added to the player pool
+Provide a callback or listen for the [practiceLobbyResponse](#module_Dota2.Dota2Client+event_practiceLobbyResponse) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-#### leavePracticeLobby()
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-Sends a message to the Game Coordinator requesting to leave the current lobby.  Requires the GC to be ready (listen for the `ready` event before calling).
+| Param | Type | Description |
+| --- | --- | --- |
+| account_id | <code>number</code> | The Dota2 account ID of the player you want to kick from his team. |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgPracticeLobbyJoinResponse` |
 
-#### requestPracticeLobbyList
+<a name="module_Dota2.Dota2Client+joinPracticeLobby"></a>
 
-TODO
+#### dota2Client.joinPracticeLobby(id, password, [callback])
+Sends a message to the Game Coordinator requesting to join a lobby.
+Provide a callback or listen for the [practiceLobbyJoinResponse](#module_Dota2.Dota2Client+event_practiceLobbyJoinResponse) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-#### requestFriendPractiseLobbyList
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-TODO
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>externalLong</code> | The ID of the lobby |
+| password | <code>number</code> | The password of the lobby |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgPracticeLobbyJoinResponse` |
 
-### Custom games
-#### requestJoinableCustomGameModes([server_region])
-* `[region]` - Enum for the server region, defaults to Dota2.ServerRegion.UNSPECIFIED
+<a name="module_Dota2.Dota2Client+leavePracticeLobby"></a>
 
-Sends a message to the Game Coordinator requesting a list of joinable custom games for a given region.
+#### dota2Client.leavePracticeLobby([callback])
+Sends a message to the Game Coordinator requesting to leave the current lobby.
+Provide a callback or listen for the [practiceLobbyResponse](#module_Dota2.Dota2Client+event_practiceLobbyResponse) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-### Leagues
-#### requestLeaguesInMonth([month], [year], [tier], [callback])
-* `[month]` - Int for the month (MM) you want to query data for.  Defaults to current month. **IMPORTANT NOTE**:  Month is zero-aligned, not one-aligned; so Jan = 00, Feb = 01, etc.
-* `[year]`  - Int for the year (YYYY) you want to query data for .  Defaults to current year.
-* `[tier]`  - Search only for a specific tier of tournaments. Defaults to 0.
-* `[callback]` - optional callback` returns args: `err` response`.
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-Sends a message to the Game Coordinator requesting data on leagues being played in the given month.  Provide a callback or listen for `leaguesInMonthData` for the Game Coordinator's response.  Requires the GC to be ready (listen for the `ready` event before calling).
+| Param | Type | Description |
+| --- | --- | --- |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgPracticeLobbyJoinResponse` |
 
-#### requestLeagueInfo()
+<a name="module_Dota2.Dota2Client+abandonCurrentGame"></a>
 
-Requests info on all available official leagues from the GC. Listen for `leagueData` for the Game Coordinator's response.  Requires the GC to be ready (listen for the `ready` event before calling).
+#### dota2Client.abandonCurrentGame([callback])
+Abandons the current game.
+Provide a callback or listen for the [practiceLobbyResponse](#module_Dota2.Dota2Client+event_practiceLobbyResponse) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-#### requestTopLeagueMatches()
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-Sends a message to the Game Coordinator requesting the top league matches. Listen for the `topLeagueMatchesData` event for the Game Coordinator's response (cannot take a callback because of Steam's backend). Requires the GC to be ready (listen for the `ready` event before calling).
+| Param | Type | Description |
+| --- | --- | --- |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgPracticeLobbyJoinResponse` |
 
-### Fantasy
-#### requestPlayerCardRoster(league_id, timestamp, [callback])
-* `league_id` - ID of the league for which you're requesting your player card roster
-* `timestamp` - timestamp of the day for which you want your player card roster
-* `[callback]` - optional callback` returns args: `err` response`.
- 
-Sends a message to the Game Coordinator requesting your fantasy line-up for a specific day of a given tournament. Listen for the `playerCardRoster` event for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
+<a name="module_Dota2.Dota2Client+launchPracticeLobby"></a>
+
+#### dota2Client.launchPracticeLobby([callback])
+Start the practice lobby. The bot will continue to receive lobby updates, but won't join the actual game.
+Requires you to be in a lobby and to be the host.
+Provide a callback or listen for the [practiceLobbyResponse](#module_Dota2.Dota2Client+event_practiceLobbyResponse) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-#### draftPlayerCard(league_id, timestamp, slot, player_card_id, [callback])
-* `league_id` - ID of the league for which you're drafting a player card
-* `timestamp` - timestamp of the day for which you want to draft a player card
-* `slot` - Slot in the draft which you want to fill
-* `player_card_id` - Item ID of the player card you want to draft
-* `[callback]` - optional callback` returns args: `err` response`.
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgPracticeLobbyJoinResponse` |
 
-Sends a message to the Game Coordinator requesting to draft a certain player card in a specific slot, for a given day in a tournament. Listen for the `playerCardDrafted` event for the Game Coordinator's response. Requires the GC to be ready (listen for the `ready` event before calling).
-### SourceTV
+<a name="module_Dota2.Dota2Client+joinPracticeLobbyTeam"></a>
 
-#### requestSourceTVGames([filterOption])
+#### dota2Client.joinPracticeLobbyTeam(slot, team, [callback])
+Sends a message to the Game Coordinator requesting to join a particular team in the lobby.
+Requires you to be in a lobby.
+Provide a callback or listen for the [practiceLobbyResponse](#module_Dota2.Dota2Client+event_practiceLobbyResponse) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-* `[filterOption]` - Object to override the default filters
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-Returns a list of current ongoing matches (from live games tab).
+| Param | Type | Description |
+| --- | --- | --- |
+| slot | <code>number</code> | The slot you want to join |
+| team | <code>number</code> | The team you want to join |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgPracticeLobbyJoinResponse` |
 
-Default filterOptions:
+<a name="module_Dota2.Dota2Client+joinPracticeLobbyBroadcastChannel"></a>
 
-```javascript
-{
-    search_key: '',
-    league_id: 0,
-    hero_id: 0,
-    start_game: 0, // This is not the game offset, only values in [0, 10, 20, ... 90] are valid, and yield [1,2,3 ... 10] responses
-    game_list_index: 0,
-    lobby_ids: [], // This is for getting player specific matches (pro player) games on the live games list, but where the lobby_ids are derived from is unknown.
-}
-```
+#### dota2Client.joinPracticeLobbyBroadcastChannel([channel], [callback])
+Sends a message to the Game Coordinator requesting to add a bot to the broadcast channel.
+Requires you to be in a lobby.
+Provide a callback or listen for the [practiceLobbyResponse](#module_Dota2.Dota2Client+event_practiceLobbyResponse) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-> __Important:__ The useful parameters are `league_id`, `hero_id`, and `start_game`.  The rest have unclear usage conditions.
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-## Events
-### `ready`
-Emitted when the GC is ready to receive messages.  Be careful not to declare anonymous functions as event handlers here, as you'll need to be able to invalidate event handlers on an `unready` event.
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [channel] | <code>number</code> | <code>1</code> | The channel slot you want to fill |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> |  | Called with `err, CMsgPracticeLobbyJoinResponse` |
 
-### `unready`
-Emitted when the connection status to the GC changes, and renders the library unavailable to interact.  You should clear any event handlers set in the `ready` event here, otherwise you'll have multiple handlers for each message every time a new `ready` event is sent.
+<a name="module_Dota2.Dota2Client+addBotToPracticeLobby"></a>
 
-### `popup` (`type`, `popup`)
-* `type` - The type of the popup. See `CMsgDOTAPopup.PopupID` 
-* `popup` - The raw popup data
+#### dota2Client.addBotToPracticeLobby(slot, team, bot_difficulty, [callback])
+Sends a message to the Game Coordinator requesting to add a bot to the given team in the lobby.
+Requires you to be in a lobby and to be the host
+Provide a callback or listen for the [practiceLobbyResponse](#module_Dota2.Dota2Client+event_practiceLobbyResponse) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| slot | <code>number</code> | The slot you want to add a bot to |
+| team | <code>number</code> | The team you want to add a bot to |
+| bot_difficulty | <code>[BotDifficulty](#module_Dota2.BotDifficulty)</code> | The difficulty setting of the bot. |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgPracticeLobbyJoinResponse` |
+
+<a name="module_Dota2.Dota2Client+respondLobbyInvite"></a>
+
+#### dota2Client.respondLobbyInvite(id, accept)
+Sends a message to the Game Coordinator confirming/denying a lobby invitation
+Provide a callback or listen for the [practiceLobbyResponse](#module_Dota2.Dota2Client+event_practiceLobbyResponse) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>[Long](#external_Long)</code> | The ID of the lobby |
+| accept | <code>boolean</code> | Whether or not you accept the invitation. |
+
+<a name="module_Dota2.Dota2Client+requestMatches"></a>
+
+#### dota2Client.requestMatches([criteria], [callback])
+Requests a list of matches corresponding to the given criteria. The responses are paginated, 
+but you can use the `start_at_match_id` and `matches_requested` options to loop through them.
+Provide a callback or listen for the [matchesData](#module_Dota2.Dota2Client+event_matchesData) event for the GC's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [criteria] | <code>Object</code> |  | Filtering options |
+| [criteria.hero_id] | <code>number</code> |  | Show only matches where someone played the given hero |
+| [criteria.game_mode] | <code>number</code> |  | Game mode |
+| [criteria.start_at_match_id] | <code>number</code> |  | Which match ID to start searching at (pagination) |
+| [criteria.matches_requested] | <code>number</code> | <code>1</code> | How many matches to retrieve |
+| [criteria.min_players] | <code>number</code> |  | Minimum number of players present during the match |
+| [criteria.request_id] | <code>number</code> |  | A unique identifier that identifies this request |
+| [criteria.tournament_games_only] | <code>boolean</code> |  | Whether or not to only include tournament games |
+| [criteria.account_id] | <code>number</code> |  | Dota2 account ID of a player that needs to be present in all matches |
+| [criteria.league_id] | <code>number</code> |  | Show only matches from the league with this ID |
+| [criteria.skill] | <code>number</code> |  | Skill level of the matches. 0 = Any, 3 = Very high skill. |
+| [criteria.team_id] | <code>number</code> |  | Team ID of the team that's played in the matches |
+| [criteria.custom_game_id] | <code>number</code> |  | Show only custom games with the given ID |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> |  | Called with `err, CMsgDOTARequestMatchesResponse` |
 
-Generic popup, can be produced for a plethora of reasons.
+<a name="module_Dota2.Dota2Client+requestMatchDetails"></a>
 
-### `chatMessage` (`channel`, `senderName`, `message`, `chatObject`)
-* `channel` - Channel name.
-* `senderName` - Persona name of user who sent message.
-* `message` - Wot u think?
-* `chatObject` - The raw chat object to do with as you wish.
+#### dota2Client.requestMatchDetails(match_ids, [callback])
+Sends a message to the Game Coordinator requesting the match details for the given match ID. 
+This method is rate limited. When abused, the GC just stops responding.
+Provide a callback or listen for [matchDetailsData](#module_Dota2.Dota2Client+event_matchDetailsData) event for Game Coordinator's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
-Emitted for chat messages received from Dota 2 chat channels
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-### `chatJoin` (`channel`, `joiner_name`, `joiner_steam_id`, `otherJoined_object`)
-* `channel` - Channel name.
-* `joiner_name` - Persona name of user who joined.
-* `joiner_steam_id` - Steam ID of the user who joined.
-* `otherJoined_object` - The raw `CMsgDOTAOtherJoinedChatChannel` object for you to do with as you wish.
-
-Emitted when another user joins a chat channel you are in.
-
-### `chatLeave` (`channel`, `leaver_steam_id`, `otherLeft_object`)
-* `channel` - Channel name.
-* `leaver_steam_id` - Steam ID of the user who left.
-* `otherLeft_object` - The raw `CMsgDOTAOtherLeftChatChannel` object for you to do with as you wish.
-
-Emitted when another user leaves a chat channel you are in.
-
-### `chatChannelsData` (`channels`)
-* `channels` - An array of ChatChannel objects, each with the following properties:
-  * `channel_name`
-  * `num_members`
-  * `channel_type`
-
-The GC's response to a requestChatChannels call.
-
-### `guildOpenPartyData` (`guild_id`, `openParties`)
-* `guild_id` - ID of the guild.
-* `openParties` - Array containing information about open guild parties.  Each object has the following properties:
-  * `partyId` - Unique ID of the party.
-  * `member_account_ids` - Array of account ids.
-  * `time_created` - Something about Back to the Future.
-  * `description` - A user-inputted string.  Do not trust.
-
-Emitted for each guild the bot's account is a member of, containing information on open parties for each guild.  Also exposes guild_id's, which is handy.
-
-### `guildData` (`guild_id`, `members`, `guildDataObject`)
-* `guild_id` - ID of the guild.
-* `members` - A list of members in the guild. Each object has the following properties:
-  * `account_id` - Account ID of the member.
-  * `time_joined` - Timestamp of when this user joined the guild.
-  * `role` - Role of the member withing the guild
-    * `1` - Leader
-    * `2` - Officer
-    * `3` - Member
-* `guildDataObject` - The raw `CMsgDOTAGuildSDO` object.
-
-Emitted when information on a particular guild is retrieved.
-
-### `guildInviteData` (`guild_id`, `guildName`, `inviter`, `guildInviteDataObject`)
-* `guild_id` - ID of the guild.
-* `guildName` - Name of the guild.
-* `inviter` - Account ID of user whom invited you.
-* `guildInviteDataObject` - The raw guildInviteData object to do with as you wish.
-
-You can respond with `cancelInviteToGuild` or `setGuildAccountRole`.
-
-### `teamData` (`teams`, `league_id`)
-* `teams` - Array containing the teams the user is in or which are featured on the user's profile. Each object has the following properties:
-  * `on_team` - Whether or not the user is on this team
-  * `profile_team` - Whether or not this is a team featured on the user's profile
-  * `team` - Info about the team. This contains among others:
-  * `name` - Name of the team
-  * `members` - Account ID and time joined for all members
-  * `wins` - All wins
-  * `losses` - All losses
-  * `gamesplayed` - Total amount of games played
-  * `rank` - Team MMR
-  * ...
-* `league_id` - League ID (no clue as of its meaning, feel free to suggest)
-
-Emitted when GC responds to the `requestMyTeams` method.
-
-See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client.proto#L776) for `team`'s object structure.
-
-### `teamProfile` (`team_id`, `team_info`) - DEPRECATED
-* `team_id` - ID of the team.
-* `team_info` - Info about the team. This contains among others:
-  * `name` - Name of the team
-  * `members` - Account ID and time joined for all members
-  * `wins` - All wins
-  * `losses` - All losses
-  * `gamesplayed` - Total amount of games played
-  * `rank` - Team MMR
-  * ...
-
-Emitted when GC responds to the `requestTeamProfile` and `requestTeamMemberProfile` method.
-
-See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client.proto#L776) for `team_info`'s object structure.
-
-### `teamID` (`team_id`) - DEPRECATED
-* `team_id` - ID of the team. Null if none was found.
-
-Emitted when GC responds to the `requestTeamIDByName` method.
-
-### `proTeamListData` (`teams`)
-* `teams` - List of team entries
-  * `team_id` - ID of the team
-  * `tag` - Tag of the team
-  * `time_created` - Timestamp when the team was created
-  * `logo` - Logo of the team
-  * `country_code` - 2 letter country code
-  * `member_count`- Number of team members in this team
-
-Emitted when GC responds to the `requestProTeamList` method.
-
-### `profileData` (`account_id`, `profileData`) - DEPRECATED
-* `account_id` - Account ID whom the data is associated with.
-* `profileData` - The raw profile data object.
-
-Emitted when GC responds to the `requestProfile` method.
-
-See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_common.proto#L1584) for `profileData`'s object structure.
-
-### `profileCardData` (`account_id`, `profileCardData`)
-* `account_id` - Account ID whom the data is associated with.
-* `profileCardData` - The raw profileCard object.
-
-Emitted when GC responds to the `requestProfileCard` method.
-
-See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_common.proto#L1584) for `profileCardData`'s object structure.
-
-### `playerInfoData` (`playerInfoResponse`)
-* `playerInfoResponse` - The raw playerInfo object.
-  * `leaderboards` - Empty array, details unknown.
-  * `player_infos` - List of player information
-    * `account_id` - The Account ID of the requested user.
-    * `name` - The display name for the user.
-    * `country_code` - The abbreviated country code for the user, i.e. `us`, `cn`, etc...
-    * `fantasy_role` - The role of the player, either core or support, `1` and `2` respectively.
-    * `team_id` - The numerical id of the user's team.
-    * `team_name` - The name of the team the user is on, ex: `Cloud9`
-    * `team_tag` - The abbreviated tag of a team prepended to a player's name, ex: `C9`
-    * `sponsor` - The sponsor listed in the player's official info, ex: `HyperX`  
-    * `is_locked` - Whether or not the user's official player info has been locked from editing, `true` or `false`.
-    * `is_pro` - Whether the player is considered a pro player by Valve, `true` or `false`.
-
-Emitted when GC responds to the `requestPlayerInfo` method.
-
-See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client_fantasy.proto#L159) for `playerInfoData`'s object structure.
-
-### `trophyListData` (`trophyListResponse`)
-* `trophyListResponse` - The raw trophyListResponse object.
-  * `profile_name` - The name displayed on the user's dota profile page and profile card.
-  * `trophies` - List of trophies owned by the user. The following values are all integers.
-    *  `trophy_id` - Id of the trophy.
-    *  `trophy_score` - The score this trophy has counted.  This is usually a level, but can represent other things, like number of challenges completed, or coins collected, etc...
-    *  `last_updated` - The last time the trophy has been updated, in Unix time.
-
-Emitted when GC responds to the `requestTrophyList` method.
-
-### `playerMatchHistoryData` (`request_id`, `matchHistoryResponse`)
-
-TODO
-
-### `passportData` (`account_id`, `passportData`) - DEPRECATED
-* `account_id` - Account ID whom the passport belongs to.
-* `passportData` - The raw passport data object.
-
-Emitted when GC responds to the `requestPassportData` method.
-
-See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client_fantasy.proto#L961) for `passportData`'s object structure.
-
-### `playerStatsData` (`account_id`, `playerStats`)
-* `account_id` - Account ID whom the stats belong to.
-* `playerStats` - Statistics about the player. This entails:
-  * `account_id`
-  * `player_stats`
-  * `match_count`
-  * `mean_gpm`
-  * `mean_xppm`
-  * `mean_lasthits`
-  * `rampages`
-  * `triple_kills`
-  * `first_blood_claimed`
-  * `first_blood_given`
-  * `couriers_killed`
-  * `aegises_snatched`
-  * `cheeses_eaten`
-  * `creeps_stacked`
-  * `fight_score`
-  * `farm_score`
-  * `support_score`
-  * `push_score`
-  * `versatility_score`
-
-Emitted when the GC responds to the `requestPlayerStats` method.
-
-### `hallOfFameData` (`week`, `featuredPlayers`, `featuredFarmer`, `hallOfFameResponse`)
-* `week` - Week the data is associated with.
-* `featuredPlayers` - Array of featured players for that week. `[{ account_id, heroId, averageScaledMetric, numGames }]`
-* `featuredFarmer` - Featured farmer for that week. `{ account_id, heroId, goldPerMin, match_id }`
-* `hallOfFameResponse` - Raw response object.
-
-Emitted when the GC responds to the `requestHallOfFame` method.
-
-### `matchesData`
-
-TODO
-
-### `matchDetailsData` (`match_id`, `matchDetailsData`)
-* `match_id` - Match ID whom the data is associatd with.
-* `matchDetailsData` - The raw match details data object.
-
-Emitted when GC responds to the `requestmatchDetails` method.
-
-See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/dota/dota_gcmessages_client.proto#L1571) for `matchDetailsData`'s object structure.
-
-### `matchMinimalDetailsData` (`matchMinimalDetailsData`)
-* `last_match` - Bool, usage unknown
-* `matchMinimalDetailsData` - The raw match details data object.
-
-Emitted when GC responds to the `requestMatchMinimalDetails` method.
-
-See the [protobuf schema](https://github.com/SteamRE/SteamKit/blob/5acc8bb72bb7fb79ad08723a431fcbfe90669230/Resources/Protobufs/dota/dota_gcmessages_client.proto#L621-L650) for `matchMinimalDetailsData`'s object structure.
-
-### `matchmakingStatsData` (`matchgroups_version`, `match_groups`, `matchmakingStatsResponse`)
-* `matchgroups_version` - Version of the current list of match groups.
-* `match_groups` - Array of CMsgMatchmakingMatchGroupInfo objects. Contains info on the number of people searching and ping penalty.
-* `matchmakingStatsResponse` - Raw response object.
-
-Emitted when te GC response to the `requestMatchmakingStats` method.  The array order dictates which matchmaking groups the figure belongs to. 
-The groups are discoverable through [regions.txt](https://github.com/SteamDatabase/GameTracking/blob/master/dota/game/dota/pak01_dir/scripts/regions.txt) in Dota 2's game files.  We maintain an indicative list *without guarantees* in this README. 
-This list is manually updated only when changes are detected by community members, so it can be out of date. 
-Here are the groups at the time of this sentence being written (with unecessary data trimmed out):
-
-```
-    "USWest":                       {"matchgroup": "0"},
-    "USEast":                       {"matchgroup": "1"},
-    "Europe":                       {"matchgroup": "2"},
-    "Singapore":                    {"matchgroup": "3"},
-    "Shanghai":                     {"matchgroup": "4"},
-    "Brazil":                       {"matchgroup": "5"},
-    "Korea":                        {"matchgroup": "6"},
-    "Stockholm":                    {"matchgroup": "7"},
-    "Austria":                      {"matchgroup": "8"},
-    "Australia":                    {"matchgroup": "9"},
-    "SouthAfrica":                  {"matchgroup": "10"},
-    "PerfectWorldTelecom":          {"matchgroup": "11"},
-    "PerfectWorldUnicom":           {"matchgroup": "12"},
-    "Dubai":                        {"matchgroup": "13"},
-    "Chile":                        {"matchgroup": "14"},
-    "Peru":                         {"matchgroup": "15"},
-    "India":                        {"matchgroup": "16"},
-    "PerfectWorldTelecomGuangdong": {"matchgroup": "17"},
-    "PerfectWorldTelecomZhejiang":  {"matchgroup": "18"},
-    "Japan":                        {"matchgroup": "19"},
-    "PerfectWorldTelecomWuhan":     {"matchgroup": "20"}
-```
-
-### `topFriendMatchesData` (`matches`)
-* `matches` - A list of matches. Each match contains:
-  * `match_id` - Match ID
-  * `start_time` - Unix time of the start of the match
-  * `duration` - Duration of the match in seconds
-  * `game_mode` - Game mode
-  * `winning_team` - Team who won the match
-  * `players` - List of all the players in the game, contains id, hero, K/D/A and items
-  * `league` - Information on the league if this is a league match
-
-Emitted when the GC responds to the `requestTopFriendMatches` method.
-
-### `practiceLobbyUpdate` (`lobby`)
-* `lobby` - The full lobby object (see `CSODOTALobby`).
+| Param | Type | Description |
+| --- | --- | --- |
+| match_ids | <code>Array.&lt;number&gt;</code> | List of match ID's for which the bot should fetch the details |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgGCMatchDetailsResponse` |
 
+<a name="module_Dota2.Dota2Client+requestMatchMinimalDetails"></a>
+
+#### dota2Client.requestMatchMinimalDetails(match_id, [callback])
+Sends a message to the Game Coordinator requesting the minimal match details for the given match ID. 
+This method is rate limited. When abused, the GC just stops responding.
+Provide a callback or listen for [matchMinimalDetailsData](#module_Dota2.Dota2Client+event_matchMinimalDetailsData) event for Game Coordinator's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| match_id | <code>number</code> | Match ID for which the bot should fetch the minimal details |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgClientToGCMatchesMinimalResponse` |
+
+<a name="module_Dota2.Dota2Client+requestMatchmakingStats"></a>
+
+#### dota2Client.requestMatchmakingStats()
+Sends a message to the Game Coordinator requesting the current match making stats. 
+Listen for [matchmakingStatsData](#module_Dota2.Dota2Client+event_matchmakingStatsData) event for Game Coordinator's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+<a name="module_Dota2.Dota2Client+requestTopFriendMatches"></a>
+
+#### dota2Client.requestTopFriendMatches()
+Sends a message to the Game Coordinator requesting the current top matches played by your friends. 
+Listen for [topFriendMatchesData](#module_Dota2.Dota2Client+event_topFriendMatchesData) event for Game Coordinator's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+<a name="module_Dota2.Dota2Client+respondPartyInvite"></a>
+
+#### dota2Client.respondPartyInvite(id, [accept], [ping_data])
+Responds to a party invite.
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| id | <code>[Long](#external_Long)</code> |  | The party's ID |
+| [accept] | <code>boolean</code> | <code>false</code> | Whether or not you accept the invite |
+| [ping_data] | <code>CMsgClientPingData</code> |  | Optional argument that can be provided when accepting an invite. Contains a.o. the ping to the different servers. |
+
+<a name="module_Dota2.Dota2Client+leaveParty"></a>
+
+#### dota2Client.leaveParty()
+Leaves the current party. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+<a name="module_Dota2.Dota2Client+setPartyLeader"></a>
+
+#### dota2Client.setPartyLeader(steam_id)
+Tries to assign a party member as party leader. 
+Only works if you are a party leader and the proposed user is a member of 
+the current party.
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| steam_id | <code>[Long](#external_Long)</code> | The Steam ID of the new party leader |
+
+<a name="module_Dota2.Dota2Client+setPartyCoach"></a>
+
+#### dota2Client.setPartyCoach(coach)
+Announces whether or not you want to be coach of the current party. GC will take action accordingly.
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| coach | <code>boolean</code> | True if you want to be coach, false if you no longer want to be coach |
+
+<a name="module_Dota2.Dota2Client+inviteToParty"></a>
+
+#### dota2Client.inviteToParty(steam_id)
+Invite a player to your party.
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| steam_id | <code>[Long](#external_Long)</code> | Steam ID of the player you want to invite |
+
+<a name="module_Dota2.Dota2Client+kickFromParty"></a>
+
+#### dota2Client.kickFromParty(steam_id)
+Kick a player from your party. Only works if you're party leader.
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| steam_id | <code>[Long](#external_Long)</code> | Steam ID of the player you want to kick |
+
+<a name="module_Dota2.Dota2Client+requestSourceTVGames"></a>
+
+#### dota2Client.requestSourceTVGames(filter_options)
+Requests a list of SourceTV games based on the given criteria. 
+Listen for [sourceTVGamesData](#module_Dota2.Dota2Client+event_sourceTVGamesData) for results
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| filter_options | <code>CSourceTVGameSmall</code> | Filter options. Check the protobuf for a full list. |
+| filter_options.league_id | <code>number</code> | ID of a league |
+| filter_options.hero_id | <code>number</code> | ID of a hero that must be present in the game |
+| filter_options.start_game | <code>number</code> | Number of pages sent, only values in [0, 10, 20, ... 90] are valid, and yield [1,2,3 ... 10] responses |
+
+<a name="module_Dota2.Dota2Client+requestMyTeams"></a>
+
+#### dota2Client.requestMyTeams([callback])
+Sends a message to the Game Coordinator requesting the authenticated user's team data.
+Provide a callback or listen for [teamData](#module_Dota2.Dota2Client+event_teamData) for the Game Coordinator's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [callback] | <code>[requestCallback](#module_Dota2..requestCallback)</code> | Called with `err, CMsgDOTATeamsInfo` |
+
+<a name="module_Dota2.Dota2Client+event_ready"></a>
+
+#### "ready"
+Emitted when the connection with the GC has been established 
+and the client is ready to take requests.
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+<a name="module_Dota2.Dota2Client+event_unhandled"></a>
+
+#### "unhandled" (kMsg, kMsg_name)
+Emitted when the GC sends a message that isn't yet treated by the library.
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| kMsg | <code>number</code> | Proto message type ID |
+| kMsg_name | <code>string</code> | Proto message type name |
+
+<a name="module_Dota2.Dota2Client+event_hellotimeout"></a>
+
+#### "hellotimeout"
+Emitted when the connection with the GC takes longer than 30s
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+<a name="module_Dota2.Dota2Client+event_inventoryUpdate"></a>
+
+#### "inventoryUpdate" (inventory)
+Emitted when the GC sends an inventory snapshot. The GC is incredibly
+inefficient and will send the entire object even if it's a minor update.
+You can use this to detect when a change was made to your inventory (e.g. drop)
+Note that the [Inventory](#module_Dota2.Dota2Client+Inventory) property will be the old value until after this event 
+completes to allow comparison between the two.
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| inventory | <code>Array.&lt;CSOEconItem&gt;</code> | A list of `CSOEconItem` objects |
+
+<a name="module_Dota2.Dota2Client+event_practiceLobbyUpdate"></a>
+
+#### "practiceLobbyUpdate" (lobby)
 Emitted when the GC sends a lobby snapshot. The GC is incredibly
 inefficient and will send the entire object even if it's a minor update.
 You can use this to detect when a lobby has been entered / created
-successfully as well. Note that the `Lobby` property will be the old
+successfully as well. Note that the [Lobby](#module_Dota2.Dota2Client+Lobby) property will be the old
 value until after this event completes to allow comparison between the
 two.
 
-### `lobbyInviteCleared` ()
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
+| Param | Type | Description |
+| --- | --- | --- |
+| lobby | <code>CSODOTALobby</code> | The new state of the lobby. |
+
+<a name="module_Dota2.Dota2Client+event_practiceLobbyCleared"></a>
+
+#### "practiceLobbyCleared"
+Emitted when leaving a lobby (aka, the lobby is cleared). This can
+happen when kicked, upon leaving a lobby, etc. There are other events
+to tell when the bot has been kicked.
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+<a name="module_Dota2.Dota2Client+event_lobbyInviteUpdate"></a>
+
+#### "lobbyInviteUpdate" (lobbyInvite)
+Emitted when the bot received an invite to a lobby
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| lobbyInvite | <code>CSODOTALobbyInvite</code> | The invitation to a lobby. |
+
+<a name="module_Dota2.Dota2Client+event_lobbyInviteCleared"></a>
+
+#### "lobbyInviteCleared"
 Emitted when the Lobby Invite is cleared, for example when
 accepting/rejecting it or when the lobby is closed.
 
-### `practiceLobbyJoinResponse`(`result`, `practiceLobbyJoinResponse`)
-* `result` - The result object from `practiceLobbyJoinResponse`.
-* `practiceLobbyJoinResponse` - The raw response object.
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+<a name="module_Dota2.Dota2Client+event_partyUpdate"></a>
 
-Emitted when the GC responds to `joinPracticeLobby` method.
-
-### `practiceLobbyCleared` ()
-
-Emitted when leaving a lobby (aka, the lobby is cleared). This can
-happen when kicked, upon leaving a lobby, etc. There are other callbacks
-to tell when the bot has been kicked.
-
-### `practiceLobbyResponse` (`result`, `practiceLobbyResponse`)
-* `result` - The result object from `practiceLobbyJoinResponse`.
-* `practiceLobbyResponse` - The raw response object.
-
-Emitted when an operation changing the state of a lobby was sent to the GC and
-processed. This event only contains the acknowledgement by the GC. The actual 
-update of the lobby state is communicated via `practiceLobbyUpdate` events.
-
-### `friendPracticeLobbyListData` ()
-
-TODO
-
-### `joinableCustomGameModes` (`game_modes`)
-* `game_modes` - List of custom game modes that are available in a given server region
-  * `custom_game_id` - ID corresponding to a custom game mode
-  * `lobby_count` - Number of lobbies available for the game mode
-  * `player_count` - Number of players playing this game mode
-
-Emitted when the GC responds to `requestJoinableCustomGameModes`. Never seems to return more then ten results.
-
-### `inviteCreated` (`steam_id`, `group_id`, `is_online`)
-* `steam_id` - The steam ID of the person the invite was sent to
-* `group_id` - The group ID of the person the invite was sent to
-* `is_online` - Whether or not the person the invite was sent to is online
-
-Emitted when the GC has created the invitation. The invitation is only sent when
-the invitee is online.
-
-### `partyUpdate` (`party`)
-* `party` - The full party object (see `CSODOTAParty`).
-
-
+#### "partyUpdate" (party)
 Emitted when the GC sends a party snapshot. The GC is incredibly
 inefficient and will send the entire object even if it's a minor update.
 You can use this to detect when a party has been entered / created
-successfully as well. Note that the `Party` property will be the old
+successfully as well. Note that the [Party](#module_Dota2.Dota2Client+Party) property will be the old
 value until after this event completes to allow comparison between the
 two.
 
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-### `partyCleared` ()
+| Param | Type | Description |
+| --- | --- | --- |
+| party | <code>CSODOTAParty</code> | The new state of the party. |
 
+<a name="module_Dota2.Dota2Client+event_partyCleared"></a>
 
+#### "partyCleared"
 Emitted when leaving a party (aka, the party is cleared). This can
 happen when kicked, upon leaving a party, etc. There are other callbacks
 to tell when the bot has been kicked.
 
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+<a name="module_Dota2.Dota2Client+event_partyInviteUpdate"></a>
 
-### `partyInviteUpdate` (`party`)
-* `partyInvite` - The full party invite object (see CSODOTAPartyInvite).
-
-
+#### "partyInviteUpdate" (partyInvite)
 Emitted when the GC sends a party invite snapshot. The GC is incredibly
 inefficient and will send the entire object even if it's a minor update.
 You can use this to detect when an incoming party invite has been sent.
-Note that the `PartyInvite` property will be the old
+Note that the [PartyInvite](#module_Dota2.Dota2Client+PartyInvite) property will be the old
 value until after this event completes to allow comparison between the two.
 
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-### `partyInviteCleared` ()
+| Param | Type | Description |
+| --- | --- | --- |
+| partyInvite | <code>CSODOTAPartyInvite</code> | The invitation to a party. |
 
+<a name="module_Dota2.Dota2Client+event_partyInviteCleared"></a>
 
+#### "partyInviteCleared"
 Emitted when the Party Invite is cleared, for example when
-accepting/rejecting it or when the party is closed.
+accepting/rejecting it or when the party is closed
 
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+<a name="module_Dota2.Dota2Client+event_chatJoined"></a>
 
-### `liveLeagueGamesUpdate` (`null`, `liveLeaguesResponse`)
-* `null` - nothing
-* `liveLeaguesResponse` - Integer representing number of live league games.
+#### "chatJoined" (channelData)
+Event that's emitted whenever the bot joins a chat channel
 
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-### `leaguesInMonthData` (`month`, `year`, `leagues`)
-* `month` - Int representing which month this data represents.
-* `year` - Int representing which year this data represents.
-* `leagues` - Array of CMsgLeague objects
+| Param | Type | Description |
+| --- | --- | --- |
+| channelData | <code>Object</code> | A `CMsgDOTAJoinChatChannelResponse` object containing information about the chat channel. |
 
-Emitted when the GC responds to `requestLeaguesInMonth` method.
+<a name="module_Dota2.Dota2Client+event_chatJoin"></a>
 
-Notes:
+#### "chatJoin" (channel, joiner_name, joiner_steam_id, otherJoined_object)
+Event that's emitted whenever someone else joins a chat channel the bot is in
 
-* The `month` property is used to filter the data to the leagues which have matches scheduled in the given month, however the `schedule` object contains schedules for a league's entire duration - i.e. before or after `month`.
-* `month` is also zero-aligned, so January = 0, Febuary = 1, March = 2, etc.
-* Not every participating team seems to be hooked up to Dota 2's team system, so there will be a few `{ teamId: 0 }` objects for some schedule blocks.
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-The leagues object is visualized as follows:
+| Param | Type | Description |
+| --- | --- | --- |
+| channel | <code>string</code> | Name of the chat channel someone joined |
+| joiner_name | <code>string</code> | Persona name of the person that joined the channel |
+| joiner_steam_id | <code>[Long](#external_Long)</code> | Steam ID of the person that joined the channel |
+| otherJoined_object | <code>CMsgDOTAOtherJoinedChatChannel</code> | The raw message data. |
 
-```
-leagues: [{         // An array of CMsgLeague objects
-    leagueId,       // ID of the league associated
-    schedule: [{    // An array of CMsgLeagueScheduleBlock objects
-        blockId,    // ID represending this block
-        startTime,  // Unix timestamp of a scheduled match (or group of matches)
-        finals,     // Boolean represending if this match is a final.
-        comment,    // Comment about this scheduled block - often the team names & position in bracket
-        teams: [{   // An array of CMsgLeagueScheduleBlockTeamInfo objects
-            teamId, // ID of the associated team
-            name,   // The teams name
-            tag,    // The teams tag
-            logo    // The teams logo
-        }]
-    }]
-}]
-```
+<a name="module_Dota2.Dota2Client+event_chatLeave"></a>
 
-### `topLeagueMatchesData` (`matches`)
-* `matches` - A list of matches. Each match contains:
-  * `match_id` - Match ID
-  * `start_time` - Unix time of the start of the match
-  * `duration` - Duration of the match in seconds
-  * `game_mode` - Game mode
-  * `winning_team` - Team who won the match
-  * `players` - List of all the players in the game, contains id, hero, K/D/A and items
-  * `league` - Information on the league if this is a league match
+#### "chatLeave" (channel, leaver_steam_id, otherLeft_object)
+Event that's emitted whenever someone else leaves a chat channel the bot is in
 
-Emitted when the GC responds to the `requestTopLeagueMatches` method.
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-### `leagueData` ()
+| Param | Type | Description |
+| --- | --- | --- |
+| channel | <code>string</code> | Name of the chat channel someone left |
+| leaver_steam_id | <code>string</code> | Persona name of the person that left the channel |
+| otherLeft_object | <code>CMsgDOTAOtherLeftChatChannel</code> | The raw message data. |
 
-TODO
+<a name="module_Dota2.Dota2Client+event_chatMessage"></a>
 
-### `sourceTVGamesData` (`sourceTVGamesResponse`)
-* `sourceTVGamesResponse` - The raw response object
+#### "chatMessage" (channel, sender_name, message, chatData)
+Event that's emitted whenever someone sends a message in a channel the bot is in
 
-Emitted when the GC responds to the `requestSourceTVGames` method.  Multiple events are emitted when `requestSourceTVGames` is passed with `start_game` > 0 or with one or more `lobby_id`s.  
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
+| Param | Type | Description |
+| --- | --- | --- |
+| channel | <code>string</code> | Name of the chat channel the message was sent to |
+| sender_name | <code>string</code> | Persona name of the sender of the message |
+| message | <code>string</code> | The message that was sent |
+| chatData | <code>CMsgDOTAChatMessage</code> | The raw message data containing the message and its metadata. |
 
-### `inventoryUpdate` (`inv`)
-* `inv` - Player inventory
+<a name="module_Dota2.Dota2Client+event_chatChannelsData"></a>
 
-Emitted when the GC sends an inventory snapshot. The GC is incredibly
-inefficient and will send the entire object even if it's a minor update.
-You can use this to detect when a change was made to your inventory (e.g. drop)
-Note that the `Inventory` property will be the old value until after this event 
-completes to allow comparison between the two.
+#### "chatChannelsData" (channels)
+Event that's emitted after requesting a list of chat channels via [requestChatChannels](#module_Dota2.Dota2Client+requestChatChannels)
 
-### `playerCardRoster` (`playerCardRoster`)
-* `playerCardRoster` - Fantasy challenge line-up for a specific day
-* `result` - Status code indicating whether or not the request was succesful (0 = SUCCESS)
-  * `player_card_item_id` - Item ID of the player card. Can be used to cross-reference with `Inventory`
-  * `score` - Score the card got for this specific day
-  * `finalized` - Whether or not the matches for this day are over
-  * `percentile` - Percentile of all players your score falls in
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-Emitted when the GC responds to the `requestPlayerCardRoster` method.
+| Param | Type | Description |
+| --- | --- | --- |
+| channels | <code>Array.&lt;Object&gt;</code> | An array of ChatChannel objects |
+| channels[].channel_name | <code>string</code> | Name of the chat channel |
+| channels[].num_members | <code>number</code> | Number of members in the channel |
+| channels[].channel_type | <code>DOTAChatChannelType_t</code> | The type of the channel |
 
-### `playerCardDrafted` (`result`)
-* `result` - Status code indicating whether or not the card got drafted (0 = SUCCESS)
+<a name="module_Dota2.Dota2Client+event_playerMatchHistoryData"></a>
 
-Emitted when the GC responds to the `draftPlayerCard` method.
+#### "playerMatchHistoryData" (requestId, matchHistoryResponse)
+Emitted in response to a [request for a player's match history](#module_Dota2.Dota2Client+requestPlayerMatchHistory)
 
-## Enums
-### ServerRegion
-* `UNSPECIFIED: 0`
-* `USWEST: 1`
-* `USEAST: 2`
-* `EUROPE: 3`
-* `KOREA: 4`
-* `SINGAPORE: 5`
-* `DUBAI: 6`
-* `AUSTRALIA: 7`
-* `STOCKHOLM: 8`
-* `AUSTRIA: 9`
-* `BRAZIL: 10`
-* `SOUTHAFRICA: 11`
-* `PWTELECOMSHANGHAI: 12`
-* `PWUNICOM: 13`
-* `CHILE: 14`
-* `PERU: 15`
-* `INDIA: 16`
-* `PWTELECOMGUANGZHOU: 17`
-* `PWTELECOMZHEJIANG: 18`
-* `JAPAN: 19`
-* `PWTELECOMWUHAN: 20`
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
-Use this to pass valid server region data to `createPracticeLobby`.
+| Param | Type | Description |
+| --- | --- | --- |
+| requestId | <code>number</code> | Id of the request to which this event is the answer |
+| matchHistoryResponse | <code>CMsgDOTAGetPlayerMatchHistoryResponse</code> | The raw response data containing the user's match history. |
 
-### GameMode
-* `DOTA_GAMEMODE_NONE: 0` - None
-* `DOTA_GAMEMODE_AP: 1` - All Pick
-* `DOTA_GAMEMODE_CM: 2` - Captain's Mode
-* `DOTA_GAMEMODE_RD: 3` - Random Draft
-* `DOTA_GAMEMODE_SD: 4` - Single Draft
-* `DOTA_GAMEMODE_AR: 5` - All Random
-* `DOTA_GAMEMODE_INTRO: 6` - Unknown
-* `DOTA_GAMEMODE_HW: 7` - Diretide
-* `DOTA_GAMEMODE_REVERSE_CM: 8` - Reverse Captain's Mode
-* `DOTA_GAMEMODE_XMAS: 9` - The Greeviling
-* `DOTA_GAMEMODE_TUTORIAL: 10` - Tutorial
-* `DOTA_GAMEMODE_MO: 11` - Mid Only
-* `DOTA_GAMEMODE_LP: 12` - Least Played
-* `DOTA_GAMEMODE_POOL1: 13` - Limited Heroes
-* `DOTA_GAMEMODE_FH: 14` - Compendium
-* `DOTA_GAMEMODE_CUSTOM: 15` - Unknown, probably ti4 techies reveal.
-* `DOTA_GAMEMODE_CD: 16` - Captain's Draft
-* `DOTA_GAMEMODE_BD: 17` - Balanced Draft
-* `DOTA_GAMEMODE_ABILITY_DRAFT: 18` - Ability Draft
-* `DOTA_GAMEMODE_EVENT: 19` - Unknown
-* `DOTA_GAMEMODE_ARDM: 20` - All Random Death Match
-* `DOTA_GAMEMODE_1V1MID: 21` - 1v1 Mid
-* `DOTA_GAMEMODE_ALL_DRAFT: 22` - All Draft a.k.a. ranked all pick
+<a name="module_Dota2.Dota2Client+event_profileCardData"></a>
 
-Use this to pass valid game mode data to `createPracticeLobby`. This enum is built-in the protobuf schema and can be referenced by `Dota2.DOTA_GameMode`.
+#### "profileCardData" (account_id, profileCardResponse)
+Emitted in response to a [request for a player's profile card](#module_Dota2.Dota2Client+requestProfileCard)
 
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 
+| Param | Type | Description |
+| --- | --- | --- |
+| account_id | <code>number</code> | Dota2 account ID of the player whose profile card was fetched. |
+| profileCardResponse | <code>CMsgDOTAProfileCard</code> | The raw response data containing the user's profile card. |
 
+<a name="module_Dota2.Dota2Client+event_hallOfFameData"></a>
+
+#### "hallOfFameData" (week, featured_players, featured_farmer, hallOfFameResponse)
+Emitted in response to a [request for a player's profile card](#module_Dota2.Dota2Client+requestHallOfFame)
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| week | <code>number</code> | Weeks since unix epoch for which the hall of fame data was fetched |
+| featured_players | <code>Array.&lt;Object&gt;</code> | This week's featured players |
+| featured_players[].account_id | <code>number</code> | Dota2 account id of the featured player |
+| featured_players[].hero_id | <code>number</code> | ID of the hero |
+| featured_players[].average_scaled_metric | <code>number</code> | Scaled metric of awesomeness |
+| featured_players[].num_games | <code>number</code> | The number of games played |
+| featured_farmer | <code>Object</code> | This week's featured farmer |
+| featured_farmer.account_id | <code>number</code> | Dota2 account id of the featured farmer |
+| featured_farmer.hero_id | <code>number</code> | ID of the hero |
+| featured_farmer.gold_per_min | <code>number</code> | GPM for the featured match |
+| featured_farmer.match_id | <code>number</code> | Match ID of the featured match |
+| hallOfFameResponse | <code>CMsgDOTAHallOfFameResponse</code> | The raw response data containing the requested week's hall of fame. |
+
+<a name="module_Dota2.Dota2Client+event_playerInfoData"></a>
+
+#### "playerInfoData" (playerInfoData)
+Emitted in response to a [request for a player's info](#module_Dota2.Dota2Client+requestPlayerInfo)
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| playerInfoData | <code>Object</code> | A `CMsgGCPlayerInfo` object containing the player's info. |
+| playerInfoData.player_infos | <code>Array.&lt;Object&gt;</code> | List of player information |
+| playerInfoData.player_infos[].account_id | <code>number</code> | Dota2 account ID of the player |
+| playerInfoData.player_infos[].name | <code>string</code> | The display name for the player |
+| playerInfoData.player_infos[].country_code | <code>string</code> | The abbreviated country code for the user if available (i.e. `us`, `cn`, etc...) |
+| playerInfoData.player_infos[].fantasy_role | <code>number</code> | The role of the player, either core or support, `1` and `2` respectively |
+| playerInfoData.player_infos[].team_id | <code>number</code> | The numerical id of the user's team |
+| playerInfoData.player_infos[].team_name | <code>string</code> | The name of the team the user is on, ex: `Cloud9` |
+| playerInfoData.player_infos[].team_tag | <code>string</code> | The abbreviated tag of a team prepended to a player's name, ex: `C9` |
+| playerInfoData.player_infos[].sponsor | <code>string</code> | The sponsor listed in the player's official info, ex: `HyperX` |
+| playerInfoData.player_infos[].is_locked | <code>boolean</code> | Whether or not the user's official player info has been locked from editing, `true` or `false` |
+| playerInfoData.player_infos[].is_pro | <code>boolean</code> | Whether the player is considered a pro player by Valve, `true` or `false` |
+| playerInfoData.player_infos[].locked_until | <code>number</code> | Timestamp indicating end of lock period |
+| playerInfoData.player_infos[].timestamp | <code>number</code> | Unknown |
+
+<a name="module_Dota2.Dota2Client+event_trophyListData"></a>
+
+#### "trophyListData" (trophyListResponse)
+Emitted in response to a [request for a player's trophy list](#module_Dota2.Dota2Client+requestTrophyList)
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| trophyListResponse | <code>Object</code> | A `CMsgClientToGCGetTrophyListResponse` object containing the player's trophy list. |
+| trophyListResponse.account_id | <code>number</code> | Dota2 account ID of the player |
+| trophyListResponse.trophies | <code>Array.&lt;Object&gt;</code> | List of player trophies |
+| trophyListResponse.trophies[].trophy_id | <code>number</code> | Id of the trophy |
+| trophyListResponse.trophies[].trophy_score | <code>number</code> | The score this trophy has counted.  This is usually a level, but can represent other things, like number of challenges completed, or coins collected, etc... |
+| trophyListResponse.trophies[].last_updated | <code>number</code> | The last time the trophy has been updated, in Unix time |
+| trophyListResponse.profile_name | <code>string</code> | The name displayed on the user's dota profile page and profile card |
+
+<a name="module_Dota2.Dota2Client+event_playerStatsData"></a>
+
+#### "playerStatsData" (account_id, playerStatsResponse)
+Emitted in response to a [request for a player's stats](#module_Dota2.Dota2Client+requestPlayerStats)
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| account_id | <code>number</code> | Dota2 account ID of the player |
+| playerStatsResponse | <code>[CMsgGCToClientPlayerStatsResponse](#module_Dota2.schema.CMsgGCToClientPlayerStatsResponse)</code> | The player's stats. |
+
+<a name="module_Dota2.Dota2Client+event_joinableCustomGameModes"></a>
+
+#### "joinableCustomGameModes" (joinableCustomGameModes)
+Emitted in response to a [request for joinable custom game modes](#module_Dota2.Dota2Client+requestJoinableCustomGameModes).
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| joinableCustomGameModes | <code>Array.&lt;CMsgJoinableCustomGameModesResponseEntry&gt;</code> | List of joinable custom game modes |
+
+<a name="module_Dota2.Dota2Client+event_playerCardRoster"></a>
+
+#### "playerCardRoster" (playerCardRoster)
+Emitted in response to a [request for a player's fantasy roster](#module_Dota2.Dota2Client+requestPlayerCardRoster)
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| playerCardRoster | <code>CMsgClientToGCGetPlayerCardRosterResponse</code> | The raw response data containing the fantasy draft and score if available. |
+
+<a name="module_Dota2.Dota2Client+event_playerCardDrafted"></a>
+
+#### "playerCardDrafted" (playerCardRoster)
+Emitted in response to a [draft of a player card](#module_Dota2.Dota2Client+draftPlayerCard)
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| playerCardRoster | <code>number</code> | The result of the operation. See `CMsgClientToGCSetPlayerCardRosterResponse.result`. |
+
+<a name="module_Dota2.Dota2Client+event_popup"></a>
+
+#### "popup" (id, popup)
+Emitted when the server wants the client to create a pop-up
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>number</code> | Type of the pop-up. |
+| popup | <code>CMsgDOTAPopup</code> | The raw pop-up object. Can contain further specifications like formattable text |
+
+<a name="module_Dota2.Dota2Client+event_leaguesInMonthData"></a>
+
+#### "leaguesInMonthData" (month, year, leagues)
+Emitted in response to a [request for the leagues in a given month](#module_Dota2.Dota2Client+requestLeaguesInMonth).
+The leagues that are returned are those which have one or more matches in the given month.
+They can however also have other matches in a different month.
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| month | <code>number</code> | Month this data represents. |
+| year | <code>number</code> | Year this data represents |
+| leagues | <code>Array.&lt;Object&gt;</code> | List of leagues that have matches in the given month |
+| leagues[].league_id | <code>number</code> | ID of the league |
+| leagues[].schedule | <code>Array.&lt;Object&gt;</code> | The scheduled games in this league. Might contain matches in other months. |
+| leagues[].schedule[].block_id | <code>number</code> | ID of the schedule block |
+| leagues[].schedule[].start_time | <code>number</code> | Unix timestamp of the start time of this scheduled match |
+| leagues[].schedule[].finals | <code>boolean</code> | Whether or not this is a finals game |
+| leagues[].schedule[].comment | <code>string</code> | Comment about this scheduled block; often the team names & position in bracket |
+| leagues[].schedule[].teams | <code>Array.&lt;Object&gt;</code> | The teams duking it out in this match |
+| leagues[].schedule[].teams[].team_id | <code>number</code> | ID of the team. Not every participating team seems to be hooked up to Dota 2's team system, so 0 entries can happen |
+| leagues[].schedule[].teams[].name | <code>string</code> | Name of the team |
+| leagues[].schedule[].teams[].logo | <code>[Long](#external_Long)</code> | Logo of the team |
+
+<a name="module_Dota2.Dota2Client+event_liveLeagueGamesUpdate"></a>
+
+#### "liveLeagueGamesUpdate" (live_league_games)
+Emitted when the GC sends a `CMsgDOTALiveLeagueGameUpdate`.
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| live_league_games | <code>number</code> | The number of live league games |
+
+<a name="module_Dota2.Dota2Client+event_leagueData"></a>
+
+#### "leagueData" (leagues)
+Emitted in response to a [request for league info](#module_Dota2.Dota2Client+requestLeagueInfo).
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| leagues | <code>Array.&lt;Object&gt;</code> | List of all leagues |
+| leagues[].league_id | <code>number</code> | ID of the league |
+| leagues[].last_match_time | <code>number</code> | Unix timestamp of when the last match took place |
+| leagues[].prize_pool_usd | <code>number</code> | Price pool in US$ |
+| leagues[].has_live_matches | <code>boolean</code> | Whether or not if there are currently live matches |
+| leagues[].is_compendium_public | <code>boolean</code> | Whether or not there is a public compendium |
+| leagues[].compendium_version | <code>number</code> | Verion nr of the compendium |
+| leagues[].compendium_content_version | <code>number</code> | Version nr of the compendium contents |
+
+<a name="module_Dota2.Dota2Client+event_topLeagueMatchesData"></a>
+
+#### "topLeagueMatchesData" (matches)
+Emitted in response to a [request for top league matches](#module_Dota2.Dota2Client+requestTopLeagueMatches).
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| matches | <code>Array.&lt;Object&gt;</code> | List of top matches |
+| matches[].match_id | <code>[Long](#external_Long)</code> | Match ID |
+| matches[].start_time | <code>number</code> | Unix timestamp of the start of the match |
+| matches[].duration | <code>number</code> | Duration of the match in seconds |
+| matches[].game_mode | <code>DOTA_GameMode</code> | Game mode |
+| matches[].players | <code>CMsgDOTAMatchMinimal.Player</code> | List of all the players in the game, contains id, hero, K/D/A and items |
+| matches[].tourney | <code>CMsgDOTAMatchMinimal.Tourney</code> | Information on the league if this is a league match |
+| matches[].match_outcome | <code>EMatchOutcome</code> | Who won |
+
+<a name="module_Dota2.Dota2Client+event_practiceLobbyJoinResponse"></a>
+
+#### "practiceLobbyJoinResponse" (result, response)
+Event that's emitted whenever the bot joins a lobby
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| result | <code>DOTAJoinLobbyResult</code> | Result code |
+| response | <code>Object</code> | The raw response object |
+| response.result | <code>DOTAJoinLobbyResult</code> | Result code |
+
+<a name="module_Dota2.Dota2Client+event_practiceLobbyListData"></a>
+
+#### "practiceLobbyListData" (practiceLobbyListResponse)
+Event that's emitted in response to a [request for the list of lobbies](#module_Dota2.Dota2Client+requestPracticeLobbyList)
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| practiceLobbyListResponse | <code>Object</code> | Raw response object |
+| practiceLobbyListResponse.tournament_games | <code>boolean</code> | Whether or not there are tournament games included in the list |
+| practiceLobbyListResponse.lobbies | <code>Array.&lt;CMsgPracticeLobbyListResponseEntry&gt;</code> | List of practice lobbies and their details |
+
+<a name="module_Dota2.Dota2Client+event_practiceLobbyResponse"></a>
+
+#### "practiceLobbyResponse" (result, response)
+Emitted when an operation changing the state of a lobby was sent to the GC and
+processed. This event only contains the acknowledgement by the GC. The actual
+update of the lobby state is communicated via [module:Dota2.Dota2Client#practiceLobbyUpdate](module:Dota2.Dota2Client#practiceLobbyUpdate) events.
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| result | <code>DOTAJoinLobbyResult</code> | Result code |
+| response | <code>Object</code> | The raw response object |
+| response.result | <code>[EResult](#module_Dota2.EResult)</code> | Result code |
+
+<a name="module_Dota2.Dota2Client+event_friendPracticeLobbyListData"></a>
+
+#### "friendPracticeLobbyListData" (practiceLobbyListResponse)
+Event that's emitted in response to a [request for the list of your friends' lobbies](#module_Dota2.Dota2Client+requestPracticeLobbyList)
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| practiceLobbyListResponse | <code>Object</code> | Raw response object |
+| practiceLobbyListResponse.lobbies | <code>Array.&lt;CMsgPracticeLobbyListResponseEntry&gt;</code> | List of practice lobbies and their details |
+
+<a name="module_Dota2.Dota2Client+event_inviteCreated"></a>
+
+#### "inviteCreated" (steam_id, group_id, is_online)
+Event that's emitted whenever the bot attempts to invite someone to a lobby
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| steam_id | <code>[Long](#external_Long)</code> | Steam ID of the person that was invited to the lobby |
+| group_id | <code>[Long](#external_Long)</code> | Group ID of the invitation |
+| is_online | <code>boolean</code> | Whether or not the invitee is online |
+
+<a name="module_Dota2.Dota2Client+event_matchesData"></a>
+
+#### "matchesData" (requestId, total_results, results_remaining, matches, series, matchResponse)
+Emitted in response to a [request for matches](#module_Dota2.Dota2Client+requestMatches)
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| requestId | <code>number</code> | Id of the request to which this event is the answer |
+| total_results | <code>number</code> | Total number of results corresponding to the query (max 500) |
+| results_remaining | <code>number</code> | Total number of results not in this response |
+| matches | <code>Array.&lt;CMsgDOTAMatch&gt;</code> | List of match information objects |
+| series | <code>Array.&lt;Object&gt;</code> | List of series |
+| series[].matches | <code>Array.&lt;CMsgDOTAMatch&gt;</code> | List of match information objects for the matches in this series |
+| series[].series_id | <code>number</code> | ID of the series |
+| series[].series_type | <code>number</code> | Type of the series |
+| matchResponse | <code>CMsgDOTARequestMatchesResponse</code> | A `CMsgDOTARequestMatchesResponse` object containing the raw response. |
+
+<a name="module_Dota2.Dota2Client+event_matchDetailsData"></a>
+
+#### "matchDetailsData" (match_id, matchDetailsResponse)
+Emitted in response to a [request for a match's details](#module_Dota2.Dota2Client+requestMatchDetails)
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| match_id | <code>number</code> | Match ID for which the details where asked |
+| matchDetailsResponse | <code>CMsgGCMatchDetailsResponse</code> | A `CMsgGCMatchDetailsResponse` object containing the raw response. |
+
+<a name="module_Dota2.Dota2Client+event_matchMinimalDetailsData"></a>
+
+#### "matchMinimalDetailsData" (last_match, matchMinimalDetailsResponse)
+Emitted in response to a [request for a/multiples match's minimal details](#module_Dota2.Dota2Client+requestMatchMinimalDetails)
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| last_match | <code>boolean</code> | Whether or not the last of the requested matches is included in this response |
+| matchMinimalDetailsResponse | <code>CMsgClientToGCMatchesMinimalResponse</code> | A `CMsgClientToGCMatchesMinimalResponse` object containing the raw response. |
+
+<a name="module_Dota2.Dota2Client+event_matchmakingStatsData"></a>
+
+#### "matchmakingStatsData" (matchgroups_version, match_groups, matchmakingStatsResponse)
+Emitted in response to a [request for the match making stats](#module_Dota2.Dota2Client+requestMatchmakingStats)
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| matchgroups_version | <code>number</code> | Version nr of the match groups (these evolve over time). For the current list check [regions.txt](https://github.com/SteamDatabase/GameTracking-Dota2/blob/master/game/dota/pak01_dir/scripts/regions.txt) |
+| match_groups | <code>Array.&lt;Object&gt;</code> | The different match groups and their stats |
+| match_groups[].players_searching | <code>number</code> | The number of people searching for a match |
+| match_groups[].auto_region_select_ping_penalty | <code>number</code> | Ping penalty for people searching this region |
+| matchmakingStatsResponse | <code>CMsgDOTAMatchmakingStatsResponse</code> | A `CMsgDOTAMatchmakingStatsResponse` object containing the raw response. |
+
+<a name="module_Dota2.Dota2Client+event_topFriendMatchesData"></a>
+
+#### "topFriendMatchesData" (matches)
+Emitted in response to a [request for the current top matches played by your friends](#module_Dota2.Dota2Client+requestTopFriendMatches)
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| matches | <code>Array.&lt;CMsgDOTAMatchMinimal&gt;</code> | A list of `CMsgDOTAMatchMinimal` objects containing the minimal match details of the matches your friends are currently playing. |
+
+<a name="module_Dota2.Dota2Client+event_sourceTVGamesData"></a>
+
+#### "sourceTVGamesData" (sourceTVGamesResponse)
+sourceTVGamesData event
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| sourceTVGamesResponse | <code>CMsgGCToClientFindTopSourceTVGamesResponse</code> | The raw response data or null if a bad response was received |
+
+<a name="module_Dota2.Dota2Client+event_teamData"></a>
+
+#### "teamData" (teams, league_id)
+Emitted in response to a [request for your teams](#module_Dota2.Dota2Client+requestMyTeams).
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| teams | <code>Array.&lt;CMsgDOTATeamInfo&gt;</code> | A list of `CMsgDOTATeamInfo` objects containing information about the teams you're in (name, members, stats, ...) |
+| league_id | <code>number</code> | No clue why this is here, nor what it signifies |
+
+<a name="module_Dota2.Dota2Client.ToAccountID"></a>
+
+#### Dota2Client.ToAccountID(steamID) ⇒ <code>number</code>
+Converts a 64bit Steam ID to a Dota2 account ID by deleting the 32 most significant bits
+
+**Kind**: static method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+**Returns**: <code>number</code> - Dota2 account ID corresponding with steamID  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| steamID | <code>string</code> | String representation of a 64bit Steam ID |
+
+<a name="module_Dota2.Dota2Client.ToSteamID"></a>
+
+#### Dota2Client.ToSteamID(accid) ⇒ <code>[Long](#external_Long)</code>
+Converts a Dota2 account ID to a 64bit Steam ID
+
+**Kind**: static method of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+**Returns**: <code>[Long](#external_Long)</code> - 64bit Steam ID corresponding to the given Dota 2 account ID  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| accid | <code>string</code> | String representation of a Dota 2 account ID |
+
+<a name="module_Dota2.schema"></a>
+
+### Dota2.schema
+Protobuf schema. See [Protobufjs#Root](http://dcode.io/protobuf.js/Root.html). 
+This object can be used to obtain special protobuf types.
+Object types can be created by `Dota2.schema.lookupType("TypeName").encode(payload :Object).finish();`.
+Enum types can be referenced by `Dota2.schema.lookupEnum("EnumName")`, which returns an object array representing the enum.
+
+**Kind**: static property of <code>[Dota2](#module_Dota2)</code>  
+<a name="module_Dota2.schema.CMsgGCToClientPlayerStatsResponse"></a>
+
+#### schema.CMsgGCToClientPlayerStatsResponse : <code>Object</code>
+Player statistics
+
+**Kind**: static typedef of <code>[schema](#module_Dota2.schema)</code>  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| account_id | <code>number</code> | Dota2 account ID of the player |
+| player_stats | <code>Array.&lt;number&gt;</code> |  |
+| match_count | <code>number</code> | Number of matches played |
+| mean_gpm | <code>number</code> | Mean GPM per match over the last 20 matches |
+| mean_xppm | <code>number</code> | Mean XPPM per match over the last 20 matches |
+| mean_lasthits | <code>number</code> | Mean last hits per match over the last 20 matches |
+| rampages | <code>number</code> | All time number of rampages |
+| triple_kills | <code>number</code> | All time number of triple kills |
+| first_blood_claimed | <code>number</code> | All time number of times the player claimed first blood |
+| first_blood_given | <code>number</code> | All time number of times the player fed first blood |
+| couriers_killed | <code>number</code> | All time number of couriers killed |
+| aegises_snatched | <code>number</code> | All time number of aegises snatched |
+| cheeses_eaten | <code>number</code> | All time amount of cheese eaten |
+| creeps_stacked | <code>number</code> | All time number of camps stacked |
+| fight_score | <code>number</code> | Fighting score over the last 20 matches |
+| farm_score | <code>number</code> | Farming score over the last 20 matches |
+| support_score | <code>number</code> | Support score over the last 20 matches |
+| push_score | <code>number</code> | Push score over the last 20 matches |
+| versatility_score | <code>number</code> | Hero versatility over the last 20 matches |
+
+<a name="module_Dota2.EResult"></a>
+
+### Dota2.EResult : <code>enum</code>
+Enum for all possible `EResult` values
+
+**Kind**: static enum of <code>[Dota2](#module_Dota2)</code>  
+**Read only**: true  
+**Properties**
+
+| Name | Type | Default |
+| --- | --- | --- |
+| k_EResultOK | <code>number</code> | <code>1</code> | 
+| k_EResultFail | <code>number</code> | <code>2</code> | 
+| k_EResultNoConnection | <code>number</code> | <code>3</code> | 
+| k_EResultInvalidPassword | <code>number</code> | <code>5</code> | 
+| k_EResultLoggedInElsewhere | <code>number</code> | <code>6</code> | 
+| k_EResultInvalidProtocolVer | <code>number</code> | <code>7</code> | 
+| k_EResultInvalidParam | <code>number</code> | <code>8</code> | 
+| k_EResultFileNotFound | <code>number</code> | <code>9</code> | 
+| k_EResultBusy | <code>number</code> | <code>10</code> | 
+| k_EResultInvalidState | <code>number</code> | <code>11</code> | 
+| k_EResultInvalidName | <code>number</code> | <code>12</code> | 
+| k_EResultInvalidEmail | <code>number</code> | <code>13</code> | 
+| k_EResultDuplicateName | <code>number</code> | <code>14</code> | 
+| k_EResultAccessDenied | <code>number</code> | <code>15</code> | 
+| k_EResultTimeout | <code>number</code> | <code>16</code> | 
+| k_EResultBanned | <code>number</code> | <code>17</code> | 
+| k_EResultAccountNotFound | <code>number</code> | <code>18</code> | 
+| k_EResultInvalidSteamID | <code>number</code> | <code>19</code> | 
+| k_EResultServiceUnavailable | <code>number</code> | <code>20</code> | 
+| k_EResultNotLoggedOn | <code>number</code> | <code>21</code> | 
+| k_EResultPending | <code>number</code> | <code>22</code> | 
+| k_EResultEncryptionFailure | <code>number</code> | <code>23</code> | 
+| k_EResultInsufficientPrivilege | <code>number</code> | <code>24</code> | 
+| k_EResultLimitExceeded | <code>number</code> | <code>25</code> | 
+| k_EResultRevoked | <code>number</code> | <code>26</code> | 
+| k_EResultExpired | <code>number</code> | <code>27</code> | 
+| k_EResultAlreadyRedeemed | <code>number</code> | <code>28</code> | 
+| k_EResultDuplicateRequest | <code>number</code> | <code>29</code> | 
+| k_EResultAlreadyOwned | <code>number</code> | <code>30</code> | 
+| k_EResultIPNotFound | <code>number</code> | <code>31</code> | 
+| k_EResultPersistFailed | <code>number</code> | <code>32</code> | 
+| k_EResultLockingFailed | <code>number</code> | <code>33</code> | 
+| k_EResultLogonSessionReplaced | <code>number</code> | <code>34</code> | 
+| k_EResultConnectFailed | <code>number</code> | <code>35</code> | 
+| k_EResultHandshakeFailed | <code>number</code> | <code>36</code> | 
+| k_EResultIOFailure | <code>number</code> | <code>37</code> | 
+| k_EResultRemoteDisconnect | <code>number</code> | <code>38</code> | 
+| k_EResultShoppingCartNotFound | <code>number</code> | <code>39</code> | 
+| k_EResultBlocked | <code>number</code> | <code>40</code> | 
+| k_EResultIgnored | <code>number</code> | <code>41</code> | 
+| k_EResultNoMatch | <code>number</code> | <code>42</code> | 
+| k_EResultAccountDisabled | <code>number</code> | <code>43</code> | 
+| k_EResultServiceReadOnly | <code>number</code> | <code>44</code> | 
+| k_EResultAccountNotFeatured | <code>number</code> | <code>45</code> | 
+| k_EResultAdministratorOK | <code>number</code> | <code>46</code> | 
+| k_EResultContentVersion | <code>number</code> | <code>47</code> | 
+| k_EResultTryAnotherCM | <code>number</code> | <code>48</code> | 
+| k_EResultPasswordRequiredToKickSession | <code>number</code> | <code>49</code> | 
+| k_EResultAlreadyLoggedInElsewhere | <code>number</code> | <code>50</code> | 
+| k_EResultSuspended | <code>number</code> | <code>51</code> | 
+| k_EResultCancelled | <code>number</code> | <code>52</code> | 
+| k_EResultDataCorruption | <code>number</code> | <code>53</code> | 
+| k_EResultDiskFull | <code>number</code> | <code>54</code> | 
+| k_EResultRemoteCallFailed | <code>number</code> | <code>55</code> | 
+
+<a name="module_Dota2.ServerRegion"></a>
+
+### Dota2.ServerRegion : <code>enum</code>
+Enum for all server regions. This enum is kept up to date on a best effort base.
+For the up-to-date values, check your game's regions.txt or [SteamDB's version](https://github.com/SteamDatabase/GameTracking-Dota2/blob/master/game/dota/pak01_dir/scripts/regions.txt)
+
+**Kind**: static enum of <code>[Dota2](#module_Dota2)</code>  
+**Read only**: true  
+**Properties**
+
+| Name | Type | Default |
+| --- | --- | --- |
+| UNSPECIFIED | <code>number</code> | <code>0</code> | 
+| USWEST | <code>number</code> | <code>1</code> | 
+| USEAST | <code>number</code> | <code>2</code> | 
+| EUROPE | <code>number</code> | <code>3</code> | 
+| KOREA | <code>number</code> | <code>4</code> | 
+| SINGAPORE | <code>number</code> | <code>5</code> | 
+| DUBAI | <code>number</code> | <code>6</code> | 
+| AUSTRALIA | <code>number</code> | <code>7</code> | 
+| STOCKHOLM | <code>number</code> | <code>8</code> | 
+| AUSTRIA | <code>number</code> | <code>9</code> | 
+| BRAZIL | <code>number</code> | <code>10</code> | 
+| SOUTHAFRICA | <code>number</code> | <code>11</code> | 
+| PWTELECOMSHANGHAI | <code>number</code> | <code>12</code> | 
+| PWUNICOM | <code>number</code> | <code>13</code> | 
+| CHILE | <code>number</code> | <code>14</code> | 
+| PERU | <code>number</code> | <code>15</code> | 
+| INDIA | <code>number</code> | <code>16</code> | 
+| PWTELECOMGUANGZHOU | <code>number</code> | <code>17</code> | 
+| PWTELECOMZHEJIANG | <code>number</code> | <code>18</code> | 
+| JAPAN | <code>number</code> | <code>19</code> | 
+| PWTELECOMWUHAN | <code>number</code> | <code>20</code> | 
+
+<a name="module_Dota2.SeriesType"></a>
+
+### Dota2.SeriesType : <code>enum</code>
+Enum for different types of series.
+
+**Kind**: static enum of <code>[Dota2](#module_Dota2)</code>  
+**Read only**: true  
+**Properties**
+
+| Name | Type | Default |
+| --- | --- | --- |
+| NONE | <code>number</code> | <code>0</code> | 
+| BEST_OF_THREE | <code>number</code> | <code>1</code> | 
+| BEST_OF_FIVE | <code>number</code> | <code>2</code> | 
+
+<a name="module_Dota2.BotDifficulty"></a>
+
+### Dota2.BotDifficulty : <code>enum</code>
+Enum for different bot difficulty levels.
+
+**Kind**: static enum of <code>[Dota2](#module_Dota2)</code>  
+**Read only**: true  
+**Properties**
+
+| Name | Type | Default |
+| --- | --- | --- |
+| PASSIVE | <code>number</code> | <code>0</code> | 
+| EASY | <code>number</code> | <code>1</code> | 
+| MEDIUM | <code>number</code> | <code>2</code> | 
+| HARD | <code>number</code> | <code>3</code> | 
+| UNFAIR | <code>number</code> | <code>4</code> | 
+
+<a name="module_Dota2..requestCallback"></a>
+
+### Dota2~requestCallback : <code>function</code>
+**Kind**: inner typedef of <code>[Dota2](#module_Dota2)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| errorCode | <code>number</code> | Null if everything went well, else the error code |
+| responseMessage | <code>Object</code> | The response message the GC sent |
+
+<a name="external_Long"></a>
+
+### Dota2~Long
+A Long class for representing a 64 bit two's-complement integer value 
+derived from the Closure Library for stand-alone use and extended with unsigned support.
+
+**Kind**: inner external of <code>[Dota2](#module_Dota2)</code>  
+**See**: [long](https://www.npmjs.com/package/long) npm package  

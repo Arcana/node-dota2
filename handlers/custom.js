@@ -1,6 +1,12 @@
 var Dota2 = require("../index"),
     util = require("util");
-    
+
+/**
+ * Requests a list of custom game modes for which there are currently lobbies available.
+ * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
+ * @alias module:Dota2.Dota2Client#requestJoinableCustomGameModes
+ * @param {ServerRegion} [server_region=ServerRegion.UNSPECIFIED] - The server region for which you'd like to obtain the joinable custom game modes
+ */
 Dota2.Dota2Client.prototype.requestJoinableCustomGameModes = function requestJoinableCustomGameModes(server_region) {
     // Request list of joinable custom games for a certain region
     server_region = server_region || Dota2.ServerRegion.UNSPECIFIED;
@@ -13,6 +19,14 @@ Dota2.Dota2Client.prototype.requestJoinableCustomGameModes = function requestJoi
                     Dota2.schema.lookupType("CMsgJoinableCustomGameModesRequest").encode(payload).finish());
 }
 
+// Events
+/**
+ * Emitted in response to a {@link module:Dota2.Dota2Client#requestJoinableCustomGameModes|request for joinable custom game modes}.
+ * @event module:Dota2.Dota2Client#joinableCustomGameModes
+ * @param {CMsgJoinableCustomGameModesResponseEntry[]} joinableCustomGameModes - List of joinable custom game modes
+ */ 
+
+// Handlers
 var handlers = Dota2.Dota2Client.prototype._handlers;
 
 var onJoinableCustomGameModesResponse = function onJoinableCustomGameModesResponse(message) {

@@ -49,10 +49,10 @@ function handleSubscribedType(obj_type, object_data) {
             break;
         // Lobby invite snapshot.
         case cacheTypeIDs.CSODOTALobbyInvite:
-            var lobby = Dota2.schema.lookupType("CSODOTALobbyInvite").decode(object_data[0]);
-            if (this.debug) util.log("Received lobby invite snapshot for group ID " + lobby.group_id);
-            this.emit("lobbyInviteUpdate", lobby);
-            this.LobbyInvite = lobby;
+            var lobbyInvite = Dota2.schema.lookupType("CSODOTALobbyInvite").decode(object_data[0]);
+            if (this.debug) util.log("Received lobby invite snapshot for group ID " + lobbyInvite.group_id);
+            this.emit("lobbyInviteUpdate", lobbyInvite);
+            this.LobbyInvite = lobbyInvite;
             break;
         // Party snapshot.
         case cacheTypeIDs.CSODOTAParty:
@@ -85,6 +85,73 @@ Dota2.Dota2Client.prototype._handleWelcomeCaches = function handleWelcomeCaches(
             });
         });
 };
+
+// Events
+/**
+ * Emitted when the GC sends an inventory snapshot. The GC is incredibly
+ * inefficient and will send the entire object even if it's a minor update.
+ * You can use this to detect when a change was made to your inventory (e.g. drop)
+ * Note that the {@link module:Dota2.Dota2Client#Inventory|Inventory} property will be the old value until after this event 
+ * completes to allow comparison between the two.
+ * @event module:Dota2.Dota2Client#inventoryUpdate
+ * @param {CSOEconItem[]} inventory - A list of `CSOEconItem` objects
+ */
+ /**
+ * Emitted when the GC sends a lobby snapshot. The GC is incredibly
+ * inefficient and will send the entire object even if it's a minor update.
+ * You can use this to detect when a lobby has been entered / created
+ * successfully as well. Note that the {@link module:Dota2.Dota2Client#Lobby|Lobby} property will be the old
+ * value until after this event completes to allow comparison between the
+ * two.
+ * @event module:Dota2.Dota2Client#practiceLobbyUpdate
+ * @param {CSODOTALobby} lobby - The new state of the lobby.
+ */
+ /**
+ * Emitted when leaving a lobby (aka, the lobby is cleared). This can
+ * happen when kicked, upon leaving a lobby, etc. There are other events
+ * to tell when the bot has been kicked.
+ * @event module:Dota2.Dota2Client#practiceLobbyCleared
+ */
+ /**
+ * Emitted when the bot received an invite to a lobby
+ * @event module:Dota2.Dota2Client#lobbyInviteUpdate
+ * @param {CSODOTALobbyInvite} lobbyInvite - The invitation to a lobby.
+ */
+ /**
+ * Emitted when the Lobby Invite is cleared, for example when
+ * accepting/rejecting it or when the lobby is closed.
+ * @event module:Dota2.Dota2Client#lobbyInviteCleared
+ */
+ /**
+ * Emitted when the GC sends a party snapshot. The GC is incredibly
+ * inefficient and will send the entire object even if it's a minor update.
+ * You can use this to detect when a party has been entered / created
+ * successfully as well. Note that the {@link module:Dota2.Dota2Client#Party|Party} property will be the old
+ * value until after this event completes to allow comparison between the
+ * two.
+ * @event module:Dota2.Dota2Client#partyUpdate
+ * @param {CSODOTAParty} party - The new state of the party.
+ */
+ /**
+ * Emitted when leaving a party (aka, the party is cleared). This can
+ * happen when kicked, upon leaving a party, etc. There are other callbacks
+ * to tell when the bot has been kicked.
+ * @event module:Dota2.Dota2Client#partyCleared
+ */
+ /**
+ * Emitted when the GC sends a party invite snapshot. The GC is incredibly
+ * inefficient and will send the entire object even if it's a minor update.
+ * You can use this to detect when an incoming party invite has been sent.
+ * Note that the {@link module:Dota2.Dota2Client#PartyInvite|PartyInvite} property will be the old
+ * value until after this event completes to allow comparison between the two.
+ * @event module:Dota2.Dota2Client#partyInviteUpdate
+ * @param {CSODOTAPartyInvite} partyInvite - The invitation to a party.
+ */
+ /**
+ * Emitted when the Party Invite is cleared, for example when
+ * accepting/rejecting it or when the party is closed
+ * @event module:Dota2.Dota2Client#partyInviteCleared
+ */
 
 var handlers = Dota2.Dota2Client.prototype._handlers;
 
@@ -130,16 +197,16 @@ var onCacheUnsubscribed = function onCacheUnsubscribed(message) {
 
     if (this.debug) util.log("Cache unsubscribed, " + unsubscribe.owner_soid.id);
 
-    if (this.Lobby && "" + unsubscribe.owner_soid.id === "" + this.Lobby.lobby_id) {
+    if (this.Lobby && unsubscribe.owner_soid.id.eq(this.Lobby.lobby_id)) {
         this.Lobby = null;
         this.emit("practiceLobbyCleared");
-    } else if (this.LobbyInvite && "" + unsubscribe.owner_soid.id === "" + this.LobbyInvite.group_id) {
+    } else if (this.LobbyInvite && unsubscribe.owner_soid.id.eq(this.LobbyInvite.group_id)) {
         this.LobbyInvite = null;
         this.emit("lobbyInviteCleared");
-    } else if (this.Party && "" + unsubscribe.owner_soid.id === "" + this.Party.party_id) {
+    } else if (this.Party && unsubscribe.owner_soid.id.eq(this.Party.party_id)) {
         this.Party = null;
         this.emit("partyCleared");
-    } else if (this.PartyInvite && "" + unsubscribe.owner_soid.id === "" + this.PartyInvite.group_id) {
+    } else if (this.PartyInvite && unsubscribe.owner_soid.id.eq(this.PartyInvite.group_id)) {
         this.PartyInvite = null;
         this.emit("partyInviteCleared");
     }

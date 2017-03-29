@@ -2,6 +2,12 @@ var Dota2 = require("../index"),
     util = require("util");
 
 // Enums
+/**
+ * Enum for all possible `EResult` values
+ * @alias module:Dota2.EResult
+ * @readonly 
+ * @enum {number}
+ */
 Dota2.EResult = {
     k_EResultOK : 1, // success
     k_EResultFail : 2, // generic failure 
@@ -59,7 +65,13 @@ Dota2.EResult = {
     k_EResultDiskFull : 54,
     k_EResultRemoteCallFailed : 55,
 };
-
+/**
+ * Enum for all server regions. This enum is kept up to date on a best effort base.
+ * For the up-to-date values, check your game's regions.txt or {@link https://github.com/SteamDatabase/GameTracking-Dota2/blob/master/game/dota/pak01_dir/scripts/regions.txt|SteamDB's version}
+ * @alias module:Dota2.ServerRegion
+ * @readonly 
+ * @enum {number}
+ */
 Dota2.ServerRegion = {
     UNSPECIFIED : 0,
     USWEST : 1,
@@ -83,6 +95,39 @@ Dota2.ServerRegion = {
     JAPAN : 19,
     PWTELECOMWUHAN : 20
 };
+
+/**
+ * Enum for different types of series.
+ * @alias module:Dota2.SeriesType
+ * @readonly
+ * @enum {number}
+ */
+Dota2.SeriesType = {
+    NONE: 0,
+    BEST_OF_THREE: 1,
+    BEST_OF_FIVE: 2
+};
+
+/**
+ * Enum for different bot difficulty levels.
+ * @alias module:Dota2.BotDifficulty
+ * @readonly
+ * @enum {number}
+ */
+Dota2.BotDifficulty = {
+    PASSIVE: 0,
+    EASY: 1,
+    MEDIUM: 2,
+    HARD: 3,
+    UNFAIR: 4
+};
+
+
+/**
+ * @callback module:Dota2~requestCallback
+ * @param {number} errorCode - Null if everything went well, else the error code
+ * @param {Object} responseMessage - The response message the GC sent
+ */
 
 // Helper methods
 Dota2._parseOptions = function(options, possibleOptions) {

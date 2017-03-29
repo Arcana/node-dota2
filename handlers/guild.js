@@ -86,7 +86,6 @@ var onGuildDataResponse = function onGuildDataResponse(message) {
     if (this.debug) util.log("Got guild data");
     this.emit("guildData", response.guild_id, response.members, response);
 };
-
 handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCGuildData] = onGuildDataResponse;
 
 var onGuildInviteResponse = function onGuildInviteResponse(message, callback) {
