@@ -47,9 +47,9 @@ Dota2._lobbyOptions = {
  * 
  * @property {boolean} [fill_with_bots=false] - Whether or not to fill empty slots with bots
  * 
- * @property {BotDifficulty} [bot_difficulty_radiant=PASSIVE] - The bot difficulty for radiant bots, if fill_with_bots is true.
+ * @property {BotDifficulty} [bot_difficulty_radiant=module:Dota2.BotDifficulty.PASSIVE] - The bot difficulty for radiant bots, if fill_with_bots is true.
  *
- * @property {BotDifficulty} [bot_difficulty_dire=PASSIVE] - The bot difficulty for dire bots, if fill_with_bots is true.
+ * @property {BotDifficulty} [bot_difficulty_dire=module:Dota2.BotDifficulty.PASSIVE] - The bot difficulty for dire bots, if fill_with_bots is true.
  *
  * @property {number} [bot_radiant] - Presumably the ID of the custom AI to be applied to radiant bots.
  *

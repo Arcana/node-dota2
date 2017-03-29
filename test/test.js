@@ -138,6 +138,10 @@ var steam = require("steam"),
 			describe('#ToSteamID', function () {
 				it('should convert a 32-bit account ID into a 64-bit Steam ID ', convertAccountIDToSteamID);
 			});
+			
+			describe('#ToMsgID', function () {
+				it('should convert a Msg ID to its name ', invertKMsgTypeID);
+			});
 		});
 		
 		describe('Inventory', function () {
