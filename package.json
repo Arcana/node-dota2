@@ -5,7 +5,7 @@
     "long": "^3.0.0",
     "deferred": "^0.7.2",
     "merge": "^1.2.0",
-    "protobufjs": "^6.0.0",
+    "protobufjs": "~6.6.0",
     "steam": "^1.2.0"
   },
   "devDependencies": {
