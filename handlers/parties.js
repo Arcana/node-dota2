@@ -25,7 +25,7 @@ Dota2.Dota2Client.prototype.respondPartyInvite = function(id, accept, ping_data)
         "accept": accept,
         "ping_data": ping_data
     };
-    this.sendToGC(  Dota2.schema.lookupEnum("EGCBaseMsg").k_EMsgGCPartyInviteResponse, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EGCBaseMsg").values.k_EMsgGCPartyInviteResponse, 
                     Dota2.schema.lookupType("CMsgPartyInviteResponse").encode(payload).finish());
 };
 
@@ -39,7 +39,7 @@ Dota2.Dota2Client.prototype.leaveParty = function() {
 
     var payload = {};
     this.Party = null;
-    this.sendToGC(  Dota2.schema.lookupEnum("EGCBaseMsg").k_EMsgGCLeaveParty, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EGCBaseMsg").values.k_EMsgGCLeaveParty, 
                     Dota2.schema.lookupType("CMsgLeaveParty").encode(payload).finish());
 };
 
@@ -67,7 +67,7 @@ Dota2.Dota2Client.prototype.setPartyLeader = function(steam_id) {
     var payload = {
         "new_leader_steamid": steam_id
     };
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgClientToGCSetPartyLeader, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCSetPartyLeader, 
                     Dota2.schema.lookupType("CMsgDOTASetGroupLeader").encode(payload).finish());
 }
 
@@ -89,7 +89,7 @@ Dota2.Dota2Client.prototype.setPartyCoach = function(coach) {
     var payload = {
         "wants_coach": coach
     };
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCPartyMemberSetCoach, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPartyMemberSetCoach, 
                     Dota2.schema.lookupType("CMsgDOTAPartyMemberSetCoach").encode(payload).finish());
 };
 
@@ -111,7 +111,7 @@ Dota2.Dota2Client.prototype.inviteToParty = function(steam_id) {
     var payload = {
         "steam_id": steam_id
     };
-    this.sendToGC(  Dota2.schema.lookupEnum("EGCBaseMsg").k_EMsgGCInviteToParty, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EGCBaseMsg").values.k_EMsgGCInviteToParty, 
                     Dota2.schema.lookupType("CMsgInviteToParty").encode(payload).finish());
 };
 
@@ -133,6 +133,6 @@ Dota2.Dota2Client.prototype.kickFromParty = function(steam_id) {
     var payload = {
         "steam_id": steam_id
     };
-    this.sendToGC(  Dota2.schema.lookupEnum("EGCBaseMsg").k_EMsgGCKickFromParty, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EGCBaseMsg").values.k_EMsgGCKickFromParty, 
                     Dota2.schema.lookupType("CMsgKickFromParty").encode(payload).finish());
 };
