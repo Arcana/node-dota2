@@ -49,7 +49,7 @@ Dota2.Dota2Client.prototype.requestMatches = function(criteria, callback) {
     var payload = Dota2._parseOptions(criteria, Dota2._matchOptions);
     payload.matches_requested = payload.matches_requested || 1;
 
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCRequestMatches, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCRequestMatches, 
                     Dota2.schema.lookupType("CMsgDOTARequestMatches").encode(payload).finish(), 
                     onMatchesResponse, callback);
 }
@@ -73,7 +73,7 @@ Dota2.Dota2Client.prototype.requestMatchDetails = function(match_ids, callback) 
     var payload = {
         "match_id": match_ids
     };
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCMatchDetailsRequest, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCMatchDetailsRequest, 
                     Dota2.schema.lookupType("CMsgGCMatchDetailsRequest").encode(payload).finish(), 
                     onMatchDetailsResponse, callback);
 };
@@ -97,7 +97,7 @@ Dota2.Dota2Client.prototype.requestMatchMinimalDetails = function(match_ids, cal
     var payload = {
         "match_ids": match_ids
     };
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgClientToGCMatchesMinimalRequest, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCMatchesMinimalRequest, 
                     Dota2.schema.lookupType("CMsgClientToGCMatchesMinimalRequest").encode(payload).finish(), 
                     onMatchMinimalDetailsResponse, callback);
 };
@@ -114,7 +114,7 @@ Dota2.Dota2Client.prototype.requestMatchmakingStats = function() {
     if (this.debug) util.log("Sending matchmaking stats request");
     
     var payload = {};
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCMatchmakingStatsRequest, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCMatchmakingStatsRequest, 
                     Dota2.schema.lookupType("CMsgDOTAMatchmakingStatsRequest").encode(payload).finish());
 };
 
@@ -129,7 +129,7 @@ Dota2.Dota2Client.prototype.requestTopFriendMatches = function() {
     if (this.debug) util.log("Sending CMsgClientToGCTopFriendMatchesRequest");
     
     var payload = {};
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgClientToGCTopFriendMatchesRequest, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCTopFriendMatchesRequest, 
                     Dota2.schema.lookupType("CMsgClientToGCTopFriendMatchesRequest").encode(payload).finish());
 
 };
@@ -197,7 +197,7 @@ var onMatchesResponse = function onMatchesResponse(message, callback) {
         if (callback) callback(matchResponse.result, matchResponse);
     }
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCRequestMatchesResponse] = onMatchesResponse;
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCRequestMatchesResponse] = onMatchesResponse;
 
 var onMatchDetailsResponse = function onMatchDetailsResponse(message, callback) {
     callback = callback || null;
@@ -214,7 +214,7 @@ var onMatchDetailsResponse = function onMatchDetailsResponse(message, callback) 
         if (callback) callback(matchDetailsResponse.result, matchDetailsResponse);
     }
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCMatchDetailsResponse] = onMatchDetailsResponse;
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCMatchDetailsResponse] = onMatchDetailsResponse;
 
 var onMatchMinimalDetailsResponse = function onMatchMinimalDetailsResponse(message, callback) {
     callback = callback || null;
@@ -232,7 +232,7 @@ var onMatchMinimalDetailsResponse = function onMatchMinimalDetailsResponse(messa
         if (callback) callback(matchMinimalDetailsResponse.result, matchMinimalDetailsResponse);
     }
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgClientToGCMatchesMinimalResponse] = onMatchMinimalDetailsResponse;
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCMatchesMinimalResponse] = onMatchMinimalDetailsResponse;
 
 var onMatchmakingStatsResponse = function onMatchmakingStatsResponse(message) {
     // Is not Job ID based - can't do callbacks.
@@ -244,7 +244,7 @@ var onMatchmakingStatsResponse = function onMatchmakingStatsResponse(message) {
         matchmakingStatsResponse.match_groups,
         matchmakingStatsResponse);
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCMatchmakingStatsResponse] = onMatchmakingStatsResponse;
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCMatchmakingStatsResponse] = onMatchmakingStatsResponse;
 
 var onTopFriendMatchesResponse = function onTopFriendMatchesResponse(message) {
     var response = Dota2.schema.lookupType("CMsgGCToClientTopFriendMatchesResponse").decode(message);
@@ -257,4 +257,4 @@ var onTopFriendMatchesResponse = function onTopFriendMatchesResponse(message) {
     }
 
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCToClientTopFriendMatchesResponse] = onTopFriendMatchesResponse;
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCToClientTopFriendMatchesResponse] = onTopFriendMatchesResponse;

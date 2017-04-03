@@ -16,7 +16,7 @@ Dota2.Dota2Client.prototype.setItemPositions = function(item_positions) {
     let payload = {
         "itemPositions": item_positions
     };
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCSetItemPositions, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCSetItemPositions, 
                     Dota2.schema.lookupType("CMsgSetItemPositions").encode(payload).finish());
 };
 
@@ -35,7 +35,7 @@ Dota2.Dota2Client.prototype.deleteItem = function(item_id) {
     var buffer = new Buffer(8);
     buffer.writeUInt64LE(item_id);
     this._gc.send({
-            "msg": Dota2.schema.lookupEnum("EGCItemMsg").k_EMsgGCDelete
+            "msg": Dota2.schema.lookupEnum("EGCItemMsg").values.k_EMsgGCDelete
         },
         buffer
     );

@@ -167,7 +167,7 @@ var onCacheSubscribed = function onCacheSubscribed(message) {
         handleSubscribedType.call(_self, obj.type_id, obj.object_data);
     });
 };
-handlers[Dota2.schema.lookupEnum("ESOMsg").k_ESOMsg_CacheSubscribed] = onCacheSubscribed;
+handlers[Dota2.schema.lookupEnum("ESOMsg").values.k_ESOMsg_CacheSubscribed] = onCacheSubscribed;
 
 var onUpdateMultiple = function onUpdateMultiple(message) {
     var multi = Dota2.schema.lookup("CMsgSOMultipleObjects").decode(message);
@@ -178,7 +178,7 @@ var onUpdateMultiple = function onUpdateMultiple(message) {
             handleSubscribedType.call(_self, obj.type_id, obj.object_data);
         });
 };
-handlers[Dota2.schema.lookupEnum("ESOMsg").k_ESOMsg_UpdateMultiple] = onUpdateMultiple;
+handlers[Dota2.schema.lookupEnum("ESOMsg").values.k_ESOMsg_UpdateMultiple] = onUpdateMultiple;
 
 var onCreate = function onCreate(message) {
     var single = Dota2.schema.lookup("CMsgSOSingleObject").decode(message);
@@ -189,7 +189,7 @@ var onCreate = function onCreate(message) {
     }
     handleSubscribedType.call(_self, single.type_id, single.object_data);
 }
-handlers[Dota2.schema.lookupEnum("ESOMsg").k_ESOMsg_Create] = onCreate;
+handlers[Dota2.schema.lookupEnum("ESOMsg").values.k_ESOMsg_Create] = onCreate;
 
 var onCacheUnsubscribed = function onCacheUnsubscribed(message) {
     var unsubscribe = Dota2.schema.lookup("CMsgSOCacheUnsubscribed").decode(message);
@@ -211,7 +211,7 @@ var onCacheUnsubscribed = function onCacheUnsubscribed(message) {
         this.emit("partyInviteCleared");
     }
 };
-handlers[Dota2.schema.lookupEnum("ESOMsg").k_ESOMsg_CacheUnsubscribed] = onCacheUnsubscribed;
+handlers[Dota2.schema.lookupEnum("ESOMsg").values.k_ESOMsg_CacheUnsubscribed] = onCacheUnsubscribed;
 
 var onCacheDestroy = function onCacheDestroy(message) {
     var destroy = Dota2.schema.lookup("CMsgSOSingleObject").decode(message);
@@ -228,4 +228,4 @@ var onCacheDestroy = function onCacheDestroy(message) {
         this.emit("lobbyInviteCleared");
     }
 };
-handlers[Dota2.schema.lookupEnum("ESOMsg").k_ESOMsg_Destroy] = onCacheDestroy;
+handlers[Dota2.schema.lookupEnum("ESOMsg").values.k_ESOMsg_Destroy] = onCacheDestroy;

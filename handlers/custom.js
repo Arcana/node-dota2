@@ -15,7 +15,7 @@ Dota2.Dota2Client.prototype.requestJoinableCustomGameModes = function requestJoi
     var payload = {
         "server_region": server_region
     };
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCJoinableCustomGameModesRequest, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCJoinableCustomGameModesRequest, 
                     Dota2.schema.lookupType("CMsgJoinableCustomGameModesRequest").encode(payload).finish());
 }
 
@@ -35,4 +35,4 @@ var onJoinableCustomGameModesResponse = function onJoinableCustomGameModesRespon
     if (this.debug) util.log("Received joinable custom game modes");
     this.emit("joinableCustomGameModes", modes.game_modes);
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCJoinableCustomGameModesResponse] = onJoinableCustomGameModesResponse;
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCJoinableCustomGameModesResponse] = onJoinableCustomGameModesResponse;
