@@ -29,7 +29,7 @@ Dota2.Dota2Client.prototype.requestSourceTVGames = function(filter_options) {
         "lobby_ids": [],      // Used for getting player specific games, still don't know where the lobbyids come from though
     }, filter_options);
 
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgClientToGCFindTopSourceTVGames, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCFindTopSourceTVGames, 
                     Dota2.schema.lookupType("CMsgClientToGCFindTopSourceTVGames").encode(payload).finish());
 };
 
@@ -68,5 +68,5 @@ var onSourceTVGamesResponse = function onSourceTVGamesResponse(message) {
         */
     }
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCToClientFindTopSourceTVGamesResponse] = onSourceTVGamesResponse;
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCToClientFindTopSourceTVGamesResponse] = onSourceTVGamesResponse;
 

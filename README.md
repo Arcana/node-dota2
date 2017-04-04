@@ -4,6 +4,7 @@ node-dota2
 [![NPM version](https://img.shields.io/npm/v/dota2.svg)](https://npmjs.org/package/dota2 "View this project on NPM")
 [![Build Status](https://img.shields.io/travis/Arcana/node-dota2.svg)](https://travis-ci.org/Arcana/node-dota2 "View this project's build information")
 [![Dependency Status](https://img.shields.io/david/Arcana/node-dota2.svg)](https://david-dm.org/Arcana/node-dota2 "Check this project's dependencies")
+[![Greenkeeper badge](https://badges.greenkeeper.io/Arcana/node-dota2.svg)](https://greenkeeper.io/)
 
 A node-steam plugin for Dota 2, consider it in alpha state.
 
@@ -1735,7 +1736,7 @@ Converts a Dota2 account ID to a 64bit Steam ID
 Protobuf schema. See [Protobufjs#Root](http://dcode.io/protobuf.js/Root.html). 
 This object can be used to obtain special protobuf types.
 Object types can be created by `Dota2.schema.lookupType("TypeName").encode(payload :Object).finish();`.
-Enum types can be referenced by `Dota2.schema.lookupEnum("EnumName")`, which returns an object array representing the enum.
+Enum types can be referenced by `Dota2.schema.lookupEnum("EnumName").values`, which returns an object array representing the enum.
 
 **Kind**: static property of <code>[Dota2](#module_Dota2)</code>  
 <a name="module_Dota2.schema.CMsgGCToClientPlayerStatsResponse"></a>
