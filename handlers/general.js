@@ -19,4 +19,4 @@ var onPopUp = function onPopUp(message) {
     if (this.debug) util.log("Received popup: "+popup.custom_text);
     this.emit("popup", popup.id, popup);
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCPopup] = onPopUp;
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPopup] = onPopUp;

@@ -19,7 +19,7 @@ Dota2.Dota2Client.prototype.requestMyTeams = function requestMyTeams(callback) {
 
     if (this.debug) util.log("Requesting my own team data");
     var payload = {};
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgClientToGCMyTeamInfoRequest,
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCMyTeamInfoRequest,
                     Dota2.schema.lookupType("CMsgDOTAMyTeamInfoRequest").encode(payload).finish(), 
                     onTeamDataResponse, callback);
 }
@@ -42,7 +42,7 @@ Dota2.Dota2Client.prototype.requestProTeamList = function requestProTeamList(cal
 
     if (this.debug) util.log("Requesting list of pro teams");
     var payload = {};
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCProTeamListRequest, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCProTeamListRequest, 
                     Dota2.schema.lookupType("CMsgDOTAProTeamListRequest").encode(payload).finish(), 
                     onProTeamListResponse, callback);
 }
@@ -79,7 +79,7 @@ var onTeamDataResponse = function onTeamDataResponse(message, callback) {
     if (callback) callback(null, teamDataResponse);
     
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCToClientTeamsInfo] = onTeamDataResponse;
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCToClientTeamsInfo] = onTeamDataResponse;
 
 // No longer gets triggered
 var onProTeamListResponse = function onProTeamListResponse(message, callback) {
@@ -95,4 +95,4 @@ var onProTeamListResponse = function onProTeamListResponse(message, callback) {
         if (callback) callback(teams.eresult, teams);
     }
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCProTeamListResponse] = onProTeamListResponse;
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCProTeamListResponse] = onProTeamListResponse;

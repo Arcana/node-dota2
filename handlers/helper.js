@@ -175,12 +175,6 @@ Dota2._getMessageName = function(kMsg) {
                     Dota2.schema.lookupEnum("EGCToGCMsg"),
                     Dota2.schema.lookupEnum("EGCEconBaseMsg")];
     for (var i=0; i<msgTypes.length; i++) {
-        for (var m in msgTypes[i]) {
-            if (msgTypes[i].hasOwnProperty(m)) {
-                if (msgTypes[i][m] === kMsg) {
-                    return m;
-                }
-            }
-        }
+        if (msgTypes[i].valuesById[kMsg]) return msgTypes[i].valuesById[kMsg];
     }
 }

@@ -30,7 +30,7 @@ Dota2.Dota2Client.prototype._leaveChatChannelById = function(channelId) {
         "channel_id": channelId
     };
     this.chatChannels = this.chatChannels.filter(item => item.channel_id.notEquals(channelId));
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCLeaveChatChannel, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCLeaveChatChannel, 
                     Dota2.schema.lookupType("CMsgDOTALeaveChatChannel").encode(payload).finish());
     if (this.debug) {
         util.log("Leaving channel " + channelId);
@@ -46,7 +46,7 @@ Dota2.Dota2Client.prototype._leaveChatChannelById = function(channelId) {
  * @param {DOTAChatChannelType_t} [channel_type=DOTAChatChannelType_t.DOTAChatChannelType_Custom] - The type of the channel being joined
  */
 Dota2.Dota2Client.prototype.joinChat = function(channel_name, channel_type) {
-    channel_type = channel_type == null ? Dota2.schema.lookupEnum("DOTAChatChannelType_t").DOTAChannelType_Custom : channel_type;
+    channel_type = channel_type == null ? Dota2.schema.lookupEnum("DOTAChatChannelType_t").values.DOTAChannelType_Custom : channel_type;
 
     /* Attempts to join a chat channel.  Expect k_EMsgGCJoinChatChannelResponse from GC */
     if (this.debug) util.log("Joining chat channel: " + channel_name);
@@ -55,7 +55,7 @@ Dota2.Dota2Client.prototype.joinChat = function(channel_name, channel_type) {
         "channel_name": channel_name,
         "channel_type": channel_type
     };
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCJoinChatChannel, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCJoinChatChannel, 
                     Dota2.schema.lookupType("CMsgDOTAJoinChatChannel").encode(payload).finish());
 };
 
@@ -102,7 +102,7 @@ Dota2.Dota2Client.prototype.sendMessage = function(message, channel_name, channe
         "channel_id": cache.channel_id,
         "text": message
     };
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCChatMessage, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCChatMessage, 
                     Dota2.schema.lookupType("CMsgDOTAChatMessage").encode(payload).finish());
 };
 
@@ -132,7 +132,7 @@ Dota2.Dota2Client.prototype.shareLobby = function(channel_name, channel_type) {
         "share_lobby_id": this.Lobby.lobby_id,
         "share_lobby_passkey": this.Lobby.pass_key
     };
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCChatMessage, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCChatMessage, 
                     Dota2.schema.lookupType("CMsgDOTAChatMessage").encode(payload).finish());
 };
 
@@ -158,7 +158,7 @@ Dota2.Dota2Client.prototype.flipCoin = function(channel_name, channel_type) {
         "channel_id": cache.channel_id,
         "coin_flip": true
     };
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCChatMessage, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCChatMessage, 
                     Dota2.schema.lookupType("CMsgDOTAChatMessage").encode(payload).finish());
 };
 
@@ -189,7 +189,7 @@ Dota2.Dota2Client.prototype.rollDice = function(min, max, channel_name, channel_
             "roll_max": max
         }
     };
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCChatMessage, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCChatMessage, 
                     Dota2.schema.lookupType("CMsgDOTAChatMessage").encode(payload).finish());
 };
 
@@ -203,7 +203,7 @@ Dota2.Dota2Client.prototype.requestChatChannels = function() {
     if (this.debug) util.log("Requesting channel list");
     
     var payload = {};
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCRequestChatChannelList, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCRequestChatChannelList, 
                     Dota2.schema.lookupType("CMsgDOTAChatMessage").encode(payload).finish());
 };
 
@@ -255,7 +255,7 @@ var onJoinChatChannelResponse = function onJoinChatChannelResponse(message) {
     this.chatChannels.push(channelData);
     this.emit("chatJoined", channelData);
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCJoinChatChannelResponse] = onJoinChatChannelResponse;
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCJoinChatChannelResponse] = onJoinChatChannelResponse;
 
 var onChatMessage = function onChatMessage(message) {
     /* Chat channel message from another user. */
@@ -269,7 +269,7 @@ var onChatMessage = function onChatMessage(message) {
         chatData.text,
         chatData);
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCChatMessage] = onChatMessage;
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCChatMessage] = onChatMessage;
 
 var onOtherJoinedChannel = function onOtherJoinedChannel(message) {
     /* Someone joined a chat channel you're in. */
@@ -287,7 +287,7 @@ var onOtherJoinedChannel = function onOtherJoinedChannel(message) {
         persona_name: otherJoined.persona_name
     }));
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCOtherJoinedChannel] = onOtherJoinedChannel;
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCOtherJoinedChannel] = onOtherJoinedChannel;
 
 var onUserLeftChannel = function onOtherLeftChannel(message) {
     /* Someone left a chat channel you're in. */
@@ -320,10 +320,10 @@ var onUserLeftChannel = function onOtherLeftChannel(message) {
         }
     }
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCOtherLeftChannel] = onUserLeftChannel;
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCOtherLeftChannel] = onUserLeftChannel;
 
 var onChatChannelsResponse = function onChatChannelsResponse(message) {
     var channels = Dota2.schema.lookupType("CMsgDOTARequestChatChannelListResponse").decode(message).channels;
     this.emit("chatChannelsData", channels)
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCRequestChatChannelListResponse] = onChatChannelsResponse;
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCRequestChatChannelListResponse] = onChatChannelsResponse;

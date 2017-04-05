@@ -102,9 +102,9 @@ Dota2.Dota2Client.prototype.createPracticeLobby = function(options, callback) {
     var defaults = {
         game_name: "",
         server_region: Dota2.ServerRegion.UNSPECIFIED,
-        game_mode: Dota2.schema.lookupEnum("DOTA_GameMode").DOTA_GAMEMODE_AP,
-        game_version: Dota2.schema.lookupEnum("DOTAGameVersion").GAME_VERSION_STABLE,
-        cm_pick: Dota2.schema.lookupEnum("DOTA_CM_PICK").DOTA_CM_RANDOM,
+        game_mode: Dota2.schema.lookupEnum("DOTA_GameMode").values.DOTA_GAMEMODE_AP,
+        game_version: Dota2.schema.lookupEnum("DOTAGameVersion").values.GAME_VERSION_STABLE,
+        cm_pick: Dota2.schema.lookupEnum("DOTA_CM_PICK").values.DOTA_CM_RANDOM,
         allow_cheats: false,
         fill_with_bots: false,
         bot_difficulty_radiant: Dota2.BotDifficulty.PASSIVE,
@@ -115,7 +115,7 @@ Dota2.Dota2Client.prototype.createPracticeLobby = function(options, callback) {
         radiant_series_wins: 0,
         dire_series_wins: 0,
         allchat: false,
-        dota_tv_delay: Dota2.schema.lookupEnum("LobbyDotaTVDelay").LobbyDotaTV_120,
+        dota_tv_delay: Dota2.schema.lookupEnum("LobbyDotaTVDelay").values.LobbyDotaTV_120,
         leagueid: 0,
         previous_match_override: 0,
         custom_game_mode: "",
@@ -132,7 +132,7 @@ Dota2.Dota2Client.prototype.createPracticeLobby = function(options, callback) {
         "pass_key": finalOptions.pass_key
     };
 
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCPracticeLobbyCreate,
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPracticeLobbyCreate,
                     Dota2.schema.lookupType("CMsgPracticeLobbyCreate").encode(payload).finish(),
                     onPracticeLobbyResponse, callback);
 }
@@ -171,7 +171,7 @@ Dota2.Dota2Client.prototype.createTournamentLobby = function(password, tournamen
         payload["tournament_id"] = tournament_id;
     }
 
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCPracticeLobbyCreate, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPracticeLobbyCreate, 
                     Dota2.schema.lookupType("CMsgPracticeLobbyCreate").encode(payload).finish(), 
                     onPracticeLobbyResponse, callback);
 };
@@ -193,7 +193,7 @@ Dota2.Dota2Client.prototype.configPracticeLobby = function(lobby_id, options, ca
     var payload = Dota2._parseOptions(options, Dota2._lobbyOptions);
     payload["lobby_id"] = lobby_id;
 
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCPracticeLobbySetDetails,
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPracticeLobbySetDetails,
                     Dota2.schema.lookupType("CMsgPracticeLobbySetDetails").encode(payload).finish(), 
                     onPracticeLobbyResponse, callback);
 };
@@ -212,7 +212,7 @@ Dota2.Dota2Client.prototype.requestPracticeLobbyList = function(callback) {
     if (this.debug) util.log("Sending CMsgPracticeLobbyList request");
     
     var payload = {};
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCPracticeLobbyList, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPracticeLobbyList, 
                     Dota2.schema.lookupType("CMsgPracticeLobbyList").encode(payload).finish(), 
                     onPracticeLobbyListResponse, callback);
 };
@@ -231,7 +231,7 @@ Dota2.Dota2Client.prototype.requestFriendPracticeLobbyList = function(callback) 
     if (this.debug) util.log("Sending CMsgFriendPracticeLobbyListRequest request");
     
     var payload = {};
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCFriendPracticeLobbyListRequest, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCFriendPracticeLobbyListRequest, 
                     Dota2.schema.lookupType("CMsgFriendPracticeLobbyListRequest").encode(payload).finish(), 
                     onFriendPracticeLobbyListResponse, callback);
 };
@@ -250,7 +250,7 @@ Dota2.Dota2Client.prototype.balancedShuffleLobby = function(callback) {
     if (this.debug) util.log("Sending CMsgBalancedShuffleLobby request");
     
     var payload = {};
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCBalancedShuffleLobby, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCBalancedShuffleLobby, 
                     Dota2.schema.lookupType("CMsgBalancedShuffleLobby").encode(payload).finish(), 
                     onPracticeLobbyResponse, callback);
 };
@@ -269,7 +269,7 @@ Dota2.Dota2Client.prototype.flipLobbyTeams = function(callback) {
     if (this.debug) util.log("Sending flip teams request");
     
     var payload = {};
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCFlipLobbyTeams, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCFlipLobbyTeams, 
                     Dota2.schema.lookupType("CMsgFlipLobbyTeams").encode(payload).finish(), 
                     onPracticeLobbyResponse, callback);
 };
@@ -293,7 +293,7 @@ Dota2.Dota2Client.prototype.inviteToLobby = function(steam_id) {
     var payload = {
         "steam_id": steam_id
     };
-    this.sendToGC(  Dota2.schema.lookupEnum("EGCBaseMsg").k_EMsgGCInviteToLobby, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EGCBaseMsg").values.k_EMsgGCInviteToLobby, 
                     Dota2.schema.lookupType("CMsgInviteToLobby").encode(payload).finish());
 };
 
@@ -315,7 +315,7 @@ Dota2.Dota2Client.prototype.practiceLobbyKick = function(account_id, callback) {
     var payload = {
         "account_id": account_id
     };
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCPracticeLobbyKick, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPracticeLobbyKick, 
                     Dota2.schema.lookupType("CMsgPracticeLobbyKick").encode(payload).finish(), 
                     onPracticeLobbyResponse, callback);
 };
@@ -339,7 +339,7 @@ Dota2.Dota2Client.prototype.practiceLobbyKickFromTeam = function(account_id, cal
     var payload = {
         "account_id": account_id
     };
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCPracticeLobbyKickFromTeam, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPracticeLobbyKickFromTeam, 
                     Dota2.schema.lookupType("CMsgPracticeLobbyKickFromTeam").encode(payload).finish(), 
                     onPracticeLobbyResponse, callback);
 };
@@ -364,7 +364,7 @@ Dota2.Dota2Client.prototype.joinPracticeLobby = function(id, password, callback)
         "lobby_id": id,
         "pass_key": password
     };
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCPracticeLobbyJoin, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPracticeLobbyJoin, 
                     Dota2.schema.lookupType("CMsgPracticeLobbyJoin").encode(payload).finish(), 
                     onPracticeLobbyJoinResponse, callback);
 };
@@ -384,7 +384,7 @@ Dota2.Dota2Client.prototype.leavePracticeLobby = function(callback) {
     if (this.debug) util.log("Sending match CMsgPracticeLobbyLeave request");
     
     var payload = {};
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCPracticeLobbyLeave, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPracticeLobbyLeave, 
                     Dota2.schema.lookupType("CMsgPracticeLobbyLeave").encode(payload).finish(), 
                     onPracticeLobbyResponse, callback);
 };
@@ -403,7 +403,7 @@ Dota2.Dota2Client.prototype.abandonCurrentGame = function(callback) {
     if (this.debug) util.log("Sending match CMsgAbandonCurrentGame request");
 
     var payload = {};
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCAbandonCurrentGame,
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCAbandonCurrentGame,
                     Dota2.schema.lookupType("CMsgAbandonCurrentGame").encode(payload).finish(),
                     onPracticeLobbyResponse, callback);
 };
@@ -423,7 +423,7 @@ Dota2.Dota2Client.prototype.launchPracticeLobby = function(callback) {
     if (this.debug) util.log("Sending match CMsgPracticeLobbyLaunch request");
 
     var payload = {};
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCPracticeLobbyLaunch, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPracticeLobbyLaunch, 
                     Dota2.schema.lookupType("CMsgPracticeLobbyLaunch").encode(payload).finish(), 
                     onPracticeLobbyResponse, callback);
 };
@@ -441,7 +441,7 @@ Dota2.Dota2Client.prototype.launchPracticeLobby = function(callback) {
 Dota2.Dota2Client.prototype.joinPracticeLobbyTeam = function(slot, team, callback) {
     callback = callback || null;
     slot = slot ||1;
-    if (typeof team === 'undefined') team = Dota2.schema.lookupEnum("DOTA_GC_TEAM").DOTA_GC_TEAM_PLAYER_POOL;
+    if (typeof team === 'undefined') team = Dota2.schema.lookupEnum("DOTA_GC_TEAM").values.DOTA_GC_TEAM_PLAYER_POOL;
     
     var _self = this;
 
@@ -451,7 +451,7 @@ Dota2.Dota2Client.prototype.joinPracticeLobbyTeam = function(slot, team, callbac
         "team": team,
         "slot": slot
     };
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCPracticeLobbySetTeamSlot, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPracticeLobbySetTeamSlot, 
                     Dota2.schema.lookupType("CMsgPracticeLobbySetTeamSlot").encode(payload).finish(), 
                     onPracticeLobbyResponse, callback);
 };
@@ -475,7 +475,7 @@ Dota2.Dota2Client.prototype.joinPracticeLobbyBroadcastChannel = function(channel
     var payload = {
         "channel": channel
     };
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCPracticeLobbyJoinBroadcastChannel,
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPracticeLobbyJoinBroadcastChannel,
                     Dota2.schema.lookupType("CMsgPracticeLobbyJoinBroadcastChannel").encode(payload).finish(),
                     onPracticeLobbyJoinResponse, callback);
 };
@@ -494,8 +494,8 @@ Dota2.Dota2Client.prototype.joinPracticeLobbyBroadcastChannel = function(channel
 Dota2.Dota2Client.prototype.addBotToPracticeLobby = function(slot, team, bot_difficulty, callback) {
     callback = callback || null;
     slot = slot || 1;
-    team = team || Dota2.schema.lookupEnum("DOTA_GC_TEAM").DOTA_GC_TEAM_GOOD_GUYS;
-    bot_difficulty = bot_difficulty || Dota2.schema.lookupEnum("DOTABotDifficulty").BOT_DIFFICULTY_PASSIVE;
+    team = team || Dota2.schema.lookupEnum("DOTA_GC_TEAM").values.DOTA_GC_TEAM_GOOD_GUYS;
+    bot_difficulty = bot_difficulty || Dota2.schema.lookupEnum("DOTABotDifficulty").values.BOT_DIFFICULTY_PASSIVE;
     var _self = this;
 
     if (this.debug) util.log("Sending match CMsgPracticeLobbySetTeamSlot request");
@@ -505,7 +505,7 @@ Dota2.Dota2Client.prototype.addBotToPracticeLobby = function(slot, team, bot_dif
         "slot": slot,
         "bot_difficulty": bot_difficulty
     };
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCPracticeLobbySetTeamSlot, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPracticeLobbySetTeamSlot, 
                     Dota2.schema.lookupType("CMsgPracticeLobbySetTeamSlot").encode(payload).finish(), 
                     onPracticeLobbyResponse, callback);
 }
@@ -532,7 +532,7 @@ Dota2.Dota2Client.prototype.respondLobbyInvite = function(id, accept) {
         "lobby_id": id,
         "accept": accept
     };
-    this.sendToGC(  Dota2.schema.lookupEnum("EGCBaseMsg").k_EMsgGCLobbyInviteResponse, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EGCBaseMsg").values.k_EMsgGCLobbyInviteResponse, 
                     Dota2.schema.lookupType("CMsgLobbyInviteResponse").encode(payload).finish());
 };
 
@@ -585,14 +585,14 @@ var onPracticeLobbyJoinResponse = function onPracticeLobbyJoinResponse(message, 
     this.emit("practiceLobbyJoinResponse", practiceLobbyJoinResponse.result, practiceLobbyJoinResponse);
     
     if (callback) {
-        if (practiceLobbyJoinResponse.result === Dota2.schema.lookupEnum("DOTAJoinLobbyResult").DOTA_JOIN_RESULT_SUCCESS) {
+        if (practiceLobbyJoinResponse.result === Dota2.schema.lookupEnum("DOTAJoinLobbyResult").values.DOTA_JOIN_RESULT_SUCCESS) {
             callback(null, practiceLobbyJoinResponse);
         } else {
             callback(practiceLobbyJoinResponse.result, practiceLobbyJoinResponse);
         }
     }
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCPracticeLobbyJoinResponse] = onPracticeLobbyJoinResponse;
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPracticeLobbyJoinResponse] = onPracticeLobbyJoinResponse;
 
 var onPracticeLobbyListResponse = function onPracticeLobbyListResponse(message, callback) {
     var practiceLobbyListResponse = Dota2.schema.lookupType("CMsgPracticeLobbyListResponse").decode(message);
@@ -601,7 +601,7 @@ var onPracticeLobbyListResponse = function onPracticeLobbyListResponse(message, 
     this.emit("practiceLobbyListData", practiceLobbyListResponse);
     if (callback) callback(null, practiceLobbyListResponse);
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCPracticeLobbyListResponse] = onPracticeLobbyListResponse;
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPracticeLobbyListResponse] = onPracticeLobbyListResponse;
 
 var onPracticeLobbyResponse = function onPracticeLobbyResponse(message, callback) {
     var practiceLobbyResponse = Dota2.schema.lookupType("CMsgPracticeLobbyJoinResponse").decode(message);
@@ -617,7 +617,7 @@ var onPracticeLobbyResponse = function onPracticeLobbyResponse(message, callback
         }
     }
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCPracticeLobbyResponse] = onPracticeLobbyResponse;
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPracticeLobbyResponse] = onPracticeLobbyResponse;
 
 var onFriendPracticeLobbyListResponse = function onFriendPracticeLobbyListResponse(message, callback) {
     var practiceLobbyListResponse = Dota2.schema.lookupType("CMsgFriendPracticeLobbyListResponse").decode(message);
@@ -626,7 +626,7 @@ var onFriendPracticeLobbyListResponse = function onFriendPracticeLobbyListRespon
     this.emit("friendPracticeLobbyListData", practiceLobbyListResponse);
     if (callback) callback(null, practiceLobbyListResponse);
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCFriendPracticeLobbyListResponse] = onFriendPracticeLobbyListResponse;
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCFriendPracticeLobbyListResponse] = onFriendPracticeLobbyListResponse;
 
 var onInviteCreated = function onInviteCreated(message) {
     var inviteCreated = Dota2.schema.lookupType("CMsgInvitationCreated").decode(message);
@@ -636,5 +636,5 @@ var onInviteCreated = function onInviteCreated(message) {
     if (this.debug && !is_online) util.log("Created invitation to offline user " + inviteCreated.steam_id);
     this.emit("inviteCreated", inviteCreated.steam_id, inviteCreated.group_id, is_online);
 }
-handlers[Dota2.schema.lookupEnum("EGCBaseMsg").k_EMsgGCInvitationCreated] = onInviteCreated;
+handlers[Dota2.schema.lookupEnum("EGCBaseMsg").values.k_EMsgGCInvitationCreated] = onInviteCreated;
 

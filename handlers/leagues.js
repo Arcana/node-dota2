@@ -29,7 +29,7 @@ Dota2.Dota2Client.prototype.requestLeaguesInMonth = function(month, year, tier, 
         'year': year,
         'tier': tier
     };
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCLeaguesInMonthRequest, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCLeaguesInMonthRequest, 
                     Dota2.schema.lookupType("CMsgDOTALeaguesInMonthRequest").encode(payload).finish(), 
                     onLeaguesInMonthResponse, callback);
 };
@@ -45,7 +45,7 @@ Dota2.Dota2Client.prototype.requestLeagueInfo = function() {
     if (this.debug) util.log("Sending CMsgRequestLeagueInfo");
     
     var payload = {};
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgRequestLeagueInfo, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgRequestLeagueInfo, 
                     Dota2.schema.lookupType("CMsgRequestLeagueInfo").encode(payload).finish());
 
 };
@@ -61,7 +61,7 @@ Dota2.Dota2Client.prototype.requestTopLeagueMatches = function() {
     if (this.debug) util.log("Sending CMsgClientToGCTopLeagueMatchesRequest");
     
     var payload = {};
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgClientToGCTopLeagueMatchesRequest, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCTopLeagueMatchesRequest, 
                     Dota2.schema.lookupType("CMsgClientToGCTopLeagueMatchesRequest").encode(payload).finish());
 
 };
@@ -132,7 +132,7 @@ var onLeaguesInMonthResponse = function onLeaguesInMonthResponse(message, callba
         if (callback) callback(response.eresult, response);
     }
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCLeaguesInMonthResponse] = onLeaguesInMonthResponse;
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCLeaguesInMonthResponse] = onLeaguesInMonthResponse;
 
 var onLiveLeagueGameUpdate = function onLiveLeagueGameUpdate(message, callback) {
     callback = callback || null;
@@ -142,7 +142,7 @@ var onLiveLeagueGameUpdate = function onLiveLeagueGameUpdate(message, callback) 
     this.emit("liveLeagueGamesUpdate", response.live_league_games);
     if (callback) callback(null, response.live_league_games);
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgDOTALiveLeagueGameUpdate] = onLiveLeagueGameUpdate;
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgDOTALiveLeagueGameUpdate] = onLiveLeagueGameUpdate;
 
 var onLeagueInfoResponse = function onLeagueInfoResponse(message) {
     var response = Dota2.schema.lookupType("CMsgResponseLeagueInfo").decode(message);
@@ -155,7 +155,7 @@ var onLeagueInfoResponse = function onLeagueInfoResponse(message) {
     }
 
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgResponseLeagueInfo] = onLeagueInfoResponse;
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgResponseLeagueInfo] = onLeagueInfoResponse;
 
 var onTopLeagueMatchesResponse = function onTopLeagueMatchesResponse(message) {
     var response = Dota2.schema.lookupType("CMsgGCToClientTopLeagueMatchesResponse").decode(message);
@@ -168,4 +168,4 @@ var onTopLeagueMatchesResponse = function onTopLeagueMatchesResponse(message) {
     }
 
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCToClientTopLeagueMatchesResponse] = onTopLeagueMatchesResponse;
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCToClientTopLeagueMatchesResponse] = onTopLeagueMatchesResponse;

@@ -82,7 +82,7 @@ Dota2.Dota2Client.prototype.requestPlayerCardsByPlayer = function() {
 //         "player_card_item_ids": player_card_ids
 //     };
     
-//     this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgGCGetPlayerCardItemInfo, 
+//     this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCGetPlayerCardItemInfo, 
 //                     Dota2.schema.lookupType("CMsgGCGetPlayerCardItemInfo").encode(payload).finish(), 
 //                     onPlayerCardInfoResponse, callback);
 // }
@@ -108,7 +108,7 @@ Dota2.Dota2Client.prototype.requestPlayerCardRoster = function(league_id, timest
         "timestamp": timestamp
     };
     
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgClientToGCGetPlayerCardRosterRequest, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCGetPlayerCardRosterRequest, 
                     Dota2.schema.lookupType("CMsgClientToGCGetPlayerCardRosterRequest").encode(payload).finish(), 
                     onGetPlayerCardRosterResponse, callback);
 }
@@ -136,7 +136,7 @@ Dota2.Dota2Client.prototype.draftPlayerCard = function(league_id, timestamp, slo
         "timestamp": timestamp
     };
     
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgClientToGCSetPlayerCardRosterRequest, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCSetPlayerCardRosterRequest, 
                     Dota2.schema.lookupType("CMsgClientToGCSetPlayerCardRosterRequest").encode(payload).finish(), 
                     onSetPlayerCardRosterResponse, callback);
 }
@@ -165,7 +165,7 @@ var handlers = Dota2.Dota2Client.prototype._handlers;
 //     if (callback) callback(null, playerCardInfo);
     
 // };
-// handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgClientToGCCreatePlayerCardPackResponse] = onPlayerCardInfoResponse;
+// handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCCreatePlayerCardPackResponse] = onPlayerCardInfoResponse;
 
 var onGetPlayerCardRosterResponse = function onGetPlayerCardRosterResponse(message, callback) {
     callback = callback || null;
@@ -179,7 +179,7 @@ var onGetPlayerCardRosterResponse = function onGetPlayerCardRosterResponse(messa
         if (callback) callback(playerCardRoster.result);
     }
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgClientToGCGetPlayerCardRosterResponse] = onGetPlayerCardRosterResponse;
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCGetPlayerCardRosterResponse] = onGetPlayerCardRosterResponse;
 
 var onSetPlayerCardRosterResponse = function onSetPlayerCardRosterResponse(message, callback) {
     callback = callback || null;
@@ -188,4 +188,4 @@ var onSetPlayerCardRosterResponse = function onSetPlayerCardRosterResponse(messa
     this.emit("playerCardDrafted", playerCardRoster.result);
     if (callback) callback(playerCardRoster.result, playerCardRoster);
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").k_EMsgClientToGCSetPlayerCardRosterResponse] = onSetPlayerCardRosterResponse;
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCSetPlayerCardRosterResponse] = onSetPlayerCardRosterResponse;
