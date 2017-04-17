@@ -29,7 +29,7 @@ Dota2.Dota2Client.prototype._leaveChatChannelById = function(channelId) {
     var payload = {
         "channel_id": channelId
     };
-    this.chatChannels = this.chatChannels.filter(item => item.channel_id.notEquals(channelId));
+    //this.chatChannels = this.chatChannels.filter(item => item.channel_id.notEquals(channelId));
     this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCLeaveChatChannel, 
                     Dota2.schema.lookupType("CMsgDOTALeaveChatChannel").encode(payload).finish());
     if (this.debug) {
@@ -229,6 +229,11 @@ Dota2.Dota2Client.prototype.requestChatChannels = function() {
  * @param {CMsgDOTAOtherLeftChatChannel} otherLeft_object - The raw message data.
  */
 /**
+ * Event that's emitted whenever the bot left a chat channel
+ * @event module:Dota2.Dota2Client#chatLeft
+ * @param {string} channel - Name of the chat channel the bot left
+ */
+/**
  * Event that's emitted whenever someone sends a message in a channel the bot is in
  * @event module:Dota2.Dota2Client#chatMessage
  * @param {string} channel - Name of the chat channel the message was sent to
@@ -290,15 +295,18 @@ var onOtherJoinedChannel = function onOtherJoinedChannel(message) {
 handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCOtherJoinedChannel] = onOtherJoinedChannel;
 
 var onUserLeftChannel = function onOtherLeftChannel(message) {
+    console.log("Someone left channel");
     /* Someone left a chat channel you're in. */
     var userWhoLeft = Dota2.schema.lookupType("CMsgDOTAOtherLeftChatChannel").decode(message);
     var channel = this._getChannelById(userWhoLeft.channel_id);
+    // Delete channel from cache
+    this.chatChannels = this.chatChannels.filter(item => item.channel_id.notEquals(userWhoLeft.channel_id));
     // Check if it is me that left the channel
     if (userWhoLeft.steam_id.equals(this._client.steamID)) {
         if (channel) {
+            // TODO 6.0.0 - Delete this event
             this.emit("chatLeave", channel.channel_name, userWhoLeft.steam_id, userWhoLeft);
-            // Delete channel from cache
-            this.chatChannels = this.chatChannels.filter(item => item.channel_id.notEquals(channel.channel_id));
+            this.emit("chatLeft", channel.channel_name);
             if (this.debug)
                 util.log("Left channel " + channel.channel_name);
         } else {
