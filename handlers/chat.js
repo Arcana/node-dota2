@@ -295,7 +295,6 @@ var onOtherJoinedChannel = function onOtherJoinedChannel(message) {
 handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCOtherJoinedChannel] = onOtherJoinedChannel;
 
 var onUserLeftChannel = function onOtherLeftChannel(message) {
-    console.log("Someone left channel");
     /* Someone left a chat channel you're in. */
     var userWhoLeft = Dota2.schema.lookupType("CMsgDOTAOtherLeftChatChannel").decode(message);
     var channel = this._getChannelById(userWhoLeft.channel_id);
