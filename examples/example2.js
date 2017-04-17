@@ -29,7 +29,7 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
             if(joiningChannel == 1){
                 Dota2.joinChat(chatChannel);
                 setTimeout(function(){
-                    Dota2.sendMessage(chatChannel, "Hello, guys! I'm Dota 2 Bot.");
+                    Dota2.sendMessage("Hello, guys! I'm Dota 2 Bot.", chatChannel);
                 }, 1000);
             }
 
@@ -106,35 +106,45 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
 
             // LOBBY
 
-            var creatingLobby = 0;
-            var leavingLobby = 0;
+            var creatingLobby = 1;
+            var leavingLobby = 1;
+            var lobbyChannel = "";
 
             if(creatingLobby == 1){ // sets only password, nothing more
-                var lobbyPassword = "ap";
                 var properties = {
                     "game_name": "MyLobby",
-                    "server_region": 3,
-                    "game_mode": 2,
-                    "series_type": 2,
+                    "server_region": dota2.ServerRegion.EUROPE,
+                    "game_mode": dota2.schema.lookupEnum('DOTA_GameMode').values.DOTA_GAMEMODE_CM,
                     "game_version": 1,
                     "allow_cheats": false,
                     "fill_with_bots": false,
                     "allow_spectating": true,
-                    "pass_key": lobbyPassword,
+                    "pass_key": "ap",
                     "radiant_series_wins": 0,
                     "dire_series_wins": 0,
                     "allchat": true
                 }
 
-                Dota2.createPracticeLobby(lobbyPassword, properties, function(err, data){
-                    util.log(JSON.stringify(data));
+                Dota2.createPracticeLobby(properties, function(err, data){
+                    if (err) {
+                        util.log(err + ' - ' + JSON.stringify(data));
+                    }
+                });
+                Dota2.on("practiceLobbyUpdate", function(lobby) {
+                        lobbyChannel = "Lobby_"+lobby.lobby_id;
+                        Dota2.joinChat(lobbyChannel, dota2.schema.lookupEnum('DOTAChatChannelType_t').values.DOTAChannelType_Lobby);
                 });
             }
 
             if(leavingLobby == 1){
                 setTimeout(function(){
                     Dota2.leavePracticeLobby(function(err, data){
-                        // util.log(JSON.stringify(data));
+                        if (!err) {
+                            Dota2.abandonCurrentGame();
+                            if(lobbyChannel) Dota2.leaveChat(lobbyChannel);
+                        } else {
+                            util.log(err + ' - ' + JSON.stringify(data));
+                        }
                     });
                 }, 10000);
             }
