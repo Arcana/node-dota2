@@ -298,10 +298,10 @@ var onUserLeftChannel = function onOtherLeftChannel(message) {
     /* Someone left a chat channel you're in. */
     var userWhoLeft = Dota2.schema.lookupType("CMsgDOTAOtherLeftChatChannel").decode(message);
     var channel = this._getChannelById(userWhoLeft.channel_id);
-    // Delete channel from cache
-    this.chatChannels = this.chatChannels.filter(item => item.channel_id.notEquals(userWhoLeft.channel_id));
     // Check if it is me that left the channel
     if (userWhoLeft.steam_id.equals(this._client.steamID)) {
+        // Delete channel from cache
+        this.chatChannels = this.chatChannels.filter(item => item.channel_id.notEquals(userWhoLeft.channel_id));
         if (channel) {
             // TODO 6.0.0 - Delete this event
             this.emit("chatLeave", channel.channel_name, userWhoLeft.steam_id, userWhoLeft);
