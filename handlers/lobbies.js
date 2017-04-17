@@ -604,7 +604,7 @@ var onPracticeLobbyListResponse = function onPracticeLobbyListResponse(message, 
 handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPracticeLobbyListResponse] = onPracticeLobbyListResponse;
 
 var onPracticeLobbyResponse = function onPracticeLobbyResponse(message, callback) {
-    var practiceLobbyResponse = Dota2.schema.lookupType("CMsgPracticeLobbyJoinResponse").decode(message);
+    var practiceLobbyResponse = Dota2.schema.lookupType("CMsgGenericResult").decode(message);
 
     if (this.debug) util.log("Received create/flip/shuffle/kick/launch/leave response " + JSON.stringify(practiceLobbyResponse));
     this.emit("practiceLobbyResponse", practiceLobbyResponse.result, practiceLobbyResponse);
