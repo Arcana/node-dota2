@@ -115,6 +115,7 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
                     "game_name": "MyLobby",
                     "server_region": dota2.ServerRegion.EUROPE,
                     "game_mode": dota2.schema.lookupEnum('DOTA_GameMode').values.DOTA_GAMEMODE_CM,
+                    "series_type": dota2.SeriesType.BEST_OF_THREE,
                     "game_version": 1,
                     "allow_cheats": false,
                     "fill_with_bots": false,
