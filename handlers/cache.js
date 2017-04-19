@@ -181,7 +181,7 @@ var onUpdateMultiple = function onUpdateMultiple(message) {
             let updates = {};
             multi[type].forEach(obj => {
                 if (updates[obj.type_id]) updates[obj.type_id] = updates[obj.type_id].concat(obj.object_data);
-                else updates[obj.type_id] = obj.object_data;
+                else updates[obj.type_id] = [obj.object_data];
             });
             for (let type in updates)
                 handleSubscribedType.call(_self, parseInt(type), updates[type], i==2);
