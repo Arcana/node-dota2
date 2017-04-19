@@ -34,7 +34,9 @@ function handleSubscribedType(obj_type, object_data) {
         // Inventory item
         case cacheTypeIDs.CSOEconItem:
             if (this.debug) util.log("Received inventory snapshot");
-            var inv = object_data.map(obj => Dota2.schema.lookupType("CSOEconItem").decode(obj));
+            var items = object_data.map(obj => Dota2.schema.lookupType("CSOEconItem").decode(obj));
+            var inv = this.Inventory.filter(item => items.reduce((acc, val) => acc && item.id.notEquals(val.id)), true);
+            inv.concat(items);
             this.emit("inventoryUpdate", inv);
             this.Inventory = inv;
             break;
@@ -173,10 +175,15 @@ var onUpdateMultiple = function onUpdateMultiple(message) {
     var multi = Dota2.schema.lookup("CMsgSOMultipleObjects").decode(message);
     var _self = this;
 
-    if (multi.objects_modified)
-        multi.objects_modified.forEach(function(obj) {
-            handleSubscribedType.call(_self, obj.type_id, obj.object_data);
+    if (multi.objects_modified) {
+        let updates = {};
+        multi.objects_modified.forEach(obj => {
+            if (updates[obj.type_id]) updates[obj.type_id] = updates[obj.type_id].concat(obj.object_data);
+            else updates[obj.type_id] = obj.object_data;
         });
+        for (let type in updates)
+            handleSubscribedType.call(_self, parseInt(type), updates[type]);
+    }
 };
 handlers[Dota2.schema.lookupEnum("ESOMsg").values.k_ESOMsg_UpdateMultiple] = onUpdateMultiple;
 

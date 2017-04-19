@@ -14,9 +14,9 @@ Dota2.Dota2Client.prototype.setItemPositions = function(item_positions) {
     if (this.debug) util.log("Setting item positions.");
     
     let payload = {
-        "itemPositions": item_positions
+        "item_positions": item_positions
     };
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCSetItemPositions, 
+    this.sendToGC(  Dota2.schema.lookupEnum("EGCItemMsg").values.k_EMsgGCSetItemPositions,
                     Dota2.schema.lookupType("CMsgSetItemPositions").encode(payload).finish());
 };
 
