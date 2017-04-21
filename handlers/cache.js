@@ -29,12 +29,14 @@ var cacheTypeIDs = {
 };
 
 // Handlers
-function handleSubscribedType(obj_type, object_data) {
+function handleSubscribedType(obj_type, object_data, isDelete) {
     switch (obj_type) {
         // Inventory item
         case cacheTypeIDs.CSOEconItem:
             if (this.debug) util.log("Received inventory snapshot");
-            var inv = object_data.map(obj => Dota2.schema.lookupType("CSOEconItem").decode(obj));
+            var items = object_data.map(obj => Dota2.schema.lookupType("CSOEconItem").decode(obj));
+            var inv = this.Inventory.filter(item => items.reduce((acc, val) => acc && item.id.notEquals(val.id)), true);
+            if (!isDelete) inv.concat(items);
             this.emit("inventoryUpdate", inv);
             this.Inventory = inv;
             break;
@@ -172,11 +174,20 @@ handlers[Dota2.schema.lookupEnum("ESOMsg").values.k_ESOMsg_CacheSubscribed] = on
 var onUpdateMultiple = function onUpdateMultiple(message) {
     var multi = Dota2.schema.lookup("CMsgSOMultipleObjects").decode(message);
     var _self = this;
-
-    if (multi.objects_modified)
-        multi.objects_modified.forEach(function(obj) {
-            handleSubscribedType.call(_self, obj.type_id, obj.object_data);
-        });
+    
+    let multi_types = ["objects_modified", "objects_added", "objects_removed"];
+    multi_types.map((type, i) => {
+        if (multi[type]) {
+            let updates = {};
+            multi[type].forEach(obj => {
+                if (updates[obj.type_id]) updates[obj.type_id] = updates[obj.type_id].concat(obj.object_data);
+                else updates[obj.type_id] = [obj.object_data];
+            });
+            for (let type in updates)
+                handleSubscribedType.call(_self, parseInt(type), updates[type], i==2);
+        }
+    });
+   
 };
 handlers[Dota2.schema.lookupEnum("ESOMsg").values.k_ESOMsg_UpdateMultiple] = onUpdateMultiple;
 
