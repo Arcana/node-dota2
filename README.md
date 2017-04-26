@@ -140,6 +140,7 @@ Dota 2 module
                 * ["chatJoined" (channelData)](#module_Dota2.Dota2Client+event_chatJoined)
                 * ["chatJoin" (channel, joiner_name, joiner_steam_id, otherJoined_object)](#module_Dota2.Dota2Client+event_chatJoin)
                 * ["chatLeave" (channel, leaver_steam_id, otherLeft_object)](#module_Dota2.Dota2Client+event_chatLeave)
+                * ["chatLeft" (channel)](#module_Dota2.Dota2Client+event_chatLeft)
                 * ["chatMessage" (channel, sender_name, message, chatData)](#module_Dota2.Dota2Client+event_chatMessage)
                 * ["chatChannelsData" (channels)](#module_Dota2.Dota2Client+event_chatChannelsData)
                 * ["playerMatchHistoryData" (requestId, matchHistoryResponse)](#module_Dota2.Dota2Client+event_playerMatchHistoryData)
@@ -270,6 +271,7 @@ Dota 2 module
         * ["chatJoined" (channelData)](#module_Dota2.Dota2Client+event_chatJoined)
         * ["chatJoin" (channel, joiner_name, joiner_steam_id, otherJoined_object)](#module_Dota2.Dota2Client+event_chatJoin)
         * ["chatLeave" (channel, leaver_steam_id, otherLeft_object)](#module_Dota2.Dota2Client+event_chatLeave)
+        * ["chatLeft" (channel)](#module_Dota2.Dota2Client+event_chatLeft)
         * ["chatMessage" (channel, sender_name, message, chatData)](#module_Dota2.Dota2Client+event_chatMessage)
         * ["chatChannelsData" (channels)](#module_Dota2.Dota2Client+event_chatChannelsData)
         * ["playerMatchHistoryData" (requestId, matchHistoryResponse)](#module_Dota2.Dota2Client+event_playerMatchHistoryData)
@@ -1303,6 +1305,17 @@ Event that's emitted whenever someone else leaves a chat channel the bot is in
 | channel | <code>string</code> | Name of the chat channel someone left |
 | leaver_steam_id | <code>string</code> | Persona name of the person that left the channel |
 | otherLeft_object | <code>CMsgDOTAOtherLeftChatChannel</code> | The raw message data. |
+
+<a name="module_Dota2.Dota2Client+event_chatLeft"></a>
+
+#### "chatLeft" (channel)
+Event that's emitted whenever the bot left a chat channel
+
+**Kind**: event emitted by <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| channel | <code>string</code> | Name of the chat channel the bot left |
 
 <a name="module_Dota2.Dota2Client+event_chatMessage"></a>
 
