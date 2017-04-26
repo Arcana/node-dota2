@@ -74,7 +74,7 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
                 /* CHAT */
                 // Event based
                 // Dota2.joinChat("rj");
-                // setTimeout(function(){ Dota2.sendMessage("rj", "wowoeagnaeigniaeg"); }, 5000);
+                // setTimeout(function(){ Dota2.sendMessage("wowoeagnaeigniaeg", "rj"); }, 5000);
                 // setTimeout(function(){ Dota2.leaveChat("rj"); }, 10000);
                 /* GUILD */
                 // Dota2.requestGuildData();
@@ -96,14 +96,13 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
                 // Doing chat stuffs.
                 // var guildChannelName = util.format("Guild_%s", guildId);
                 // Dota2.joinChat(guildChannelName, Dota2.schema.DOTAChatChannelType_t.DOTAChannelType_Guild);
-                // setTimeout(function(){ Dota2.sendMessage(guildChannelName, "wowoeagnaeigniaeg"); }, 5000);
+                // setTimeout(function(){ Dota2.sendMessage("wowoeagnaeigniaeg", guildChannelName); }, 5000);
                 // setTimeout(function(){ Dota2.leaveChat(guildChannelName); }, 10000);
                 // });
                 /* LOBBIES */
-                //  Dota2.createPracticeLobby("password",
-                //                             {"game_name": "node-dota2",
+                //  Dota2.createPracticeLobby({"game_name": "node-dota2",
                 //                             "server_region": dota2.ServerRegion.PERFECTWORLDTELECOM,
-                //                             "game_mode": dota2.schema.DOTA_GameMode.DOTA_GAMEMODE_AR,
+                //                             "game_mode": dota2.schema.lookupEnum('DOTA_GameMode').values.DOTA_GAMEMODE_AR,
                 //                             "series_type": 2,
                 //                             "game_version": 1,
                 //                             "allow_cheats": false,

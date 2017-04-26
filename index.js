@@ -219,7 +219,8 @@ Dota2.Dota2Client.prototype.launch = function() {
     this.Party = null;
     this.Lobby = null;
     this.PartyInvite = null;
-    this.Inventory = null;
+    this.Inventory = [];
+    this.chatChannels = [];
     this._user.gamesPlayed([{
         "game_id": this._appid
     }]);

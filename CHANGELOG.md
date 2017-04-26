@@ -28,6 +28,9 @@ Changed the parameter type from an array of tuples to an array of objects
 Changed parameters to `(options, callback)` to reduce confusion. CreateTournamentLobby is now deprecated.
 
 ### Events
+#### chatLeft
+New event emitted when the bot has left a chat channel
+
 #### matchesData
 Event parameters are now `(request_id, total_results, results_remaining, matches, series)`
 
