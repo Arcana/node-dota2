@@ -5,7 +5,7 @@ New dependencies on winstonjs and momentjs for logging purposes
 ## API changes
 ### Properties
 #### Logger
-Instance of winston.Logger. Default logging is identical to util.js. Users can
+Instance of winston.Logger. Default logging is identical to util.log. Users can
 configure as they like.
 
 ### Events
