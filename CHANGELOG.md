@@ -1,4 +1,18 @@
-# Changelog
+# Changelog 5.1.0
+## Dependency changes
+New dependencies on winstonjs and momentjs for logging purposes
+
+## API changes
+### Properties
+#### Logger
+Instance of winston.Logger. Default logging is identical to util.js. Users can
+configure as they like.
+
+### Events
+#### chatLeft
+New event emitted when the bot has left a chat channel
+
+# Changelog 5.0.0
 ## General
 * examples will no longer be pushed to npm
 
@@ -28,8 +42,6 @@ Changed the parameter type from an array of tuples to an array of objects
 Changed parameters to `(options, callback)` to reduce confusion. CreateTournamentLobby is now deprecated.
 
 ### Events
-#### chatLeft
-New event emitted when the bot has left a chat channel
 
 #### matchesData
 Event parameters are now `(request_id, total_results, results_remaining, matches, series)`
