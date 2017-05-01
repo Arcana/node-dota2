@@ -33,7 +33,7 @@ function handleSubscribedType(obj_type, object_data, isDelete) {
     switch (obj_type) {
         // Inventory item
         case cacheTypeIDs.CSOEconItem:
-            if (this.debug) util.log("Received inventory snapshot");
+            this.Logger.debug("Received inventory snapshot");
             var items = object_data.map(obj => Dota2.schema.lookupType("CSOEconItem").decode(obj));
             var inv = this.Inventory.filter(item => items.reduce((acc, val) => acc && item.id.notEquals(val.id)), true);
             if (!isDelete) inv.concat(items);
@@ -45,33 +45,33 @@ function handleSubscribedType(obj_type, object_data, isDelete) {
             // object_data is an array when called from onCacheSubscribed
             // but an object when called from onUpdateMultiple
             var lobby = Dota2.schema.lookupType("CSODOTALobby").decode([].concat(object_data)[0]);
-            if (this.debug) util.log("Received lobby snapshot for lobby ID " + lobby.lobby_id);
+            this.Logger.debug("Received lobby snapshot for lobby ID " + lobby.lobby_id);
             this.emit("practiceLobbyUpdate", lobby);
             this.Lobby = lobby;
             break;
         // Lobby invite snapshot.
         case cacheTypeIDs.CSODOTALobbyInvite:
             var lobbyInvite = Dota2.schema.lookupType("CSODOTALobbyInvite").decode(object_data[0]);
-            if (this.debug) util.log("Received lobby invite snapshot for group ID " + lobbyInvite.group_id);
+            this.Logger.debug("Received lobby invite snapshot for group ID " + lobbyInvite.group_id);
             this.emit("lobbyInviteUpdate", lobbyInvite);
             this.LobbyInvite = lobbyInvite;
             break;
         // Party snapshot.
         case cacheTypeIDs.CSODOTAParty:
             var party = Dota2.schema.lookupType("CSODOTAParty").decode([].concat(object_data)[0]);
-            if (this.debug) util.log("Received party snapshot for party ID " + party.party_id);
+            this.Logger.debug("Received party snapshot for party ID " + party.party_id);
             this.emit("partyUpdate", party);
             this.Party = party;
             break;
         // Party invite snapshot.
         case cacheTypeIDs.CSODOTAPartyInvite:
             var party = Dota2.schema.lookupType("CSODOTAPartyInvite").decode(object_data[0]);
-            if (this.debug) util.log("Received party invite snapshot for group ID " + party.group_id);
+            this.Logger.debug("Received party invite snapshot for group ID " + party.group_id);
             this.emit("partyInviteUpdate", party);
             this.PartyInvite = party;
             break;
         default:
-            if (this.debug) util.log("Unhandled cache ID: " + obj_type);
+            this.Logger.warn("Unhandled cache ID: " + obj_type);
             break;
     }
 };
@@ -161,9 +161,7 @@ var onCacheSubscribed = function onCacheSubscribed(message) {
     var subscribe = Dota2.schema.lookupType("CMsgSOCacheSubscribed").decode(message);
     var _self = this;
 
-    if (this.debug) {
-        util.log("Cache(s) subscribed, type(s): " + subscribe.objects.map(obj=>obj.type_id).toString());
-    }
+    this.Logger.debug("Cache(s) subscribed, type(s): " + subscribe.objects.map(obj=>obj.type_id).toString());
 
     subscribe.objects.forEach(function(obj) {
         handleSubscribedType.call(_self, obj.type_id, obj.object_data);
@@ -195,9 +193,8 @@ var onCreate = function onCreate(message) {
     var single = Dota2.schema.lookup("CMsgSOSingleObject").decode(message);
     var _self = this;
 
-    if (this.debug) {
-        util.log("Create, type " + single.type_id);
-    }
+    this.Logger.debug("Create, type " + single.type_id);
+    
     handleSubscribedType.call(_self, single.type_id, single.object_data);
 }
 handlers[Dota2.schema.lookupEnum("ESOMsg").values.k_ESOMsg_Create] = onCreate;
@@ -206,7 +203,7 @@ var onCacheUnsubscribed = function onCacheUnsubscribed(message) {
     var unsubscribe = Dota2.schema.lookup("CMsgSOCacheUnsubscribed").decode(message);
     var _self = this;
 
-    if (this.debug) util.log("Cache unsubscribed, " + unsubscribe.owner_soid.id);
+    this.Logger.debug("Cache unsubscribed, " + unsubscribe.owner_soid.id);
 
     if (this.Lobby && unsubscribe.owner_soid.id.eq(this.Lobby.lobby_id)) {
         this.Lobby = null;
@@ -228,7 +225,7 @@ var onCacheDestroy = function onCacheDestroy(message) {
     var destroy = Dota2.schema.lookup("CMsgSOSingleObject").decode(message);
     var _self = this;
 
-    if (this.debug) util.log("Cache destroy, " + destroy.type_id);
+    this.Logger.debug("Cache destroy, " + destroy.type_id);
 
     if (destroy.type_id === cacheTypeIDs.CSODOTAPartyInvite) {
         this.PartyInvite = null;

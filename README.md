@@ -61,6 +61,7 @@ Dota 2 module
         * [.Dota2Client](#module_Dota2.Dota2Client) ⇐ <code>EventEmitter</code>
             * [new Dota2.Dota2Client(steamClient, debug, debugMore)](#new_module_Dota2.Dota2Client_new)
             * _instance_
+                * [.Logger](#module_Dota2.Dota2Client+Logger) : <code>winston.Logger</code>
                 * [.Inventory](#module_Dota2.Dota2Client+Inventory) : <code>Array.&lt;CSOEconItem&gt;</code>
                 * [.chatChannels](#module_Dota2.Dota2Client+chatChannels) : <code>Array.&lt;CMsgDOTAJoinChatChannelResponse&gt;</code>
                 * [.Lobby](#module_Dota2.Dota2Client+Lobby) : <code>CSODOTALobby</code>
@@ -192,6 +193,7 @@ Dota 2 module
 * [.Dota2Client](#module_Dota2.Dota2Client) ⇐ <code>EventEmitter</code>
     * [new Dota2.Dota2Client(steamClient, debug, debugMore)](#new_module_Dota2.Dota2Client_new)
     * _instance_
+        * [.Logger](#module_Dota2.Dota2Client+Logger) : <code>winston.Logger</code>
         * [.Inventory](#module_Dota2.Dota2Client+Inventory) : <code>Array.&lt;CSOEconItem&gt;</code>
         * [.chatChannels](#module_Dota2.Dota2Client+chatChannels) : <code>Array.&lt;CMsgDOTAJoinChatChannelResponse&gt;</code>
         * [.Lobby](#module_Dota2.Dota2Client+Lobby) : <code>CSODOTALobby</code>
@@ -316,6 +318,13 @@ The Dota 2 client that communicates with the GC
 | debug | <code>boolean</code> | Print debug information to console |
 | debugMore | <code>boolean</code> | Print even more debug information to console |
 
+<a name="module_Dota2.Dota2Client+Logger"></a>
+
+#### dota2Client.Logger : <code>winston.Logger</code>
+The logger used to write debug messages. This is a WinstonJS logger, 
+feel free to configure it as you like
+
+**Kind**: instance property of <code>[Dota2Client](#module_Dota2.Dota2Client)</code>  
 <a name="module_Dota2.Dota2Client+Inventory"></a>
 
 #### dota2Client.Inventory : <code>Array.&lt;CSOEconItem&gt;</code>

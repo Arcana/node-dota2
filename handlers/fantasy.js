@@ -75,7 +75,7 @@ Dota2.Dota2Client.prototype.requestPlayerCardsByPlayer = function() {
 //     var _self = this;
     
 //     /* Sends a message to the Game Coordinator requesting information on a list of player card ID's. Listen for `playerCardInfo` event for Game Coordinator's response. */
-//     if (this.debug) util.log("Requesting player card info");
+//     this.Logger.debug("Requesting player card info");
 
 //     var payload = {
 //         "account_id": this.AccountID,
@@ -101,7 +101,7 @@ Dota2.Dota2Client.prototype.requestPlayerCardRoster = function(league_id, timest
     var _self = this;
     
     /* Sends a message to the Game Coordinator requesting information on a list of player card ID's. Listen for `playerCardInfo` event for Game Coordinator's response. */
-    if (this.debug) util.log("Requesting player card roster");
+    this.Logger.debug("Requesting player card roster");
 
     var payload = {
         "league_id": league_id,
@@ -129,7 +129,7 @@ Dota2.Dota2Client.prototype.draftPlayerCard = function(league_id, timestamp, slo
     var _self = this;
     
     /* Sends a message to the Game Coordinator requesting information on a list of player card ID's. Listen for `playerCardInfo` event for Game Coordinator's response. */
-    if (this.debug) util.log("Requesting player card roster");
+    this.Logger.debug("Requesting player card roster");
 
     var payload = {
         "league_id": league_id,
@@ -160,7 +160,7 @@ var handlers = Dota2.Dota2Client.prototype._handlers;
 // var onPlayerCardInfoResponse = function onPlayerCardInfoResponse(message, callback) {
 //     callback = callback || null;
 //     var playerCardInfo = Dota2.schema.lookupType("CMsgGCGetPlayerCardItemInfoResponse").decode(message);
-//     if (this.debug) util.log("Received info for player cards");
+//     this.Logger.debug("Received info for player cards");
 //     this.emit("playerCardInfo", playerCardInfo.player_card_infos);
 //     if (callback) callback(null, playerCardInfo);
     
@@ -171,11 +171,11 @@ var onGetPlayerCardRosterResponse = function onGetPlayerCardRosterResponse(messa
     callback = callback || null;
     var playerCardRoster = Dota2.schema.lookupType("CMsgClientToGCGetPlayerCardRosterResponse").decode(message);
     if (playerCardRoster.result == 0) {
-        if (this.debug) util.log("Received roster for player cards");
+        this.Logger.debug("Received roster for player cards");
         this.emit("playerCardRoster", playerCardRoster);
         if (callback) callback(null, playerCardRoster);
     } else {
-        if (this.debug) util.log("Error receiving roster for player cards: " + playerCardRoster.result);
+        this.Logger.error("Error receiving roster for player cards: " + playerCardRoster.result);
         if (callback) callback(playerCardRoster.result);
     }
 };
@@ -184,7 +184,7 @@ handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCGetPlayerC
 var onSetPlayerCardRosterResponse = function onSetPlayerCardRosterResponse(message, callback) {
     callback = callback || null;
     var playerCardRoster = Dota2.schema.lookupType("CMsgClientToGCSetPlayerCardRosterResponse").decode(message);
-    if (this.debug) util.log("Received player card draft result: "+playerCardRoster.result);
+    this.Logger.debug("Received player card draft result: "+playerCardRoster.result);
     this.emit("playerCardDrafted", playerCardRoster.result);
     if (callback) callback(playerCardRoster.result, playerCardRoster);
 };

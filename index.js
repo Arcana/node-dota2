@@ -10,13 +10,14 @@
  * @see {@link https://www.npmjs.com/package/long|long} npm package
  */
 
-var steam = require("steam");
+const steam = require("steam");
+const winston = require("winston");
+const moment = require("moment");
 
 const DOTA_APP_ID = 570;
 
 var EventEmitter = require('events').EventEmitter,
     fs = require("fs"),
-    path = require("path"),
     util = require("util"),
     Long = require("long"),
     Protobuf = require('protobufjs'),
@@ -92,6 +93,22 @@ Dota2.Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
     this.debug = debug || false;
     this.debugMore = debugMore || false;
     
+    /**
+     * The logger used to write debug messages. This is a WinstonJS logger, 
+     * feel free to configure it as you like
+     * @type {winston.Logger}
+     */
+    this.Logger = new (winston.Logger)({
+        transports: [
+            new (winston.transports.Console)({
+                'timestamp': () => moment().format("d MMMM HH:mm:ss"), 
+                'formatter': options => options.timestamp() + " - " + (options.message ? options.message : "")
+            })
+        ]
+    });
+    if(debug) this.Logger.level = "debug";
+    if(debugMore) this.Logger.level = "silly";
+    
     /** The current state of the bot's inventory. Contains cosmetics, player cards, ... 
      * @type {CSOEconItem[]} 
      */
@@ -141,7 +158,7 @@ Dota2.Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
         callback = callback || null;
 
         var kMsg = header.msg;
-        if (self.debugMore) util.log("Dota2 fromGC: " + Dota2._getMessageName(kMsg));
+        self.Logger.silly("Dota2 fromGC: " + Dota2._getMessageName(kMsg));
 
         if (kMsg in self._handlers) {
             if (callback) {
@@ -163,14 +180,15 @@ Dota2.Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
             return;
         }
         if (self._gcClientHelloCount > 10) {
-            if (self.debug) util.log("ClientHello has taken longer than 30 seconds! Reporting timeout...");
+            self.Logger.warn("ClientHello has taken longer than 30 seconds! Reporting timeout...")
             self._gcClientHelloCount = 0;
             self.emit("hellotimeout");
         }
-
-        if (self.debug) util.log("Sending ClientHello");
+        
+        self.Logger.debug("Sending ClientHello");
+        
         if (!self._gc) {
-            util.log("Where the fuck is _gc?");
+            self.Logger.error("Where the fuck is _gc?");
         } else {
             self._protoBufHeader.msg = Dota2.schema.lookupEnum("EGCBaseClientMsg").values.k_EMsgGCClientHello;
             var payload = {
@@ -214,7 +232,8 @@ Dota2.Dota2Client.prototype.ToSteamID = function(accid) {
  */
 Dota2.Dota2Client.prototype.launch = function() {
     /* Reports to Steam that we are running Dota 2. Initiates communication with GC with EMsgGCClientHello */
-    if (this.debug) util.log("Launching Dota 2");
+    this.Logger.debug("Launching Dota 2");
+    
     this.AccountID = this.ToAccountID(this._client.steamID);
     this.Party = null;
     this.Lobby = null;
@@ -241,7 +260,7 @@ Dota2.Dota2Client.prototype.launch = function() {
  */
 Dota2.Dota2Client.prototype.exit = function() {
     /* Reports to Steam we are not running any apps. */
-    if (this.debug) util.log("Exiting Dota 2");
+    this.Logger.debug("Exiting Dota 2");
 
     /* stop knocking if exit comes before ready event */
     if (this._gcClientHelloIntervalId) {
@@ -256,7 +275,7 @@ Dota2.Dota2Client.prototype.exit = function() {
 Dota2.Dota2Client.prototype.sendToGC = function(type, payload, handler, callback) {
     var self = this;
     if (!this._gcReady) {
-        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+        this.Logger.warn("GC not ready, please listen for the 'ready' event.");
         if (callback) callback(-1, null);                   // notify user that something went wrong
         return null;
     }
@@ -297,7 +316,7 @@ handlers[Dota2.schema.lookupEnum("EGCBaseClientMsg").values.k_EMsgGCClientWelcom
         this._gcClientHelloIntervalId = null;
     }
 
-    if (this.debug) util.log("Received client welcome.");
+    this.Logger.debug("Received client welcome.");
 
     // Parse any caches
     this._gcReady = true;
@@ -312,7 +331,7 @@ handlers[Dota2.schema.lookupEnum("EGCBaseClientMsg").values.k_EMsgGCClientConnec
 
     switch (status) {
         case Dota2.schema.lookupEnum("GCConnectionStatus").values.GCConnectionStatus_HAVE_SESSION:
-            if (this.debug) util.log("GC Connection Status regained.");
+            this.Logger.debug("GC Connection Status regained.");
 
             // Only execute if _gcClientHelloIntervalID, otherwise it's already been handled (and we don't want to emit multiple 'ready');
             if (this._gcClientHelloIntervalId) {
@@ -325,7 +344,7 @@ handlers[Dota2.schema.lookupEnum("EGCBaseClientMsg").values.k_EMsgGCClientConnec
             break;
 
         default:
-            if (this.debug) util.log("GC Connection Status unreliable - " + status);
+            this.Logger.debug("GC Connection Status unreliable - " + status);
 
             // Only execute if !_gcClientHelloIntervalID, otherwise it's already been handled (and we don't want to emit multiple 'unready');
             if (!this._gcClientHelloIntervalId) {
