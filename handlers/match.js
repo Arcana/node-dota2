@@ -44,7 +44,7 @@ Dota2.Dota2Client.prototype.requestMatches = function(criteria, callback) {
     callback = callback || null;
     var _self = this;
     
-    if (this.debug) util.log("Sending match request");
+    this.Logger.debug("Sending match request");
 
     var payload = Dota2._parseOptions(criteria, Dota2._matchOptions);
     payload.matches_requested = payload.matches_requested || 1;
@@ -68,7 +68,7 @@ Dota2.Dota2Client.prototype.requestMatchDetails = function(match_ids, callback) 
     var _self = this;
     
     /* Sends a message to the Game Coordinator requesting `match_id`'s match details.  Listen for `matchData` event for Game Coordinator's response. */
-    if (this.debug) util.log("Sending match details request");
+    this.Logger.debug("Sending match details request");
     
     var payload = {
         "match_id": match_ids
@@ -92,7 +92,7 @@ Dota2.Dota2Client.prototype.requestMatchMinimalDetails = function(match_ids, cal
     var _self = this;
     
     /* Sends a message to the Game Coordinator requesting `match_id`'s match details.  Listen for `matchData` event for Game Coordinator's response. */
-    if (this.debug) util.log("Sending match minimal details request");
+    this.Logger.debug("Sending match minimal details request");
     
     var payload = {
         "match_ids": match_ids
@@ -111,7 +111,7 @@ Dota2.Dota2Client.prototype.requestMatchMinimalDetails = function(match_ids, cal
 Dota2.Dota2Client.prototype.requestMatchmakingStats = function() {
     /* Sends a message to the Game Coordinator requesting `match_id`'s match deails.  Listen for `matchData` event for Game Coordinator's response. */
     // Is not Job ID based - can't do callbacks.
-    if (this.debug) util.log("Sending matchmaking stats request");
+    this.Logger.debug("Sending matchmaking stats request");
     
     var payload = {};
     this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCMatchmakingStatsRequest, 
@@ -126,7 +126,7 @@ Dota2.Dota2Client.prototype.requestMatchmakingStats = function() {
  */
 Dota2.Dota2Client.prototype.requestTopFriendMatches = function() {
     /* Sends a message to the Game Coordinator request the info on all available official leagues */
-    if (this.debug) util.log("Sending CMsgClientToGCTopFriendMatchesRequest");
+    this.Logger.debug("Sending CMsgClientToGCTopFriendMatchesRequest");
     
     var payload = {};
     this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCTopFriendMatchesRequest, 
@@ -183,7 +183,7 @@ var onMatchesResponse = function onMatchesResponse(message, callback) {
     callback = callback || null;
     var matchResponse = Dota2.schema.lookupType("CMsgDOTARequestMatchesResponse").decode(message);
     if (matchResponse.total_results > 1) {
-        if (this.debug) util.log("Received listing for matches");
+        this.Logger.debug("Received listing for matches");
         this.emit("matchesData",
             matchResponse.request_id,
             matchResponse.total_results,
@@ -193,7 +193,7 @@ var onMatchesResponse = function onMatchesResponse(message, callback) {
             matchResponse);
         if (callback) callback(null, matchResponse);
     } else {
-        if (this.debug) util.log("Received a bad matchesResponse");
+        this.Logger.error("Received a bad matchesResponse");
         if (callback) callback(matchResponse.result, matchResponse);
     }
 };
@@ -204,13 +204,13 @@ var onMatchDetailsResponse = function onMatchDetailsResponse(message, callback) 
     var matchDetailsResponse = Dota2.schema.lookupType("CMsgGCMatchDetailsResponse").decode(message);
 
     if (matchDetailsResponse.result === 1) {
-        if (this.debug) util.log("Received match data for: " + matchDetailsResponse.match.match_id);
+        this.Logger.debug("Received match data for: " + matchDetailsResponse.match.match_id);
         this.emit("matchDetailsData",
             matchDetailsResponse.match.match_id,
             matchDetailsResponse);
         if (callback) callback(null, matchDetailsResponse);
     } else {
-        if (this.debug) util.log("Received a bad matchDetailsResponse");
+        this.Logger.error("Received a bad matchDetailsResponse");
         if (callback) callback(matchDetailsResponse.result, matchDetailsResponse);
     }
 };
@@ -221,13 +221,13 @@ var onMatchMinimalDetailsResponse = function onMatchMinimalDetailsResponse(messa
     var matchMinimalDetailsResponse = Dota2.schema.lookupType("CMsgClientToGCMatchesMinimalResponse").decode(message);
 
     if (matchMinimalDetailsResponse.matches) {
-        if (this.debug) util.log("Received match minimal data for: " + matchMinimalDetailsResponse.matches.match_id);
+        this.Logger.debug("Received match minimal data for: " + matchMinimalDetailsResponse.matches.match_id);
         this.emit("matchMinimalDetailsData",
             matchMinimalDetailsResponse.last_match,
             matchMinimalDetailsResponse);
         if (callback) callback(null, matchMinimalDetailsResponse);
     } else {
-        if (this.debug) util.log("Received a bad matchMinimalDetailsResponse");
+        this.Logger.error("Received a bad matchMinimalDetailsResponse");
 		if (this.debug) console.log(JSON.stringify(matchMinimalDetailsResponse));
         if (callback) callback(matchMinimalDetailsResponse.result, matchMinimalDetailsResponse);
     }
@@ -238,7 +238,7 @@ var onMatchmakingStatsResponse = function onMatchmakingStatsResponse(message) {
     // Is not Job ID based - can't do callbacks.
     var matchmakingStatsResponse = Dota2.schema.lookupType("CMsgDOTAMatchmakingStatsResponse").decode(message);
 
-    if (this.debug) util.log("Received matchmaking stats");
+    this.Logger.debug("Received matchmaking stats");
     this.emit("matchmakingStatsData",
         matchmakingStatsResponse.matchgroups_version,
         matchmakingStatsResponse.match_groups,
@@ -250,10 +250,10 @@ var onTopFriendMatchesResponse = function onTopFriendMatchesResponse(message) {
     var response = Dota2.schema.lookupType("CMsgGCToClientTopFriendMatchesResponse").decode(message);
 
     if (response.matches.length > 0) {
-        if (this.debug) util.log("Received information for " + response.matches.length + " friend matches");
+        this.Logger.debug("Received information for " + response.matches.length + " friend matches");
         this.emit("topFriendMatchesData", response.matches);
     } else {
-        if (this.debug) util.log("Received a bad topFriendMatches response", response);
+        this.Logger.error("Received a bad topFriendMatches response", response);
     }
 
 };

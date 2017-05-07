@@ -18,7 +18,7 @@ Dota2.Dota2Client.prototype.requestSourceTVGames = function(filter_options) {
     // Unfortunately this does not seem to support callbacks
     filter_options = filter_options || null;
     var _self = this;
-    if (this.debug) util.log("Sending SourceTV games request");
+    this.Logger.debug("Sending SourceTV games request");
 
     var payload = merge({
         "search_key": '',     // I don't know what's supposed to go here, everything i've tried fails
@@ -47,10 +47,10 @@ var onSourceTVGamesResponse = function onSourceTVGamesResponse(message) {
     var sourceTVGamesResponse = Dota2.schema.lookupType("CMsgGCToClientFindTopSourceTVGamesResponse").decode(message);
 
     if (sourceTVGamesResponse.start_game !== null) {
-        if (this.debug) util.log("Received SourceTV games data");
+        this.Logger.debug("Received SourceTV games data");
         this.emit("sourceTVGamesData", sourceTVGamesResponse);
     } else {
-        if (this.debug) util.log("Received a bad new SourceTV games response");
+        this.Logger.error("Received a bad new SourceTV games response");
         this.emit("sourceTVGamesData", null);
         /*
 

@@ -32,9 +32,8 @@ Dota2.Dota2Client.prototype._leaveChatChannelById = function(channelId) {
     //this.chatChannels = this.chatChannels.filter(item => item.channel_id.notEquals(channelId));
     this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCLeaveChatChannel, 
                     Dota2.schema.lookupType("CMsgDOTALeaveChatChannel").encode(payload).finish());
-    if (this.debug) {
-        util.log("Leaving channel " + channelId);
-    }
+    this.Logger.debug("Leaving channel " + channelId);
+    
 };
 
 /**
@@ -49,7 +48,7 @@ Dota2.Dota2Client.prototype.joinChat = function(channel_name, channel_type) {
     channel_type = channel_type == null ? Dota2.schema.lookupEnum("DOTAChatChannelType_t").values.DOTAChannelType_Custom : channel_type;
 
     /* Attempts to join a chat channel.  Expect k_EMsgGCJoinChatChannelResponse from GC */
-    if (this.debug) util.log("Joining chat channel: " + channel_name);
+    this.Logger.debug("Joining chat channel: " + channel_name);
     
     var payload = {
         "channel_name": channel_name,
@@ -69,11 +68,11 @@ Dota2.Dota2Client.prototype.joinChat = function(channel_name, channel_type) {
  */
 Dota2.Dota2Client.prototype.leaveChat = function(channel_name, channel_type) {
     /* Attempts to leave a chat channel. GC does not send a response. */
-    if (this.debug) util.log("Leaving chat channel: " + channel_name);
+    this.Logger.debug("Leaving chat channel: " + channel_name);
     // Clear cache
     var cache = this._getChannelByName(channel_name, channel_type);
     if (cache === undefined) {
-        if (this.debug) util.log("Cannot leave a channel you have not joined.");
+        this.Logger.error("Cannot leave a channel you have not joined.");
         return;
     }
     this._leaveChatChannelById(cache.channel_id)
@@ -90,11 +89,11 @@ Dota2.Dota2Client.prototype.leaveChat = function(channel_name, channel_type) {
  */
 Dota2.Dota2Client.prototype.sendMessage = function(message, channel_name, channel_type) {
     /* Attempts to send a message to a chat channel. GC does not send a response. */
-    if (this.debug) util.log("Sending message to " + channel_name);
+    this.Logger.debug("Sending message to " + channel_name);
     // Check cache
     var cache = this._getChannelByName(channel_name, channel_type);
     if (cache === undefined) {
-        if (this.debug) util.log("Cannot send message to a channel you have not joined.");
+        this.Logger.error("Cannot send message to a channel you have not joined.");
         return;
     }
     
@@ -115,15 +114,15 @@ Dota2.Dota2Client.prototype.sendMessage = function(message, channel_name, channe
  */
 Dota2.Dota2Client.prototype.shareLobby = function(channel_name, channel_type) {
     /* Attempts to send a message to a chat channel. GC does not send a response. */
-    if (this.debug) util.log("Sharing lobby to " + channel_name);
+    this.Logger.debug("Sharing lobby to " + channel_name);
     // Check cache
     var cache = this._getChannelByName(channel_name, channel_type);
     if (cache === undefined) {
-        if (this.debug) util.log("Cannot send message to a channel you have not joined.");
+        this.Logger.error("Cannot send message to a channel you have not joined.");
         return;
     }
     if (this.Lobby === undefined) {
-        if (this.debug) util.log("Cannot share a lobby when you're not in one.");
+        this.Logger.error("Cannot share a lobby when you're not in one.");
         return;
     }
     
@@ -146,11 +145,11 @@ Dota2.Dota2Client.prototype.shareLobby = function(channel_name, channel_type) {
  */
 Dota2.Dota2Client.prototype.flipCoin = function(channel_name, channel_type) {
     /* Attempts to send a coin flip to a chat channel. Expect a chatmessage in response. */
-    if (this.debug) util.log("Sending coin flip to " + channel_name);
+    this.Logger.debug("Sending coin flip to " + channel_name);
     // Check cache
     var cache = this._getChannelByName(channel_name, channel_type);
     if (cache === undefined) {
-        if (this.debug) util.log("Cannot send message to a channel you have not joined.");
+        this.Logger.error("Cannot send message to a channel you have not joined.");
         return;
     }
     
@@ -174,11 +173,11 @@ Dota2.Dota2Client.prototype.flipCoin = function(channel_name, channel_type) {
  */
 Dota2.Dota2Client.prototype.rollDice = function(min, max, channel_name, channel_type) {
     /* Attempts to send a dice roll to a chat channel. Expect a chatmessage in response. */
-    if (this.debug) util.log("Sending dice roll to " + channel_name);
+    this.Logger.debug("Sending dice roll to " + channel_name);
     // Check cache
     var cache = this._getChannelByName(channel_name, channel_type);
     if (cache === undefined) {
-        if (this.debug) util.log("Cannot send message to a channel you have not joined.");
+        this.Logger.error("Cannot send message to a channel you have not joined.");
         return;
     }
     
@@ -200,7 +199,7 @@ Dota2.Dota2Client.prototype.rollDice = function(min, max, channel_name, channel_
  */
 Dota2.Dota2Client.prototype.requestChatChannels = function() {
     /* Requests a list of chat channels from the GC. */
-    if (this.debug) util.log("Requesting channel list");
+    this.Logger.debug("Requesting channel list");
     
     var payload = {};
     this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCRequestChatChannelList, 
@@ -256,7 +255,7 @@ var handlers = Dota2.Dota2Client.prototype._handlers;
 var onJoinChatChannelResponse = function onJoinChatChannelResponse(message) {
     /* Channel data after we sent k_EMsgGCJoinChatChannel */
     var channelData = Dota2.schema.lookupType("CMsgDOTAJoinChatChannelResponse").decode(message);
-    if (this.debug) util.log("Chat channel " + channelData.channel_name + " has " + channelData.members.length + " person(s) online");
+    this.Logger.debug("Chat channel " + channelData.channel_name + " has " + channelData.members.length + " person(s) online");
     this.chatChannels.push(channelData);
     this.emit("chatJoined", channelData);
 };
@@ -267,7 +266,7 @@ var onChatMessage = function onChatMessage(message) {
     var chatData = Dota2.schema.lookupType("CMsgDOTAChatMessage").decode(message);
     var channel = this._getChannelById(chatData.channel_id);
 
-    if (this.debug) util.log("Received chat message from " + chatData.persona_name + " in channel " + channel.channel_name);
+    this.Logger.debug("Received chat message from " + chatData.persona_name + " in channel " + channel.channel_name);
     this.emit("chatMessage",
         channel.channel_name,
         chatData.persona_name,
@@ -280,7 +279,7 @@ var onOtherJoinedChannel = function onOtherJoinedChannel(message) {
     /* Someone joined a chat channel you're in. */
     var otherJoined = Dota2.schema.lookupType("CMsgDOTAOtherJoinedChatChannel").decode(message);
     var channel = this._getChannelById(otherJoined.channel_id);
-    if (this.debug) util.log(otherJoined.steam_id + " joined channel " + channel.channel_name);
+    this.Logger.debug(otherJoined.steam_id + " joined channel " + channel.channel_name);
     this.emit("chatJoin",
         channel.channel_name,
         otherJoined.persona_name,

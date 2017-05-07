@@ -132,8 +132,9 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
                     }
                 });
                 Dota2.on("practiceLobbyUpdate", function(lobby) {
-                        lobbyChannel = "Lobby_"+lobby.lobby_id;
-                        Dota2.joinChat(lobbyChannel, dota2.schema.lookupEnum('DOTAChatChannelType_t').values.DOTAChannelType_Lobby);
+                    Dota2.practiceLobbyKickFromTeam(Dota2.AccountID);
+                    lobbyChannel = "Lobby_"+lobby.lobby_id;
+                    Dota2.joinChat(lobbyChannel, dota2.schema.lookupEnum('DOTAChatChannelType_t').values.DOTAChannelType_Lobby);
                 });
             }
 
