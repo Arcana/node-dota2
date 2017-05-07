@@ -14,11 +14,11 @@ Dota2.Dota2Client.prototype.respondPartyInvite = function(id, accept, ping_data)
     id = id || null;
     accept = accept || false;
     if (id == null) {
-        if (this.debug) util.log("Party ID required to respond to an invite.");
+        this.Logger.error("Party ID required to respond to an invite.");
         return null;
     }
 
-    if (this.debug) util.log("Responding to party invite " + id + ", accept: " + accept);
+    this.Logger.debug("Responding to party invite " + id + ", accept: " + accept);
     
     var payload = {
         "party_id": id,
@@ -35,7 +35,7 @@ Dota2.Dota2Client.prototype.respondPartyInvite = function(id, accept, ping_data)
  * @alias module:Dota2.Dota2Client#leaveParty
  */
 Dota2.Dota2Client.prototype.leaveParty = function() {
-    if (this.debug) util.log("Leaving party.");
+    this.Logger.debug("Leaving party.");
 
     var payload = {};
     this.Party = null;
@@ -54,15 +54,15 @@ Dota2.Dota2Client.prototype.leaveParty = function() {
 Dota2.Dota2Client.prototype.setPartyLeader = function(steam_id) {
     steam_id = steam_id || null;
     if (this.Party == null) {
-        if (this.debug) util.log("setPartyLeader called when not in a party!");
+        this.Logger.error("setPartyLeader called when not in a party!");
         return null;
     }
     if (steam_id == null) {
-        if (this.debug) util.log("Steam ID required to set party leader.");
+        this.Logger.error("Steam ID required to set party leader.");
         return null;
     }
 
-    if (this.debug) util.log("Setting party leader: " + steam_id);
+    this.Logger.debug("Setting party leader: " + steam_id);
 
     var payload = {
         "new_leader_steamid": steam_id
@@ -80,11 +80,11 @@ Dota2.Dota2Client.prototype.setPartyLeader = function(steam_id) {
 Dota2.Dota2Client.prototype.setPartyCoach = function(coach) {
     coach = coach || false;
     if (this.Party == null) {
-        if (this.debug) util.log("setPartyCoach called when not in a party!");
+        this.Logger.error("setPartyCoach called when not in a party!");
         return null;
     }
 
-    if (this.debug) util.log("Setting coach slot: " + coach);
+    this.Logger.debug("Setting coach slot: " + coach);
 
     var payload = {
         "wants_coach": coach
@@ -102,11 +102,11 @@ Dota2.Dota2Client.prototype.setPartyCoach = function(coach) {
 Dota2.Dota2Client.prototype.inviteToParty = function(steam_id) {
     steam_id = steam_id || null;
     if (steam_id == null) {
-        if (this.debug) util.log("Steam ID required to create a party invite.");
+        this.Logger.error("Steam ID required to create a party invite.");
         return null;
     }
 
-    if (this.debug) util.log("Inviting " + steam_id + " to a party.");
+    this.Logger.debug("Inviting " + steam_id + " to a party.");
     
     var payload = {
         "steam_id": steam_id
@@ -124,11 +124,11 @@ Dota2.Dota2Client.prototype.inviteToParty = function(steam_id) {
 Dota2.Dota2Client.prototype.kickFromParty = function(steam_id) {
     steam_id = steam_id || null;
     if (steam_id == null) {
-        if (this.debug) util.log("Steam ID required to kick from the party.");
+        this.Logger.error("Steam ID required to kick from the party.");
         return null;
     }
 
-    if (this.debug) util.log("Kicking " + steam_id + " from the party.");
+    this.Logger.debug("Kicking " + steam_id + " from the party.");
     
     var payload = {
         "steam_id": steam_id

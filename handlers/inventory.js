@@ -11,7 +11,7 @@ var Dota2 = require("../index"),
  * @param {number} item_positions[].position - New position of the item
  */
 Dota2.Dota2Client.prototype.setItemPositions = function(item_positions) {
-    if (this.debug) util.log("Setting item positions.");
+    this.Logger.debug("Setting item positions.");
     
     let payload = {
         "item_positions": item_positions
@@ -29,7 +29,7 @@ Dota2.Dota2Client.prototype.setItemPositions = function(item_positions) {
 Dota2.Dota2Client.prototype.deleteItem = function(item_id) {
     /* Attempts to delete item by itemid. */
     if (!this._gcReady) {
-        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+        this.Logger.error("GC not ready, please listen for the 'ready' event.");
         return null;
     }
     var buffer = new Buffer(8);

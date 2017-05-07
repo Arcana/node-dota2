@@ -13,11 +13,11 @@ Dota2.Dota2Client.prototype.requestMyTeams = function requestMyTeams(callback) {
     callback = callback || null;
     var _self = this;
     if (!this._gcReady) {
-        if (this.debug) util.log("GC not ready, please listen for the 'ready' event.");
+        this.Logger.error("GC not ready, please listen for the 'ready' event.");
         return null;
     }
 
-    if (this.debug) util.log("Requesting my own team data");
+    this.Logger.debug("Requesting my own team data");
     var payload = {};
     this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCMyTeamInfoRequest,
                     Dota2.schema.lookupType("CMsgDOTAMyTeamInfoRequest").encode(payload).finish(), 
@@ -40,7 +40,7 @@ Dota2.Dota2Client.prototype.requestProTeamList = function requestProTeamList(cal
     callback = callback || null;
     var _self = this;
 
-    if (this.debug) util.log("Requesting list of pro teams");
+    this.Logger.debug("Requesting list of pro teams");
     var payload = {};
     this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCProTeamListRequest, 
                     Dota2.schema.lookupType("CMsgDOTAProTeamListRequest").encode(payload).finish(), 
@@ -74,7 +74,7 @@ var handlers = Dota2.Dota2Client.prototype._handlers;
 var onTeamDataResponse = function onTeamDataResponse(message, callback) {
     var teamDataResponse = Dota2.schema.lookupType("CMsgDOTATeamsInfo").decode(message);
     
-    if (this.debug) util.log("Received my teams response " + JSON.stringify(teamDataResponse));
+    this.Logger.debug("Received my teams response " + JSON.stringify(teamDataResponse));
     this.emit("teamData", teamDataResponse.teams, teamDataResponse.league_id);
     if (callback) callback(null, teamDataResponse);
     
@@ -86,11 +86,11 @@ var onProTeamListResponse = function onProTeamListResponse(message, callback) {
     var teams = Dota2.schema.lookupType("CMsgDOTAProTeamListResponse").decode(message);
     
     if (teams.eresult === 1) {
-        if (this.debug) util.log("Received pro team list");
+        this.Logger.debug("Received pro team list");
         this.emit("proTeamListData", teams.teams);
         if (callback) callback(null, teams);
     } else {
-        if (this.debug) util.log("Bad pro team list response " + JSON.stringify(teams));
+        this.Logger.error("Bad pro team list response " + JSON.stringify(teams));
         this.emit("proTeamListData", null);
         if (callback) callback(teams.eresult, teams);
     }

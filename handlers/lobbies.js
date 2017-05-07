@@ -125,7 +125,7 @@ Dota2.Dota2Client.prototype.createPracticeLobby = function(options, callback) {
     };
     var finalOptions = Object.assign(defaults, options);
 
-    if (this.debug) util.log("Sending match CMsgPracticeLobbyCreate request");
+    this.Logger.debug("Sending match CMsgPracticeLobbyCreate request");
     var lobby_details = Dota2._parseOptions(finalOptions, Dota2._lobbyOptions);
     var payload = {
         "lobby_details": lobby_details,
@@ -156,7 +156,7 @@ Dota2.Dota2Client.prototype.createTournamentLobby = function(password, tournamen
     tournament_id = tournament_id || -1;
     var _self = this;
 
-    if (this.debug) util.log("Sending match CMsgPracticeLobbyCreate request");
+    this.Logger.debug("Sending match CMsgPracticeLobbyCreate request");
     var lobby_details = Dota2._parseOptions(options, Dota2._lobbyOptions);
     lobby_details.pass_key = password;
     lobby_details.leagueid = options.leagueid || tournament_id;
@@ -209,7 +209,7 @@ Dota2.Dota2Client.prototype.requestPracticeLobbyList = function(callback) {
     callback = callback || null;
     var _self = this;
 
-    if (this.debug) util.log("Sending CMsgPracticeLobbyList request");
+    this.Logger.debug("Sending CMsgPracticeLobbyList request");
     
     var payload = {};
     this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPracticeLobbyList, 
@@ -228,7 +228,7 @@ Dota2.Dota2Client.prototype.requestFriendPracticeLobbyList = function(callback) 
     callback = callback || null;
     var _self = this;
 
-    if (this.debug) util.log("Sending CMsgFriendPracticeLobbyListRequest request");
+    this.Logger.debug("Sending CMsgFriendPracticeLobbyListRequest request");
     
     var payload = {};
     this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCFriendPracticeLobbyListRequest, 
@@ -247,7 +247,7 @@ Dota2.Dota2Client.prototype.balancedShuffleLobby = function(callback) {
     callback = callback || null;
     var _self = this;
     
-    if (this.debug) util.log("Sending CMsgBalancedShuffleLobby request");
+    this.Logger.debug("Sending CMsgBalancedShuffleLobby request");
     
     var payload = {};
     this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCBalancedShuffleLobby, 
@@ -266,7 +266,7 @@ Dota2.Dota2Client.prototype.flipLobbyTeams = function(callback) {
     callback = callback || null;
     var _self = this;
 
-    if (this.debug) util.log("Sending flip teams request");
+    this.Logger.debug("Sending flip teams request");
     
     var payload = {};
     this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCFlipLobbyTeams, 
@@ -284,11 +284,11 @@ Dota2.Dota2Client.prototype.flipLobbyTeams = function(callback) {
 Dota2.Dota2Client.prototype.inviteToLobby = function(steam_id) {
     steam_id = steam_id.toString() || null;
     if (steam_id == null) {
-        if (this.debug) util.log("Steam ID required to create a lobby invite.");
+        this.Logger.error("Steam ID required to create a lobby invite.");
         return null;
     }
 
-    if (this.debug) util.log("Inviting " + steam_id + " to a lobby.");
+    this.Logger.debug("Inviting " + steam_id + " to a lobby.");
     // todo: set client version here?
     var payload = {
         "steam_id": steam_id
@@ -310,7 +310,7 @@ Dota2.Dota2Client.prototype.practiceLobbyKick = function(account_id, callback) {
     account_id = account_id || "";
     var _self = this;
 
-    if (this.debug) util.log("Sending match CMsgPracticeLobbyKick request");
+    this.Logger.debug("Sending match CMsgPracticeLobbyKick request");
     
     var payload = {
         "account_id": account_id
@@ -334,7 +334,7 @@ Dota2.Dota2Client.prototype.practiceLobbyKickFromTeam = function(account_id, cal
     account_id = account_id || "";
     var _self = this;
 
-    if (this.debug) util.log("Sending match CMsgPracticeLobbyKickFromTeam request");
+    this.Logger.debug("Sending match CMsgPracticeLobbyKickFromTeam request");
     
     var payload = {
         "account_id": account_id
@@ -358,7 +358,7 @@ Dota2.Dota2Client.prototype.joinPracticeLobby = function(id, password, callback)
     password = password || "";
     var _self = this;
 
-    if (this.debug) util.log("Sending match CMsgPracticeLobbyJoin request");
+    this.Logger.debug("Sending match CMsgPracticeLobbyJoin request");
     
     var payload = {
         "lobby_id": id,
@@ -381,7 +381,7 @@ Dota2.Dota2Client.prototype.leavePracticeLobby = function(callback) {
     var _self = this;
 
     /* Sends a message to the Game Coordinator requesting `matchId`'s match details.  Listen for `matchData` event for Game Coordinator's response. */
-    if (this.debug) util.log("Sending match CMsgPracticeLobbyLeave request");
+    this.Logger.debug("Sending match CMsgPracticeLobbyLeave request");
     
     var payload = {};
     this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPracticeLobbyLeave, 
@@ -400,7 +400,7 @@ Dota2.Dota2Client.prototype.abandonCurrentGame = function(callback) {
     callback = callback || null;
     var _self = this;
 
-    if (this.debug) util.log("Sending match CMsgAbandonCurrentGame request");
+    this.Logger.debug("Sending match CMsgAbandonCurrentGame request");
 
     var payload = {};
     this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCAbandonCurrentGame,
@@ -420,7 +420,7 @@ Dota2.Dota2Client.prototype.launchPracticeLobby = function(callback) {
     callback = callback || null;
     var _self = this;
     /* Sends a message to the Game Coordinator requesting lobby start. */
-    if (this.debug) util.log("Sending match CMsgPracticeLobbyLaunch request");
+    this.Logger.debug("Sending match CMsgPracticeLobbyLaunch request");
 
     var payload = {};
     this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPracticeLobbyLaunch, 
@@ -445,7 +445,7 @@ Dota2.Dota2Client.prototype.joinPracticeLobbyTeam = function(slot, team, callbac
     
     var _self = this;
 
-    if (this.debug) util.log("Sending match CMsgPracticeLobbySetTeamSlot request");
+    this.Logger.debug("Sending match CMsgPracticeLobbySetTeamSlot request");
     
     var payload = {
         "team": team,
@@ -470,7 +470,7 @@ Dota2.Dota2Client.prototype.joinPracticeLobbyBroadcastChannel = function(channel
     channel = channel || 1;
     var _self = this;
 
-    if (this.debug) util.log("Sending match CMsgPracticeLobbyJoinBroadcastChannel request");
+    this.Logger.debug("Sending match CMsgPracticeLobbyJoinBroadcastChannel request");
 
     var payload = {
         "channel": channel
@@ -498,7 +498,7 @@ Dota2.Dota2Client.prototype.addBotToPracticeLobby = function(slot, team, bot_dif
     bot_difficulty = bot_difficulty || Dota2.schema.lookupEnum("DOTABotDifficulty").values.BOT_DIFFICULTY_PASSIVE;
     var _self = this;
 
-    if (this.debug) util.log("Sending match CMsgPracticeLobbySetTeamSlot request");
+    this.Logger.debug("Sending match CMsgPracticeLobbySetTeamSlot request");
     
     var payload = {
         "team": team,
@@ -522,11 +522,11 @@ Dota2.Dota2Client.prototype.respondLobbyInvite = function(id, accept) {
     id = id || null;
     accept = accept || false;
     if (id == null) {
-        if (this.debug) util.log("Lobby ID required to respond to an invite.");
+        this.Logger.error("Lobby ID required to respond to an invite.");
         return null;
     }
 
-    if (this.debug) util.log("Responding to lobby invite " + id + ", accept: " + accept);
+    this.Logger.debug("Responding to lobby invite " + id + ", accept: " + accept);
     // todo: set client version here?
     var payload = {
         "lobby_id": id,
@@ -581,7 +581,7 @@ var onPracticeLobbyJoinResponse = function onPracticeLobbyJoinResponse(message, 
     callback = callback || null;
     var practiceLobbyJoinResponse = Dota2.schema.lookupType("CMsgPracticeLobbyJoinResponse").decode(message);
 
-    if (this.debug) util.log("Received practice lobby join response " + practiceLobbyJoinResponse.result);
+    this.Logger.debug("Received practice lobby join response " + practiceLobbyJoinResponse.result);
     this.emit("practiceLobbyJoinResponse", practiceLobbyJoinResponse.result, practiceLobbyJoinResponse);
     
     if (callback) {
@@ -597,7 +597,7 @@ handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPracticeLobbyJoinR
 var onPracticeLobbyListResponse = function onPracticeLobbyListResponse(message, callback) {
     var practiceLobbyListResponse = Dota2.schema.lookupType("CMsgPracticeLobbyListResponse").decode(message);
 
-    if (this.debug) util.log("Received practice lobby list response " + practiceLobbyListResponse);
+    this.Logger.debug("Received practice lobby list response " + practiceLobbyListResponse);
     this.emit("practiceLobbyListData", practiceLobbyListResponse);
     if (callback) callback(null, practiceLobbyListResponse);
 };
@@ -606,7 +606,7 @@ handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPracticeLobbyListR
 var onPracticeLobbyResponse = function onPracticeLobbyResponse(message, callback) {
     var practiceLobbyResponse = Dota2.schema.lookupType("CMsgGenericResult").decode(message);
 
-    if (this.debug) util.log("Received create/flip/shuffle/kick/launch/leave response " + JSON.stringify(practiceLobbyResponse));
+    this.Logger.debug("Received create/flip/shuffle/kick/launch/leave response " + JSON.stringify(practiceLobbyResponse));
     this.emit("practiceLobbyResponse", practiceLobbyResponse.result, practiceLobbyResponse);
     
     if (callback) {
@@ -622,7 +622,7 @@ handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPracticeLobbyRespo
 var onFriendPracticeLobbyListResponse = function onFriendPracticeLobbyListResponse(message, callback) {
     var practiceLobbyListResponse = Dota2.schema.lookupType("CMsgFriendPracticeLobbyListResponse").decode(message);
 
-    if (this.debug) util.log("Received friend practice lobby list response " + JSON.stringify(practiceLobbyListResponse));
+    this.Logger.debug("Received friend practice lobby list response " + JSON.stringify(practiceLobbyListResponse));
     this.emit("friendPracticeLobbyListData", practiceLobbyListResponse);
     if (callback) callback(null, practiceLobbyListResponse);
 };

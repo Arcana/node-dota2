@@ -22,7 +22,7 @@ Dota2.Dota2Client.prototype.requestLeaguesInMonth = function(month, year, tier, 
     tier = tier || 0;
     callback = callback || null;
 
-    if (this.debug) util.log("Sending CMsgDOTALeaguesInMonthRequest");
+    this.Logger.debug("Sending CMsgDOTALeaguesInMonthRequest");
     
     var payload = {
         'month': month,
@@ -42,7 +42,7 @@ Dota2.Dota2Client.prototype.requestLeaguesInMonth = function(month, year, tier, 
  */
 Dota2.Dota2Client.prototype.requestLeagueInfo = function() {
     /* Sends a message to the Game Coordinator request the info on all available official leagues */
-    if (this.debug) util.log("Sending CMsgRequestLeagueInfo");
+    this.Logger.debug("Sending CMsgRequestLeagueInfo");
     
     var payload = {};
     this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgRequestLeagueInfo, 
@@ -58,7 +58,7 @@ Dota2.Dota2Client.prototype.requestLeagueInfo = function() {
  */
 Dota2.Dota2Client.prototype.requestTopLeagueMatches = function() {
     /* Sends a message to the Game Coordinator request the info on all available official leagues */
-    if (this.debug) util.log("Sending CMsgClientToGCTopLeagueMatchesRequest");
+    this.Logger.debug("Sending CMsgClientToGCTopLeagueMatchesRequest");
     
     var payload = {};
     this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCTopLeagueMatchesRequest, 
@@ -124,11 +124,11 @@ var onLeaguesInMonthResponse = function onLeaguesInMonthResponse(message, callba
     var response = Dota2.schema.lookupType("CMsgDOTALeaguesInMonthResponse").decode(message);
 
     if (response.eresult === 1) {
-        if (this.debug) util.log("Received leagues in month response " + response.eresult);
+        this.Logger.debug("Received leagues in month response " + response.eresult);
         this.emit("leaguesInMonthData", response.month, response.year, response.leagues);
         if (callback) callback(null, response);
     } else {
-        if (this.debug) util.log("Received a bad leaguesInMonthResponse");
+        this.Logger.error("Received a bad leaguesInMonthResponse");
         if (callback) callback(response.eresult, response);
     }
 };
@@ -148,10 +148,10 @@ var onLeagueInfoResponse = function onLeagueInfoResponse(message) {
     var response = Dota2.schema.lookupType("CMsgResponseLeagueInfo").decode(message);
 
     if (response.leagues.length > 0) {
-        if (this.debug) util.log("Received information for " + response.leagues.length + " leagues");
+        this.Logger.debug("Received information for " + response.leagues.length + " leagues");
         this.emit("leagueData", response.leagues);
     } else {
-        if (this.debug) util.log("Received a bad leagueInfo response", response);
+        this.Logger.error("Received a bad leagueInfo response", response);
     }
 
 };
@@ -161,10 +161,10 @@ var onTopLeagueMatchesResponse = function onTopLeagueMatchesResponse(message) {
     var response = Dota2.schema.lookupType("CMsgGCToClientTopLeagueMatchesResponse").decode(message);
 
     if (response.matches.length > 0) {
-        if (this.debug) util.log("Received information for " + response.matches.length + " league matches");
+        this.Logger.debug("Received information for " + response.matches.length + " league matches");
         this.emit("topLeagueMatchesData", response.matches);
     } else {
-        if (this.debug) util.log("Received a bad topLeagueMatches response", response);
+        this.Logger.error("Received a bad topLeagueMatches response", response);
     }
 
 };

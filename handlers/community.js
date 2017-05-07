@@ -32,7 +32,7 @@ Dota2.Dota2Client.prototype.requestPlayerMatchHistory = function(account_id, opt
     options = options || null;
     var _self = this;
     /* Sends a message to the Game Coordinator requesting `accountId`'s player match history.  Listen for `playerMatchHistoryData` event for Game Coordinator's response. */
-    if (this.debug) util.log("Sending player match history request");
+    this.Logger.debug("Sending player match history request");
     
     var payload = Dota2._parseOptions(options, Dota2._playerHistoryOptions);
     payload.account_id = account_id;
@@ -58,7 +58,7 @@ Dota2.Dota2Client.prototype.requestProfileCard = function(account_id, callback) 
     var _self = this;
     
     /* Sends a message to the Game Coordinator requesting `accountId`'s profile card.  Listen for `profileCardData` event for Game Coordinator's response. */
-    if (this.debug) util.log("Sending profile card request");
+    this.Logger.debug("Sending profile card request");
     
     var payload = {
         "account_id": account_id
@@ -82,7 +82,7 @@ Dota2.Dota2Client.prototype.requestHallOfFame = function(week, callback) {
     var _self = this;
 
     /* Sends a message to the Game Coordinator requesting `accountId`'s passport data.  Listen for `passportData` event for Game Coordinator's response. */
-    if (this.debug) util.log("Sending hall of fame request.");
+    this.Logger.debug("Sending hall of fame request.");
     
     var payload = {
         "week": week
@@ -105,12 +105,12 @@ Dota2.Dota2Client.prototype.requestPlayerInfo = function(account_ids) {
     account_ids = (Array.isArray(account_ids) ? account_ids : [account_ids]).map(id => {return {'account_id': id};});
     
     if (account_ids.length == 0) {
-        if (this.debug) util.log("Account ids must be a single id or array of ids.");
+        this.Logger.error("Account ids must be a single id or array of ids.");
         return null;
     }
 
     /* Sends a message to the Game Coordinator requesting the player info on all `account_ids`. Listen for `playerInfoData` event for Game Coordinator's response. */
-    if (this.debug) util.log("Sending player info request.");
+    this.Logger.debug("Sending player info request.");
 
     var payload = {
         player_infos: account_ids
@@ -132,7 +132,7 @@ Dota2.Dota2Client.prototype.requestTrophyList = function(account_id, callback) {
     var _self = this;
 
     /* Sends a message to the Game Coordinator requesting `accountId`'s trophy list. Listen for `trophyListData` event for Game Coordinator's response. */
-    if (this.debug) util.log("Sending trophy list request.");
+    this.Logger.debug("Sending trophy list request.");
 
     var payload = {
         "account_id": account_id
@@ -156,7 +156,7 @@ Dota2.Dota2Client.prototype.requestPlayerStats = function(account_id, callback) 
     account_id = account_id || null;
 
     /* Sends a message to the Game Coordinator requesting `accountId`'s stats. Listen for `playerStatsData` event for Game Coordinator's response. */
-    if (this.debug) util.log("Sending player stats request.");
+    this.Logger.debug("Sending player stats request.");
 
     var payload = {
         "account_id": account_id
@@ -264,11 +264,11 @@ var onPlayerMatchHistoryResponse = function onPlayerMatchHistoryResponse(message
     var matchHistoryResponse = Dota2.schema.lookupType("CMsgDOTAGetPlayerMatchHistoryResponse").decode(message);
 
     if (typeof matchHistoryResponse.matches != "undefined") {
-        if (this.debug) util.log("Received player match history data");
+        this.Logger.debug("Received player match history data");
         this.emit("playerMatchHistoryData", matchHistoryResponse.requestId, matchHistoryResponse);
         if (callback) callback(null, matchHistoryResponse);
     } else {
-        if (this.debug) util.log("Received a bad GetPlayerMatchHistoryResponse");
+        this.Logger.error("Received a bad GetPlayerMatchHistoryResponse");
         if (callback) callback(matchHistoryResponse.result, matchHistoryResponse);
     }
 };
@@ -278,7 +278,7 @@ var onProfileCardResponse = function onProfileCardResponse(message, callback) {
     callback = callback || null;
     var profileCardResponse = Dota2.schema.lookupType("CMsgDOTAProfileCard").decode(message);
 
-    if (this.debug) util.log("Received profile card data for: " + profileCardResponse.account_id);
+    this.Logger.debug("Received profile card data for: " + profileCardResponse.account_id);
     this.emit("profileCardData", profileCardResponse.account_id, profileCardResponse);
     if (callback) callback(null, profileCardResponse);
 };
@@ -289,11 +289,11 @@ var onHallOfFameResponse = function onHallOfFameResponse(message, callback) {
     var hallOfFameResponse = Dota2.schema.lookupType("CMsgDOTAHallOfFameResponse").decode(message);
 
     if (hallOfFameResponse.eresult === 1) {
-        if (this.debug) util.log("Received hall of fame response for week: " + hallOfFameResponse.hall_of_fame.week);
+        this.Logger.debug("Received hall of fame response for week: " + hallOfFameResponse.hall_of_fame.week);
         this.emit("hallOfFameData", hallOfFameResponse.hall_of_fame.week, hallOfFameResponse.hall_of_fame.featured_players, hallOfFameResponse.hall_of_fame.featured_farmer, hallOfFameResponse);
         if (callback) callback(null, hallOfFameResponse);
     } else {
-        if (this.debug) util.log("Received a bad hall of fame.");
+        this.Logger.error("Received a bad hall of fame.");
         if (callback) callback(hallOfFameResponse.result, hallOfFameResponse);
     }
 };
@@ -302,7 +302,7 @@ handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCHallOfFameResponse
 var onPlayerInfoResponse = function onPlayerInfoResponse(message) {
     var playerInfoResponse = Dota2.schema.lookupType("CMsgGCPlayerInfo").decode(message);
 
-    if (this.debug) util.log("Received new player info data");
+    this.Logger.debug("Received new player info data");
     this.emit("playerInfoData", playerInfoResponse);
 };
 handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPlayerInfo] = onPlayerInfoResponse;
@@ -310,7 +310,7 @@ handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPlayerInfo] = onPl
 var onTrophyListResponse = function onTrophyListResponse(message, callback) {
     var trophyListResponse = Dota2.schema.lookupType("CMsgClientToGCGetTrophyListResponse").decode(message);
 
-    if (this.debug) util.log("Received new trophy list data.");
+    this.Logger.debug("Received new trophy list data.");
     this.emit("trophyListData", trophyListResponse);
     if (callback) callback(null, trophyListResponse);
 };
@@ -319,7 +319,7 @@ handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCGetTrophyL
 var onPlayerStatsResponse = function onPlayerStatsResponse(message, callback) {
     var playerStatsResponse = Dota2.schema.lookupType("CMsgGCToClientPlayerStatsResponse").decode(message);
 
-    if (this.debug) util.log("Received new player stats data.");
+    this.Logger.debug("Received new player stats data.");
     this.emit("playerStatsData", playerStatsResponse.account_id, playerStatsResponse);
     if (callback) callback(null, playerStatsResponse);
     
