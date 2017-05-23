@@ -1,3 +1,5 @@
+'use strict';
+
 var Dota2 = require("../index"),
     util = require("util");
 
@@ -93,7 +95,7 @@ Dota2.Dota2Client.prototype._handleWelcomeCaches = function handleWelcomeCaches(
  * Emitted when the GC sends an inventory snapshot. The GC is incredibly
  * inefficient and will send the entire object even if it's a minor update.
  * You can use this to detect when a change was made to your inventory (e.g. drop)
- * Note that the {@link module:Dota2.Dota2Client#Inventory|Inventory} property will be the old value until after this event 
+ * Note that the {@link module:Dota2.Dota2Client#Inventory|Inventory} property will be the old value until after this event
  * completes to allow comparison between the two.
  * @event module:Dota2.Dota2Client#inventoryUpdate
  * @param {CSOEconItem[]} inventory - A list of `CSOEconItem` objects
@@ -172,7 +174,7 @@ handlers[Dota2.schema.lookupEnum("ESOMsg").values.k_ESOMsg_CacheSubscribed] = on
 var onUpdateMultiple = function onUpdateMultiple(message) {
     var multi = Dota2.schema.lookup("CMsgSOMultipleObjects").decode(message);
     var _self = this;
-    
+
     let multi_types = ["objects_modified", "objects_added", "objects_removed"];
     multi_types.map((type, i) => {
         if (multi[type]) {
@@ -185,7 +187,7 @@ var onUpdateMultiple = function onUpdateMultiple(message) {
                 handleSubscribedType.call(_self, parseInt(type), updates[type], i==2);
         }
     });
-   
+
 };
 handlers[Dota2.schema.lookupEnum("ESOMsg").values.k_ESOMsg_UpdateMultiple] = onUpdateMultiple;
 
@@ -194,7 +196,7 @@ var onCreate = function onCreate(message) {
     var _self = this;
 
     this.Logger.debug("Create, type " + single.type_id);
-    
+
     handleSubscribedType.call(_self, single.type_id, single.object_data);
 }
 handlers[Dota2.schema.lookupEnum("ESOMsg").values.k_ESOMsg_Create] = onCreate;
