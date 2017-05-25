@@ -1,3 +1,5 @@
+'use strict';
+
 var Dota2 = require("../index"),
     util = require("util");
 
@@ -12,7 +14,7 @@ var Dota2 = require("../index"),
  */
 Dota2.Dota2Client.prototype.setItemPositions = function(item_positions) {
     this.Logger.debug("Setting item positions.");
-    
+
     let payload = {
         "item_positions": item_positions
     };
