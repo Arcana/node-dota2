@@ -5,7 +5,7 @@ var Dota2 = require("../index");
 /**
  * Attempts to tip a player for his performance during a match. Listen for the `tipResponse` event for the GC's response.
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
- * @alias module:Dota2.Dota2Client#requestChatChannels
+ * @alias module:Dota2.Dota2Client#tipPlayer
  * @param {number} account_id - The Dota2 ID of the player you want to tip.
  * @param {external:Long} steam_id - The match ID for which you want to tip a player.
  * @param {number} steam_id - The event ID during which you want to tip a player.
@@ -25,7 +25,7 @@ Dota2.Dota2Client.prototype.tipPlayer = function(account_id, match_id, event_id)
 
 // Events
 /**
- * Event that's emitted whenever the bot tipped somebody
+ * Event that's emitted in response to a {@link module:Dota2.Dota2Client#tipPlayer|request for tipping a player}
  * @event module:Dota2.Dota2Client#tipResponse
  * @param {CMsgClientToGCGiveTipResponse.Result} tipResponse - Whether or not the tip was successful
  */
