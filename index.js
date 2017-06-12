@@ -87,6 +87,8 @@ Dota2.schema = Protobuf.loadSync(folder.map(filename => __dirname + '/proto/' + 
  * @fires module:Dota2.Dota2Client#event:matchMinimalDetailsData
  * @fires module:Dota2.Dota2Client#event:matchmakingStatsData
  * @fires module:Dota2.Dota2Client#event:topFriendMatchesData
+ * @fires module:Dota2.Dota2Client#event:tipResponse
+ * @fires module:Dota2.Dota2Client#event:tipped
  */
 Dota2.Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
     EventEmitter.call(this);
@@ -373,3 +375,4 @@ require("./handlers/team");
 require("./handlers/custom");
 require("./handlers/general");
 require("./handlers/fantasy");
+require("./handlers/compendium");

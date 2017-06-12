@@ -84,6 +84,7 @@ Dota 2 module
                 * [.requestPlayerInfo(account_ids)](#module_Dota2.Dota2Client+requestPlayerInfo)
                 * [.requestTrophyList(account_id, [callback])](#module_Dota2.Dota2Client+requestTrophyList)
                 * [.requestPlayerStats(account_id, [callback])](#module_Dota2.Dota2Client+requestPlayerStats)
+                * [.tipPlayer(account_id, steam_id, steam_id)](#module_Dota2.Dota2Client+tipPlayer)
                 * [.requestJoinableCustomGameModes([server_region])](#module_Dota2.Dota2Client+requestJoinableCustomGameModes)
                 * [.requestPlayerCardsByPlayer()](#module_Dota2.Dota2Client+requestPlayerCardsByPlayer) ⇒ <code>Array.&lt;FantasyPlayer&gt;</code>
                     * [.FantasyPlayer](#module_Dota2.Dota2Client+requestPlayerCardsByPlayer.FantasyPlayer) : <code>Object</code>
@@ -150,6 +151,8 @@ Dota 2 module
                 * ["playerInfoData" (playerInfoData)](#module_Dota2.Dota2Client+event_playerInfoData)
                 * ["trophyListData" (trophyListResponse)](#module_Dota2.Dota2Client+event_trophyListData)
                 * ["playerStatsData" (account_id, playerStatsResponse)](#module_Dota2.Dota2Client+event_playerStatsData)
+                * ["tipResponse" (tipResponse)](#module_Dota2.Dota2Client+event_tipResponse)
+                * ["tipped" (tipper_account_id, tipper_name, recipient_account_id, recipient_name, event_id)](#module_Dota2.Dota2Client+event_tipped)
                 * ["joinableCustomGameModes" (joinableCustomGameModes)](#module_Dota2.Dota2Client+event_joinableCustomGameModes)
                 * ["playerCardRoster" (playerCardRoster)](#module_Dota2.Dota2Client+event_playerCardRoster)
                 * ["playerCardDrafted" (playerCardRoster)](#module_Dota2.Dota2Client+event_playerCardDrafted)
@@ -188,7 +191,7 @@ Dota 2 module
 ### Dota2.Dota2Client ⇐ <code>EventEmitter</code>
 **Kind**: static class of [<code>Dota2</code>](#module_Dota2)  
 **Extends**: <code>EventEmitter</code>  
-**Emits**: [<code>ready</code>](#module_Dota2.Dota2Client+event_ready), [<code>unhandled</code>](#module_Dota2.Dota2Client+event_unhandled), [<code>hellotimeout</code>](#module_Dota2.Dota2Client+event_hellotimeout), [<code>popup</code>](#module_Dota2.Dota2Client+event_popup), [<code>sourceTVGamesData</code>](#module_Dota2.Dota2Client+event_sourceTVGamesData), [<code>inventoryUpdate</code>](#module_Dota2.Dota2Client+event_inventoryUpdate), [<code>practiceLobbyUpdate</code>](#module_Dota2.Dota2Client+event_practiceLobbyUpdate), [<code>practiceLobbyCleared</code>](#module_Dota2.Dota2Client+event_practiceLobbyCleared), [<code>lobbyInviteUpdate</code>](#module_Dota2.Dota2Client+event_lobbyInviteUpdate), [<code>lobbyInviteCleared</code>](#module_Dota2.Dota2Client+event_lobbyInviteCleared), [<code>practiceLobbyJoinResponse</code>](#module_Dota2.Dota2Client+event_practiceLobbyJoinResponse), [<code>practiceLobbyListData</code>](#module_Dota2.Dota2Client+event_practiceLobbyListData), [<code>practiceLobbyResponse</code>](#module_Dota2.Dota2Client+event_practiceLobbyResponse), [<code>friendPracticeLobbyListData</code>](#module_Dota2.Dota2Client+event_friendPracticeLobbyListData), [<code>inviteCreated</code>](#module_Dota2.Dota2Client+event_inviteCreated), [<code>partyUpdate</code>](#module_Dota2.Dota2Client+event_partyUpdate), [<code>partyCleared</code>](#module_Dota2.Dota2Client+event_partyCleared), [<code>partyInviteUpdate</code>](#module_Dota2.Dota2Client+event_partyInviteUpdate), [<code>partyInviteCleared</code>](#module_Dota2.Dota2Client+event_partyInviteCleared), [<code>joinableCustomGameModes</code>](#module_Dota2.Dota2Client+event_joinableCustomGameModes), [<code>chatChannelsData</code>](#module_Dota2.Dota2Client+event_chatChannelsData), [<code>chatJoin</code>](#module_Dota2.Dota2Client+event_chatJoin), [<code>chatJoined</code>](#module_Dota2.Dota2Client+event_chatJoined), [<code>chatLeave</code>](#module_Dota2.Dota2Client+event_chatLeave), [<code>chatMessage</code>](#module_Dota2.Dota2Client+event_chatMessage), [<code>profileCardData</code>](#module_Dota2.Dota2Client+event_profileCardData), [<code>playerMatchHistoryData</code>](#module_Dota2.Dota2Client+event_playerMatchHistoryData), [<code>playerInfoData</code>](#module_Dota2.Dota2Client+event_playerInfoData), [<code>playerStatsData</code>](#module_Dota2.Dota2Client+event_playerStatsData), [<code>trophyListData</code>](#module_Dota2.Dota2Client+event_trophyListData), [<code>hallOfFameData</code>](#module_Dota2.Dota2Client+event_hallOfFameData), [<code>playerCardRoster</code>](#module_Dota2.Dota2Client+event_playerCardRoster), [<code>playerCardDrafted</code>](#module_Dota2.Dota2Client+event_playerCardDrafted), [<code>leaguesInMonthData</code>](#module_Dota2.Dota2Client+event_leaguesInMonthData), [<code>liveLeagueGamesUpdate</code>](#module_Dota2.Dota2Client+event_liveLeagueGamesUpdate), [<code>leagueData</code>](#module_Dota2.Dota2Client+event_leagueData), [<code>topLeagueMatchesData</code>](#module_Dota2.Dota2Client+event_topLeagueMatchesData), [<code>teamData</code>](#module_Dota2.Dota2Client+event_teamData), [<code>matchesData</code>](#module_Dota2.Dota2Client+event_matchesData), [<code>matchDetailsData</code>](#module_Dota2.Dota2Client+event_matchDetailsData), [<code>matchMinimalDetailsData</code>](#module_Dota2.Dota2Client+event_matchMinimalDetailsData), [<code>matchmakingStatsData</code>](#module_Dota2.Dota2Client+event_matchmakingStatsData), [<code>topFriendMatchesData</code>](#module_Dota2.Dota2Client+event_topFriendMatchesData)  
+**Emits**: [<code>ready</code>](#module_Dota2.Dota2Client+event_ready), [<code>unhandled</code>](#module_Dota2.Dota2Client+event_unhandled), [<code>hellotimeout</code>](#module_Dota2.Dota2Client+event_hellotimeout), [<code>popup</code>](#module_Dota2.Dota2Client+event_popup), [<code>sourceTVGamesData</code>](#module_Dota2.Dota2Client+event_sourceTVGamesData), [<code>inventoryUpdate</code>](#module_Dota2.Dota2Client+event_inventoryUpdate), [<code>practiceLobbyUpdate</code>](#module_Dota2.Dota2Client+event_practiceLobbyUpdate), [<code>practiceLobbyCleared</code>](#module_Dota2.Dota2Client+event_practiceLobbyCleared), [<code>lobbyInviteUpdate</code>](#module_Dota2.Dota2Client+event_lobbyInviteUpdate), [<code>lobbyInviteCleared</code>](#module_Dota2.Dota2Client+event_lobbyInviteCleared), [<code>practiceLobbyJoinResponse</code>](#module_Dota2.Dota2Client+event_practiceLobbyJoinResponse), [<code>practiceLobbyListData</code>](#module_Dota2.Dota2Client+event_practiceLobbyListData), [<code>practiceLobbyResponse</code>](#module_Dota2.Dota2Client+event_practiceLobbyResponse), [<code>friendPracticeLobbyListData</code>](#module_Dota2.Dota2Client+event_friendPracticeLobbyListData), [<code>inviteCreated</code>](#module_Dota2.Dota2Client+event_inviteCreated), [<code>partyUpdate</code>](#module_Dota2.Dota2Client+event_partyUpdate), [<code>partyCleared</code>](#module_Dota2.Dota2Client+event_partyCleared), [<code>partyInviteUpdate</code>](#module_Dota2.Dota2Client+event_partyInviteUpdate), [<code>partyInviteCleared</code>](#module_Dota2.Dota2Client+event_partyInviteCleared), [<code>joinableCustomGameModes</code>](#module_Dota2.Dota2Client+event_joinableCustomGameModes), [<code>chatChannelsData</code>](#module_Dota2.Dota2Client+event_chatChannelsData), [<code>chatJoin</code>](#module_Dota2.Dota2Client+event_chatJoin), [<code>chatJoined</code>](#module_Dota2.Dota2Client+event_chatJoined), [<code>chatLeave</code>](#module_Dota2.Dota2Client+event_chatLeave), [<code>chatMessage</code>](#module_Dota2.Dota2Client+event_chatMessage), [<code>profileCardData</code>](#module_Dota2.Dota2Client+event_profileCardData), [<code>playerMatchHistoryData</code>](#module_Dota2.Dota2Client+event_playerMatchHistoryData), [<code>playerInfoData</code>](#module_Dota2.Dota2Client+event_playerInfoData), [<code>playerStatsData</code>](#module_Dota2.Dota2Client+event_playerStatsData), [<code>trophyListData</code>](#module_Dota2.Dota2Client+event_trophyListData), [<code>hallOfFameData</code>](#module_Dota2.Dota2Client+event_hallOfFameData), [<code>playerCardRoster</code>](#module_Dota2.Dota2Client+event_playerCardRoster), [<code>playerCardDrafted</code>](#module_Dota2.Dota2Client+event_playerCardDrafted), [<code>leaguesInMonthData</code>](#module_Dota2.Dota2Client+event_leaguesInMonthData), [<code>liveLeagueGamesUpdate</code>](#module_Dota2.Dota2Client+event_liveLeagueGamesUpdate), [<code>leagueData</code>](#module_Dota2.Dota2Client+event_leagueData), [<code>topLeagueMatchesData</code>](#module_Dota2.Dota2Client+event_topLeagueMatchesData), [<code>teamData</code>](#module_Dota2.Dota2Client+event_teamData), [<code>matchesData</code>](#module_Dota2.Dota2Client+event_matchesData), [<code>matchDetailsData</code>](#module_Dota2.Dota2Client+event_matchDetailsData), [<code>matchMinimalDetailsData</code>](#module_Dota2.Dota2Client+event_matchMinimalDetailsData), [<code>matchmakingStatsData</code>](#module_Dota2.Dota2Client+event_matchmakingStatsData), [<code>topFriendMatchesData</code>](#module_Dota2.Dota2Client+event_topFriendMatchesData), [<code>tipResponse</code>](#module_Dota2.Dota2Client+event_tipResponse), [<code>tipped</code>](#module_Dota2.Dota2Client+event_tipped)  
 
 * [.Dota2Client](#module_Dota2.Dota2Client) ⇐ <code>EventEmitter</code>
     * [new Dota2.Dota2Client(steamClient, debug, debugMore)](#new_module_Dota2.Dota2Client_new)
@@ -216,6 +219,7 @@ Dota 2 module
         * [.requestPlayerInfo(account_ids)](#module_Dota2.Dota2Client+requestPlayerInfo)
         * [.requestTrophyList(account_id, [callback])](#module_Dota2.Dota2Client+requestTrophyList)
         * [.requestPlayerStats(account_id, [callback])](#module_Dota2.Dota2Client+requestPlayerStats)
+        * [.tipPlayer(account_id, steam_id, steam_id)](#module_Dota2.Dota2Client+tipPlayer)
         * [.requestJoinableCustomGameModes([server_region])](#module_Dota2.Dota2Client+requestJoinableCustomGameModes)
         * [.requestPlayerCardsByPlayer()](#module_Dota2.Dota2Client+requestPlayerCardsByPlayer) ⇒ <code>Array.&lt;FantasyPlayer&gt;</code>
             * [.FantasyPlayer](#module_Dota2.Dota2Client+requestPlayerCardsByPlayer.FantasyPlayer) : <code>Object</code>
@@ -282,6 +286,8 @@ Dota 2 module
         * ["playerInfoData" (playerInfoData)](#module_Dota2.Dota2Client+event_playerInfoData)
         * ["trophyListData" (trophyListResponse)](#module_Dota2.Dota2Client+event_trophyListData)
         * ["playerStatsData" (account_id, playerStatsResponse)](#module_Dota2.Dota2Client+event_playerStatsData)
+        * ["tipResponse" (tipResponse)](#module_Dota2.Dota2Client+event_tipResponse)
+        * ["tipped" (tipper_account_id, tipper_name, recipient_account_id, recipient_name, event_id)](#module_Dota2.Dota2Client+event_tipped)
         * ["joinableCustomGameModes" (joinableCustomGameModes)](#module_Dota2.Dota2Client+event_joinableCustomGameModes)
         * ["playerCardRoster" (playerCardRoster)](#module_Dota2.Dota2Client+event_playerCardRoster)
         * ["playerCardDrafted" (playerCardRoster)](#module_Dota2.Dota2Client+event_playerCardDrafted)
@@ -593,6 +599,20 @@ Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 | --- | --- | --- |
 | account_id | <code>number</code> | Dota 2 account ID of the player whose player stats the bot should fetch |
 | [callback] | [<code>requestCallback</code>](#module_Dota2..requestCallback) | Called with `err, CMsgGCToClientPlayerStatsResponse` |
+
+<a name="module_Dota2.Dota2Client+tipPlayer"></a>
+
+#### dota2Client.tipPlayer(account_id, steam_id, steam_id)
+Attempts to tip a player for his performance during a match. Listen for the `tipResponse` event for the GC's response.
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of [<code>Dota2Client</code>](#module_Dota2.Dota2Client)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| account_id | <code>number</code> | The Dota2 ID of the player you want to tip. |
+| steam_id | [<code>Long</code>](#external_Long) | The match ID for which you want to tip a player. |
+| steam_id | <code>number</code> | The event ID during which you want to tip a player. |
 
 <a name="module_Dota2.Dota2Client+requestJoinableCustomGameModes"></a>
 
@@ -1180,7 +1200,7 @@ Emitted when the connection with the GC takes longer than 30s
 Emitted when the GC sends an inventory snapshot. The GC is incredibly
 inefficient and will send the entire object even if it's a minor update.
 You can use this to detect when a change was made to your inventory (e.g. drop)
-Note that the [Inventory](#module_Dota2.Dota2Client+Inventory) property will be the old value until after this event 
+Note that the [Inventory](#module_Dota2.Dota2Client+Inventory) property will be the old value until after this event
 completes to allow comparison between the two.
 
 **Kind**: event emitted by [<code>Dota2Client</code>](#module_Dota2.Dota2Client)  
@@ -1452,6 +1472,32 @@ Emitted in response to a [request for a player's stats](#module_Dota2.Dota2Clien
 | --- | --- | --- |
 | account_id | <code>number</code> | Dota2 account ID of the player |
 | playerStatsResponse | [<code>CMsgGCToClientPlayerStatsResponse</code>](#module_Dota2.schema.CMsgGCToClientPlayerStatsResponse) | The player's stats. |
+
+<a name="module_Dota2.Dota2Client+event_tipResponse"></a>
+
+#### "tipResponse" (tipResponse)
+Event that's emitted in response to a [request for tipping a player](#module_Dota2.Dota2Client+tipPlayer)
+
+**Kind**: event emitted by [<code>Dota2Client</code>](#module_Dota2.Dota2Client)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| tipResponse | <code>CMsgClientToGCGiveTipResponse.Result</code> | Whether or not the tip was successful |
+
+<a name="module_Dota2.Dota2Client+event_tipped"></a>
+
+#### "tipped" (tipper_account_id, tipper_name, recipient_account_id, recipient_name, event_id)
+Event that's emitted whenever the bot got tipped
+
+**Kind**: event emitted by [<code>Dota2Client</code>](#module_Dota2.Dota2Client)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| tipper_account_id | <code>number</code> | Dota 2 account ID of the person who tipped |
+| tipper_name | <code>string</code> | Name of the tipper |
+| recipient_account_id | <code>number</code> | Dota 2 account ID of the person who got tipped |
+| recipient_name | <code>string</code> | Name of the one who got tipped |
+| event_id | <code>number</code> | ID of the event during which the tip occurred |
 
 <a name="module_Dota2.Dota2Client+event_joinableCustomGameModes"></a>
 

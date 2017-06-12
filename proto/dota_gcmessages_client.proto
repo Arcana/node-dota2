@@ -205,6 +205,7 @@ message CMsgDOTAPopup {
 		LOW_BADGE_LEVEL_CHAT = 71;
 		LOW_WINS_CHAT = 72;
 		UNVERIFIED_USER_CHAT = 73;
+		PARTY_STARTED_FINDING_EVENT_MATCH = 74;
 		GENERIC_INFO = 69;
 		GENERIC_ERROR = 70;
 	}
@@ -415,9 +416,9 @@ message CMsgDOTAWelcome {
 	optional uint32 gc_socache_file_version = 22;
 	repeated .CMsgDOTAWelcome.LocalizationDigest localization_digests = 23;
 	optional bool is_perfect_world_test_account = 24;
-	repeated .EEvent active_events = 25;
 	repeated .CMsgDOTAWelcome.CExtraMsg extra_messages = 26;
 	optional uint64 minimum_recent_item_id = 27;
+	optional .EEvent active_event = 28 [default = EVENT_ID_NONE];
 }
 
 message CSODOTAGameHeroFavorites {
@@ -1219,7 +1220,7 @@ message CMsgClientToGCRecordCompendiumStats {
 }
 
 message CMsgGCToClientEventStatusChanged {
-	repeated .EEvent active_events = 1;
+	optional .EEvent active_event = 2 [default = EVENT_ID_NONE];
 }
 
 message CMsgClientToGCPlayerStatsRequest {
@@ -1752,6 +1753,10 @@ message CMsgClientToGCRequestEventPointLogResponse {
 		optional uint32 points_won = 1;
 	}
 
+	message ExploitCorrectionEvent {
+		optional uint32 points_corrected = 1;
+	}
+
 	message EventPointTransaction {
 		optional uint32 time = 1;
 		optional int32 event_points = 2;
@@ -1769,6 +1774,7 @@ message CMsgClientToGCRequestEventPointLogResponse {
 		optional .CMsgClientToGCRequestEventPointLogResponse.FantasyRewardEvent fantasy_reward_event = 15;
 		optional .CMsgClientToGCRequestEventPointLogResponse.BracketRewardEvent bracket_reward_event = 16;
 		optional .CMsgClientToGCRequestEventPointLogResponse.WeeklyGameEvent weekly_game_event = 19;
+		optional .CMsgClientToGCRequestEventPointLogResponse.ExploitCorrectionEvent exploit_correction_event = 20;
 	}
 
 	optional bool result = 1;
@@ -2200,7 +2206,8 @@ message CMsgClientToGCGiveTipResponse {
 		ERROR_INVALID_MATCH_TIME = 4;
 		ERROR_NOT_WINNER = 5;
 		ERROR_UNOWNED_EVENT = 6;
-		ERROR_UNKNOWN = 7;
+		ERROR_INVALID_LOBBY_TYPE = 7;
+		ERROR_UNKNOWN = 8;
 	}
 
 	optional .CMsgClientToGCGiveTipResponse.Result result = 1 [default = SUCCESS];
