@@ -60,10 +60,10 @@ Dota2.Dota2Client.prototype.requestMatches = function(criteria, callback) {
  * Provide a callback or listen for {@link module:Dota2.Dota2Client#event:matchDetailsData|matchDetailsData} event for Game Coordinator's response. 
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
  * @alias module:Dota2.Dota2Client#requestMatchDetails
- * @param {number[]} match_ids - List of match ID's for which the bot should fetch the details
+ * @param {number} match_id - Match ID for which the bot should fetch the details
  * @param {module:Dota2~requestCallback} [callback] - Called with `err, CMsgGCMatchDetailsResponse`
  */
-Dota2.Dota2Client.prototype.requestMatchDetails = function(match_ids, callback) {
+Dota2.Dota2Client.prototype.requestMatchDetails = function(match_id, callback) {
     callback = callback || null;
     var _self = this;
     
@@ -71,7 +71,7 @@ Dota2.Dota2Client.prototype.requestMatchDetails = function(match_ids, callback) 
     this.Logger.debug("Sending match details request");
     
     var payload = {
-        "match_id": match_ids
+        "match_id": match_id
     };
     this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCMatchDetailsRequest, 
                     Dota2.schema.lookupType("CMsgGCMatchDetailsRequest").encode(payload).finish(), 
