@@ -2,12 +2,12 @@
   "name": "dota2",
   "version": "5.2.0",
   "dependencies": {
+    "steam": "^1.4.0",
     "deferred": "^0.7.6",
     "long": "^3.2.0",
     "merge": "^1.2.0",
     "moment": "^2.18.1",
     "protobufjs": "^6.7.3",
-    "steam": "^1.4.0",
     "winston": "^2.3.1"
   },
   "devDependencies": {
