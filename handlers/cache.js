@@ -30,6 +30,18 @@ var cacheTypeIDs = {
     CSODOTALobbyInvite : 2011
 };
 
+// TODO: temporary function for debug purposes
+function handleCreateType(obj_type, object_data) {
+    switch(obj_type) {
+        case cacheTypeIDs.CSOEconItem:
+            this.Logger("Received trade request");
+            var item = Dota2.schema.lookupType("CSOEconItem").decode(object_data);
+            this.Logger(JSON.stringify(item));
+            break;
+    }
+}
+
+
 // Handlers
 function handleSubscribedType(obj_type, object_data, isDelete) {
     switch (obj_type) {
@@ -197,7 +209,7 @@ var onCreate = function onCreate(message) {
 
     this.Logger.debug("Create, type " + single.type_id);
 
-    handleSubscribedType.call(_self, single.type_id, single.object_data);
+    handleCreateType.call(_self, single.type_id, single.object_data);
 }
 handlers[Dota2.schema.lookupEnum("ESOMsg").values.k_ESOMsg_Create] = onCreate;
 
