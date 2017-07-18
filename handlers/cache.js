@@ -34,9 +34,9 @@ var cacheTypeIDs = {
 function handleCreateType(obj_type, object_data) {
     switch(obj_type) {
         case cacheTypeIDs.CSOEconItem:
-            this.Logger("Received trade request");
+            this.Logger.debug("Received trade request");
             var item = Dota2.schema.lookupType("CSOEconItem").decode(object_data);
-            this.Logger(JSON.stringify(item));
+            this.Logger.debug(JSON.stringify(item));
             break;
     }
 }
