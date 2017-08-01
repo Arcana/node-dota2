@@ -131,6 +131,8 @@ Dota 2 module
                 * ["unhandled" (kMsg, kMsg_name)](#module_Dota2.Dota2Client+event_unhandled)
                 * ["hellotimeout"](#module_Dota2.Dota2Client+event_hellotimeout)
                 * ["inventoryUpdate" (inventory)](#module_Dota2.Dota2Client+event_inventoryUpdate)
+                * ["gotItem" (item)](#module_Dota2.Dota2Client+event_gotItem)
+                * ["gaveItem" (item)](#module_Dota2.Dota2Client+event_gaveItem)
                 * ["practiceLobbyUpdate" (lobby)](#module_Dota2.Dota2Client+event_practiceLobbyUpdate)
                 * ["practiceLobbyCleared"](#module_Dota2.Dota2Client+event_practiceLobbyCleared)
                 * ["lobbyInviteUpdate" (lobbyInvite)](#module_Dota2.Dota2Client+event_lobbyInviteUpdate)
@@ -266,6 +268,8 @@ Dota 2 module
         * ["unhandled" (kMsg, kMsg_name)](#module_Dota2.Dota2Client+event_unhandled)
         * ["hellotimeout"](#module_Dota2.Dota2Client+event_hellotimeout)
         * ["inventoryUpdate" (inventory)](#module_Dota2.Dota2Client+event_inventoryUpdate)
+        * ["gotItem" (item)](#module_Dota2.Dota2Client+event_gotItem)
+        * ["gaveItem" (item)](#module_Dota2.Dota2Client+event_gaveItem)
         * ["practiceLobbyUpdate" (lobby)](#module_Dota2.Dota2Client+event_practiceLobbyUpdate)
         * ["practiceLobbyCleared"](#module_Dota2.Dota2Client+event_practiceLobbyCleared)
         * ["lobbyInviteUpdate" (lobbyInvite)](#module_Dota2.Dota2Client+event_lobbyInviteUpdate)
@@ -1208,6 +1212,32 @@ completes to allow comparison between the two.
 | Param | Type | Description |
 | --- | --- | --- |
 | inventory | <code>Array.&lt;CSOEconItem&gt;</code> | A list of `CSOEconItem` objects |
+
+<a name="module_Dota2.Dota2Client+event_gotItem"></a>
+
+#### "gotItem" (item)
+Emitted when you receive an item through a trade. 
+Note that the [Inventory](#module_Dota2.Dota2Client+Inventory) property will be the old value until after this event
+completes to allow comparison between the two.
+
+**Kind**: event emitted by [<code>Dota2Client</code>](#module_Dota2.Dota2Client)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| item | <code>CSOEconItem</code> | `CSOEconItem` object describing the received item |
+
+<a name="module_Dota2.Dota2Client+event_gaveItem"></a>
+
+#### "gaveItem" (item)
+Emitted when you trade away an item. 
+Note that the [Inventory](#module_Dota2.Dota2Client+Inventory) property will be the old value until after this event
+completes to allow comparison between the two.
+
+**Kind**: event emitted by [<code>Dota2Client</code>](#module_Dota2.Dota2Client)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| item | <code>CSOEconItem</code> | `CSOEconItem` object describing the traded item |
 
 <a name="module_Dota2.Dota2Client+event_practiceLobbyUpdate"></a>
 
