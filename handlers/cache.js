@@ -35,10 +35,31 @@ var cacheTypeIDs = {
 function handleCreateType(obj_type, object_data) {
     switch(obj_type) {
         case cacheTypeIDs.CSOEconItem:
-            this.Logger.debug("Received trade request");
+            this.Logger.debug("Got an item traded");
             var item = Dota2.schema.lookupType("CSOEconItem").decode(object_data);
             this.emit("gotItem", item);
             this.Inventory.push(item);
+            break;
+    }
+}
+
+function handleDestroyType(obj_type, object_data) {
+    switch(obj_type) {
+        case cacheTypeIDs.CSODOTAPartyInvite:
+            this.Logger.debug("Party invite cleared");
+            this.PartyInvite = null;
+            this.emit("partyInviteCleared");
+            break;
+        case cacheTypeIDs.CSODOTALobbyInvite:
+            this.Logger.debug("Lobby invite cleared");
+            this.LobbyInvite = null;
+            this.emit("lobbyInviteCleared");
+            break;
+        case cacheTypeIDs.CSOEconItem:
+            this.Logger.debug("Traded item away");
+            var item = Dota2.schema.lookupType("CSOEconItem").decode(object_data);
+            this.Inventory = this.Inventory.filter(i => item.id.equals(i.id));
+            this.emit("gaveItem", item);
             break;
     }
 }
@@ -117,6 +138,20 @@ Dota2.Dota2Client.prototype._handleWelcomeCaches = function handleWelcomeCaches(
  * @event module:Dota2.Dota2Client#inventoryUpdate
  * @param {CSOEconItem[]} inventory - A list of `CSOEconItem` objects
  */
+/**
+ * Emitted when you receive an item through a trade. 
+ * Note that the {@link module:Dota2.Dota2Client#Inventory|Inventory} property will be the old value until after this event
+ * completes to allow comparison between the two.
+ * @event module:Dota2.Dota2Client#gotItem
+ * @param {CSOEconItem} item - `CSOEconItem` object describing the received item
+ **/
+/**
+ * Emitted when you trade away an item. 
+ * Note that the {@link module:Dota2.Dota2Client#Inventory|Inventory} property will be the old value until after this event
+ * completes to allow comparison between the two.
+ * @event module:Dota2.Dota2Client#gaveItem
+ * @param {CSOEconItem} item - `CSOEconItem` object describing the traded item
+ **/
  /**
  * Emitted when the GC sends a lobby snapshot. The GC is incredibly
  * inefficient and will send the entire object even if it's a minor update.
@@ -241,22 +276,10 @@ var onCacheUnsubscribed = function onCacheUnsubscribed(message) {
 handlers[Dota2.schema.lookupEnum("ESOMsg").values.k_ESOMsg_CacheUnsubscribed] = onCacheUnsubscribed;
 
 var onCacheDestroy = function onCacheDestroy(message) {
-    var destroy = Dota2.schema.lookup("CMsgSOSingleObject").decode(message);
+    var single = Dota2.schema.lookup("CMsgSOSingleObject").decode(message);
 
-    this.Logger.debug("Cache destroy, " + destroy.type_id);
-
-    if (destroy.type_id === cacheTypeIDs.CSODOTAPartyInvite) {
-        this.PartyInvite = null;
-        this.emit("partyInviteCleared");
-    }
-    if (destroy.type_id === cacheTypeIDs.CSODOTALobbyInvite) {
-        this.LobbyInvite = null;
-        this.emit("lobbyInviteCleared");
-    }
-    if (destroy.type_id === cacheTypeIDs.CSOEconItem) {
-        var item = Dota2.schema.lookupType("CSOEconItem").decode(destroy.object_data);
-        this.Inventory = this.Inventory.filter(i => item.id.equals(i.id));
-        this.emit("gaveItem", item);
-    }
+    this.Logger.debug("Cache destroy, " + single.type_id);
+    
+    handleDestroyType.call(_self, single.type_id, single.object_data);
 };
 handlers[Dota2.schema.lookupEnum("ESOMsg").values.k_ESOMsg_Destroy] = onCacheDestroy;
