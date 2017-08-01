@@ -29,19 +29,20 @@ var cacheTypeIDs = {
     CSODOTALobbyInvite : 2011
 };
 
-// TODO: temporary function for debug purposes
+
+
+// Handlers
 function handleCreateType(obj_type, object_data) {
     switch(obj_type) {
         case cacheTypeIDs.CSOEconItem:
             this.Logger.debug("Received trade request");
             var item = Dota2.schema.lookupType("CSOEconItem").decode(object_data);
-            this.Logger.debug(JSON.stringify(item));
+            this.emit("gotItem", item);
+            this.Inventory.push(item);
             break;
     }
 }
 
-
-// Handlers
 function handleSubscribedType(obj_type, object_data, isDelete) {
     switch (obj_type) {
         // Inventory item
@@ -241,7 +242,6 @@ handlers[Dota2.schema.lookupEnum("ESOMsg").values.k_ESOMsg_CacheUnsubscribed] = 
 
 var onCacheDestroy = function onCacheDestroy(message) {
     var destroy = Dota2.schema.lookup("CMsgSOSingleObject").decode(message);
-    var _self = this;
 
     this.Logger.debug("Cache destroy, " + destroy.type_id);
 
@@ -252,6 +252,11 @@ var onCacheDestroy = function onCacheDestroy(message) {
     if (destroy.type_id === cacheTypeIDs.CSODOTALobbyInvite) {
         this.LobbyInvite = null;
         this.emit("lobbyInviteCleared");
+    }
+    if (destroy.type_id === cacheTypeIDs.CSOEconItem) {
+        var item = Dota2.schema.lookupType("CSOEconItem").decode(destroy.object_data);
+        this.Inventory = this.Inventory.filter(i => item.id.equals(i.id));
+        this.emit("gaveItem", item);
     }
 };
 handlers[Dota2.schema.lookupEnum("ESOMsg").values.k_ESOMsg_Destroy] = onCacheDestroy;
