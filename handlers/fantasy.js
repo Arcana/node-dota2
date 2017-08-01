@@ -23,19 +23,19 @@ var Dota2 = require("../index"),
  */
 Dota2.Dota2Client.prototype.requestPlayerCardsByPlayer = function() {
     if(this.Inventory) {
-        var playercards = this.Inventory.filter(item => item.def_index == 11953);
+        var playercards = this.Inventory.filter(item => item.def_index == 11985);
         var promises = [];
         // Sort cards per player
         var players = playercards.reduce((players, card)=>{
             var id_attr = card.attribute.filter(attr => attr.def_index == 424)[0];
-            var account_id = id_attr.value_bytes.readUInt32(id_attr.value_bytes.offset);
+            var account_id = Buffer.from(id_attr.value_bytes, 'base64').readUInt32LE();
             // Add player if we haven't seen him yet
             if (!players[account_id]) players[account_id] = {'account_id': account_id, 'cards': []};
             // Add this card
             var bonus = card.attribute.filter(attr => attr.def_index == 425)[0];
             players[account_id].cards.push({
                 'id': card.id,
-                'bonuses': bonus ?  bonus.value_bytes.readUInt64(bonus.value_bytes.offset) : undefined
+                'bonuses': bonus ?  bonus.value_bytes : undefined
             });
             return players;
         },{});

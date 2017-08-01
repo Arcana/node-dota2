@@ -1,7 +1,6 @@
 'use strict';
 
-var Dota2 = require("../index"),
-    util = require("util");
+var Dota2 = require("../index");
 
 var cacheTypeIDs = {
     // Legacy values
@@ -48,9 +47,14 @@ function handleSubscribedType(obj_type, object_data, isDelete) {
         // Inventory item
         case cacheTypeIDs.CSOEconItem:
             this.Logger.debug("Received inventory snapshot");
+            // Parse items
             var items = object_data.map(obj => Dota2.schema.lookupType("CSOEconItem").decode(obj));
+            // Remove updated items from inventory
             var inv = this.Inventory.filter(item => items.reduce((acc, val) => acc && item.id.notEquals(val.id)), true);
-            if (!isDelete) inv.concat(items);
+            if (!isDelete) {
+                // Put them back if it's not a delete
+                inv = inv.concat(items);
+            }
             this.emit("inventoryUpdate", inv);
             this.Inventory = inv;
             break;
