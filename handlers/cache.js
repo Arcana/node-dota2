@@ -58,8 +58,8 @@ function handleDestroyType(obj_type, object_data) {
         case cacheTypeIDs.CSOEconItem:
             this.Logger.debug("Traded item away");
             var item = Dota2.schema.lookupType("CSOEconItem").decode(object_data);
-            this.Inventory = this.Inventory.filter(i => item.id.equals(i.id));
             this.emit("gaveItem", item);
+            this.Inventory = this.Inventory.filter(i => item.id.notEquals(i.id));
             break;
     }
 }
