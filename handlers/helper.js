@@ -4,7 +4,7 @@ var Dota2 = require("../index"),
 // Enums
 /**
  * Enum for the different fantasy stats
- * @alias module:Dota2.
+ * @alias module:Dota2.FantasyStats
  * @readonly
  * @enum {number}
  **/
