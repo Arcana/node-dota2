@@ -710,5 +710,14 @@ enum EDOTAGCMsg {
 	k_EMsgGCToGCGetFavoriteTeam = 8230;
 	k_EMsgGCToGCGetFavoriteTeamResponse = 8231;
 	k_EMsgSignOutEventGameData = 8232;
+	k_EMsgGCToClientAllStarVotesRequest = 8233;
+	k_EMsgGCToClientAllStarVotesReply = 8234;
+	k_EMsgGCToClientAllStarVotesSubmit = 8236;
+	k_EMsgGCToClientAllStarVotesSubmitReply = 8237;
+	k_EMsgClientToGCQuickStatsRequest = 8238;
+	k_EMsgClientToGCQuickStatsResponse = 8239;
+	k_EMsgGCToGCSubtractEventPointsFromUser = 8240;
+	k_EMsgSelectionPriorityChoiceRequest = 8241;
+	k_EMsgSelectionPriorityChoiceResponse = 8242;
 }
 

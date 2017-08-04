@@ -32,6 +32,7 @@ enum EStartFindingMatchResult {
 	k_EStartFindingMatchResult_MemberMissingEventOwnership = 118;
 	k_EStartFindingMatchResult_WeekendTourneyNotUnlocked = 119;
 	k_EStartFindingMatchResult_WeekendTourneyRecentParticipation = 120;
+	k_EStartFindingMatchResult_MemberMissingAnchoredPhoneNumber = 121;
 }
 
 message CMsgStartFindingMatch {
@@ -49,6 +50,7 @@ message CMsgStartFindingMatch {
 	optional .CMsgClientPingData ping_data = 12;
 	optional uint32 region_select_flags = 13;
 	optional bool solo_queue = 14;
+	optional uint64 bot_script = 15;
 }
 
 message CMsgStartFindingMatchResult {
@@ -122,13 +124,11 @@ message CMsgPracticeLobbySetDetails {
 	optional uint32 league_game_id = 36;
 	optional fixed32 custom_game_timestamp = 37;
 	optional uint64 previous_match_override = 38;
-	optional uint32 league_selection_priority_team = 39;
-	optional .SelectionPriorityType league_selection_priority_choice = 40 [default = UNDEFINED];
-	optional .SelectionPriorityType league_non_selection_priority_choice = 41 [default = UNDEFINED];
 	optional .LobbyDotaPauseSetting pause_setting = 42 [default = LobbyDotaPauseSetting_Unlimited];
 	optional .DOTABotDifficulty bot_difficulty_dire = 43 [default = BOT_DIFFICULTY_PASSIVE];
 	optional uint64 bot_radiant = 44;
 	optional uint64 bot_dire = 45;
+	optional .DOTASelectionPriorityRules selection_priority_rules = 46 [default = k_DOTASelectionPriorityRules_Manual];
 }
 
 message CMsgPracticeLobbyCreate {
@@ -402,50 +402,3 @@ message CMsgSpectatorLobbyGameDetails {
 
 message CMsgSetSpectatorLobbyDetails {
 	optional uint64 lobby_id = 1;
-	optional string lobby_name = 2;
-	optional string pass_key = 3;
-	optional .CMsgSpectatorLobbyGameDetails game_details = 4;
-}
-
-message CMsgCreateSpectatorLobby {
-	optional uint32 client_version = 1;
-	optional .CMsgSetSpectatorLobbyDetails details = 2;
-}
-
-message CMsgSpectatorLobbyList {
-}
-
-message CMsgSpectatorLobbyListResponse {
-	message SpectatorLobby {
-		optional uint64 lobby_id = 1;
-		optional string game_name = 2;
-		optional bool requires_pass_key = 3;
-		optional uint32 leader_account_id = 4;
-		optional uint32 member_count = 5;
-		optional .CMsgSpectatorLobbyGameDetails game_details = 7;
-	}
-
-	repeated .CMsgSpectatorLobbyListResponse.SpectatorLobby lobbies = 1;
-}
-
-message CMsgClientToGCRequestSteamDatagramTicket {
-	optional fixed64 server_steam_id = 1;
-}
-
-message CMsgClientToGCRequestSteamDatagramTicketResponse {
-	optional bytes serialized_ticket = 1;
-	optional string message = 2;
-}
-
-message CMsgGCToClientSteamDatagramTicket {
-	optional fixed32 legacy_time_expiry = 1;
-	optional fixed64 legacy_authorized_steam_id = 2;
-	optional fixed32 legacy_authorized_public_ip = 3;
-	optional fixed64 legacy_gameserver_steam_id = 4;
-	optional fixed64 legacy_gameserver_net_id = 5;
-	optional bytes legacy_signature = 6;
-	optional uint32 legacy_app_id = 7;
-	repeated bytes legacy_extra_fields = 8;
-	optional bytes serialized_ticket = 16;
-}
-

@@ -217,7 +217,7 @@ util.inherits(Dota2.Dota2Client, EventEmitter);
  * @returns {number} Dota2 account ID corresponding with steamID
  */
 Dota2.Dota2Client.prototype.ToAccountID = function(steamID) {
-    return new Long.fromString(steamID).sub('76561197960265728').toNumber();
+    return new Long.fromString(""+steamID).sub('76561197960265728').toNumber();
 };
 /**
  * Converts a Dota2 account ID to a 64bit Steam ID
@@ -226,7 +226,7 @@ Dota2.Dota2Client.prototype.ToAccountID = function(steamID) {
  * @returns {external:Long} 64bit Steam ID corresponding to the given Dota 2 account ID
  */
 Dota2.Dota2Client.prototype.ToSteamID = function(accid) {
-    return new Long.fromString(accid).add('76561197960265728');
+    return new Long.fromString(accid+"").add('76561197960265728');
 };
 /**
  * Reports to Steam that you're playing Dota 2, and then initiates communication with the Game Coordinator.

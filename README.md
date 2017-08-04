@@ -8,7 +8,7 @@ node-dota2
 
 A node-steam plugin for Dota 2, consider it in alpha state.
 
-Check out RJackson1's blog post (his only blog post), [Extending node-dota2](https://blog.rjackson.me/extending-node-dota2/), for a rough overview of adding new functionality to the library.
+Check out @RJacksonm1's blog post (his only blog post), [Extending node-dota2](https://blog.rjackson.me/extending-node-dota2/), for a rough overview of adding new functionality to the library.
 A fair warning, while the way you search for new functionality is still the same, quite a lot has changed (and been simplified) implementation wise.
 It is now easier to implement new functionality than it was back when this blog was written.
 
@@ -131,6 +131,8 @@ Dota 2 module
                 * ["unhandled" (kMsg, kMsg_name)](#module_Dota2.Dota2Client+event_unhandled)
                 * ["hellotimeout"](#module_Dota2.Dota2Client+event_hellotimeout)
                 * ["inventoryUpdate" (inventory)](#module_Dota2.Dota2Client+event_inventoryUpdate)
+                * ["gotItem" (item)](#module_Dota2.Dota2Client+event_gotItem)
+                * ["gaveItem" (item)](#module_Dota2.Dota2Client+event_gaveItem)
                 * ["practiceLobbyUpdate" (lobby)](#module_Dota2.Dota2Client+event_practiceLobbyUpdate)
                 * ["practiceLobbyCleared"](#module_Dota2.Dota2Client+event_practiceLobbyCleared)
                 * ["lobbyInviteUpdate" (lobbyInvite)](#module_Dota2.Dota2Client+event_lobbyInviteUpdate)
@@ -178,6 +180,7 @@ Dota 2 module
                 * [.ToSteamID(accid)](#module_Dota2.Dota2Client.ToSteamID) ⇒ [<code>Long</code>](#external_Long)
         * [.schema](#module_Dota2.schema)
             * [.CMsgGCToClientPlayerStatsResponse](#module_Dota2.schema.CMsgGCToClientPlayerStatsResponse) : <code>Object</code>
+        * [.FantasyStats](#module_Dota2.FantasyStats) : <code>enum</code>
         * [.EResult](#module_Dota2.EResult) : <code>enum</code>
         * [.ServerRegion](#module_Dota2.ServerRegion) : <code>enum</code>
         * [.SeriesType](#module_Dota2.SeriesType) : <code>enum</code>
@@ -266,6 +269,8 @@ Dota 2 module
         * ["unhandled" (kMsg, kMsg_name)](#module_Dota2.Dota2Client+event_unhandled)
         * ["hellotimeout"](#module_Dota2.Dota2Client+event_hellotimeout)
         * ["inventoryUpdate" (inventory)](#module_Dota2.Dota2Client+event_inventoryUpdate)
+        * ["gotItem" (item)](#module_Dota2.Dota2Client+event_gotItem)
+        * ["gaveItem" (item)](#module_Dota2.Dota2Client+event_gaveItem)
         * ["practiceLobbyUpdate" (lobby)](#module_Dota2.Dota2Client+event_practiceLobbyUpdate)
         * ["practiceLobbyCleared"](#module_Dota2.Dota2Client+event_practiceLobbyCleared)
         * ["lobbyInviteUpdate" (lobbyInvite)](#module_Dota2.Dota2Client+event_lobbyInviteUpdate)
@@ -648,7 +653,9 @@ Player with player cards
 | account_id | <code>number</code> | Dota2 account ID of the player |
 | cards | <code>Array.&lt;Object&gt;</code> | Player cards of this player in the bot's inventory |
 | cards[].id | <code>number</code> | ID of the card |
-| cards[].bonuses | [<code>Long</code>](#external_Long) | 64bit bitmask for the bonuses of this card |
+| cards[].bonuses | <code>Array.&lt;Object&gt;</code> | Array of bonuses that apply to this card |
+| cards[].bonuses[].type | [<code>FantasyStats</code>](#module_Dota2.FantasyStats) | The stat that gets a bonus |
+| cards[].bonuses[].value | <code>number</code> | Percentage bonus for the stat |
 | stats | [<code>CMsgGCToClientPlayerStatsResponse</code>](#module_Dota2.schema.CMsgGCToClientPlayerStatsResponse) | Player stats |
 
 <a name="module_Dota2.Dota2Client+requestPlayerCardRoster"></a>
@@ -1208,6 +1215,32 @@ completes to allow comparison between the two.
 | Param | Type | Description |
 | --- | --- | --- |
 | inventory | <code>Array.&lt;CSOEconItem&gt;</code> | A list of `CSOEconItem` objects |
+
+<a name="module_Dota2.Dota2Client+event_gotItem"></a>
+
+#### "gotItem" (item)
+Emitted when you receive an item through a trade. 
+Note that the [Inventory](#module_Dota2.Dota2Client+Inventory) property will be the old value until after this event
+completes to allow comparison between the two.
+
+**Kind**: event emitted by [<code>Dota2Client</code>](#module_Dota2.Dota2Client)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| item | <code>CSOEconItem</code> | `CSOEconItem` object describing the received item |
+
+<a name="module_Dota2.Dota2Client+event_gaveItem"></a>
+
+#### "gaveItem" (item)
+Emitted when you trade away an item. 
+Note that the [Inventory](#module_Dota2.Dota2Client+Inventory) property will be the old value until after this event
+completes to allow comparison between the two.
+
+**Kind**: event emitted by [<code>Dota2Client</code>](#module_Dota2.Dota2Client)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| item | <code>CSOEconItem</code> | `CSOEconItem` object describing the traded item |
 
 <a name="module_Dota2.Dota2Client+event_practiceLobbyUpdate"></a>
 
@@ -1836,6 +1869,30 @@ Player statistics
 | support_score | <code>number</code> | Support score over the last 20 matches |
 | push_score | <code>number</code> | Push score over the last 20 matches |
 | versatility_score | <code>number</code> | Hero versatility over the last 20 matches |
+
+<a name="module_Dota2.FantasyStats"></a>
+
+### Dota2.FantasyStats : <code>enum</code>
+Enum for the different fantasy stats
+
+**Kind**: static enum of [<code>Dota2</code>](#module_Dota2)  
+**Read only**: true  
+**Properties**
+
+| Name | Type | Default |
+| --- | --- | --- |
+| KILLS | <code>number</code> | <code>0</code> | 
+| DEATHS | <code>number</code> | <code>1</code> | 
+| CREEPS | <code>number</code> | <code>2</code> | 
+| GPM | <code>number</code> | <code>3</code> | 
+| TOWERS | <code>number</code> | <code>4</code> | 
+| ROSHAN | <code>number</code> | <code>5</code> | 
+| TEAMFIGHT | <code>number</code> | <code>6</code> | 
+| OBSERVER | <code>number</code> | <code>7</code> | 
+| STACKS | <code>number</code> | <code>8</code> | 
+| RUNES | <code>number</code> | <code>9</code> | 
+| FIRSTBLOOD | <code>number</code> | <code>10</code> | 
+| STUNS | <code>number</code> | <code>11</code> | 
 
 <a name="module_Dota2.EResult"></a>
 
