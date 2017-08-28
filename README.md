@@ -386,6 +386,7 @@ The lobby the bot is currently in. Falsy if the bot isn't in a lobby.
 | custom_map_name | <code>string</code> |  | Which map the custom game should be played on |
 | custom_difficulty | <code>number</code> |  | Difficulty of the custom game |
 | custom_game_id | [<code>Long</code>](#external_Long) |  | 64bit ID of the custom game mode |
+| pause_setting | <code>LobbyDotaPauseSetting</code> | | Pause setting: 0 - unlimited, 1 - limited, 2 - disabled |
 
 <a name="module_Dota2.Dota2Client+LobbyInvite"></a>
 
