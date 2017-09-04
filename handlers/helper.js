@@ -3,6 +3,26 @@ var Dota2 = require("../index"),
 
 // Enums
 /**
+ * Enum for the different fantasy stats
+ * @alias module:Dota2.FantasyStats
+ * @readonly
+ * @enum {number}
+ **/
+Dota2.FantasyStats = {
+    KILLS: 0,
+    DEATHS: 1,
+    CREEPS: 2,
+    GPM: 3,
+    TOWERS: 4,
+    ROSHAN: 5,
+    TEAMFIGHT: 6,
+    OBSERVER: 7,
+    STACKS: 8,
+    RUNES: 9,
+    FIRSTBLOOD: 10,
+    STUNS: 11
+}
+/**
  * Enum for all possible `EResult` values
  * @alias module:Dota2.EResult
  * @readonly 

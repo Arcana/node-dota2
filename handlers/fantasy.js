@@ -2,14 +2,31 @@ var Dota2 = require("../index"),
     util = require("util"),
     Long = require('long');
 
+
+
 // Methods
+function decodeBonus(bonus) {
+    let bitmask = bonus.readUInt16LE(6);
+    let parsed = [];
+    let bonusValues = [];
+    for (let i=1; i<=5; i++) bonusValues.push(bonus.readUInt8(i));
+    for (let i=0; i<16; i++) {
+        if (bitmask % 2) parsed.push({'type': i, 'value': bonusValues.pop()});
+        bitmask = bitmask >>> 1;
+    }
+    return parsed;
+}
+
+
 /**
  * Player with player cards
  * @typedef {Object} module:Dota2.Dota2Client#requestPlayerCardsByPlayer.FantasyPlayer
  * @property {number} account_id - Dota2 account ID of the player
  * @property {Object[]} cards - Player cards of this player in the bot's inventory
  * @property {number} cards[].id - ID of the card
- * @property {external:Long} cards[].bonuses - 64bit bitmask for the bonuses of this card
+ * @property {Object[]} cards[].bonuses - Array of bonuses that apply to this card
+ * @property {module:Dota2.FantasyStats} cards[].bonuses[].type - The stat that gets a bonus
+ * @property {number} cards[].bonuses[].value - Percentage bonus for the stat
  * @property {module:Dota2.schema.CMsgGCToClientPlayerStatsResponse} stats - Player stats
  */
 
@@ -23,19 +40,19 @@ var Dota2 = require("../index"),
  */
 Dota2.Dota2Client.prototype.requestPlayerCardsByPlayer = function() {
     if(this.Inventory) {
-        var playercards = this.Inventory.filter(item => item.def_index == 11953);
+        var playercards = this.Inventory.filter(item => item.def_index == 11985);
         var promises = [];
         // Sort cards per player
         var players = playercards.reduce((players, card)=>{
             var id_attr = card.attribute.filter(attr => attr.def_index == 424)[0];
-            var account_id = id_attr.value_bytes.readUInt32(id_attr.value_bytes.offset);
+            var account_id = Buffer.from(id_attr.value_bytes, 'base64').readUInt32LE();
             // Add player if we haven't seen him yet
             if (!players[account_id]) players[account_id] = {'account_id': account_id, 'cards': []};
             // Add this card
             var bonus = card.attribute.filter(attr => attr.def_index == 425)[0];
             players[account_id].cards.push({
                 'id': card.id,
-                'bonuses': bonus ?  bonus.value_bytes.readUInt64(bonus.value_bytes.offset) : undefined
+                'bonuses': bonus ?  decodeBonus(bonus.value_bytes) : undefined
             });
             return players;
         },{});

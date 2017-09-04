@@ -26,6 +26,7 @@ Dota2._lobbyOptions = {
     custom_map_name: "string",
     custom_difficulty: "number",
     custom_game_id: "number",
+    pause_setting: "number",
 };
 
 /**
