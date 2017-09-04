@@ -1,3 +1,31 @@
+# Changelog 5.2.0
+## Dependency changes
+Nothing new, just some updates
+
+## API changes
+### methods
+#### requestPlayerCardsByPlayer 
+Now parses the bonuses
+
+#### tipPlayer
+Allows you to tip someone after a game
+
+### Properties
+* new Enum for Fantasy stats
+
+### Events
+#### gotItem
+New event emitted when the bot received an item
+
+#### gaveItem
+New event emitted when the bot trades away an item
+
+#### tipResponse
+GC response after having tried tipping someone
+
+#### tipped
+Event fired when you get tipped
+
 # Changelog 5.1.0
 ## Dependency changes
 New dependencies on winstonjs and momentjs for logging purposes
