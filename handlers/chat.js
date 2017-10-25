@@ -266,6 +266,10 @@ var onChatMessage = function onChatMessage(message) {
     var chatData = Dota2.schema.lookupType("CMsgDOTAChatMessage").decode(message);
     var channel = this._getChannelById(chatData.channel_id);
 
+    if (!channel) {
+        channel = { channel_name: "Unknown" }
+    }
+
     this.Logger.debug("Received chat message from " + chatData.persona_name + " in channel " + channel.channel_name);
     this.emit("chatMessage",
         channel.channel_name,
