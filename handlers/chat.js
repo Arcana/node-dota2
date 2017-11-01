@@ -264,7 +264,9 @@ handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCJoinChatChannelRes
 var onChatMessage = function onChatMessage(message) {
     /* Chat channel message from another user. */
     var chatData = Dota2.schema.lookupType("CMsgDOTAChatMessage").decode(message);
-    var channel = this._getChannelById(chatData.channel_id);
+    var channel = this._getChannelById(chatData.channel_id) || {
+        channel_name: "Unknown"
+    };
 
     this.Logger.debug("Received chat message from " + chatData.persona_name + " in channel " + channel.channel_name);
     this.emit("chatMessage",
