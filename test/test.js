@@ -384,19 +384,6 @@ var steam = require("steam"),
 		});
 		
 		describe('Leagues', function () {
-			describe('#requestLeaguesInMonth', function () {
-				it('should fetch data on leages being played in the given month', function (done) {
-					Dota2.on('leaguesInMonthData', function (month, year, leagues){
-						should.exist(month);
-						should.exist(year);
-						should(leagues.length).above(0);
-						should.exist(leagues[0].league_id);
-						should(leagues[0].schedule.length).above(0);
-						done();
-					});
-					Dota2.requestLeaguesInMonth(8,2015);
-				}); 
-			});
 			
 			describe('#requestLeagueInfo', function () {
 				it('should fetch data on all official leagues', function (done) {

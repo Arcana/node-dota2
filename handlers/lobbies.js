@@ -80,6 +80,8 @@ Dota2._lobbyOptions = {
  * @property {number} [custom_difficulty] - Difficulty of the custom game
  * 
  * @property {external:Long} [custom_game_id] - 64bit ID of the custom game mode
+ * 
+ * @property {LobbyDotaPauseSetting} [pause_setting=0] - Pause setting: 0 - unlimited, 1 - limited, 2 - disabled
  */
 
 // Methods
@@ -381,7 +383,7 @@ Dota2.Dota2Client.prototype.leavePracticeLobby = function(callback) {
     callback = callback || null;
     var _self = this;
 
-    /* Sends a message to the Game Coordinator requesting `matchId`'s match details.  Listen for `matchData` event for Game Coordinator's response. */
+    /* Sends a message to the Game Coordinator requesting to leave the lobby.  Listen for `practiceLobby` event for Game Coordinator's response. */
     this.Logger.debug("Sending match CMsgPracticeLobbyLeave request");
     
     var payload = {};
@@ -389,6 +391,25 @@ Dota2.Dota2Client.prototype.leavePracticeLobby = function(callback) {
                     Dota2.schema.lookupType("CMsgPracticeLobbyLeave").encode(payload).finish(), 
                     onPracticeLobbyResponse, callback);
 };
+
+/**
+ * Destroy the current lobby. Requires you to be the host.
+ * Provide a callback or listen for the {@link module:Dota2.Dota2Client#event:lobbyDestroyed|lobbyDestroyed} event for the GC's response.
+ * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
+ * @alias module:Dota2.Dota2Client#destroyLobby
+ * @param {module:Dota2~requestCallback} [callback] - Called with `err, CMsgDOTADestroyLobbyResponse`
+ **/
+Dota2.Dota2Client.prototype.destroyLobby = function(callback) {
+    callback = callback || null;
+
+    /* Sends a message to the Game Coordinator requesting to destroy the lobby.  Listen for `lobbyDestroyed` event for Game Coordinator's response. */
+    this.Logger.debug("Sending match CMsgPracticeLobbyLeave request");
+    
+    var payload = {};
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgDestroyLobbyRequest,
+                    Dota2.schema.lookupType("CMsgDOTADestroyLobbyRequest").encode(payload).finish(),
+                    onDestroyLobbyResponse, callback);
+}
 
 /**
  * Abandons the current game.
@@ -539,6 +560,12 @@ Dota2.Dota2Client.prototype.respondLobbyInvite = function(id, accept) {
 
 // Events
 /**
+ * Event that's emitted when attempting to destroy the lobby
+ * @event module:Dota2.Dota2Client#lobbyDestroyed
+ * @param {CMsgDOTADestroyLobbyResponse.Result} result - Result code, 0 is SUCCESS, 1 is ERROR_UNKNOWN
+ * @param {Object} response - The raw response object
+ **/ 
+/**
  * Event that's emitted whenever the bot joins a lobby
  * @event module:Dota2.Dota2Client#practiceLobbyJoinResponse
  * @param {DOTAJoinLobbyResult} result - Result code
@@ -577,6 +604,23 @@ Dota2.Dota2Client.prototype.respondLobbyInvite = function(id, accept) {
 
 // Handlers
 var handlers = Dota2.Dota2Client.prototype._handlers;
+
+var onDestroyLobbyResponse = function onDestroyLobbyResponse(message, callback) {
+    callback = callback || null;
+    var lobbyDestroyed = Dota2.schema.lookupType("CMsgDOTADestroyLobbyResponse").decode(message);
+    
+    this.Logger.debug("Received destroy lobby response "+lobbyDestroyed.result);
+    this.emit("lobbyDestroyed", lobbyDestroyed.result, lobbyDestroyed);
+    
+    if (callback) {
+        if (lobbyDestroyed.result === Dota2.schema.lookupEnum("CMsgDOTADestroyLobbyResponse.Result").values.SUCCESS) {
+            callback(null, lobbyDestroyed);
+        } else {
+            callback(lobbyDestroyed.result, lobbyDestroyed);
+        }
+    }
+}
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgDestroyLobbyResponse ] = onDestroyLobbyResponse;
 
 var onPracticeLobbyJoinResponse = function onPracticeLobbyJoinResponse(message, callback) {
     callback = callback || null;
