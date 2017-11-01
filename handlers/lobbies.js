@@ -80,6 +80,8 @@ Dota2._lobbyOptions = {
  * @property {number} [custom_difficulty] - Difficulty of the custom game
  * 
  * @property {external:Long} [custom_game_id] - 64bit ID of the custom game mode
+ * 
+ * @property {LobbyDotaPauseSetting} [pause_setting=0] - Pause setting: 0 - unlimited, 1 - limited, 2 - disabled
  */
 
 // Methods
@@ -568,6 +570,7 @@ Dota2.Dota2Client.prototype.respondLobbyInvite = function(id, accept) {
  * @event module:Dota2.Dota2Client#practiceLobbyJoinResponse
  * @param {DOTAJoinLobbyResult} result - Result code
  * @param {Object} response - The raw response object
+ * @param {DOTAJoinLobbyResult} response.result - Result code
  */
 /**
  * Event that's emitted in response to a {@link module:Dota2.Dota2Client#requestPracticeLobbyList|request for the list of lobbies}

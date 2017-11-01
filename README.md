@@ -92,7 +92,6 @@ Dota 2 module
                 * [.draftPlayerCard(league_id, timestamp, slot, player_card_id, [callback])](#module_Dota2.Dota2Client+draftPlayerCard)
                 * [.setItemPositions(item_positions)](#module_Dota2.Dota2Client+setItemPositions)
                 * [.deleteItem(item_id)](#module_Dota2.Dota2Client+deleteItem)
-                * [.requestLeaguesInMonth([month], [year], [tier], [callback])](#module_Dota2.Dota2Client+requestLeaguesInMonth)
                 * [.requestLeagueInfo()](#module_Dota2.Dota2Client+requestLeagueInfo)
                 * [.requestTopLeagueMatches()](#module_Dota2.Dota2Client+requestTopLeagueMatches)
                 * [.createPracticeLobby(options, [callback])](#module_Dota2.Dota2Client+createPracticeLobby)
@@ -108,6 +107,7 @@ Dota 2 module
                 * [.practiceLobbyKickFromTeam(account_id, [callback])](#module_Dota2.Dota2Client+practiceLobbyKickFromTeam)
                 * [.joinPracticeLobby(id, password, [callback])](#module_Dota2.Dota2Client+joinPracticeLobby)
                 * [.leavePracticeLobby([callback])](#module_Dota2.Dota2Client+leavePracticeLobby)
+                * [.destroyLobby([callback])](#module_Dota2.Dota2Client+destroyLobby)
                 * [.abandonCurrentGame([callback])](#module_Dota2.Dota2Client+abandonCurrentGame)
                 * [.launchPracticeLobby([callback])](#module_Dota2.Dota2Client+launchPracticeLobby)
                 * [.joinPracticeLobbyTeam(slot, team, [callback])](#module_Dota2.Dota2Client+joinPracticeLobbyTeam)
@@ -159,10 +159,10 @@ Dota 2 module
                 * ["playerCardRoster" (playerCardRoster)](#module_Dota2.Dota2Client+event_playerCardRoster)
                 * ["playerCardDrafted" (playerCardRoster)](#module_Dota2.Dota2Client+event_playerCardDrafted)
                 * ["popup" (id, popup)](#module_Dota2.Dota2Client+event_popup)
-                * ["leaguesInMonthData" (month, year, leagues)](#module_Dota2.Dota2Client+event_leaguesInMonthData)
                 * ["liveLeagueGamesUpdate" (live_league_games)](#module_Dota2.Dota2Client+event_liveLeagueGamesUpdate)
                 * ["leagueData" (leagues)](#module_Dota2.Dota2Client+event_leagueData)
                 * ["topLeagueMatchesData" (matches)](#module_Dota2.Dota2Client+event_topLeagueMatchesData)
+                * ["lobbyDestroyed" (result, response)](#module_Dota2.Dota2Client+event_lobbyDestroyed)
                 * ["practiceLobbyJoinResponse" (result, response)](#module_Dota2.Dota2Client+event_practiceLobbyJoinResponse)
                 * ["practiceLobbyListData" (practiceLobbyListResponse)](#module_Dota2.Dota2Client+event_practiceLobbyListData)
                 * ["practiceLobbyResponse" (result, response)](#module_Dota2.Dota2Client+event_practiceLobbyResponse)
@@ -194,7 +194,7 @@ Dota 2 module
 ### Dota2.Dota2Client ⇐ <code>EventEmitter</code>
 **Kind**: static class of [<code>Dota2</code>](#module_Dota2)  
 **Extends**: <code>EventEmitter</code>  
-**Emits**: [<code>ready</code>](#module_Dota2.Dota2Client+event_ready), [<code>unhandled</code>](#module_Dota2.Dota2Client+event_unhandled), [<code>hellotimeout</code>](#module_Dota2.Dota2Client+event_hellotimeout), [<code>popup</code>](#module_Dota2.Dota2Client+event_popup), [<code>sourceTVGamesData</code>](#module_Dota2.Dota2Client+event_sourceTVGamesData), [<code>inventoryUpdate</code>](#module_Dota2.Dota2Client+event_inventoryUpdate), [<code>practiceLobbyUpdate</code>](#module_Dota2.Dota2Client+event_practiceLobbyUpdate), [<code>practiceLobbyCleared</code>](#module_Dota2.Dota2Client+event_practiceLobbyCleared), [<code>lobbyInviteUpdate</code>](#module_Dota2.Dota2Client+event_lobbyInviteUpdate), [<code>lobbyInviteCleared</code>](#module_Dota2.Dota2Client+event_lobbyInviteCleared), [<code>practiceLobbyJoinResponse</code>](#module_Dota2.Dota2Client+event_practiceLobbyJoinResponse), [<code>practiceLobbyListData</code>](#module_Dota2.Dota2Client+event_practiceLobbyListData), [<code>practiceLobbyResponse</code>](#module_Dota2.Dota2Client+event_practiceLobbyResponse), [<code>friendPracticeLobbyListData</code>](#module_Dota2.Dota2Client+event_friendPracticeLobbyListData), [<code>inviteCreated</code>](#module_Dota2.Dota2Client+event_inviteCreated), [<code>partyUpdate</code>](#module_Dota2.Dota2Client+event_partyUpdate), [<code>partyCleared</code>](#module_Dota2.Dota2Client+event_partyCleared), [<code>partyInviteUpdate</code>](#module_Dota2.Dota2Client+event_partyInviteUpdate), [<code>partyInviteCleared</code>](#module_Dota2.Dota2Client+event_partyInviteCleared), [<code>joinableCustomGameModes</code>](#module_Dota2.Dota2Client+event_joinableCustomGameModes), [<code>chatChannelsData</code>](#module_Dota2.Dota2Client+event_chatChannelsData), [<code>chatJoin</code>](#module_Dota2.Dota2Client+event_chatJoin), [<code>chatJoined</code>](#module_Dota2.Dota2Client+event_chatJoined), [<code>chatLeave</code>](#module_Dota2.Dota2Client+event_chatLeave), [<code>chatMessage</code>](#module_Dota2.Dota2Client+event_chatMessage), [<code>profileCardData</code>](#module_Dota2.Dota2Client+event_profileCardData), [<code>playerMatchHistoryData</code>](#module_Dota2.Dota2Client+event_playerMatchHistoryData), [<code>playerInfoData</code>](#module_Dota2.Dota2Client+event_playerInfoData), [<code>playerStatsData</code>](#module_Dota2.Dota2Client+event_playerStatsData), [<code>trophyListData</code>](#module_Dota2.Dota2Client+event_trophyListData), [<code>hallOfFameData</code>](#module_Dota2.Dota2Client+event_hallOfFameData), [<code>playerCardRoster</code>](#module_Dota2.Dota2Client+event_playerCardRoster), [<code>playerCardDrafted</code>](#module_Dota2.Dota2Client+event_playerCardDrafted), [<code>leaguesInMonthData</code>](#module_Dota2.Dota2Client+event_leaguesInMonthData), [<code>liveLeagueGamesUpdate</code>](#module_Dota2.Dota2Client+event_liveLeagueGamesUpdate), [<code>leagueData</code>](#module_Dota2.Dota2Client+event_leagueData), [<code>topLeagueMatchesData</code>](#module_Dota2.Dota2Client+event_topLeagueMatchesData), [<code>teamData</code>](#module_Dota2.Dota2Client+event_teamData), [<code>matchesData</code>](#module_Dota2.Dota2Client+event_matchesData), [<code>matchDetailsData</code>](#module_Dota2.Dota2Client+event_matchDetailsData), [<code>matchMinimalDetailsData</code>](#module_Dota2.Dota2Client+event_matchMinimalDetailsData), [<code>matchmakingStatsData</code>](#module_Dota2.Dota2Client+event_matchmakingStatsData), [<code>topFriendMatchesData</code>](#module_Dota2.Dota2Client+event_topFriendMatchesData), [<code>tipResponse</code>](#module_Dota2.Dota2Client+event_tipResponse), [<code>tipped</code>](#module_Dota2.Dota2Client+event_tipped)  
+**Emits**: [<code>ready</code>](#module_Dota2.Dota2Client+event_ready), [<code>unhandled</code>](#module_Dota2.Dota2Client+event_unhandled), [<code>hellotimeout</code>](#module_Dota2.Dota2Client+event_hellotimeout), [<code>popup</code>](#module_Dota2.Dota2Client+event_popup), [<code>sourceTVGamesData</code>](#module_Dota2.Dota2Client+event_sourceTVGamesData), [<code>inventoryUpdate</code>](#module_Dota2.Dota2Client+event_inventoryUpdate), [<code>practiceLobbyUpdate</code>](#module_Dota2.Dota2Client+event_practiceLobbyUpdate), [<code>practiceLobbyCleared</code>](#module_Dota2.Dota2Client+event_practiceLobbyCleared), [<code>lobbyInviteUpdate</code>](#module_Dota2.Dota2Client+event_lobbyInviteUpdate), [<code>lobbyInviteCleared</code>](#module_Dota2.Dota2Client+event_lobbyInviteCleared), [<code>practiceLobbyJoinResponse</code>](#module_Dota2.Dota2Client+event_practiceLobbyJoinResponse), [<code>practiceLobbyListData</code>](#module_Dota2.Dota2Client+event_practiceLobbyListData), [<code>practiceLobbyResponse</code>](#module_Dota2.Dota2Client+event_practiceLobbyResponse), [<code>lobbyDestroyed</code>](#module_Dota2.Dota2Client+event_lobbyDestroyed), [<code>friendPracticeLobbyListData</code>](#module_Dota2.Dota2Client+event_friendPracticeLobbyListData), [<code>inviteCreated</code>](#module_Dota2.Dota2Client+event_inviteCreated), [<code>partyUpdate</code>](#module_Dota2.Dota2Client+event_partyUpdate), [<code>partyCleared</code>](#module_Dota2.Dota2Client+event_partyCleared), [<code>partyInviteUpdate</code>](#module_Dota2.Dota2Client+event_partyInviteUpdate), [<code>partyInviteCleared</code>](#module_Dota2.Dota2Client+event_partyInviteCleared), [<code>joinableCustomGameModes</code>](#module_Dota2.Dota2Client+event_joinableCustomGameModes), [<code>chatChannelsData</code>](#module_Dota2.Dota2Client+event_chatChannelsData), [<code>chatJoin</code>](#module_Dota2.Dota2Client+event_chatJoin), [<code>chatJoined</code>](#module_Dota2.Dota2Client+event_chatJoined), [<code>chatLeave</code>](#module_Dota2.Dota2Client+event_chatLeave), [<code>chatMessage</code>](#module_Dota2.Dota2Client+event_chatMessage), [<code>profileCardData</code>](#module_Dota2.Dota2Client+event_profileCardData), [<code>playerMatchHistoryData</code>](#module_Dota2.Dota2Client+event_playerMatchHistoryData), [<code>playerInfoData</code>](#module_Dota2.Dota2Client+event_playerInfoData), [<code>playerStatsData</code>](#module_Dota2.Dota2Client+event_playerStatsData), [<code>trophyListData</code>](#module_Dota2.Dota2Client+event_trophyListData), [<code>hallOfFameData</code>](#module_Dota2.Dota2Client+event_hallOfFameData), [<code>playerCardRoster</code>](#module_Dota2.Dota2Client+event_playerCardRoster), [<code>playerCardDrafted</code>](#module_Dota2.Dota2Client+event_playerCardDrafted), [<code>liveLeagueGamesUpdate</code>](#module_Dota2.Dota2Client+event_liveLeagueGamesUpdate), [<code>leagueData</code>](#module_Dota2.Dota2Client+event_leagueData), [<code>topLeagueMatchesData</code>](#module_Dota2.Dota2Client+event_topLeagueMatchesData), [<code>teamData</code>](#module_Dota2.Dota2Client+event_teamData), [<code>matchesData</code>](#module_Dota2.Dota2Client+event_matchesData), [<code>matchDetailsData</code>](#module_Dota2.Dota2Client+event_matchDetailsData), [<code>matchMinimalDetailsData</code>](#module_Dota2.Dota2Client+event_matchMinimalDetailsData), [<code>matchmakingStatsData</code>](#module_Dota2.Dota2Client+event_matchmakingStatsData), [<code>topFriendMatchesData</code>](#module_Dota2.Dota2Client+event_topFriendMatchesData), [<code>tipResponse</code>](#module_Dota2.Dota2Client+event_tipResponse), [<code>tipped</code>](#module_Dota2.Dota2Client+event_tipped)  
 
 * [.Dota2Client](#module_Dota2.Dota2Client) ⇐ <code>EventEmitter</code>
     * [new Dota2.Dota2Client(steamClient, debug, debugMore)](#new_module_Dota2.Dota2Client_new)
@@ -230,7 +230,6 @@ Dota 2 module
         * [.draftPlayerCard(league_id, timestamp, slot, player_card_id, [callback])](#module_Dota2.Dota2Client+draftPlayerCard)
         * [.setItemPositions(item_positions)](#module_Dota2.Dota2Client+setItemPositions)
         * [.deleteItem(item_id)](#module_Dota2.Dota2Client+deleteItem)
-        * [.requestLeaguesInMonth([month], [year], [tier], [callback])](#module_Dota2.Dota2Client+requestLeaguesInMonth)
         * [.requestLeagueInfo()](#module_Dota2.Dota2Client+requestLeagueInfo)
         * [.requestTopLeagueMatches()](#module_Dota2.Dota2Client+requestTopLeagueMatches)
         * [.createPracticeLobby(options, [callback])](#module_Dota2.Dota2Client+createPracticeLobby)
@@ -246,6 +245,7 @@ Dota 2 module
         * [.practiceLobbyKickFromTeam(account_id, [callback])](#module_Dota2.Dota2Client+practiceLobbyKickFromTeam)
         * [.joinPracticeLobby(id, password, [callback])](#module_Dota2.Dota2Client+joinPracticeLobby)
         * [.leavePracticeLobby([callback])](#module_Dota2.Dota2Client+leavePracticeLobby)
+        * [.destroyLobby([callback])](#module_Dota2.Dota2Client+destroyLobby)
         * [.abandonCurrentGame([callback])](#module_Dota2.Dota2Client+abandonCurrentGame)
         * [.launchPracticeLobby([callback])](#module_Dota2.Dota2Client+launchPracticeLobby)
         * [.joinPracticeLobbyTeam(slot, team, [callback])](#module_Dota2.Dota2Client+joinPracticeLobbyTeam)
@@ -297,10 +297,10 @@ Dota 2 module
         * ["playerCardRoster" (playerCardRoster)](#module_Dota2.Dota2Client+event_playerCardRoster)
         * ["playerCardDrafted" (playerCardRoster)](#module_Dota2.Dota2Client+event_playerCardDrafted)
         * ["popup" (id, popup)](#module_Dota2.Dota2Client+event_popup)
-        * ["leaguesInMonthData" (month, year, leagues)](#module_Dota2.Dota2Client+event_leaguesInMonthData)
         * ["liveLeagueGamesUpdate" (live_league_games)](#module_Dota2.Dota2Client+event_liveLeagueGamesUpdate)
         * ["leagueData" (leagues)](#module_Dota2.Dota2Client+event_leagueData)
         * ["topLeagueMatchesData" (matches)](#module_Dota2.Dota2Client+event_topLeagueMatchesData)
+        * ["lobbyDestroyed" (result, response)](#module_Dota2.Dota2Client+event_lobbyDestroyed)
         * ["practiceLobbyJoinResponse" (result, response)](#module_Dota2.Dota2Client+event_practiceLobbyJoinResponse)
         * ["practiceLobbyListData" (practiceLobbyListResponse)](#module_Dota2.Dota2Client+event_practiceLobbyListData)
         * ["practiceLobbyResponse" (result, response)](#module_Dota2.Dota2Client+event_practiceLobbyResponse)
@@ -386,7 +386,7 @@ The lobby the bot is currently in. Falsy if the bot isn't in a lobby.
 | custom_map_name | <code>string</code> |  | Which map the custom game should be played on |
 | custom_difficulty | <code>number</code> |  | Difficulty of the custom game |
 | custom_game_id | [<code>Long</code>](#external_Long) |  | 64bit ID of the custom game mode |
-| pause_setting | <code>LobbyDotaPauseSetting</code> | | Pause setting: 0 - unlimited, 1 - limited, 2 - disabled |
+| pause_setting | <code>LobbyDotaPauseSetting</code> | <code>0</code> | Pause setting: 0 - unlimited, 1 - limited, 2 - disabled |
 
 <a name="module_Dota2.Dota2Client+LobbyInvite"></a>
 
@@ -717,22 +717,6 @@ Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 | --- | --- | --- |
 | item_id | <code>number</code> | ID of the item |
 
-<a name="module_Dota2.Dota2Client+requestLeaguesInMonth"></a>
-
-#### dota2Client.requestLeaguesInMonth([month], [year], [tier], [callback])
-Sends a message to the Game Coordinator requesting data on leagues being played in the given month.  
-Provide a callback or listen for [leaguesInMonthData](#module_Dota2.Dota2Client+event_leaguesInMonthData) for the Game Coordinator's response. 
-Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
-
-**Kind**: instance method of [<code>Dota2Client</code>](#module_Dota2.Dota2Client)  
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| [month] | <code>number</code> | <code>(new Date()).getMonth()</code> | Month (MM) you want to query data for. **IMPORTANT NOTE**:  Month is zero-aligned, not one-aligned; so Jan = 00, Feb = 01, etc. |
-| [year] | <code>number</code> | <code>(new Date()).getFullYear()</code> | Year (YYYY) you want to query data for. |
-| [tier] | <code>number</code> | <code>0</code> | Search only for a specific tier of tournaments. |
-| [callback] | [<code>requestCallback</code>](#module_Dota2..requestCallback) |  | Called with `err, CMsgDOTALeaguesInMonthResponse` |
-
 <a name="module_Dota2.Dota2Client+requestLeagueInfo"></a>
 
 #### dota2Client.requestLeagueInfo()
@@ -914,6 +898,19 @@ Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 | Param | Type | Description |
 | --- | --- | --- |
 | [callback] | [<code>requestCallback</code>](#module_Dota2..requestCallback) | Called with `err, CMsgPracticeLobbyJoinResponse` |
+
+<a name="module_Dota2.Dota2Client+destroyLobby"></a>
+
+#### dota2Client.destroyLobby([callback])
+Destroy the current lobby. Requires you to be the host.
+Provide a callback or listen for the [lobbyDestroyed](#module_Dota2.Dota2Client+event_lobbyDestroyed) event for the GC's response.
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of [<code>Dota2Client</code>](#module_Dota2.Dota2Client)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [callback] | [<code>requestCallback</code>](#module_Dota2..requestCallback) | Called with `err, CMsgDOTADestroyLobbyResponse` |
 
 <a name="module_Dota2.Dota2Client+abandonCurrentGame"></a>
 
@@ -1578,31 +1575,6 @@ Emitted when the server wants the client to create a pop-up
 | id | <code>number</code> | Type of the pop-up. |
 | popup | <code>CMsgDOTAPopup</code> | The raw pop-up object. Can contain further specifications like formattable text |
 
-<a name="module_Dota2.Dota2Client+event_leaguesInMonthData"></a>
-
-#### "leaguesInMonthData" (month, year, leagues)
-Emitted in response to a [request for the leagues in a given month](#module_Dota2.Dota2Client+requestLeaguesInMonth).
-The leagues that are returned are those which have one or more matches in the given month.
-They can however also have other matches in a different month.
-
-**Kind**: event emitted by [<code>Dota2Client</code>](#module_Dota2.Dota2Client)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| month | <code>number</code> | Month this data represents. |
-| year | <code>number</code> | Year this data represents |
-| leagues | <code>Array.&lt;Object&gt;</code> | List of leagues that have matches in the given month |
-| leagues[].league_id | <code>number</code> | ID of the league |
-| leagues[].schedule | <code>Array.&lt;Object&gt;</code> | The scheduled games in this league. Might contain matches in other months. |
-| leagues[].schedule[].block_id | <code>number</code> | ID of the schedule block |
-| leagues[].schedule[].start_time | <code>number</code> | Unix timestamp of the start time of this scheduled match |
-| leagues[].schedule[].finals | <code>boolean</code> | Whether or not this is a finals game |
-| leagues[].schedule[].comment | <code>string</code> | Comment about this scheduled block; often the team names & position in bracket |
-| leagues[].schedule[].teams | <code>Array.&lt;Object&gt;</code> | The teams duking it out in this match |
-| leagues[].schedule[].teams[].team_id | <code>number</code> | ID of the team. Not every participating team seems to be hooked up to Dota 2's team system, so 0 entries can happen |
-| leagues[].schedule[].teams[].name | <code>string</code> | Name of the team |
-| leagues[].schedule[].teams[].logo | [<code>Long</code>](#external_Long) | Logo of the team |
-
 <a name="module_Dota2.Dota2Client+event_liveLeagueGamesUpdate"></a>
 
 #### "liveLeagueGamesUpdate" (live_league_games)
@@ -1649,6 +1621,18 @@ Emitted in response to a [request for top league matches](#module_Dota2.Dota2Cli
 | matches[].players | <code>CMsgDOTAMatchMinimal.Player</code> | List of all the players in the game, contains id, hero, K/D/A and items |
 | matches[].tourney | <code>CMsgDOTAMatchMinimal.Tourney</code> | Information on the league if this is a league match |
 | matches[].match_outcome | <code>EMatchOutcome</code> | Who won |
+
+<a name="module_Dota2.Dota2Client+event_lobbyDestroyed"></a>
+
+#### "lobbyDestroyed" (result, response)
+Event that's emitted when attempting to destroy the lobby
+
+**Kind**: event emitted by [<code>Dota2Client</code>](#module_Dota2.Dota2Client)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| result | <code>CMsgDOTADestroyLobbyResponse.Result</code> | Result code, 0 is SUCCESS, 1 is ERROR_UNKNOWN |
+| response | <code>Object</code> | The raw response object |
 
 <a name="module_Dota2.Dota2Client+event_practiceLobbyJoinResponse"></a>
 
