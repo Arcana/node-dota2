@@ -1,11 +1,11 @@
 {
   "name": "dota2",
-  "version": "6.0.0",
+  "version": "6.0.1",
   "dependencies": {
     "deferred": "^0.7.8",
     "long": "^3.2.0",
     "merge": "^1.2.0",
-    "moment": "^2.19.1",
+    "moment": "^2.19.2",
     "protobufjs": "^6.8.0",
     "steam": "^1.4.0",
     "winston": "^2.3.1"
