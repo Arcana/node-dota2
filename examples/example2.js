@@ -43,7 +43,7 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
 
             // COMMUNITY
 
-            var accId = 63470426;
+            var accId = 103637655;
             // var playerInfo = 0;
             var playerInfo2 = 0;
             // var playerInfo3 = 0;
@@ -106,8 +106,9 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
 
             // LOBBY
 
-            var creatingLobby = 1;
-            var leavingLobby = 1;
+            var creatingLobby = 0;
+            var leavingLobby = 0;
+            var destroyLobby = 0;
             var lobbyChannel = "";
 
             if(creatingLobby == 1){ // sets only password, nothing more
@@ -151,6 +152,18 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
                 }, 10000);
             }
 
+            if(destroyLobby == 1){
+                setTimeout(function(){
+                    Dota2.destroyLobby(function(err, data){
+                        if (err) {
+                            util.log(err + ' - ' + JSON.stringify(data));
+                        } else {
+                            if(lobbyChannel) Dota2.leaveChat(lobbyChannel);
+                        }
+                    });
+                }, 10000);
+            }
+            
             // ----------------------------------
             
             // TEAM
@@ -186,8 +199,10 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
                 Dota2.on("inventoryUpdate", inventory => {
                     // Time-out so inventory property is updated
                     setTimeout(()=>{
-                        Promise.all(Dota2.requestPlayerCardsByPlayer()).then(cards => console.log(cards));
-                    }, 1000);
+                        Promise.all(Dota2.requestPlayerCardsByPlayer()).then(cards => {
+                            fs.writeFileSync('cards.js',JSON.stringify(cards));
+                        });
+                    }, 10000);
                 });
             }
         });

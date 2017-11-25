@@ -1,9 +1,25 @@
+# Changelog 6.0.0
+## General
+Fixed some chat channel bugs
+
+## API changes
+### Methods
+#### requestLeaguesInMonth
+Proto message was removed so corresponding function also removed
+
+#### destroyLobby
+New function for lobby host that destroys the lobby
+
+### Events
+#### leaguesInMonthData
+Removed because Valve removed proto message
+
 # Changelog 5.2.0
 ## Dependency changes
 Nothing new, just some updates
 
 ## API changes
-### methods
+### Methods
 #### requestPlayerCardsByPlayer 
 Now parses the bonuses
 

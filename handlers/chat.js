@@ -264,7 +264,9 @@ handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCJoinChatChannelRes
 var onChatMessage = function onChatMessage(message) {
     /* Chat channel message from another user. */
     var chatData = Dota2.schema.lookupType("CMsgDOTAChatMessage").decode(message);
-    var channel = this._getChannelById(chatData.channel_id);
+    var channel = this._getChannelById(chatData.channel_id) || {
+        channel_name: "Unknown"
+    };
 
     this.Logger.debug("Received chat message from " + chatData.persona_name + " in channel " + channel.channel_name);
     this.emit("chatMessage",
@@ -278,8 +280,11 @@ handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCChatMessage] = onC
 var onOtherJoinedChannel = function onOtherJoinedChannel(message) {
     /* Someone joined a chat channel you're in. */
     var otherJoined = Dota2.schema.lookupType("CMsgDOTAOtherJoinedChatChannel").decode(message);
-    var channel = this._getChannelById(otherJoined.channel_id);
-    this.Logger.debug(otherJoined.steam_id + " joined channel " + channel.channel_name);
+    var channel = this._getChannelById(otherJoined.channel_id) || {
+        channel_name: "Unknown",
+        members: []
+    };
+	this.Logger.debug(otherJoined.steam_id + " joined channel " + channel.channel_name);
     this.emit("chatJoin",
         channel.channel_name,
         otherJoined.persona_name,
