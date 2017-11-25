@@ -277,6 +277,7 @@ handlers[Dota2.schema.lookupEnum("ESOMsg").values.k_ESOMsg_CacheUnsubscribed] = 
 
 var onCacheDestroy = function onCacheDestroy(message) {
     var single = Dota2.schema.lookup("CMsgSOSingleObject").decode(message);
+    var _self = this;
 
     this.Logger.debug("Cache destroy, " + single.type_id);
     
