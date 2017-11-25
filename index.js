@@ -57,6 +57,7 @@ Dota2.schema = Protobuf.loadSync(folder.map(filename => __dirname + '/proto/' + 
  * @fires module:Dota2.Dota2Client#event:practiceLobbyJoinResponse
  * @fires module:Dota2.Dota2Client#event:practiceLobbyListData
  * @fires module:Dota2.Dota2Client#event:practiceLobbyResponse
+ * @fires module:Dota2.Dota2Client#event:lobbyDestroyed
  * @fires module:Dota2.Dota2Client#event:friendPracticeLobbyListData
  * @fires module:Dota2.Dota2Client#event:inviteCreated
  * @fires module:Dota2.Dota2Client#event:partyUpdate
@@ -77,7 +78,6 @@ Dota2.schema = Protobuf.loadSync(folder.map(filename => __dirname + '/proto/' + 
  * @fires module:Dota2.Dota2Client#event:hallOfFameData
  * @fires module:Dota2.Dota2Client#event:playerCardRoster
  * @fires module:Dota2.Dota2Client#event:playerCardDrafted
- * @fires module:Dota2.Dota2Client#event:leaguesInMonthData
  * @fires module:Dota2.Dota2Client#event:liveLeagueGamesUpdate
  * @fires module:Dota2.Dota2Client#event:leagueData
  * @fires module:Dota2.Dota2Client#event:topLeagueMatchesData
