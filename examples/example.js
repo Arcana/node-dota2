@@ -125,10 +125,6 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
                 // Dota2.requestLeaguesInMonth(10, 2013, 0, function(err, data) { // November 2013
                 //     console.log('Found ' + data.leagues.length + ' leagues full of schedule data :D');
                 // });
-                // Dota2.requestLeaguesInMonth(10, 2013); // November 2013
-                // Dota2.on("leaguesInMonthData",  function(month, year, leagues) {
-                //     console.log('Found ' + leagues.length + ' leagues full of schedule data :D');
-                // });
                 /* SOURCETV */
                 // Dota2.requestSourceTVGames({});
                 // Dota2.on("sourceTVGamesData", function(data) {    // May 2015
