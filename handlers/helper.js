@@ -160,13 +160,13 @@ Dota2._parseOptions = function(options, possibleOptions) {
         type = possibleOptions[option];
         if (type == null) {
             if (this.debug) {
-                util.log("Option " + option + " is not possible.");
+                this.Logger.debug("Option " + option + " is not possible.");
             }
             continue;
         }
         if (typeof value !== type) {
             if (this.debug) {
-                util.log("Option " + option + " must be a " + type + ".");
+                this.Logger.debug("Option " + option + " must be a " + type + ".");
             }
             continue;
         }

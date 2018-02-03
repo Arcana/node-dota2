@@ -311,11 +311,11 @@ var onUserLeftChannel = function onOtherLeftChannel(message) {
             this.emit("chatLeave", channel.channel_name, userWhoLeft.steam_id, userWhoLeft);
             this.emit("chatLeft", channel.channel_name);
             if (this.debug)
-                util.log("Left channel " + channel.channel_name);
+                this.Logger.debug("Left channel " + channel.channel_name);
         } else {
             this._leaveChatChannelById(userWhoLeft.channel_id);
             if (this.debug)
-                util.log("I left unknown channel " + userWhoLeft.channel_id);
+                this.Logger.debug("I left unknown channel " + userWhoLeft.channel_id);
         }
     } else {
         if (channel) {
@@ -323,11 +323,11 @@ var onUserLeftChannel = function onOtherLeftChannel(message) {
             // Delete member from cached chatChannel
             channel.members = channel.members.filter(item => item.steam_id.notEquals(userWhoLeft.steam_id));
             if (this.debug)
-                util.log(userWhoLeft.steam_id + " left channel " + channel.channel_name);
+                this.Logger.debug(userWhoLeft.steam_id + " left channel " + channel.channel_name);
         } else {
             this._leaveChatChannelById(userWhoLeft.channel_id);
             if (this.debug)
-                util.log(userWhoLeft.steam_id + " left unknown channel " + userWhoLeft.channel_id);
+                this.Logger.debug(userWhoLeft.steam_id + " left unknown channel " + userWhoLeft.channel_id);
         }
     }
 };
