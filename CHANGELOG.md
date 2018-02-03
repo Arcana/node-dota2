@@ -1,3 +1,9 @@
+# Changelog 6.1.0
+## General
+ * Removed some trailing util.log commands
+ * Protobuf updates
+ * Attempt to fix mocha not exiting
+
 # Changelog 6.0.0
 ## General
 Fixed some chat channel bugs

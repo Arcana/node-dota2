@@ -5,18 +5,18 @@
     "deferred": "^0.7.9",
     "long": "^3.2.0",
     "merge": "^1.2.0",
-    "moment": "^2.19.4",
-    "protobufjs": "^6.8.3",
+    "moment": "^2.20.1",
+    "protobufjs": "^6.8.4",
     "steam": "^1.4.0",
-    "winston": "^2.3.1"
+    "winston": "^2.4.0"
   },
   "devDependencies": {
-    "mocha": "^4.0.0",
-    "should": "^13.1.3"
+    "mocha": "^5.0.0",
+    "should": "^13.2.1"
   },
   "scripts": {
     "update": "bash update_proto.sh",
-    "test": "mocha"
+    "test": "mocha --exit"
   },
   "readmeFilename": "README.md",
   "description": "A node-steam plugin for Dota 2.",
