@@ -3,7 +3,7 @@
   "version": "6.0.1",
   "dependencies": {
     "deferred": "^0.7.9",
-    "long": "^3.2.0",
+    "long": "^4.0.0",
     "merge": "^1.2.0",
     "moment": "^2.20.1",
     "protobufjs": "^6.8.4",
