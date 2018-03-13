@@ -490,6 +490,8 @@ message CMsgDOTAProfileCard {
 	optional .CMsgBattleCupVictory recent_battle_cup_victory = 7;
 	optional uint32 rank_tier = 8;
 	optional uint32 leaderboard_rank = 9;
+	optional uint32 dota_plus = 10;
+	optional uint32 dota_plus_timestamp = 11;
 }
 
 message CSODOTAPlayerChallenge {
