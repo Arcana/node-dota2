@@ -5,13 +5,13 @@
     "deferred": "^0.7.9",
     "long": "^4.0.0",
     "merge": "^1.2.0",
-    "moment": "^2.20.1",
-    "protobufjs": "^6.8.4",
+    "moment": "^2.22.1",
+    "protobufjs": "^6.8.6",
     "steam": "^1.4.0",
-    "winston": "^2.4.0"
+    "winston": "^2.4.2"
   },
   "devDependencies": {
-    "mocha": "^5.0.0",
+    "mocha": "^5.1.1",
     "should": "^13.2.1"
   },
   "scripts": {
