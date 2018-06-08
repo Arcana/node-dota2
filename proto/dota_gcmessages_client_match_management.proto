@@ -52,6 +52,8 @@ message CMsgStartFindingMatch {
 	optional bool solo_queue = 14;
 	optional uint32 bot_script_index = 15;
 	optional uint32 steam_clan_account_id = 16;
+	optional bool is_challenge_match = 17;
+	optional uint32 lane_selection_flags = 18;
 }
 
 message CMsgStartFindingMatchResult {
@@ -130,6 +132,7 @@ message CMsgPracticeLobbySetDetails {
 	optional uint64 bot_radiant = 44;
 	optional uint64 bot_dire = 45;
 	optional .DOTASelectionPriorityRules selection_priority_rules = 46 [default = k_DOTASelectionPriorityRules_Manual];
+	optional bool custom_game_penalties = 47;
 }
 
 message CMsgPracticeLobbyCreate {
@@ -194,7 +197,6 @@ message CMsgClearPracticeLobbyTeam {
 }
 
 message CMsgPracticeLobbyList {
-	optional bool tournament_games = 1;
 	optional string pass_key = 2;
 	optional uint32 region = 3;
 	optional .DOTA_GameMode game_mode = 4 [default = DOTA_GAMEMODE_NONE];
@@ -207,8 +209,6 @@ message CMsgPracticeLobbyListResponseEntry {
 	}
 
 	optional uint64 id = 1 [(key_field) = true];
-	optional uint32 tournament_id = 3;
-	optional uint32 tournament_game_id = 4;
 	repeated .CMsgPracticeLobbyListResponseEntry.CLobbyMember members = 5;
 	optional bool requires_pass_key = 6;
 	optional uint32 leader_account_id = 7;
@@ -227,7 +227,6 @@ message CMsgPracticeLobbyListResponseEntry {
 }
 
 message CMsgPracticeLobbyListResponse {
-	optional bool tournament_games = 1;
 	repeated .CMsgPracticeLobbyListResponseEntry lobbies = 2;
 }
 
@@ -448,5 +447,12 @@ message CMsgGCToClientSteamDatagramTicket {
 	optional uint32 legacy_app_id = 7;
 	repeated bytes legacy_extra_fields = 8;
 	optional bytes serialized_ticket = 16;
+}
+
+message CMsgGCToClientRequestLaneSelection {
+}
+
+message CMsgGCToClientRequestLaneSelectionResponse {
+	optional uint32 lane_selection_flags = 1;
 }
 

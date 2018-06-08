@@ -73,7 +73,7 @@ var onLiveLeagueGameUpdate = function onLiveLeagueGameUpdate(message, callback) 
     callback = callback || null;
     var response = Dota2.schema.lookupType("CMsgDOTALiveLeagueGameUpdate").decode(message);
 
-    if (this.debugMore) util.log("Live league games: " + response.live_league_games + ".");
+    if (this.debugMore) this.Logger.debug("Live league games: " + response.live_league_games + ".");
     this.emit("liveLeagueGamesUpdate", response.live_league_games);
     if (callback) callback(null, response.live_league_games);
 };
