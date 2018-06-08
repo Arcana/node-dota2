@@ -431,7 +431,6 @@ enum EDOTAGCMsg {
 	k_EMsgGCToGCReportKillSummaries = 7555;
 	k_EMsgGCToGCUpdateAssassinMinigame = 7556;
 	k_EMsgGCToGCFantasySetMatchLeague = 7557;
-	k_EMsgClientToGCRecordCompendiumStats = 7558;
 	k_EMsgGCItemEditorRequestLeagueInfo = 7559;
 	k_EMsgGCItemEditorLeagueInfoResponse = 7560;
 	k_EMsgGCToGCUpdatePlayerPredictions = 7561;
@@ -487,6 +486,8 @@ enum EDOTAGCMsg {
 	k_EMsgGCToGCUnlockEventPointSpending = 7622;
 	k_EMsgGCToClientRequestLaneSelection = 7623;
 	k_EMsgGCToClientRequestLaneSelectionResponse = 7624;
+	k_EMsgServerToGCCavernCrawlIsHeroActive = 7625;
+	k_EMsgServerToGCCavernCrawlIsHeroActiveResponse = 7626;
 	k_EMsgGCDev_GrantWarKill = 8001;
 	k_EMsgServerToGCLockCharmTrading = 8004;
 	k_EMsgClientToGCPlayerStatsRequest = 8006;
@@ -759,5 +760,9 @@ enum EDOTAGCMsg {
 	k_EMsgClientToGCRequestEventPointLogResponseV2 = 8299;
 	k_EMsgClientToGCRequestEventTipsSummary = 8300;
 	k_EMsgClientToGCRequestEventTipsSummaryResponse = 8301;
+	k_EMsgClientToGCRequestSocialFeed = 8303;
+	k_EMsgClientToGCRequestSocialFeedResponse = 8304;
+	k_EMsgClientToGCRequestSocialFeedComments = 8305;
+	k_EMsgClientToGCRequestSocialFeedCommentsResponse = 8306;
 }
 
