@@ -44,16 +44,15 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
             // COMMUNITY
 
             var accId = 103637655;
-            // var playerInfo = 0;
+            var playerInfo = 1;
             var playerInfo2 = 0;
             // var playerInfo3 = 0;
 
-            // if(playerInfo == 1){ // not working - maybe disabled by Valve
-            //     Dota2.requestProfile(accId, true);
-            //     Dota2.on("profileData", function (accId, data) {
-            //         util.log(JSON.stringify(data));
-            //     });
-            // }
+            if(playerInfo == 1) { 
+                Dota2.requestProfile(accId, function (err, data) {
+                    util.log(JSON.stringify(data));
+                });
+            }
 
             if(playerInfo2 == 1){
                 Dota2.requestProfileCard(accId, function (accId, data) {

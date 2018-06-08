@@ -80,6 +80,7 @@ Dota 2 module
                 * [.requestChatChannels()](#module_Dota2.Dota2Client+requestChatChannels)
                 * [.requestPlayerMatchHistory(account_id, [options], [callback])](#module_Dota2.Dota2Client+requestPlayerMatchHistory)
                 * [.requestProfileCard(account_id, [callback])](#module_Dota2.Dota2Client+requestProfileCard)
+                * [.requestProfile(account_id, [callback])](#module_Dota2.Dota2Client+requestProfile)
                 * [.requestHallOfFame(week, [callback])](#module_Dota2.Dota2Client+requestHallOfFame)
                 * [.requestPlayerInfo(account_ids)](#module_Dota2.Dota2Client+requestPlayerInfo)
                 * [.requestTrophyList(account_id, [callback])](#module_Dota2.Dota2Client+requestTrophyList)
@@ -149,6 +150,7 @@ Dota 2 module
                 * ["chatChannelsData" (channels)](#module_Dota2.Dota2Client+event_chatChannelsData)
                 * ["playerMatchHistoryData" (requestId, matchHistoryResponse)](#module_Dota2.Dota2Client+event_playerMatchHistoryData)
                 * ["profileCardData" (account_id, profileCardResponse)](#module_Dota2.Dota2Client+event_profileCardData)
+                * ["profileData" (profileResponse)](#module_Dota2.Dota2Client+event_profileData)
                 * ["hallOfFameData" (week, featured_players, featured_farmer, hallOfFameResponse)](#module_Dota2.Dota2Client+event_hallOfFameData)
                 * ["playerInfoData" (playerInfoData)](#module_Dota2.Dota2Client+event_playerInfoData)
                 * ["trophyListData" (trophyListResponse)](#module_Dota2.Dota2Client+event_trophyListData)
@@ -218,6 +220,7 @@ Dota 2 module
         * [.requestChatChannels()](#module_Dota2.Dota2Client+requestChatChannels)
         * [.requestPlayerMatchHistory(account_id, [options], [callback])](#module_Dota2.Dota2Client+requestPlayerMatchHistory)
         * [.requestProfileCard(account_id, [callback])](#module_Dota2.Dota2Client+requestProfileCard)
+        * [.requestProfile(account_id, [callback])](#module_Dota2.Dota2Client+requestProfile)
         * [.requestHallOfFame(week, [callback])](#module_Dota2.Dota2Client+requestHallOfFame)
         * [.requestPlayerInfo(account_ids)](#module_Dota2.Dota2Client+requestPlayerInfo)
         * [.requestTrophyList(account_id, [callback])](#module_Dota2.Dota2Client+requestTrophyList)
@@ -287,6 +290,7 @@ Dota 2 module
         * ["chatChannelsData" (channels)](#module_Dota2.Dota2Client+event_chatChannelsData)
         * ["playerMatchHistoryData" (requestId, matchHistoryResponse)](#module_Dota2.Dota2Client+event_playerMatchHistoryData)
         * ["profileCardData" (account_id, profileCardResponse)](#module_Dota2.Dota2Client+event_profileCardData)
+        * ["profileData" (profileResponse)](#module_Dota2.Dota2Client+event_profileData)
         * ["hallOfFameData" (week, featured_players, featured_farmer, hallOfFameResponse)](#module_Dota2.Dota2Client+event_hallOfFameData)
         * ["playerInfoData" (playerInfoData)](#module_Dota2.Dota2Client+event_playerInfoData)
         * ["trophyListData" (trophyListResponse)](#module_Dota2.Dota2Client+event_trophyListData)
@@ -364,29 +368,29 @@ The lobby the bot is currently in. Falsy if the bot isn't in a lobby.
 | --- | --- | --- | --- |
 | game_name | <code>string</code> |  | Name of the lobby |
 | pass_key | <code>string</code> |  | Lobby password |
-| server_region | [<code>ServerRegion</code>](#module_Dota2.ServerRegion) | <code>module:Dota2.ServerRegion.UNSPECIFIED</code> | Server region where the lobby will be created |
-| game_mode | <code>DOTA_GameMode</code> | <code>DOTA_GameMode.DOTA_GAMEMODE_AP</code> | Game mode |
-| game_version | <code>DOTAGameVersion</code> | <code>DOTAGameVersion.GAME_VERSION_STABLE</code> | Version of the game |
-| cm_pick | <code>DOTA_CM_PICK</code> | <code>DOTA_CM_PICK.DOTA_CM_RANDOM</code> | Who gets first pick |
-| allow_cheats | <code>boolean</code> | <code>false</code> | Whether or not to allow cheats |
-| fill_with_bots | <code>boolean</code> | <code>false</code> | Whether or not to fill empty slots with bots |
-| bot_difficulty_radiant | <code>BotDifficulty</code> | <code>module:Dota2.BotDifficulty.PASSIVE</code> | The bot difficulty for radiant bots, if fill_with_bots is true. |
-| bot_difficulty_dire | <code>BotDifficulty</code> | <code>module:Dota2.BotDifficulty.PASSIVE</code> | The bot difficulty for dire bots, if fill_with_bots is true. |
-| bot_radiant | <code>number</code> |  | Presumably the ID of the custom AI to be applied to radiant bots. |
-| bot_dire | <code>number</code> |  | Presumably the ID of the custom AI to be applied to dire bots. |
-| allow_spectating | <code>boolean</code> | <code>true</code> | Whether or not to allow spectating |
-| series_type | <code>SeriesType</code> | <code>NONE</code> | Whether or not the game is part of a series (Bo3, Bo5). |
-| radiant_series_wins | <code>number</code> | <code>0</code> | # of games won so far, e.g. for a Bo3 or Bo5. |
-| dire_series_wins | <code>number</code> | <code>0</code> | # of games won so far, e.g. for a Bo3 or Bo5. |
-| previous_match_override | <code>number</code> |  | In a series, the match ID of the previous game. If not supplied, the GC will try to find it automatically based on the teams and the players. |
-| allchat | <code>boolean</code> | <code>false</code> | Whether or not it's allowed to all-chat |
-| dota_tv_delay | <code>LobbyDotaTVDelay</code> | <code>LobbyDotaTV_120</code> | How much time the game should be delayed for DotaTV. |
-| leagueid | <code>number</code> |  | The league this lobby is being created for. The bot should be a league admin for this to work. |
-| custom_game_mode | <code>string</code> |  | Name of the custom game |
-| custom_map_name | <code>string</code> |  | Which map the custom game should be played on |
-| custom_difficulty | <code>number</code> |  | Difficulty of the custom game |
-| custom_game_id | [<code>Long</code>](#external_Long) |  | 64bit ID of the custom game mode |
-| pause_setting | <code>LobbyDotaPauseSetting</code> | <code>0</code> | Pause setting: 0 - unlimited, 1 - limited, 2 - disabled |
+| [server_region] | [<code>ServerRegion</code>](#module_Dota2.ServerRegion) | <code>module:Dota2.ServerRegion.UNSPECIFIED</code> | Server region where the lobby will be created |
+| [game_mode] | <code>DOTA_GameMode</code> | <code>DOTA_GameMode.DOTA_GAMEMODE_AP</code> | Game mode |
+| [game_version] | <code>DOTAGameVersion</code> | <code>DOTAGameVersion.GAME_VERSION_STABLE</code> | Version of the game |
+| [cm_pick] | <code>DOTA_CM_PICK</code> | <code>DOTA_CM_PICK.DOTA_CM_RANDOM</code> | Who gets first pick |
+| [allow_cheats] | <code>boolean</code> | <code>false</code> | Whether or not to allow cheats |
+| [fill_with_bots] | <code>boolean</code> | <code>false</code> | Whether or not to fill empty slots with bots |
+| [bot_difficulty_radiant] | <code>BotDifficulty</code> | <code>module:Dota2.BotDifficulty.PASSIVE</code> | The bot difficulty for radiant bots, if fill_with_bots is true. |
+| [bot_difficulty_dire] | <code>BotDifficulty</code> | <code>module:Dota2.BotDifficulty.PASSIVE</code> | The bot difficulty for dire bots, if fill_with_bots is true. |
+| [bot_radiant] | <code>number</code> |  | Presumably the ID of the custom AI to be applied to radiant bots. |
+| [bot_dire] | <code>number</code> |  | Presumably the ID of the custom AI to be applied to dire bots. |
+| [allow_spectating] | <code>boolean</code> | <code>true</code> | Whether or not to allow spectating |
+| [series_type] | <code>SeriesType</code> | <code>NONE</code> | Whether or not the game is part of a series (Bo3, Bo5). |
+| [radiant_series_wins] | <code>number</code> | <code>0</code> | # of games won so far, e.g. for a Bo3 or Bo5. |
+| [dire_series_wins] | <code>number</code> | <code>0</code> | # of games won so far, e.g. for a Bo3 or Bo5. |
+| [previous_match_override] | <code>number</code> |  | In a series, the match ID of the previous game. If not supplied, the GC will try to find it automatically based on the teams and the players. |
+| [allchat] | <code>boolean</code> | <code>false</code> | Whether or not it's allowed to all-chat |
+| [dota_tv_delay] | <code>LobbyDotaTVDelay</code> | <code>LobbyDotaTV_120</code> | How much time the game should be delayed for DotaTV. |
+| [leagueid] | <code>number</code> |  | The league this lobby is being created for. The bot should be a league admin for this to work. |
+| [custom_game_mode] | <code>string</code> |  | Name of the custom game |
+| [custom_map_name] | <code>string</code> |  | Which map the custom game should be played on |
+| [custom_difficulty] | <code>number</code> |  | Difficulty of the custom game |
+| [custom_game_id] | [<code>Long</code>](#external_Long) |  | 64bit ID of the custom game mode |
+| [pause_setting] | <code>LobbyDotaPauseSetting</code> | <code>0</code> | Pause setting: 0 - unlimited, 1 - limited, 2 - disabled |
 
 <a name="module_Dota2.Dota2Client+LobbyInvite"></a>
 
@@ -549,6 +553,22 @@ Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 | account_id | <code>number</code> | Dota 2 account ID of the player whose profile card the bot should fetch |
 | [callback] | [<code>requestCallback</code>](#module_Dota2..requestCallback) | Called with `err, CMsgDOTAProfileCard` |
 
+<a name="module_Dota2.Dota2Client+requestProfile"></a>
+
+#### dota2Client.requestProfile(account_id, [callback])
+Sends a message to the Game Coordinator requesting `account_id`'s profile page. 
+This method is heavily rate limited. When abused, the GC just stops responding.
+Even the regular client runs into this limit when you check too many profiles.
+Provide a callback or listen for [profileData](#module_Dota2.Dota2Client+event_profileData) event for Game Coordinator's response. 
+Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
+
+**Kind**: instance method of [<code>Dota2Client</code>](#module_Dota2.Dota2Client)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| account_id | <code>number</code> | Dota 2 account ID of the player whose profile page the bot should fetch |
+| [callback] | [<code>requestCallback</code>](#module_Dota2..requestCallback) | Called with `err, CMsgDOTAProfileResponse` |
+
 <a name="module_Dota2.Dota2Client+requestHallOfFame"></a>
 
 #### dota2Client.requestHallOfFame(week, [callback])
@@ -640,7 +660,6 @@ All requests are staggered in 200ms intervals and time out after 2s.
 Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 
 **Kind**: instance method of [<code>Dota2Client</code>](#module_Dota2.Dota2Client)  
-**Async**: Returns a list of promises that resolve to [FantasyPlayer](#module_Dota2.Dota2Client+requestPlayerCardsByPlayer.FantasyPlayer) objects  
 <a name="module_Dota2.Dota2Client+requestPlayerCardsByPlayer.FantasyPlayer"></a>
 
 ##### requestPlayerCardsByPlayer.FantasyPlayer : <code>Object</code>
@@ -1428,6 +1447,17 @@ Emitted in response to a [request for a player's profile card](#module_Dota2.Dot
 | --- | --- | --- |
 | account_id | <code>number</code> | Dota2 account ID of the player whose profile card was fetched. |
 | profileCardResponse | <code>CMsgDOTAProfileCard</code> | The raw response data containing the user's profile card. |
+
+<a name="module_Dota2.Dota2Client+event_profileData"></a>
+
+#### "profileData" (profileResponse)
+Emitted in response to a [request for a player's profile page](#module_Dota2.Dota2Client+requestProfile)
+
+**Kind**: event emitted by [<code>Dota2Client</code>](#module_Dota2.Dota2Client)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| profileResponse | <code>CMsgProfileResponse</code> | The raw response data containing the user's profile page. |
 
 <a name="module_Dota2.Dota2Client+event_hallOfFameData"></a>
 

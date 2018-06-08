@@ -69,6 +69,32 @@ Dota2.Dota2Client.prototype.requestProfileCard = function(account_id, callback) 
 };
 
 /**
+ * Sends a message to the Game Coordinator requesting `account_id`'s profile page. 
+ * This method is heavily rate limited. When abused, the GC just stops responding.
+ * Even the regular client runs into this limit when you check too many profiles.
+ * Provide a callback or listen for {@link module:Dota2.Dota2Client#event:profileData|profileData} event for Game Coordinator's response. 
+ * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
+ * @alias module:Dota2.Dota2Client#requestProfile
+ * @param {number} account_id - Dota 2 account ID of the player whose profile page the bot should fetch
+ * @param {module:Dota2~requestCallback} [callback] - Called with `err, CMsgDOTAProfileResponse`
+ */
+Dota2.Dota2Client.prototype.requestProfile = function(account_id, callback) {
+    callback = callback || null;
+    var _self = this;
+    
+    /* Sends a message to the Game Coordinator requesting `accountId`'s profile.  Listen for `profileData` event for Game Coordinator's response. */
+    this.Logger.debug("Sending profile request");
+    
+    var payload = {
+        "account_id": account_id
+    };
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgProfileRequest, 
+                    Dota2.schema.lookupType("CMsgProfileRequest").encode(payload).finish(), 
+                    onProfileResponse, callback);
+};
+
+
+/**
  * Sends a message to the Game Coordinator requesting the Hall of Fame data for `week`. 
  * Provide a callback or listen for the {@link module:Dota2.Dota2Client#event:hallOfFameData|hallOfFameData} event for the Game Coordinator's response.
  * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
@@ -180,6 +206,11 @@ Dota2.Dota2Client.prototype.requestPlayerStats = function(account_id, callback) 
  * @param {CMsgDOTAProfileCard} profileCardResponse - The raw response data containing the user's profile card.
  */
  /**
+ * Emitted in response to a {@link module:Dota2.Dota2Client#requestProfile|request for a player's profile page}
+ * @event module:Dota2.Dota2Client#profileData
+ * @param {CMsgProfileResponse} profileResponse - The raw response data containing the user's profile page.
+ */
+ /**
  * Emitted in response to a {@link module:Dota2.Dota2Client#requestHallOfFame|request for a player's profile card}
  * @event module:Dota2.Dota2Client#hallOfFameData
  * @param {number} week - Weeks since unix epoch for which the hall of fame data was fetched
@@ -283,6 +314,16 @@ var onProfileCardResponse = function onProfileCardResponse(message, callback) {
     if (callback) callback(null, profileCardResponse);
 };
 handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCGetProfileCardResponse] = onProfileCardResponse;
+
+var onProfileResponse = function onProfileResponse(message, callback) {
+    callback = callback || null;
+    var profileResponse = Dota2.schema.lookupType("CMsgProfileResponse").decode(message);
+
+    this.Logger.debug("Received profile page");
+    this.emit("profileData", profileResponse);
+    if (callback) callback(null, profileResponse);
+};
+handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgProfileResponse] = onProfileResponse;
 
 var onHallOfFameResponse = function onHallOfFameResponse(message, callback) {
     callback = callback || null;
