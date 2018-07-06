@@ -40,7 +40,7 @@ function decodeBonus(bonus) {
  */
 Dota2.Dota2Client.prototype.requestPlayerCardsByPlayer = function() {
     if(this.Inventory) {
-        var playercards = this.Inventory.filter(item => item.def_index == 11985);
+        var playercards = this.Inventory.filter(item => item.def_index == 12184);
         var promises = [];
         // Sort cards per player
         var players = playercards.reduce((players, card)=>{
