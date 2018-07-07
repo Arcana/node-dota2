@@ -1,3 +1,7 @@
+# Changelog 6.1.1
+## General
+ * Updated fantasy cards with this year's player card ID
+
 # Changelog 6.1.0
 ## General
  * Removed some trailing util.log commands
