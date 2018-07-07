@@ -488,6 +488,9 @@ enum EDOTAGCMsg {
 	k_EMsgGCToClientRequestLaneSelectionResponse = 7624;
 	k_EMsgServerToGCCavernCrawlIsHeroActive = 7625;
 	k_EMsgServerToGCCavernCrawlIsHeroActiveResponse = 7626;
+	k_EMsgClientToGCPlayerCardSpecificPurchaseRequest = 7627;
+	k_EMsgClientToGCPlayerCardSpecificPurchaseResponse = 7628;
+	k_EMsgGCtoServerTensorflowInstance = 7629;
 	k_EMsgGCDev_GrantWarKill = 8001;
 	k_EMsgServerToGCLockCharmTrading = 8004;
 	k_EMsgClientToGCPlayerStatsRequest = 8006;
@@ -760,9 +763,13 @@ enum EDOTAGCMsg {
 	k_EMsgClientToGCRequestEventPointLogResponseV2 = 8299;
 	k_EMsgClientToGCRequestEventTipsSummary = 8300;
 	k_EMsgClientToGCRequestEventTipsSummaryResponse = 8301;
+	k_EMsgHeroGlobalDataAllHeroes = 8302;
 	k_EMsgClientToGCRequestSocialFeed = 8303;
 	k_EMsgClientToGCRequestSocialFeedResponse = 8304;
 	k_EMsgClientToGCRequestSocialFeedComments = 8305;
 	k_EMsgClientToGCRequestSocialFeedCommentsResponse = 8306;
+	k_EMsgGCToGCSignoutAwardCappedUnderhollowEventGamePoints = 8307;
+	k_EMsgClientToGCCavernCrawlGetClaimedRoomCount = 8308;
+	k_EMsgClientToGCCavernCrawlGetClaimedRoomCountResponse = 8309;
 }
 
