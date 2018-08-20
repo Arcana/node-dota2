@@ -8,7 +8,7 @@
     "moment": "^2.22.1",
     "protobufjs": "^6.8.6",
     "steam": "^1.4.0",
-    "winston": "^2.4.2"
+    "winston": "^3.0.0"
   },
   "devDependencies": {
     "mocha": "^5.1.1",
