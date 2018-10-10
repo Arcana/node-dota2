@@ -1,14 +1,13 @@
 {
   "name": "dota2",
-  "version": "6.1.2",
+  "version": "6.2.0",
   "dependencies": {
     "deferred": "^0.7.9",
     "long": "^4.0.0",
     "merge": "^1.2.0",
-    "moment": "^2.22.2",
     "protobufjs": "^6.8.8",
     "steam": "^1.4.0",
-    "winston": "^2.4.4"
+    "winston": "^3.1.0"
   },
   "devDependencies": {
     "mocha": "^5.2.0",

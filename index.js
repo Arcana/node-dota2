@@ -11,8 +11,7 @@
  */
 
 const steam = require("steam");
-const winston = require("winston");
-const moment = require("moment");
+const { createLogger, format, transports } = require('winston');
 
 const DOTA_APP_ID = 570;
 
@@ -100,13 +99,17 @@ Dota2.Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
      * feel free to configure it as you like
      * @type {winston.Logger}
      */
-    this.Logger = new (winston.Logger)({
-        transports: [
-            new (winston.transports.Console)({
-                'timestamp': () => moment().format("d MMMM HH:mm:ss"), 
-                'formatter': options => options.timestamp() + " - " + (options.message ? options.message : "")
+    this.Logger = createLogger({
+        transports: [new transports.Console()],
+        format: format.combine(
+            format.colorize(),
+            format.timestamp({
+                format: 'D MMM HH:mm:ss'
+            }),
+            format.printf(nfo => {
+                return `${nfo.timestamp} - ${nfo.message}`
             })
-        ]
+        )
     });
     if(debug) this.Logger.level = "debug";
     if(debugMore) this.Logger.level = "silly";
