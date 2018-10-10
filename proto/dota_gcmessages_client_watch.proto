@@ -111,10 +111,29 @@ message CMsgGCToClientFindTopLeagueMatchesResponse {
 
 message CMsgSpectateFriendGame {
 	optional fixed64 steam_id = 1;
+	optional bool live = 2;
 }
 
 message CMsgSpectateFriendGameResponse {
+	enum EWatchLiveResult {
+		SUCCESS = 0;
+		ERROR_GENERIC = 1;
+		ERROR_NO_PLUS = 2;
+		ERROR_NOT_FRIENDS = 3;
+		ERROR_LOBBY_NOT_FOUND = 4;
+		ERROR_SPECTATOR_IN_A_LOBBY = 5;
+		ERROR_LOBBY_IS_LAN = 6;
+		ERROR_WRONG_LOBBY_TYPE = 7;
+		ERROR_WRONG_LOBBY_STATE = 8;
+		ERROR_PLAYER_NOT_PLAYER = 9;
+		ERROR_TOO_MANY_SPECTATORS = 10;
+		ERROR_SPECTATOR_SWITCHED_TEAMS = 11;
+		ERROR_FRIENDS_ON_BOTH_SIDES = 12;
+		ERROR_SPECTATOR_IN_THIS_LOBBY = 13;
+	}
+
 	optional fixed64 server_steamid = 4;
+	optional .CMsgSpectateFriendGameResponse.EWatchLiveResult watch_live_result = 5 [default = SUCCESS];
 }
 
 message CMsgDOTAMatchMinimal {
@@ -209,10 +228,10 @@ message CDOTABroadcasterInfo {
 	optional bool live = 3;
 	optional string team_name_radiant = 4;
 	optional string team_name_dire = 5;
-	optional string stage_name = 6;
 	optional uint32 series_game = 7;
-	optional uint32 series_type = 8;
 	optional uint32 upcoming_broadcast_timestamp = 9;
 	optional bool allow_live_video = 10;
+	optional uint32 node_type = 11;
+	optional string node_name = 12;
 }
 

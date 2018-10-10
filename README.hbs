@@ -19,6 +19,14 @@ It is now easier to implement new functionality than it was back when this blog 
 * If you receive Error 63 you need to provide a Steam Guard code by setting the Steam Guard code in `config.js` and launching again.
 * Make sure to use at least version 4.4.5 of node js
 
+### WARNING
+At the moment the serverlist that is kept internally by node-steam contains IP addresses which are no longer responsive.
+This causes timeouts and makes node-dota2 seem unresponsive. The examples contain a fix for this behaviour.
+In short, node-steam emits a servers event that will always contain the latest version of the server list.
+You need to make sure that your bot handles this event and saves its contents so that upon next startup you can initialize node-steam with a more up to date list.
+The examples folder contains a (as of the beginning of October 2018) working list that is read by the example bots.
+You can use this list to bootstrap your bot until node-steam updates their embedded list.
+
 ## Initializing
 Parameters:
 * `steamClient` - Pass a SteamClient instance to use to send & receive GC messages.
