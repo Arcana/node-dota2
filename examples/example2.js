@@ -6,9 +6,14 @@ var steam = require("steam"),
     steamClient = new steam.SteamClient(),
     steamUser = new steam.SteamUser(steamClient),
     steamFriends = new steam.SteamFriends(steamClient),
-    Dota2 = new dota2.Dota2Client(steamClient, true);
+    Dota2 = new dota2.Dota2Client(steamClient, true, true);
 
 global.config = require("./config");
+
+// Load in server list if we've saved one before
+if (fs.existsSync('servers')) {
+  steam.servers = JSON.parse(fs.readFileSync('servers'));
+}
 
 var onSteamLogOn = function onSteamLogOn(logonResp) {
     if (logonResp.eresult == steam.EResult.OK) {

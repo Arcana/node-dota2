@@ -11,6 +11,11 @@ var steam = require("steam"),
 // Load config
 global.config = require("./config");
 
+// Load in server list if we've saved one before
+if (fs.existsSync('servers')) {
+  steam.servers = JSON.parse(fs.readFileSync('servers'));
+}
+
 /* Steam logic */
 var onSteamLogOn = function onSteamLogOn(logonResp) {
         if (logonResp.eresult == steam.EResult.OK) {
