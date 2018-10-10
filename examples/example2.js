@@ -6,7 +6,7 @@ var steam = require("steam"),
     steamClient = new steam.SteamClient(),
     steamUser = new steam.SteamUser(steamClient),
     steamFriends = new steam.SteamFriends(steamClient),
-    Dota2 = new dota2.Dota2Client(steamClient, true, true);
+    Dota2 = new dota2.Dota2Client(steamClient, true);
 
 global.config = require("./config");
 
