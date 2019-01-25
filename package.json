@@ -4,9 +4,9 @@
   "dependencies": {
     "deferred": "^0.7.9",
     "long": "^4.0.0",
-    "merge": "^1.2.0",
+    "merge": "^1.2.1",
     "protobufjs": "^6.8.8",
-    "steam": "^1.4.0",
+    "steam": "github:odota/node-steam-npm",
     "winston": "^3.1.0"
   },
   "devDependencies": {
