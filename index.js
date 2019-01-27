@@ -21,7 +21,7 @@ const Long = require("long");
 const steam = require("steam");
 const steam_resources = require("steam-resources");
 const { createLogger, format, transports } = require('winston');
-const { EventEmitter } = require('events').EventEmitter;
+const { EventEmitter } = require('events');
 
 const DOTA_APP_ID = 570;
 
