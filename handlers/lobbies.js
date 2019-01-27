@@ -108,8 +108,7 @@ Dota2.Dota2Client.prototype.createPracticeLobby = function(options, callback) {
         cm_pick: Dota2.schema.DOTA_CM_PICK.DOTA_CM_RANDOM,
         allow_cheats: false,
         fill_with_bots: false,
-        bot_difficulty_radiant: Dota2.schema.DOTABotDifficulty.BOT_DIFFICULTY_PASSIVE,
-        bot_difficulty_dire: Dota2.schema.DOTABotDifficulty.BOT_DIFFICULTY_PASSIVE,
+        bot_difficulty: Dota2.schema.DOTABotDifficulty.BOT_DIFFICULTY_PASSIVE,
         allow_spectating: true,
         pass_key: "",
         series_type: Dota2.SeriesType.NONE,
@@ -122,7 +121,8 @@ Dota2.Dota2Client.prototype.createPracticeLobby = function(options, callback) {
         custom_game_mode: "",
         custom_map_name: "",
         custom_difficulty: 0,
-        custom_game_id: 0
+        custom_game_id: 0,
+        custom_game_crc: 0
     };
     var finalOptions = Object.assign(defaults, options);
 

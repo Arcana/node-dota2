@@ -110,16 +110,16 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
 
             // LOBBY
 
-            var creatingLobby = 0;
-            var leavingLobby = 0;
-            var destroyLobby = 0;
+            var creatingLobby = 1;
+            var leavingLobby = 1;
+            var destroyLobby = 1;
             var lobbyChannel = "";
 
             if(creatingLobby == 1){ // sets only password, nothing more
                 var properties = {
                     "game_name": "MyLobby",
                     "server_region": dota2.ServerRegion.EUROPE,
-                    "game_mode": dota2.schema.lookupEnum('DOTA_GameMode').values.DOTA_GAMEMODE_CM,
+                    "game_mode": dota2.schema.DOTA_GameMode.DOTA_GAMEMODE_CM,
                     "series_type": dota2.SeriesType.BEST_OF_THREE,
                     "game_version": 1,
                     "allow_cheats": false,
@@ -139,7 +139,7 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
                 Dota2.on("practiceLobbyUpdate", function(lobby) {
                     Dota2.practiceLobbyKickFromTeam(Dota2.AccountID);
                     lobbyChannel = "Lobby_"+lobby.lobby_id;
-                    Dota2.joinChat(lobbyChannel, dota2.schema.lookupEnum('DOTAChatChannelType_t').values.DOTAChannelType_Lobby);
+                    Dota2.joinChat(lobbyChannel, dota2.schema.DOTAChatChannelType_t.DOTAChannelType_Lobby);
                 });
             }
 
@@ -220,7 +220,7 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
         });
 
         Dota2.on("unhandled", function(kMsg) {
-            util.log("UNHANDLED MESSAGE " + dota2._getMessageName(dota2.schema, kMsg));
+            util.log("UNHANDLED MESSAGE " + dota2._getMessageName(kMsg));
         });
     }
 },

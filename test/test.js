@@ -90,7 +90,7 @@ var steam = require("steam"),
 	
 	var invertKMsgTypeID = function() {
 		var msg_type_id = "k_EMsgClientToGCGetProfileCard";
-		var calculated_msg_type_id = dota2._getMessageName(dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCGetProfileCard);
+		var calculated_msg_type_id = dota2._getMessageName(dota2.schema.EDOTAGCMsg.k_EMsgClientToGCGetProfileCard);
 		should(calculated_msg_type_id).equal(msg_type_id);
 	}
  
