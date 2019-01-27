@@ -194,6 +194,7 @@ Dota 2 module
     * _inner_
         * [~requestCallback](#module_Dota2..requestCallback) : <code>function</code>
         * [~Long](#external_Long)
+        * [~steam](#external_steam)
 
 <a name="module_Dota2.Dota2Client"></a>
 
@@ -371,9 +372,9 @@ The lobby the bot is currently in. Falsy if the bot isn't in a lobby.
 | game_name | <code>string</code> |  | Name of the lobby |
 | pass_key | <code>string</code> |  | Lobby password |
 | [server_region] | [<code>ServerRegion</code>](#module_Dota2.ServerRegion) | <code>module:Dota2.ServerRegion.UNSPECIFIED</code> | Server region where the lobby will be created |
-| [game_mode] | <code>DOTA_GameMode</code> | <code>DOTA_GameMode.DOTA_GAMEMODE_AP</code> | Game mode |
+| [game_mode] | <code>DOTA\_GameMode</code> | <code>DOTA_GameMode.DOTA_GAMEMODE_AP</code> | Game mode |
 | [game_version] | <code>DOTAGameVersion</code> | <code>DOTAGameVersion.GAME_VERSION_STABLE</code> | Version of the game |
-| [cm_pick] | <code>DOTA_CM_PICK</code> | <code>DOTA_CM_PICK.DOTA_CM_RANDOM</code> | Who gets first pick |
+| [cm_pick] | <code>DOTA\_CM\_PICK</code> | <code>DOTA_CM_PICK.DOTA_CM_RANDOM</code> | Who gets first pick |
 | [allow_cheats] | <code>boolean</code> | <code>false</code> | Whether or not to allow cheats |
 | [fill_with_bots] | <code>boolean</code> | <code>false</code> | Whether or not to fill empty slots with bots |
 | [bot_difficulty_radiant] | <code>BotDifficulty</code> | <code>module:Dota2.schema.DOTABotDifficulty.BOT_DIFFICULTY_PASSIVE</code> | The bot difficulty for radiant bots, if fill_with_bots is true. |
@@ -436,7 +437,7 @@ Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | channel_name | <code>string</code> |  | Name of the chat channel |
-| [channel_type] | <code>DOTAChatChannelType_t</code> | <code>DOTAChatChannelType_t.DOTAChatChannelType_Custom</code> | The type of the channel being joined |
+| [channel_type] | <code>DOTAChatChannelType\_t</code> | <code>DOTAChatChannelType_t.DOTAChatChannelType_Custom</code> | The type of the channel being joined |
 
 <a name="module_Dota2.Dota2Client+leaveChat"></a>
 
@@ -450,7 +451,7 @@ Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 | Param | Type | Description |
 | --- | --- | --- |
 | channel_name | <code>string</code> | Name of the chat channel |
-| [channel_type] | <code>DOTAChatChannelType_t</code> | The type of the channel being joined |
+| [channel_type] | <code>DOTAChatChannelType\_t</code> | The type of the channel being joined |
 
 <a name="module_Dota2.Dota2Client+sendMessage"></a>
 
@@ -465,7 +466,7 @@ Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 | --- | --- | --- |
 | message | <code>string</code> | The message you want to send |
 | channel_name | <code>string</code> | Name of the chat channel |
-| [channel_type] | <code>DOTAChatChannelType_t</code> | The type of the channel being joined |
+| [channel_type] | <code>DOTAChatChannelType\_t</code> | The type of the channel being joined |
 
 <a name="module_Dota2.Dota2Client+shareLobby"></a>
 
@@ -478,7 +479,7 @@ Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 | Param | Type | Description |
 | --- | --- | --- |
 | channel_name | <code>string</code> | Name of the chat channel |
-| [channel_type] | <code>DOTAChatChannelType_t</code> | The type of the channel being joined |
+| [channel_type] | <code>DOTAChatChannelType\_t</code> | The type of the channel being joined |
 
 <a name="module_Dota2.Dota2Client+flipCoin"></a>
 
@@ -492,7 +493,7 @@ Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 | Param | Type | Description |
 | --- | --- | --- |
 | channel_name | <code>string</code> | Name of the chat channel |
-| [channel_type] | <code>DOTAChatChannelType_t</code> | The type of the channel being joined |
+| [channel_type] | <code>DOTAChatChannelType\_t</code> | The type of the channel being joined |
 
 <a name="module_Dota2.Dota2Client+rollDice"></a>
 
@@ -508,7 +509,7 @@ Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 | min | <code>number</code> | Lower bound of the dice roll |
 | max | <code>number</code> | Upper bound of the dice roll |
 | channel_name | <code>string</code> | Name of the chat channel |
-| [channel_type] | <code>DOTAChatChannelType_t</code> | The type of the channel being joined |
+| [channel_type] | <code>DOTAChatChannelType\_t</code> | The type of the channel being joined |
 
 <a name="module_Dota2.Dota2Client+requestChatChannels"></a>
 
@@ -1412,7 +1413,7 @@ Event that's emitted after requesting a list of chat channels via [requestChatCh
 | channels | <code>Array.&lt;Object&gt;</code> | An array of ChatChannel objects |
 | channels[].channel_name | <code>string</code> | Name of the chat channel |
 | channels[].num_members | <code>number</code> | Number of members in the channel |
-| channels[].channel_type | <code>DOTAChatChannelType_t</code> | The type of the channel |
+| channels[].channel_type | <code>DOTAChatChannelType\_t</code> | The type of the channel |
 
 <a name="module_Dota2.Dota2Client+event_playerMatchHistoryData"></a>
 
@@ -1637,7 +1638,7 @@ Emitted in response to a [request for top league matches](#module_Dota2.Dota2Cli
 | matches[].match_id | [<code>Long</code>](#external_Long) | Match ID |
 | matches[].start_time | <code>number</code> | Unix timestamp of the start of the match |
 | matches[].duration | <code>number</code> | Duration of the match in seconds |
-| matches[].game_mode | <code>DOTA_GameMode</code> | Game mode |
+| matches[].game_mode | <code>DOTA\_GameMode</code> | Game mode |
 | matches[].players | <code>CMsgDOTAMatchMinimal.Player</code> | List of all the players in the game, contains id, hero, K/D/A and items |
 | matches[].tourney | <code>CMsgDOTAMatchMinimal.Tourney</code> | Information on the league if this is a league match |
 | matches[].match_outcome | <code>EMatchOutcome</code> | Who won |
@@ -1693,7 +1694,7 @@ update of the lobby state is communicated via [module:Dota2.Dota2Client#practice
 | --- | --- | --- |
 | result | <code>DOTAJoinLobbyResult</code> | Result code |
 | response | <code>Object</code> | The raw response object |
-| response.result | <code>module:Dota2.schema.EResult</code> | Result code |
+| response.result | <code>external:steam.EResult</code> | Result code |
 
 <a name="module_Dota2.Dota2Client+event_friendPracticeLobbyListData"></a>
 
@@ -1966,3 +1967,10 @@ derived from the Closure Library for stand-alone use and extended with unsigned 
 
 **Kind**: inner external of [<code>Dota2</code>](#module_Dota2)  
 **See**: [long](https://www.npmjs.com/package/long) npm package  
+<a name="external_steam"></a>
+
+### Dota2~steam
+The Steam for Node JS package, allowing interaction with Steam.
+
+**Kind**: inner external of [<code>Dota2</code>](#module_Dota2)  
+**See**: [steam](https://www.npmjs.com/package/steam) npm package  

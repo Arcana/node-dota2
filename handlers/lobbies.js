@@ -544,7 +544,7 @@ Dota2.Dota2Client.prototype.respondLobbyInvite = function(id, accept) {
  * @event module:Dota2.Dota2Client#practiceLobbyResponse
  * @param {DOTAJoinLobbyResult} result - Result code
  * @param {Object} response - The raw response object
- * @param {module:Dota2.schema.EResult} response.result - Result code
+ * @param {external:steam.EResult} response.result - Result code
  */
 /**
  * Event that's emitted in response to a {@link module:Dota2.Dota2Client#requestPracticeLobbyList|request for the list of your friends' lobbies}

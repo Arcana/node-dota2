@@ -220,7 +220,7 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
         });
 
         Dota2.on("unhandled", function(kMsg) {
-            util.log("UNHANDLED MESSAGE " + dota2._getPropertyByValue(dota2.schema, kMsg));
+            util.log("UNHANDLED MESSAGE " + dota2._getMessageName(dota2.schema, kMsg));
         });
     }
 },

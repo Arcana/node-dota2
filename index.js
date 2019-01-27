@@ -9,11 +9,16 @@
  * @external Long
  * @see {@link https://www.npmjs.com/package/long|long} npm package
  */
+ 
+/**
+ * The Steam for Node JS package, allowing interaction with Steam.
+ * @external steam
+ * @see {@link https://www.npmjs.com/package/steam|steam} npm package
+ */
 
 const util = require("util");
 const Long = require("long");
 const steam = require("steam");
-const rsc = require("steam-resources");
 const { createLogger, format, transports } = require('winston');
 const { EventEmitter } = require('events').EventEmitter;
 
@@ -22,14 +27,13 @@ const DOTA_APP_ID = 570;
 var Dota2 = exports;
 
 /**
- * Protobuf schema created by Steam Resources. 
- * This object can be used to obtain special protobuf types.
+ * Protobuf schema created by Steam Resources. This is an alias of `steam.GC.Dota.Internal`.
+ * This object can be used to obtain Dota2 specific protobuf types.
  * Object types can be created by `new Dota2.schema.<TypeName>(payload :Object);`.
  * Enum types can be referenced by `Dota2.schema.<EnumName>`, which returns an object array representing the enum.
  * @alias module:Dota2.schema
  */ 
-Dota2.schema = rsc.GC.Dota.Internal;
-Dota2.schema.EResult = rsc.EResult;
+Dota2.schema = steam.GC.Dota.Internal;
 
 /**
  * The Dota 2 client that communicates with the GC
