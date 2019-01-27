@@ -1,5 +1,4 @@
-var Dota2 = require("../index"),
-    util = require("util");
+var Dota2 = require("../index");
 
 // Methods
 /** 
@@ -20,13 +19,12 @@ Dota2.Dota2Client.prototype.respondPartyInvite = function(id, accept, ping_data)
 
     this.Logger.debug("Responding to party invite " + id + ", accept: " + accept);
     
-    var payload = {
+    var payload = new Dota2.schema.CMsgPartyInviteResponse({
         "party_id": id,
         "accept": accept,
         "ping_data": ping_data
-    };
-    this.sendToGC(  Dota2.schema.lookupEnum("EGCBaseMsg").values.k_EMsgGCPartyInviteResponse, 
-                    Dota2.schema.lookupType("CMsgPartyInviteResponse").encode(payload).finish());
+    });
+    this.sendToGC(Dota2.schema.EGCBaseMsg.k_EMsgGCPartyInviteResponse, payload);
 };
 
 /**
@@ -37,10 +35,9 @@ Dota2.Dota2Client.prototype.respondPartyInvite = function(id, accept, ping_data)
 Dota2.Dota2Client.prototype.leaveParty = function() {
     this.Logger.debug("Leaving party.");
 
-    var payload = {};
+    var payload = new Dota2.schema.CMsgLeaveParty({});
     this.Party = null;
-    this.sendToGC(  Dota2.schema.lookupEnum("EGCBaseMsg").values.k_EMsgGCLeaveParty, 
-                    Dota2.schema.lookupType("CMsgLeaveParty").encode(payload).finish());
+    this.sendToGC(Dota2.schema.EGCBaseMsg.k_EMsgGCLeaveParty, payload);
 };
 
 /**
@@ -64,11 +61,10 @@ Dota2.Dota2Client.prototype.setPartyLeader = function(steam_id) {
 
     this.Logger.debug("Setting party leader: " + steam_id);
 
-    var payload = {
+    var payload = new Dota2.schema.CMsgDOTASetGroupLeader({
         "new_leader_steamid": steam_id
-    };
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCSetPartyLeader, 
-                    Dota2.schema.lookupType("CMsgDOTASetGroupLeader").encode(payload).finish());
+    });
+    this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCSetPartyLeader, payload);
 }
 
 /**
@@ -86,11 +82,10 @@ Dota2.Dota2Client.prototype.setPartyCoach = function(coach) {
 
     this.Logger.debug("Setting coach slot: " + coach);
 
-    var payload = {
+    var payload = new Dota2.schema.CMsgDOTAPartyMemberSetCoach({
         "wants_coach": coach
-    };
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPartyMemberSetCoach, 
-                    Dota2.schema.lookupType("CMsgDOTAPartyMemberSetCoach").encode(payload).finish());
+    });
+    this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgGCPartyMemberSetCoach, payload);
 };
 
 /**
@@ -108,11 +103,10 @@ Dota2.Dota2Client.prototype.inviteToParty = function(steam_id) {
 
     this.Logger.debug("Inviting " + steam_id + " to a party.");
     
-    var payload = {
+    var payload = new Dota2.schema.CMsgInviteToParty({
         "steam_id": steam_id
-    };
-    this.sendToGC(  Dota2.schema.lookupEnum("EGCBaseMsg").values.k_EMsgGCInviteToParty, 
-                    Dota2.schema.lookupType("CMsgInviteToParty").encode(payload).finish());
+    });
+    this.sendToGC(Dota2.schema.EGCBaseMsg.k_EMsgGCInviteToParty, payload);
 };
 
 /**
@@ -130,9 +124,8 @@ Dota2.Dota2Client.prototype.kickFromParty = function(steam_id) {
 
     this.Logger.debug("Kicking " + steam_id + " from the party.");
     
-    var payload = {
+    var payload = new Dota2.schema.CMsgKickFromParty({
         "steam_id": steam_id
-    };
-    this.sendToGC(  Dota2.schema.lookupEnum("EGCBaseMsg").values.k_EMsgGCKickFromParty, 
-                    Dota2.schema.lookupType("CMsgKickFromParty").encode(payload).finish());
+    });
+    this.sendToGC(Dota2.schema.EGCBaseMsg.k_EMsgGCKickFromParty, payload);
 };

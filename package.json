@@ -1,14 +1,18 @@
 {
   "name": "dota2",
-  "version": "6.2.1",
+  "version": "7.0.0",
   "dependencies": {
     "deferred": "^0.7.9",
     "long": "^4.0.0",
     "merge": "^1.2.1",
     "protobufjs": "^6.8.8",
-    "steam": "github:odota/node-steam-npm",
+    "steam": "^1.4.0",
+    "steam-resources": "github:seishun/node-steam-resources",
     "winston": "^3.1.0"
   },
+  "bundledDependencies": [
+    "steam-resources"
+  ],
   "devDependencies": {
     "mocha": "^5.2.0",
     "should": "^13.2.3"

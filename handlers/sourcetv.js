@@ -1,6 +1,5 @@
-var Dota2 = require("../index"),
-    merge = require("merge"),
-    util = require("util");
+const merge = require("merge");
+var Dota2 = require("../index");
 
 
 // Methods
@@ -17,7 +16,6 @@ var Dota2 = require("../index"),
 Dota2.Dota2Client.prototype.requestSourceTVGames = function(filter_options) {
     // Unfortunately this does not seem to support callbacks
     filter_options = filter_options || null;
-    var _self = this;
     this.Logger.debug("Sending SourceTV games request");
 
     var payload = merge({
@@ -28,9 +26,9 @@ Dota2.Dota2Client.prototype.requestSourceTVGames = function(filter_options) {
         "game_list_index": 0, // I think this may be some sort of version number
         "lobby_ids": [],      // Used for getting player specific games, still don't know where the lobbyids come from though
     }, filter_options);
+    payload = new Dota2.schema.CMsgClientToGCFindTopSourceTVGames(payload);
 
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCFindTopSourceTVGames, 
-                    Dota2.schema.lookupType("CMsgClientToGCFindTopSourceTVGames").encode(payload).finish());
+    this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCFindTopSourceTVGames, payload);
 };
 
 // Events
@@ -44,7 +42,7 @@ Dota2.Dota2Client.prototype.requestSourceTVGames = function(filter_options) {
 var handlers = Dota2.Dota2Client.prototype._handlers;
 
 var onSourceTVGamesResponse = function onSourceTVGamesResponse(message) {
-    var sourceTVGamesResponse = Dota2.schema.lookupType("CMsgGCToClientFindTopSourceTVGamesResponse").decode(message);
+    var sourceTVGamesResponse = Dota2.schema.CMsgGCToClientFindTopSourceTVGamesResponse.decode(message);
 
     if (sourceTVGamesResponse.start_game !== null) {
         this.Logger.debug("Received SourceTV games data");
@@ -68,5 +66,5 @@ var onSourceTVGamesResponse = function onSourceTVGamesResponse(message) {
         */
     }
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCToClientFindTopSourceTVGamesResponse] = onSourceTVGamesResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCToClientFindTopSourceTVGamesResponse] = onSourceTVGamesResponse;
 

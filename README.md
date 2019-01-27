@@ -104,8 +104,6 @@ Dota 2 module
                 * [.requestLeagueInfo()](#module_Dota2.Dota2Client+requestLeagueInfo)
                 * [.requestTopLeagueMatches()](#module_Dota2.Dota2Client+requestTopLeagueMatches)
                 * [.createPracticeLobby(options, [callback])](#module_Dota2.Dota2Client+createPracticeLobby)
-                * ~~[._createPracticeLobby()](#module_Dota2.Dota2Client+_createPracticeLobby)~~
-                * ~~[.createTournamentLobby()](#module_Dota2.Dota2Client+createTournamentLobby)~~
                 * [.configPracticeLobby(lobby_id, options, [callback])](#module_Dota2.Dota2Client+configPracticeLobby)
                 * [.requestPracticeLobbyList([callback])](#module_Dota2.Dota2Client+requestPracticeLobbyList)
                 * [.requestFriendPracticeLobbyList([callback])](#module_Dota2.Dota2Client+requestFriendPracticeLobbyList)
@@ -191,10 +189,8 @@ Dota 2 module
         * [.schema](#module_Dota2.schema)
             * [.CMsgGCToClientPlayerStatsResponse](#module_Dota2.schema.CMsgGCToClientPlayerStatsResponse) : <code>Object</code>
         * [.FantasyStats](#module_Dota2.FantasyStats) : <code>enum</code>
-        * [.EResult](#module_Dota2.EResult) : <code>enum</code>
         * [.ServerRegion](#module_Dota2.ServerRegion) : <code>enum</code>
         * [.SeriesType](#module_Dota2.SeriesType) : <code>enum</code>
-        * [.BotDifficulty](#module_Dota2.BotDifficulty) : <code>enum</code>
     * _inner_
         * [~requestCallback](#module_Dota2..requestCallback) : <code>function</code>
         * [~Long](#external_Long)
@@ -244,8 +240,6 @@ Dota 2 module
         * [.requestLeagueInfo()](#module_Dota2.Dota2Client+requestLeagueInfo)
         * [.requestTopLeagueMatches()](#module_Dota2.Dota2Client+requestTopLeagueMatches)
         * [.createPracticeLobby(options, [callback])](#module_Dota2.Dota2Client+createPracticeLobby)
-        * ~~[._createPracticeLobby()](#module_Dota2.Dota2Client+_createPracticeLobby)~~
-        * ~~[.createTournamentLobby()](#module_Dota2.Dota2Client+createTournamentLobby)~~
         * [.configPracticeLobby(lobby_id, options, [callback])](#module_Dota2.Dota2Client+configPracticeLobby)
         * [.requestPracticeLobbyList([callback])](#module_Dota2.Dota2Client+requestPracticeLobbyList)
         * [.requestFriendPracticeLobbyList([callback])](#module_Dota2.Dota2Client+requestFriendPracticeLobbyList)
@@ -382,8 +376,8 @@ The lobby the bot is currently in. Falsy if the bot isn't in a lobby.
 | [cm_pick] | <code>DOTA_CM_PICK</code> | <code>DOTA_CM_PICK.DOTA_CM_RANDOM</code> | Who gets first pick |
 | [allow_cheats] | <code>boolean</code> | <code>false</code> | Whether or not to allow cheats |
 | [fill_with_bots] | <code>boolean</code> | <code>false</code> | Whether or not to fill empty slots with bots |
-| [bot_difficulty_radiant] | <code>BotDifficulty</code> | <code>module:Dota2.BotDifficulty.PASSIVE</code> | The bot difficulty for radiant bots, if fill_with_bots is true. |
-| [bot_difficulty_dire] | <code>BotDifficulty</code> | <code>module:Dota2.BotDifficulty.PASSIVE</code> | The bot difficulty for dire bots, if fill_with_bots is true. |
+| [bot_difficulty_radiant] | <code>BotDifficulty</code> | <code>module:Dota2.schema.DOTABotDifficulty.BOT_DIFFICULTY_PASSIVE</code> | The bot difficulty for radiant bots, if fill_with_bots is true. |
+| [bot_difficulty_dire] | <code>BotDifficulty</code> | <code>module:Dota2.schema.DOTABotDifficulty.BOT_DIFFICULTY_PASSIVE</code> | The bot difficulty for dire bots, if fill_with_bots is true. |
 | [bot_radiant] | <code>number</code> |  | Presumably the ID of the custom AI to be applied to radiant bots. |
 | [bot_dire] | <code>number</code> |  | Presumably the ID of the custom AI to be applied to dire bots. |
 | [allow_spectating] | <code>boolean</code> | <code>true</code> | Whether or not to allow spectating |
@@ -776,18 +770,6 @@ Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 | options | [<code>Options</code>](#module_Dota2.Dota2Client+Lobby.Options) | Configuration options for the lobby |
 | [callback] | [<code>requestCallback</code>](#module_Dota2..requestCallback) | Called with `err, CMsgPracticeLobbyJoinResponse` |
 
-<a name="module_Dota2.Dota2Client+_createPracticeLobby"></a>
-
-#### ~~dota2Client._createPracticeLobby()~~
-***Deprecated***
-
-**Kind**: instance method of [<code>Dota2Client</code>](#module_Dota2.Dota2Client)  
-<a name="module_Dota2.Dota2Client+createTournamentLobby"></a>
-
-#### ~~dota2Client.createTournamentLobby()~~
-***Deprecated***
-
-**Kind**: instance method of [<code>Dota2Client</code>](#module_Dota2.Dota2Client)  
 <a name="module_Dota2.Dota2Client+configPracticeLobby"></a>
 
 #### dota2Client.configPracticeLobby(lobby_id, options, [callback])
@@ -1011,7 +993,7 @@ Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 | --- | --- | --- |
 | slot | <code>number</code> | The slot you want to add a bot to |
 | team | <code>number</code> | The team you want to add a bot to |
-| bot_difficulty | [<code>BotDifficulty</code>](#module_Dota2.BotDifficulty) | The difficulty setting of the bot. |
+| bot_difficulty | <code>module:Dota2.schema.DOTABotDifficulty</code> | The difficulty setting of the bot. |
 | [callback] | [<code>requestCallback</code>](#module_Dota2..requestCallback) | Called with `err, CMsgPracticeLobbyJoinResponse` |
 
 <a name="module_Dota2.Dota2Client+respondLobbyInvite"></a>
@@ -1711,7 +1693,7 @@ update of the lobby state is communicated via [module:Dota2.Dota2Client#practice
 | --- | --- | --- |
 | result | <code>DOTAJoinLobbyResult</code> | Result code |
 | response | <code>Object</code> | The raw response object |
-| response.result | [<code>EResult</code>](#module_Dota2.EResult) | Result code |
+| response.result | <code>module:Dota2.schema.EResult</code> | Result code |
 
 <a name="module_Dota2.Dota2Client+event_friendPracticeLobbyListData"></a>
 
@@ -1857,10 +1839,10 @@ Converts a Dota2 account ID to a 64bit Steam ID
 <a name="module_Dota2.schema"></a>
 
 ### Dota2.schema
-Protobuf schema. See [Protobufjs#Root](http://dcode.io/protobuf.js/Root.html). 
+Protobuf schema created by Steam Resources. 
 This object can be used to obtain special protobuf types.
-Object types can be created by `Dota2.schema.lookupType("TypeName").encode(payload :Object).finish();`.
-Enum types can be referenced by `Dota2.schema.lookupEnum("EnumName").values`, which returns an object array representing the enum.
+Object types can be created by `new Dota2.schema.<TypeName>(payload :Object);`.
+Enum types can be referenced by `Dota2.schema.<EnumName>`, which returns an object array representing the enum.
 
 **Kind**: static property of [<code>Dota2</code>](#module_Dota2)  
 <a name="module_Dota2.schema.CMsgGCToClientPlayerStatsResponse"></a>
@@ -1917,72 +1899,6 @@ Enum for the different fantasy stats
 | FIRSTBLOOD | <code>number</code> | <code>10</code> | 
 | STUNS | <code>number</code> | <code>11</code> | 
 
-<a name="module_Dota2.EResult"></a>
-
-### Dota2.EResult : <code>enum</code>
-Enum for all possible `EResult` values
-
-**Kind**: static enum of [<code>Dota2</code>](#module_Dota2)  
-**Read only**: true  
-**Properties**
-
-| Name | Type | Default |
-| --- | --- | --- |
-| k_EResultOK | <code>number</code> | <code>1</code> | 
-| k_EResultFail | <code>number</code> | <code>2</code> | 
-| k_EResultNoConnection | <code>number</code> | <code>3</code> | 
-| k_EResultInvalidPassword | <code>number</code> | <code>5</code> | 
-| k_EResultLoggedInElsewhere | <code>number</code> | <code>6</code> | 
-| k_EResultInvalidProtocolVer | <code>number</code> | <code>7</code> | 
-| k_EResultInvalidParam | <code>number</code> | <code>8</code> | 
-| k_EResultFileNotFound | <code>number</code> | <code>9</code> | 
-| k_EResultBusy | <code>number</code> | <code>10</code> | 
-| k_EResultInvalidState | <code>number</code> | <code>11</code> | 
-| k_EResultInvalidName | <code>number</code> | <code>12</code> | 
-| k_EResultInvalidEmail | <code>number</code> | <code>13</code> | 
-| k_EResultDuplicateName | <code>number</code> | <code>14</code> | 
-| k_EResultAccessDenied | <code>number</code> | <code>15</code> | 
-| k_EResultTimeout | <code>number</code> | <code>16</code> | 
-| k_EResultBanned | <code>number</code> | <code>17</code> | 
-| k_EResultAccountNotFound | <code>number</code> | <code>18</code> | 
-| k_EResultInvalidSteamID | <code>number</code> | <code>19</code> | 
-| k_EResultServiceUnavailable | <code>number</code> | <code>20</code> | 
-| k_EResultNotLoggedOn | <code>number</code> | <code>21</code> | 
-| k_EResultPending | <code>number</code> | <code>22</code> | 
-| k_EResultEncryptionFailure | <code>number</code> | <code>23</code> | 
-| k_EResultInsufficientPrivilege | <code>number</code> | <code>24</code> | 
-| k_EResultLimitExceeded | <code>number</code> | <code>25</code> | 
-| k_EResultRevoked | <code>number</code> | <code>26</code> | 
-| k_EResultExpired | <code>number</code> | <code>27</code> | 
-| k_EResultAlreadyRedeemed | <code>number</code> | <code>28</code> | 
-| k_EResultDuplicateRequest | <code>number</code> | <code>29</code> | 
-| k_EResultAlreadyOwned | <code>number</code> | <code>30</code> | 
-| k_EResultIPNotFound | <code>number</code> | <code>31</code> | 
-| k_EResultPersistFailed | <code>number</code> | <code>32</code> | 
-| k_EResultLockingFailed | <code>number</code> | <code>33</code> | 
-| k_EResultLogonSessionReplaced | <code>number</code> | <code>34</code> | 
-| k_EResultConnectFailed | <code>number</code> | <code>35</code> | 
-| k_EResultHandshakeFailed | <code>number</code> | <code>36</code> | 
-| k_EResultIOFailure | <code>number</code> | <code>37</code> | 
-| k_EResultRemoteDisconnect | <code>number</code> | <code>38</code> | 
-| k_EResultShoppingCartNotFound | <code>number</code> | <code>39</code> | 
-| k_EResultBlocked | <code>number</code> | <code>40</code> | 
-| k_EResultIgnored | <code>number</code> | <code>41</code> | 
-| k_EResultNoMatch | <code>number</code> | <code>42</code> | 
-| k_EResultAccountDisabled | <code>number</code> | <code>43</code> | 
-| k_EResultServiceReadOnly | <code>number</code> | <code>44</code> | 
-| k_EResultAccountNotFeatured | <code>number</code> | <code>45</code> | 
-| k_EResultAdministratorOK | <code>number</code> | <code>46</code> | 
-| k_EResultContentVersion | <code>number</code> | <code>47</code> | 
-| k_EResultTryAnotherCM | <code>number</code> | <code>48</code> | 
-| k_EResultPasswordRequiredToKickSession | <code>number</code> | <code>49</code> | 
-| k_EResultAlreadyLoggedInElsewhere | <code>number</code> | <code>50</code> | 
-| k_EResultSuspended | <code>number</code> | <code>51</code> | 
-| k_EResultCancelled | <code>number</code> | <code>52</code> | 
-| k_EResultDataCorruption | <code>number</code> | <code>53</code> | 
-| k_EResultDiskFull | <code>number</code> | <code>54</code> | 
-| k_EResultRemoteCallFailed | <code>number</code> | <code>55</code> | 
-
 <a name="module_Dota2.ServerRegion"></a>
 
 ### Dota2.ServerRegion : <code>enum</code>
@@ -2031,23 +1947,6 @@ Enum for different types of series.
 | NONE | <code>number</code> | <code>0</code> | 
 | BEST_OF_THREE | <code>number</code> | <code>1</code> | 
 | BEST_OF_FIVE | <code>number</code> | <code>2</code> | 
-
-<a name="module_Dota2.BotDifficulty"></a>
-
-### Dota2.BotDifficulty : <code>enum</code>
-Enum for different bot difficulty levels.
-
-**Kind**: static enum of [<code>Dota2</code>](#module_Dota2)  
-**Read only**: true  
-**Properties**
-
-| Name | Type | Default |
-| --- | --- | --- |
-| PASSIVE | <code>number</code> | <code>0</code> | 
-| EASY | <code>number</code> | <code>1</code> | 
-| MEDIUM | <code>number</code> | <code>2</code> | 
-| HARD | <code>number</code> | <code>3</code> | 
-| UNFAIR | <code>number</code> | <code>4</code> | 
 
 <a name="module_Dota2..requestCallback"></a>
 

@@ -1,7 +1,6 @@
 'use strict';
 
-var Dota2 = require("../index"),
-    util = require("util");
+var Dota2 = require("../index");
 
 // Methods
 /**
@@ -15,11 +14,10 @@ var Dota2 = require("../index"),
 Dota2.Dota2Client.prototype.setItemPositions = function(item_positions) {
     this.Logger.debug("Setting item positions.");
 
-    let payload = {
+    let payload = new Dota2.schema.CMsgSetItemPositions({
         "item_positions": item_positions
-    };
-    this.sendToGC(  Dota2.schema.lookupEnum("EGCItemMsg").values.k_EMsgGCSetItemPositions,
-                    Dota2.schema.lookupType("CMsgSetItemPositions").encode(payload).finish());
+    });
+    this.sendToGC(Dota2.schema.EGCItemMsg.k_EMsgGCSetItemPositions, payload);
 };
 
 /**
@@ -37,7 +35,7 @@ Dota2.Dota2Client.prototype.deleteItem = function(item_id) {
     var buffer = new Buffer(8);
     buffer.writeUInt64LE(item_id);
     this._gc.send({
-            "msg": Dota2.schema.lookupEnum("EGCItemMsg").values.k_EMsgGCDelete
+            "msg": Dota2.schema.EGCItemMsg.k_EMsgGCDelete
         },
         buffer
     );

@@ -6,7 +6,7 @@ var steam = require("steam"),
     steamClient = new steam.SteamClient(),
     steamUser = new steam.SteamUser(steamClient),
     steamFriends = new steam.SteamFriends(steamClient),
-    Dota2 = new dota2.Dota2Client(steamClient, true);
+    Dota2 = new dota2.Dota2Client(steamClient, true, true);
 
 global.config = require("./config");
 
@@ -49,7 +49,7 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
             // COMMUNITY
 
             var accId = 103637655;
-            var playerInfo = 1;
+            var playerInfo = 0;
             var playerInfo2 = 0;
             // var playerInfo3 = 0;
 
@@ -220,7 +220,7 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
         });
 
         Dota2.on("unhandled", function(kMsg) {
-            util.log("UNHANDLED MESSAGE " + dota2._getMessageName(kMsg));
+            util.log("UNHANDLED MESSAGE " + dota2._getPropertyByValue(dota2.schema, kMsg));
         });
     }
 },
