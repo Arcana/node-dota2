@@ -8,9 +8,6 @@
     "steam": "^1.4.0",
     "winston": "^3.2.0"
   },
-  "bundledDependencies": [
-    "steam-resources"
-  ],
   "devDependencies": {
     "mocha": "^5.2.0",
     "should": "^13.2.3",

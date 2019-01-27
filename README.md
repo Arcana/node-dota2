@@ -8,13 +8,18 @@ node-dota2
 
 A node-steam plugin for Dota 2, consider it in alpha state.
 
+## Contributing
 Check out @RJacksonm1's blog post (his only blog post), [Extending node-dota2](https://blog.rjackson.me/extending-node-dota2/), for a rough overview of adding new functionality to the library.
 A fair warning, while the way you search for new functionality is still the same, quite a lot has changed (and been simplified) implementation wise.
 It is now easier to implement new functionality than it was back when this blog was written.
 
+Be careful, you'll need SVN if you want to work on the project! Executing an `npm install` inside the project directory
+has node-steam fetch the most recent node-steam-resources, which needs SVN to obtain the protobufs.
+
 ## Installation and setup
-* `npm install` in the repository root
-* Copy `config.js.example` to `config.js` and edit appropriately
+* `npm install dota2` in your repository root
+* Copy `node_modules/dota2/examples/config.js.example` to `config.js` in your project root and edit appropriately
+* Copy `node_modules/dota2/examples/example.js` in your project root and change line 5 to `dota2 = require("dota2"),`
 * Run the example script: `node example.js`
 * If you receive Error 63 you need to provide a Steam Guard code by setting the Steam Guard code in `config.js` and launching again.
 * Make sure to use at least version 4.4.5 of node js
@@ -1840,8 +1845,8 @@ Converts a Dota2 account ID to a 64bit Steam ID
 <a name="module_Dota2.schema"></a>
 
 ### Dota2.schema
-Protobuf schema created by Steam Resources. 
-This object can be used to obtain special protobuf types.
+Protobuf schema created by Steam Resources. This is an alias of `steam.GC.Dota.Internal`.
+This object can be used to obtain Dota2 specific protobuf types.
 Object types can be created by `new Dota2.schema.<TypeName>(payload :Object);`.
 Enum types can be referenced by `Dota2.schema.<EnumName>`, which returns an object array representing the enum.
 
