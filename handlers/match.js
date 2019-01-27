@@ -30,7 +30,6 @@ Dota2._matchOptions = {
  * @param {number} [criteria.matches_requested=1] - How many matches to retrieve
  * @param {number} [criteria.min_players] - Minimum number of players present during the match
  * @param {number} [criteria.request_id] - A unique identifier that identifies this request
- * @param {boolean} [criteria.tournament_games_only] - Whether or not to only include tournament games
  * @param {number} [criteria.account_id] - Dota2 account ID of a player that needs to be present in all matches
  * @param {number} [criteria.league_id] - Show only matches from the league with this ID
  * @param {number} [criteria.skill] - Skill level of the matches. 0 = Any, 3 = Very high skill.

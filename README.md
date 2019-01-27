@@ -1035,7 +1035,6 @@ Requires the GC to be [ready](#module_Dota2.Dota2Client+event_ready).
 | [criteria.matches_requested] | <code>number</code> | <code>1</code> | How many matches to retrieve |
 | [criteria.min_players] | <code>number</code> |  | Minimum number of players present during the match |
 | [criteria.request_id] | <code>number</code> |  | A unique identifier that identifies this request |
-| [criteria.tournament_games_only] | <code>boolean</code> |  | Whether or not to only include tournament games |
 | [criteria.account_id] | <code>number</code> |  | Dota2 account ID of a player that needs to be present in all matches |
 | [criteria.league_id] | <code>number</code> |  | Show only matches from the league with this ID |
 | [criteria.skill] | <code>number</code> |  | Skill level of the matches. 0 = Any, 3 = Very high skill. |

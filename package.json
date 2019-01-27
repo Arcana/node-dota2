@@ -6,6 +6,7 @@
     "long": "^4.0.0",
     "merge": "^1.2.1",
     "steam": "^1.4.0",
+    "steam-resources": "github:seishun/node-steam-resources",
     "winston": "^3.2.0"
   },
   "devDependencies": {
@@ -13,6 +14,9 @@
     "should": "^13.2.3",
     "jsdoc-to-markdown": "^4.0.1"
   },
+  "bundledDependencies": [
+    "steam-resources"
+  ],
   "scripts": {
     "update": "bash update_proto.sh",
     "test": "mocha --exit"

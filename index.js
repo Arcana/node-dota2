@@ -19,6 +19,7 @@
 const util = require("util");
 const Long = require("long");
 const steam = require("steam");
+const steam_resources = require("steam-resources");
 const { createLogger, format, transports } = require('winston');
 const { EventEmitter } = require('events').EventEmitter;
 
@@ -33,7 +34,7 @@ var Dota2 = exports;
  * Enum types can be referenced by `Dota2.schema.<EnumName>`, which returns an object array representing the enum.
  * @alias module:Dota2.schema
  */ 
-Dota2.schema = steam.GC.Dota.Internal;
+Dota2.schema = steam_resources.GC.Dota.Internal;
 
 /**
  * The Dota 2 client that communicates with the GC

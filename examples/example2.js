@@ -28,8 +28,8 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
             // CHAT
 
             var chatChannel = "dota2bot";
-            var joiningChannel = 0;
-            var leavingChannel = 0;
+            var joiningChannel = 1;
+            var leavingChannel = 1;
 
             if(joiningChannel == 1){
                 Dota2.joinChat(chatChannel);
@@ -49,8 +49,8 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
             // COMMUNITY
 
             var accId = 103637655;
-            var playerInfo = 0;
-            var playerInfo2 = 0;
+            var playerInfo = 1;
+            var playerInfo2 = 1;
             // var playerInfo3 = 0;
 
             if(playerInfo == 1) { 
@@ -77,7 +77,7 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
 
             // Request the details of a certain match
             var CheckMatchID = 1944132605;
-            var checkingMatch = 0;
+            var checkingMatch = 1;
 
             if(checkingMatch == 1){
                 Dota2.requestMatchDetails(CheckMatchID, function(err, data){
@@ -86,11 +86,10 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
             }
             
             // Request the 50 most recent matches
-            var checkingMatches = 0;
+            var checkingMatches = 1;
             if(checkingMatches == 1){
                 Dota2.requestMatches({
                     "matches_requested": 25,
-                    "tournament_games_only": false,
                     "skill": 1
                 }, (result,response) => {
                     response.matches.map(match => console.log(""+match.match_id));
@@ -98,7 +97,6 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
                     Dota2.requestMatches({
                         "matches_requested": 25,
                         "start_at_match_id": lastID,
-                        "tournament_games_only": false,
                         "skill": 1
                     }, (result, response)=>{
                         response.matches.map(match => console.log(""+match.match_id));
@@ -172,7 +170,7 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
             
             // TEAM
             
-            var myTeamInfo = 0;
+            var myTeamInfo = 1;
             
             if (myTeamInfo == 1) {
                 Dota2.requestMyTeams(function(err, data){
@@ -184,7 +182,7 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
             
             // SOURCETV
             
-            var sourceGames = 0;
+            var sourceGames = 1;
             
             if (sourceGames == 1) {
                 Dota2.requestSourceTVGames();
@@ -197,7 +195,7 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
             
             // FANTASY
             
-            var fantasyCards = 0;
+            var fantasyCards = 1;
             
             if (fantasyCards == 1) {
                 Dota2.on("inventoryUpdate", inventory => {
