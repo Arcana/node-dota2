@@ -439,6 +439,31 @@ Dota2.Dota2Client.prototype.joinPracticeLobbyTeam = function(slot, team, callbac
 };
 
 /**
+ * Sends a message to the Game Coordinator requesting to join as coach of a team in the lobby.
+ * Requires you to be in a lobby.
+ * Provide a callback or listen for the {@link module:Dota2.Dota2Client#event:practiceLobbyResponse|practiceLobbyResponse} event for the GC's response. 
+ * Requires the GC to be {@link module:Dota2.Dota2Client#event:ready|ready}.
+ * @alias module:Dota2.Dota2Client#joinPracticeLobbyCoachTeam
+ * @param {number} team - The team you want to join as coach
+ * @param {module:Dota2~requestCallback} [callback] - Called with `err, CMsgPracticeLobbyJoinResponse`
+ */
+Dota2.Dota2Client.prototype.joinPracticeLobbyCoachTeam = function(team, callback) {
+    callback = callback || null;
+    if (typeof team === 'undefined') team = Dota2.schema.lookupEnum("DOTA_GC_TEAM").values.DOTA_GC_TEAM_GOOD_GUYS;
+    
+    var _self = this;
+
+    this.Logger.debug("Sending match CMsgPracticeLobbySetCoach request");
+    
+    var payload = {
+        "team": team
+    };
+    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPracticeLobbySetCoach, 
+                    Dota2.schema.lookupType("CMsgPracticeLobbySetCoach").encode(payload).finish(), 
+                    onPracticeLobbyResponse, callback);
+};
+
+/**
  * Sends a message to the Game Coordinator requesting to add a bot to the broadcast channel.
  * Requires you to be in a lobby.
  * Provide a callback or listen for the {@link module:Dota2.Dota2Client#event:practiceLobbyResponse|practiceLobbyResponse} event for the GC's response. 
