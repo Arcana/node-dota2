@@ -26,6 +26,8 @@ Dota2._lobbyOptions = {
     custom_difficulty: "number",
     custom_game_id: "number",
     pause_setting: "number",
+    custom_min_players: "number",
+	custom_max_players: "number"
 };
 
 /**
