@@ -5,9 +5,9 @@
     "deferred": "^0.7.9",
     "long": "^4.0.0",
     "merge": "^1.2.1",
-    "steam": "^1.4.0",
+    "steam": "^1.4.1",
     "steam-resources": "github:seishun/node-steam-resources",
-    "winston": "^3.2.0"
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "mocha": "^5.2.0",
