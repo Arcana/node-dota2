@@ -28,8 +28,8 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
             // CHAT
 
             var chatChannel = "dota2bot";
-            var joiningChannel = 1;
-            var leavingChannel = 1;
+            var joiningChannel = 0;
+            var leavingChannel = 0;
 
             if(joiningChannel == 1){
                 Dota2.joinChat(chatChannel);
@@ -49,8 +49,8 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
             // COMMUNITY
 
             var accId = 103637655;
-            var playerInfo = 1;
-            var playerInfo2 = 1;
+            var playerInfo = 0;
+            var playerInfo2 = 0;
             // var playerInfo3 = 0;
 
             if(playerInfo == 1) { 
@@ -76,8 +76,8 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
             // MATCH
 
             // Request the details of a certain match
-            var CheckMatchID = 1944132605;
-            var checkingMatch = 1;
+            var CheckMatchID = 4621098679;
+            var checkingMatch = 0;
 
             if(checkingMatch == 1){
                 Dota2.requestMatchDetails(CheckMatchID, function(err, data){
@@ -86,8 +86,8 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
             }
             
             // Request the 50 most recent matches
-            var checkingMatches = 1;
-            if(checkingMatches == 1){
+            var checkingMatches = 0;
+            if(checkingMatches == 1) {
                 Dota2.requestMatches({
                     "matches_requested": 25,
                     "skill": 1
@@ -104,13 +104,34 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
                 });
             }
 
+            var matchMakingStats = 1
+            if (matchMakingStats == 1) {
+                Dota2.requestMatchmakingStats();
+                Dota2.on("matchmakingStatsData", (version, groups) => {
+                    util.log(version);
+                    util.log(groups);
+                });
+            }
+
+            // ----------------------------------
+
+            // LEAGUES
+
+            var leagueGames = 0
+            if (leagueGames == 1) {
+                Dota2.requestTopLeagueMatches();
+                Dota2.on("topLeagueMatchesData", matches => {
+                    util.log(matches);
+                });
+            }
+
             // ----------------------------------
 
             // LOBBY
 
-            var creatingLobby = 1;
-            var leavingLobby = 1;
-            var destroyLobby = 1;
+            var creatingLobby = 0;
+            var leavingLobby = 0;
+            var destroyLobby = 0;
             var lobbyChannel = "";
 
             if(creatingLobby == 1){ // sets only password, nothing more
@@ -170,7 +191,7 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
             
             // TEAM
             
-            var myTeamInfo = 1;
+            var myTeamInfo = 0;
             
             if (myTeamInfo == 1) {
                 Dota2.requestMyTeams(function(err, data){
@@ -182,7 +203,7 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
             
             // SOURCETV
             
-            var sourceGames = 1;
+            var sourceGames = 0;
             
             if (sourceGames == 1) {
                 Dota2.requestSourceTVGames();
@@ -195,7 +216,7 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
             
             // FANTASY
             
-            var fantasyCards = 1;
+            var fantasyCards = 0;
             
             if (fantasyCards == 1) {
                 Dota2.on("inventoryUpdate", inventory => {

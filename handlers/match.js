@@ -111,7 +111,7 @@ Dota2.Dota2Client.prototype.requestMatchmakingStats = function() {
     // Is not Job ID based - can't do callbacks.
     this.Logger.debug("Sending matchmaking stats request");
     
-    var payload = Dota2.schema.CMsgDOTAMatchmakingStatsRequest({});
+    var payload = new Dota2.schema.CMsgDOTAMatchmakingStatsRequest({});
     this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgGCMatchmakingStatsRequest, payload, );
 };
 
@@ -125,7 +125,7 @@ Dota2.Dota2Client.prototype.requestTopFriendMatches = function() {
     /* Sends a message to the Game Coordinator request the info on all available official leagues */
     this.Logger.debug("Sending CMsgClientToGCTopFriendMatchesRequest");
     
-    var payload = Dota2.schema.CMsgClientToGCTopFriendMatchesRequest({});
+    var payload = new Dota2.schema.CMsgClientToGCTopFriendMatchesRequest({});
     this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCTopFriendMatchesRequest, payload);
 
 };

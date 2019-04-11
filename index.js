@@ -79,7 +79,6 @@ Dota2.schema = steam_resources.GC.Dota.Internal;
  * @fires module:Dota2.Dota2Client#event:playerCardRoster
  * @fires module:Dota2.Dota2Client#event:playerCardDrafted
  * @fires module:Dota2.Dota2Client#event:liveLeagueGamesUpdate
- * @fires module:Dota2.Dota2Client#event:leagueData
  * @fires module:Dota2.Dota2Client#event:topLeagueMatchesData
  * @fires module:Dota2.Dota2Client#event:teamData
  * @fires module:Dota2.Dota2Client#event:matchesData

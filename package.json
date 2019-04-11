@@ -10,9 +10,9 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
+    "jsdoc-to-markdown": "^4.0.1",
     "mocha": "^6.1.2",
-    "should": "^13.2.3",
-    "jsdoc-to-markdown": "^4.0.1"
+    "should": "^13.2.3"
   },
   "bundledDependencies": [
     "steam-resources"

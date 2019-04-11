@@ -385,17 +385,6 @@ var steam = require("steam"),
 		
 		describe('Leagues', function () {
 			
-			describe('#requestLeagueInfo', function () {
-				it('should fetch data on all official leagues', function (done) {
-					Dota2.on('leagueData', function (leagues){
-						should(leagues.length).above(0);
-						should.exist(leagues[0].league_id);
-						done();
-					});
-					Dota2.requestLeagueInfo();
-				}); 
-			});
-			
 			describe('#requestTopLeagueMatches', function () {
 				it('should fetch data on all top league matches', function (done) {
 					Dota2.on('topLeagueMatchesData', function (matches){

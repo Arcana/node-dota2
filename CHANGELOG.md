@@ -11,6 +11,10 @@ some of the enums declared in this package. Following enums have been removed:
 I also removed a bunch of deprecated functions that had been marked as such for
 a few versions.
 
+## Methods
+### requestLeagueInfo
+Proto message was removed so corresponding function also removed
+
 # Changelog 6.1.1
 ## General
  * Updated fantasy cards with this year's player card ID
