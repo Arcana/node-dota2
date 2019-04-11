@@ -14,13 +14,12 @@ Dota2.Dota2Client.prototype.tipPlayer = function(account_id, match_id, event_id)
     /* Requests a list of chat channels from the GC. */
     this.Logger.debug("Tipping someone");
     
-    var payload = {
+    var payload = new Dota2.schema.CMsgClientToGCGiveTip({
         "recipient_account_id": account_id,
         "match_id": match_id,
         "event_id": event_id
-    };
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCGiveTip, 
-                    Dota2.schema.lookupType("CMsgClientToGCGiveTip").encode(payload).finish());
+    });
+    this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCGiveTip, payload);
 };
 
 // Events
@@ -42,17 +41,17 @@ Dota2.Dota2Client.prototype.tipPlayer = function(account_id, match_id, event_id)
 
 var handlers = Dota2.Dota2Client.prototype._handlers;
 
-var onTipResponse = function onPracticeLobbyListResponse(message, callback) {
-    var tipResponse = Dota2.schema.lookupType("CMsgClientToGCGiveTipResponse").decode(message);
+var onTipResponse = function onTipResponse(message, callback) {
+    var tipResponse = Dota2.schema.CMsgClientToGCGiveTipResponse.decode(message);
 
     this.Logger.debug("Received tip response " + tipResponse);
     this.emit("tipResponse", tipResponse.result);
     if (callback) callback(null, tipResponse);
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCGiveTipResponse] = onTipResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCGiveTipResponse] = onTipResponse;
 
-var onTipNotification = function onPracticeLobbyListResponse(message) {
-    var tipNotification = Dota2.schema.lookupType("CMsgGCToClientTipNotification").decode(message);
+var onTipNotification = function onTipNotification(message) {
+    var tipNotification = Dota2.schema.CMsgGCToClientTipNotification.decode(message);
 
     this.Logger.debug("Received tip notification " + tipNotification);
     this.emit("tipped", 
@@ -62,4 +61,4 @@ var onTipNotification = function onPracticeLobbyListResponse(message) {
                 tipNotification.recipient_name,
                 tipNotification.event_id);
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCToClientTipNotification] = onTipNotification;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCToClientTipNotification] = onTipNotification;

@@ -8,3 +8,5 @@ test/node_modules
 .idea
 sentry
 *.log
+config.js
+.vscode

@@ -1,6 +1,4 @@
-var Dota2 = require("../index"),
-    util = require("util"),
-    Long = require('long');
+var Dota2 = require("../index");
 
 
 
@@ -94,14 +92,15 @@ Dota2.Dota2Client.prototype.requestPlayerCardsByPlayer = function() {
 //     /* Sends a message to the Game Coordinator requesting information on a list of player card ID's. Listen for `playerCardInfo` event for Game Coordinator's response. */
 //     this.Logger.debug("Requesting player card info");
 
-//     var payload = {
+//     var payload = new Dota2.schema.CMsgGCGetPlayerCardItemInfo({
 //         "account_id": this.AccountID,
 //         "player_card_item_ids": player_card_ids
-//     };
+//     });
     
-//     this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCGetPlayerCardItemInfo, 
-//                     Dota2.schema.lookupType("CMsgGCGetPlayerCardItemInfo").encode(payload).finish(), 
-//                     onPlayerCardInfoResponse, callback);
+//     this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgGCGetPlayerCardItemInfo, 
+//                     payload, 
+//                     onPlayerCardInfoResponse, 
+//                     callback);
 // }
 
 /**
@@ -115,19 +114,19 @@ Dota2.Dota2Client.prototype.requestPlayerCardsByPlayer = function() {
  */
 Dota2.Dota2Client.prototype.requestPlayerCardRoster = function(league_id, timestamp, callback) {
     callback = callback || null;
-    var _self = this;
     
     /* Sends a message to the Game Coordinator requesting information on a list of player card ID's. Listen for `playerCardInfo` event for Game Coordinator's response. */
     this.Logger.debug("Requesting player card roster");
 
-    var payload = {
+    var payload = new Dota2.schema.CMsgClientToGCGetPlayerCardRosterRequest({
         "league_id": league_id,
         "timestamp": timestamp
-    };
+    });
     
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCGetPlayerCardRosterRequest, 
-                    Dota2.schema.lookupType("CMsgClientToGCGetPlayerCardRosterRequest").encode(payload).finish(), 
-                    onGetPlayerCardRosterResponse, callback);
+    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCGetPlayerCardRosterRequest, 
+                    payload, 
+                    onGetPlayerCardRosterResponse, 
+                    callback);
 }
 
 /**
@@ -143,19 +142,19 @@ Dota2.Dota2Client.prototype.requestPlayerCardRoster = function(league_id, timest
  */
 Dota2.Dota2Client.prototype.draftPlayerCard = function(league_id, timestamp, slot, player_card_id, callback) {
     callback = callback || null;
-    var _self = this;
     
     /* Sends a message to the Game Coordinator requesting information on a list of player card ID's. Listen for `playerCardInfo` event for Game Coordinator's response. */
     this.Logger.debug("Requesting player card roster");
 
-    var payload = {
+    var payload = new Dota2.schema.CMsgClientToGCSetPlayerCardRosterRequest({
         "league_id": league_id,
         "timestamp": timestamp
-    };
+    });
     
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCSetPlayerCardRosterRequest, 
-                    Dota2.schema.lookupType("CMsgClientToGCSetPlayerCardRosterRequest").encode(payload).finish(), 
-                    onSetPlayerCardRosterResponse, callback);
+    this.sendToGC(  Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCSetPlayerCardRosterRequest, 
+                    payload, 
+                    onSetPlayerCardRosterResponse, 
+                    callback);
 }
 
 // Events
@@ -176,17 +175,17 @@ var handlers = Dota2.Dota2Client.prototype._handlers;
 // // This proto message is not supported by Valve's backend as of yet
 // var onPlayerCardInfoResponse = function onPlayerCardInfoResponse(message, callback) {
 //     callback = callback || null;
-//     var playerCardInfo = Dota2.schema.lookupType("CMsgGCGetPlayerCardItemInfoResponse").decode(message);
+//     var playerCardInfo = Dota2.schema.CMsgGCGetPlayerCardItemInfoResponse.decode(message);
 //     this.Logger.debug("Received info for player cards");
 //     this.emit("playerCardInfo", playerCardInfo.player_card_infos);
 //     if (callback) callback(null, playerCardInfo);
     
 // };
-// handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCCreatePlayerCardPackResponse] = onPlayerCardInfoResponse;
+// handlers[Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCCreatePlayerCardPackResponse] = onPlayerCardInfoResponse;
 
 var onGetPlayerCardRosterResponse = function onGetPlayerCardRosterResponse(message, callback) {
     callback = callback || null;
-    var playerCardRoster = Dota2.schema.lookupType("CMsgClientToGCGetPlayerCardRosterResponse").decode(message);
+    var playerCardRoster = Dota2.schema.CMsgClientToGCGetPlayerCardRosterResponse.decode(message);
     if (playerCardRoster.result == 0) {
         this.Logger.debug("Received roster for player cards");
         this.emit("playerCardRoster", playerCardRoster);
@@ -196,13 +195,13 @@ var onGetPlayerCardRosterResponse = function onGetPlayerCardRosterResponse(messa
         if (callback) callback(playerCardRoster.result);
     }
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCGetPlayerCardRosterResponse] = onGetPlayerCardRosterResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCGetPlayerCardRosterResponse] = onGetPlayerCardRosterResponse;
 
 var onSetPlayerCardRosterResponse = function onSetPlayerCardRosterResponse(message, callback) {
     callback = callback || null;
-    var playerCardRoster = Dota2.schema.lookupType("CMsgClientToGCSetPlayerCardRosterResponse").decode(message);
+    var playerCardRoster = Dota2.schema.CMsgClientToGCSetPlayerCardRosterResponse.decode(message);
     this.Logger.debug("Received player card draft result: "+playerCardRoster.result);
     this.emit("playerCardDrafted", playerCardRoster.result);
     if (callback) callback(playerCardRoster.result, playerCardRoster);
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCSetPlayerCardRosterResponse] = onSetPlayerCardRosterResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCSetPlayerCardRosterResponse] = onSetPlayerCardRosterResponse;
