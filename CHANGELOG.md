@@ -1,3 +1,20 @@
+# Changelog 7.0.0
+## General
+I switched protobuf resources to bundled steam-resources. 
+
+## API changes
+All protobuf objects are now available on Dota2.schema, removing the need for 
+some of the enums declared in this package. Following enums have been removed:
+ * Dota2.BotDifficulty -> Dota2.schema.DOTABotDifficulty
+ * Dota2.EResult -> steam.EResult
+
+I also removed a bunch of deprecated functions that had been marked as such for
+a few versions.
+
+## Methods
+### requestLeagueInfo
+Proto message was removed so corresponding function also removed
+
 # Changelog 6.1.1
 ## General
  * Updated fantasy cards with this year's player card ID

@@ -1,20 +1,23 @@
 {
   "name": "dota2",
-  "version": "6.2.0",
+  "version": "7.0.0",
   "dependencies": {
     "deferred": "^0.7.9",
     "long": "^4.0.0",
-    "merge": "^1.2.0",
-    "protobufjs": "^6.8.8",
-    "steam": "^1.4.0",
-    "winston": "^3.1.0"
+    "merge": "^1.2.1",
+    "steam": "^1.4.1",
+    "steam-resources": "github:seishun/node-steam-resources",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
-    "mocha": "^5.2.0",
+    "jsdoc-to-markdown": "^4.0.1",
+    "mocha": "^6.1.2",
     "should": "^13.2.3"
   },
+  "bundledDependencies": [
+    "steam-resources"
+  ],
   "scripts": {
-    "update": "bash update_proto.sh",
     "test": "mocha --exit"
   },
   "readmeFilename": "README.md",

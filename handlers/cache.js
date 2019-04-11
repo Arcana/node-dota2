@@ -2,6 +2,7 @@
 
 var Dota2 = require("../index");
 
+
 var cacheTypeIDs = {
     // Legacy values
     LOBBY: 2004,
@@ -29,14 +30,12 @@ var cacheTypeIDs = {
     CSODOTALobbyInvite : 2011
 };
 
-
-
 // Handlers
 function handleCreateType(obj_type, object_data) {
     switch(obj_type) {
         case cacheTypeIDs.CSOEconItem:
             this.Logger.debug("Got an item traded");
-            var item = Dota2.schema.lookupType("CSOEconItem").decode(object_data);
+            var item = Dota2.schema.CSOEconItem.decode(object_data);
             this.emit("gotItem", item);
             this.Inventory.push(item);
             break;
@@ -57,7 +56,7 @@ function handleDestroyType(obj_type, object_data) {
             break;
         case cacheTypeIDs.CSOEconItem:
             this.Logger.debug("Traded item away");
-            var item = Dota2.schema.lookupType("CSOEconItem").decode(object_data);
+            var item = Dota2.schema.CSOEconItem.decode(object_data);
             this.emit("gaveItem", item);
             this.Inventory = this.Inventory.filter(i => item.id.notEquals(i.id));
             break;
@@ -66,11 +65,12 @@ function handleDestroyType(obj_type, object_data) {
 
 function handleSubscribedType(obj_type, object_data, isDelete) {
     switch (obj_type) {
+        
         // Inventory item
         case cacheTypeIDs.CSOEconItem:
             this.Logger.debug("Received inventory snapshot");
             // Parse items
-            var items = object_data.map(obj => Dota2.schema.lookupType("CSOEconItem").decode(obj));
+            var items = object_data.map(obj => Dota2.schema.CSOEconItem.decode(obj));
             // Remove updated items from inventory
             var inv = this.Inventory.filter(item => items.reduce((acc, val) => acc && item.id.notEquals(val.id)), true);
             if (!isDelete) {
@@ -84,28 +84,28 @@ function handleSubscribedType(obj_type, object_data, isDelete) {
         case cacheTypeIDs.CSODOTALobby:
             // object_data is an array when called from onCacheSubscribed
             // but an object when called from onUpdateMultiple
-            var lobby = Dota2.schema.lookupType("CSODOTALobby").decode([].concat(object_data)[0]);
+            var lobby = Dota2.schema.CSODOTALobby.decode([].concat(object_data)[0]);
             this.Logger.debug("Received lobby snapshot for lobby ID " + lobby.lobby_id);
             this.emit("practiceLobbyUpdate", lobby);
             this.Lobby = lobby;
             break;
         // Lobby invite snapshot.
         case cacheTypeIDs.CSODOTALobbyInvite:
-            var lobbyInvite = Dota2.schema.lookupType("CSODOTALobbyInvite").decode(object_data[0]);
+            var lobbyInvite = Dota2.schema.CSODOTALobbyInvite.decode(object_data[0]);
             this.Logger.debug("Received lobby invite snapshot for group ID " + lobbyInvite.group_id);
             this.emit("lobbyInviteUpdate", lobbyInvite);
             this.LobbyInvite = lobbyInvite;
             break;
         // Party snapshot.
         case cacheTypeIDs.CSODOTAParty:
-            var party = Dota2.schema.lookupType("CSODOTAParty").decode([].concat(object_data)[0]);
+            var party = Dota2.schema.CSODOTAParty.decode([].concat(object_data)[0]);
             this.Logger.debug("Received party snapshot for party ID " + party.party_id);
             this.emit("partyUpdate", party);
             this.Party = party;
             break;
         // Party invite snapshot.
         case cacheTypeIDs.CSODOTAPartyInvite:
-            var party = Dota2.schema.lookupType("CSODOTAPartyInvite").decode(object_data[0]);
+            var party = Dota2.schema.CSODOTAPartyInvite.decode(object_data[0]);
             this.Logger.debug("Received party invite snapshot for group ID " + party.group_id);
             this.emit("partyInviteUpdate", party);
             this.PartyInvite = party;
@@ -117,10 +117,11 @@ function handleSubscribedType(obj_type, object_data, isDelete) {
 };
 
 Dota2.Dota2Client.prototype._handleWelcomeCaches = function handleWelcomeCaches(message) {
-    var welcome = Dota2.schema.lookupType("CMsgClientWelcome").decode(message);
+    var welcome = Dota2.schema.CMsgClientWelcome.decode(message);
     var _self = this;
 
     if (welcome.outofdate_subscribed_caches)
+        this.Logger.debug("Handling out of date caches");
         welcome.outofdate_subscribed_caches.forEach(function(cache) {
             cache.objects.forEach(function(obj) {
                 handleSubscribedType.call(_self, obj.type_id, obj.object_data[0]);
@@ -212,7 +213,7 @@ Dota2.Dota2Client.prototype._handleWelcomeCaches = function handleWelcomeCaches(
 var handlers = Dota2.Dota2Client.prototype._handlers;
 
 var onCacheSubscribed = function onCacheSubscribed(message) {
-    var subscribe = Dota2.schema.lookupType("CMsgSOCacheSubscribed").decode(message);
+    var subscribe = Dota2.schema.CMsgSOCacheSubscribed.decode(message);
     var _self = this;
 
     this.Logger.debug("Cache(s) subscribed, type(s): " + subscribe.objects.map(obj=>obj.type_id).toString());
@@ -221,10 +222,10 @@ var onCacheSubscribed = function onCacheSubscribed(message) {
         handleSubscribedType.call(_self, obj.type_id, obj.object_data);
     });
 };
-handlers[Dota2.schema.lookupEnum("ESOMsg").values.k_ESOMsg_CacheSubscribed] = onCacheSubscribed;
+handlers[Dota2.schema.ESOMsg.k_ESOMsg_CacheSubscribed] = onCacheSubscribed;
 
 var onUpdateMultiple = function onUpdateMultiple(message) {
-    var multi = Dota2.schema.lookup("CMsgSOMultipleObjects").decode(message);
+    var multi = Dota2.schema.CMsgSOMultipleObjects.decode(message);
     var _self = this;
 
     let multi_types = ["objects_modified", "objects_added", "objects_removed"];
@@ -241,46 +242,45 @@ var onUpdateMultiple = function onUpdateMultiple(message) {
     });
 
 };
-handlers[Dota2.schema.lookupEnum("ESOMsg").values.k_ESOMsg_UpdateMultiple] = onUpdateMultiple;
+handlers[Dota2.schema.ESOMsg.k_ESOMsg_UpdateMultiple] = onUpdateMultiple;
 
 var onCreate = function onCreate(message) {
-    var single = Dota2.schema.lookup("CMsgSOSingleObject").decode(message);
+    var single = Dota2.schema.CMsgSOSingleObject.decode(message);
     var _self = this;
 
     this.Logger.debug("Create, type " + single.type_id);
 
     handleCreateType.call(_self, single.type_id, single.object_data);
 }
-handlers[Dota2.schema.lookupEnum("ESOMsg").values.k_ESOMsg_Create] = onCreate;
+handlers[Dota2.schema.ESOMsg.k_ESOMsg_Create] = onCreate;
 
 var onCacheUnsubscribed = function onCacheUnsubscribed(message) {
-    var unsubscribe = Dota2.schema.lookup("CMsgSOCacheUnsubscribed").decode(message);
-    var _self = this;
+    var unsubscribe = Dota2.schema.CMsgSOCacheUnsubscribed.decode(message);
 
     this.Logger.debug("Cache unsubscribed, " + unsubscribe.owner_soid.id);
 
-    if (this.Lobby && unsubscribe.owner_soid.id.eq(this.Lobby.lobby_id)) {
+    if (this.Lobby && unsubscribe.owner_soid.id.equals(this.Lobby.lobby_id)) {
         this.Lobby = null;
         this.emit("practiceLobbyCleared");
-    } else if (this.LobbyInvite && unsubscribe.owner_soid.id.eq(this.LobbyInvite.group_id)) {
+    } else if (this.LobbyInvite && unsubscribe.owner_soid.id.equals(this.LobbyInvite.group_id)) {
         this.LobbyInvite = null;
         this.emit("lobbyInviteCleared");
-    } else if (this.Party && unsubscribe.owner_soid.id.eq(this.Party.party_id)) {
+    } else if (this.Party && unsubscribe.owner_soid.id.equals(this.Party.party_id)) {
         this.Party = null;
         this.emit("partyCleared");
-    } else if (this.PartyInvite && unsubscribe.owner_soid.id.eq(this.PartyInvite.group_id)) {
+    } else if (this.PartyInvite && unsubscribe.owner_soid.id.equals(this.PartyInvite.group_id)) {
         this.PartyInvite = null;
         this.emit("partyInviteCleared");
     }
 };
-handlers[Dota2.schema.lookupEnum("ESOMsg").values.k_ESOMsg_CacheUnsubscribed] = onCacheUnsubscribed;
+handlers[Dota2.schema.ESOMsg.k_ESOMsg_CacheUnsubscribed] = onCacheUnsubscribed;
 
 var onCacheDestroy = function onCacheDestroy(message) {
-    var single = Dota2.schema.lookup("CMsgSOSingleObject").decode(message);
+    var single = Dota2.schema.CMsgSOSingleObject.decode(message);
     var _self = this;
 
     this.Logger.debug("Cache destroy, " + single.type_id);
     
     handleDestroyType.call(_self, single.type_id, single.object_data);
 };
-handlers[Dota2.schema.lookupEnum("ESOMsg").values.k_ESOMsg_Destroy] = onCacheDestroy;
+handlers[Dota2.schema.ESOMsg.k_ESOMsg_Destroy] = onCacheDestroy;

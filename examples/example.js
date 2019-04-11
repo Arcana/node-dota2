@@ -107,7 +107,7 @@ var onSteamLogOn = function onSteamLogOn(logonResp) {
                 /* LOBBIES */
                 //  Dota2.createPracticeLobby({"game_name": "node-dota2",
                 //                             "server_region": dota2.ServerRegion.PERFECTWORLDTELECOM,
-                //                             "game_mode": dota2.schema.lookupEnum('DOTA_GameMode').values.DOTA_GAMEMODE_AR,
+                //                             "game_mode": dota2.schema.DOTA_GameMode.DOTA_GAMEMODE_AR,
                 //                             "series_type": 2,
                 //                             "game_version": 1,
                 //                             "allow_cheats": false,

@@ -1,5 +1,4 @@
-var Dota2 = require("../index"),
-    util = require("util");
+var Dota2 = require("../index");
 
 Dota2._matchOptions = {
         hero_id: "number",
@@ -31,7 +30,6 @@ Dota2._matchOptions = {
  * @param {number} [criteria.matches_requested=1] - How many matches to retrieve
  * @param {number} [criteria.min_players] - Minimum number of players present during the match
  * @param {number} [criteria.request_id] - A unique identifier that identifies this request
- * @param {boolean} [criteria.tournament_games_only] - Whether or not to only include tournament games
  * @param {number} [criteria.account_id] - Dota2 account ID of a player that needs to be present in all matches
  * @param {number} [criteria.league_id] - Show only matches from the league with this ID
  * @param {number} [criteria.skill] - Skill level of the matches. 0 = Any, 3 = Very high skill.
@@ -42,16 +40,16 @@ Dota2._matchOptions = {
 Dota2.Dota2Client.prototype.requestMatches = function(criteria, callback) {
     criteria = criteria || [];
     callback = callback || null;
-    var _self = this;
     
     this.Logger.debug("Sending match request");
 
-    var payload = Dota2._parseOptions(criteria, Dota2._matchOptions);
+    var payload = new Dota2.schema.CMsgDOTARequestMatches(Dota2._parseOptions(criteria, Dota2._matchOptions));
     payload.matches_requested = payload.matches_requested || 1;
 
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCRequestMatches, 
-                    Dota2.schema.lookupType("CMsgDOTARequestMatches").encode(payload).finish(), 
-                    onMatchesResponse, callback);
+    this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgGCRequestMatches, 
+                    payload, 
+                    onMatchesResponse, 
+                    callback);
 }
 
 /**
@@ -65,17 +63,17 @@ Dota2.Dota2Client.prototype.requestMatches = function(criteria, callback) {
  */
 Dota2.Dota2Client.prototype.requestMatchDetails = function(match_id, callback) {
     callback = callback || null;
-    var _self = this;
     
     /* Sends a message to the Game Coordinator requesting `match_id`'s match details.  Listen for `matchData` event for Game Coordinator's response. */
     this.Logger.debug("Sending match details request");
     
-    var payload = {
+    var payload = new Dota2.schema.CMsgGCMatchDetailsRequest({
         "match_id": match_id
-    };
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCMatchDetailsRequest, 
-                    Dota2.schema.lookupType("CMsgGCMatchDetailsRequest").encode(payload).finish(), 
-                    onMatchDetailsResponse, callback);
+    });
+    this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgGCMatchDetailsRequest, 
+                    payload, 
+                    onMatchDetailsResponse, 
+                    callback);
 };
 
 /**
@@ -89,17 +87,17 @@ Dota2.Dota2Client.prototype.requestMatchDetails = function(match_id, callback) {
  */
 Dota2.Dota2Client.prototype.requestMatchMinimalDetails = function(match_ids, callback) {
     callback = callback || null;
-    var _self = this;
     
     /* Sends a message to the Game Coordinator requesting `match_id`'s match details.  Listen for `matchData` event for Game Coordinator's response. */
     this.Logger.debug("Sending match minimal details request");
     
-    var payload = {
+    var payload = new Dota2.schema.CMsgClientToGCMatchesMinimalRequest({
         "match_ids": match_ids
-    };
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCMatchesMinimalRequest, 
-                    Dota2.schema.lookupType("CMsgClientToGCMatchesMinimalRequest").encode(payload).finish(), 
-                    onMatchMinimalDetailsResponse, callback);
+    });
+    this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCMatchesMinimalRequest, 
+                    payload, 
+                    onMatchMinimalDetailsResponse, 
+                    callback);
 };
 
 /**
@@ -113,9 +111,8 @@ Dota2.Dota2Client.prototype.requestMatchmakingStats = function() {
     // Is not Job ID based - can't do callbacks.
     this.Logger.debug("Sending matchmaking stats request");
     
-    var payload = {};
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCMatchmakingStatsRequest, 
-                    Dota2.schema.lookupType("CMsgDOTAMatchmakingStatsRequest").encode(payload).finish());
+    var payload = new Dota2.schema.CMsgDOTAMatchmakingStatsRequest({});
+    this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgGCMatchmakingStatsRequest, payload, );
 };
 
 /**
@@ -128,9 +125,8 @@ Dota2.Dota2Client.prototype.requestTopFriendMatches = function() {
     /* Sends a message to the Game Coordinator request the info on all available official leagues */
     this.Logger.debug("Sending CMsgClientToGCTopFriendMatchesRequest");
     
-    var payload = {};
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCTopFriendMatchesRequest, 
-                    Dota2.schema.lookupType("CMsgClientToGCTopFriendMatchesRequest").encode(payload).finish());
+    var payload = new Dota2.schema.CMsgClientToGCTopFriendMatchesRequest({});
+    this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCTopFriendMatchesRequest, payload);
 
 };
 
@@ -181,7 +177,7 @@ var handlers = Dota2.Dota2Client.prototype._handlers;
 
 var onMatchesResponse = function onMatchesResponse(message, callback) {
     callback = callback || null;
-    var matchResponse = Dota2.schema.lookupType("CMsgDOTARequestMatchesResponse").decode(message);
+    var matchResponse = Dota2.schema.CMsgDOTARequestMatchesResponse.decode(message);
     if (matchResponse.total_results > 1) {
         this.Logger.debug("Received listing for matches");
         this.emit("matchesData",
@@ -197,11 +193,11 @@ var onMatchesResponse = function onMatchesResponse(message, callback) {
         if (callback) callback(matchResponse.result, matchResponse);
     }
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCRequestMatchesResponse] = onMatchesResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCRequestMatchesResponse] = onMatchesResponse;
 
 var onMatchDetailsResponse = function onMatchDetailsResponse(message, callback) {
     callback = callback || null;
-    var matchDetailsResponse = Dota2.schema.lookupType("CMsgGCMatchDetailsResponse").decode(message);
+    var matchDetailsResponse = Dota2.schema.CMsgGCMatchDetailsResponse.decode(message);
 
     if (matchDetailsResponse.result === 1) {
         this.Logger.debug("Received match data for: " + matchDetailsResponse.match.match_id);
@@ -214,11 +210,11 @@ var onMatchDetailsResponse = function onMatchDetailsResponse(message, callback) 
         if (callback) callback(matchDetailsResponse.result, matchDetailsResponse);
     }
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCMatchDetailsResponse] = onMatchDetailsResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCMatchDetailsResponse] = onMatchDetailsResponse;
 
 var onMatchMinimalDetailsResponse = function onMatchMinimalDetailsResponse(message, callback) {
     callback = callback || null;
-    var matchMinimalDetailsResponse = Dota2.schema.lookupType("CMsgClientToGCMatchesMinimalResponse").decode(message);
+    var matchMinimalDetailsResponse = Dota2.schema.CMsgClientToGCMatchesMinimalResponse.decode(message);
 
     if (matchMinimalDetailsResponse.matches) {
         this.Logger.debug("Received match minimal data for: " + matchMinimalDetailsResponse.matches.match_id);
@@ -232,11 +228,11 @@ var onMatchMinimalDetailsResponse = function onMatchMinimalDetailsResponse(messa
         if (callback) callback(matchMinimalDetailsResponse.result, matchMinimalDetailsResponse);
     }
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCMatchesMinimalResponse] = onMatchMinimalDetailsResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgClientToGCMatchesMinimalResponse] = onMatchMinimalDetailsResponse;
 
 var onMatchmakingStatsResponse = function onMatchmakingStatsResponse(message) {
     // Is not Job ID based - can't do callbacks.
-    var matchmakingStatsResponse = Dota2.schema.lookupType("CMsgDOTAMatchmakingStatsResponse").decode(message);
+    var matchmakingStatsResponse = Dota2.schema.CMsgDOTAMatchmakingStatsResponse.decode(message);
 
     this.Logger.debug("Received matchmaking stats");
     this.emit("matchmakingStatsData",
@@ -244,10 +240,10 @@ var onMatchmakingStatsResponse = function onMatchmakingStatsResponse(message) {
         matchmakingStatsResponse.match_groups,
         matchmakingStatsResponse);
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCMatchmakingStatsResponse] = onMatchmakingStatsResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCMatchmakingStatsResponse] = onMatchmakingStatsResponse;
 
 var onTopFriendMatchesResponse = function onTopFriendMatchesResponse(message) {
-    var response = Dota2.schema.lookupType("CMsgGCToClientTopFriendMatchesResponse").decode(message);
+    var response = Dota2.schema.CMsgGCToClientTopFriendMatchesResponse.decode(message);
 
     if (response.matches.length > 0) {
         this.Logger.debug("Received information for " + response.matches.length + " friend matches");
@@ -257,4 +253,4 @@ var onTopFriendMatchesResponse = function onTopFriendMatchesResponse(message) {
     }
 
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCToClientTopFriendMatchesResponse] = onTopFriendMatchesResponse;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCToClientTopFriendMatchesResponse] = onTopFriendMatchesResponse;

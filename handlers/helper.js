@@ -1,5 +1,4 @@
-var Dota2 = require("../index"),
-    util = require("util");
+var Dota2 = require("../index");
 
 // Enums
 /**
@@ -22,69 +21,6 @@ Dota2.FantasyStats = {
     FIRSTBLOOD: 10,
     STUNS: 11
 }
-/**
- * Enum for all possible `EResult` values
- * @alias module:Dota2.EResult
- * @readonly 
- * @enum {number}
- */
-Dota2.EResult = {
-    k_EResultOK : 1, // success
-    k_EResultFail : 2, // generic failure 
-    k_EResultNoConnection : 3, // no/failed network connection
-    // k_EResultNoConnectionRetry : 4, // OBSOLETE - removed
-    k_EResultInvalidPassword : 5, // password/ticket is invalid
-    k_EResultLoggedInElsewhere : 6, // same user logged in elsewhere
-    k_EResultInvalidProtocolVer : 7, // protocol version is incorrect
-    k_EResultInvalidParam : 8, // a parameter is incorrect
-    k_EResultFileNotFound : 9, // file was not found
-    k_EResultBusy : 10, // called method busy - action not taken
-    k_EResultInvalidState : 11, // called object was in an invalid state
-    k_EResultInvalidName : 12, // name is invalid
-    k_EResultInvalidEmail : 13, // email is invalid
-    k_EResultDuplicateName : 14, // name is not unique
-    k_EResultAccessDenied : 15, // access is denied
-    k_EResultTimeout : 16, // operation timed out
-    k_EResultBanned : 17, // VAC2 banned
-    k_EResultAccountNotFound : 18, // account not found
-    k_EResultInvalidSteamID : 19, // steamID is invalid
-    k_EResultServiceUnavailable : 20, // The requested service is currently unavailable
-    k_EResultNotLoggedOn : 21, // The user is not logged on
-    k_EResultPending : 22, // Request is pending (may be in process, or waiting on third party)
-    k_EResultEncryptionFailure : 23, // Encryption or Decryption failed
-    k_EResultInsufficientPrivilege : 24, // Insufficient privilege
-    k_EResultLimitExceeded : 25, // Too much of a good thing
-    k_EResultRevoked : 26, // Access has been revoked (used for revoked guest passes)
-    k_EResultExpired : 27, // License/Guest pass the user is trying to access is expired
-    k_EResultAlreadyRedeemed : 28, // Guest pass has already been redeemed by account, cannot be acked again
-    k_EResultDuplicateRequest : 29, // The request is a duplicate and the action has already occurred in the past, ignored this time
-    k_EResultAlreadyOwned : 30, // All the games in this guest pass redemption request are already owned by the user
-    k_EResultIPNotFound : 31, // IP address not found
-    k_EResultPersistFailed : 32, // failed to write change to the data store
-    k_EResultLockingFailed : 33, // failed to acquire access lock for this operation
-    k_EResultLogonSessionReplaced : 34,
-    k_EResultConnectFailed : 35,
-    k_EResultHandshakeFailed : 36,
-    k_EResultIOFailure : 37,
-    k_EResultRemoteDisconnect : 38,
-    k_EResultShoppingCartNotFound : 39, // failed to find the shopping cart requested
-    k_EResultBlocked : 40, // a user didn't allow it
-    k_EResultIgnored : 41, // target is ignoring sender
-    k_EResultNoMatch : 42, // nothing matching the request found
-    k_EResultAccountDisabled : 43,
-    k_EResultServiceReadOnly : 44, // this service is not accepting content changes right now
-    k_EResultAccountNotFeatured : 45, // account doesn't have value, so this feature isn't available
-    k_EResultAdministratorOK : 46, // allowed to take this action, but only because requester is admin
-    k_EResultContentVersion : 47, // A Version mismatch in content transmitted within the Steam protocol.
-    k_EResultTryAnotherCM : 48, // The current CM can't service the user making a request, user should try another.
-    k_EResultPasswordRequiredToKickSession : 49, // You are already logged in elsewhere, this cached credential login has failed.
-    k_EResultAlreadyLoggedInElsewhere : 50, // You are already logged in elsewhere, you must wait
-    k_EResultSuspended : 51,
-    k_EResultCancelled : 52,
-    k_EResultDataCorruption : 53,
-    k_EResultDiskFull : 54,
-    k_EResultRemoteCallFailed : 55,
-};
 /**
  * Enum for all server regions. This enum is kept up to date on a best effort base.
  * For the up-to-date values, check your game's regions.txt or {@link https://github.com/SteamDatabase/GameTracking-Dota2/blob/master/game/dota/pak01_dir/scripts/regions.txt|SteamDB's version}
@@ -126,20 +62,6 @@ Dota2.SeriesType = {
     NONE: 0,
     BEST_OF_THREE: 1,
     BEST_OF_FIVE: 2
-};
-
-/**
- * Enum for different bot difficulty levels.
- * @alias module:Dota2.BotDifficulty
- * @readonly
- * @enum {number}
- */
-Dota2.BotDifficulty = {
-    PASSIVE: 0,
-    EASY: 1,
-    MEDIUM: 2,
-    HARD: 3,
-    UNFAIR: 4
 };
 
 
@@ -187,14 +109,22 @@ Dota2._convertCallback = function(handler, callback) {
     }
 };
 
+Dota2._getPropertyByValue = function(obj, value) {
+    return Object.keys(obj).find(key => obj[key] === value);
+}
+
 Dota2._getMessageName = function(kMsg) {
-    var msgTypes = [Dota2.schema.lookupEnum("EDOTAGCMsg"), 
-                    Dota2.schema.lookupEnum("EGCSystemMsg"), 
-                    Dota2.schema.lookupEnum("ESOMsg"), 
-                    Dota2.schema.lookupEnum("EGCBaseClientMsg"),
-                    Dota2.schema.lookupEnum("EGCToGCMsg"),
-                    Dota2.schema.lookupEnum("EGCEconBaseMsg")];
+    var msgTypes = [Dota2.schema.EDOTAGCMsg,  
+                    Dota2.schema.ESOMsg, 
+                    Dota2.schema.EGCBaseClientMsg,
+                    Dota2.schema.EGCEconBaseMsg,
+                    Dota2.schema.EGCBaseMsg,
+                    Dota2.schema.EGCItemMsg,
+                    Dota2.schema.EGCMsgInitiateTradeResponse,
+                    Dota2.schema.EGCMsgResponse,
+                    Dota2.schema.EGCMsgUseItemResponse];
     for (var i=0; i<msgTypes.length; i++) {
-        if (msgTypes[i].valuesById[kMsg]) return msgTypes[i].valuesById[kMsg];
+        let msg = Object.keys(msgTypes[i]).find(key => msgTypes[i][key] === kMsg);
+        if (msg) return msg;
     }
 }

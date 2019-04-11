@@ -90,7 +90,7 @@ var steam = require("steam"),
 	
 	var invertKMsgTypeID = function() {
 		var msg_type_id = "k_EMsgClientToGCGetProfileCard";
-		var calculated_msg_type_id = dota2._getMessageName(dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgClientToGCGetProfileCard);
+		var calculated_msg_type_id = dota2._getMessageName(dota2.schema.EDOTAGCMsg.k_EMsgClientToGCGetProfileCard);
 		should(calculated_msg_type_id).equal(msg_type_id);
 	}
  
@@ -384,17 +384,6 @@ var steam = require("steam"),
 		});
 		
 		describe('Leagues', function () {
-			
-			describe('#requestLeagueInfo', function () {
-				it('should fetch data on all official leagues', function (done) {
-					Dota2.on('leagueData', function (leagues){
-						should(leagues.length).above(0);
-						should.exist(leagues[0].league_id);
-						done();
-					});
-					Dota2.requestLeagueInfo();
-				}); 
-			});
 			
 			describe('#requestTopLeagueMatches', function () {
 				it('should fetch data on all top league matches', function (done) {

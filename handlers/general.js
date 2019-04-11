@@ -1,5 +1,4 @@
-var Dota2 = require("../index"),
-    util = require("util");
+var Dota2 = require("../index");
     
 // Events
 /**
@@ -15,8 +14,8 @@ var Dota2 = require("../index"),
 var handlers = Dota2.Dota2Client.prototype._handlers;
 
 var onPopUp = function onPopUp(message) {
-    var popup = Dota2.schema.lookupType("CMsgDOTAPopup").decode(message);
-    this.Logger.debug("Received popup: "+popup.custom_text);
+    var popup = Dota2.schema.CMsgDOTAPopup.decode(message);
+    this.Logger.debug("Received popup: "+Dota2._getPropertyByValue(Dota2.schema.CMsgDOTAPopup.PopupID, popup.id));
     this.emit("popup", popup.id, popup);
 };
-handlers[Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPopup] = onPopUp;
+handlers[Dota2.schema.EDOTAGCMsg.k_EMsgGCPopup] = onPopUp;
