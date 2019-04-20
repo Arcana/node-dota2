@@ -8,3 +8,5 @@ servers
 *.log
 *.hbs
 .vscode
+generate_README.sh
+README.hbs

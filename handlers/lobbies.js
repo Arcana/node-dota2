@@ -426,7 +426,7 @@ Dota2.Dota2Client.prototype.launchPracticeLobby = function(callback) {
 Dota2.Dota2Client.prototype.joinPracticeLobbyTeam = function(slot, team, callback) {
     callback = callback || null;
     slot = slot || 1;
-    if (typeof team === 'undefined') team = Dota2.schema.DOTA_GC_TEAM.values.DOTA_GC_TEAM_PLAYER_POOL;
+    if (typeof team === 'undefined') team = Dota2.schema.DOTA_GC_TEAM.DOTA_GC_TEAM_PLAYER_POOL;
     
     this.Logger.debug("Sending match CMsgPracticeLobbySetTeamSlot request");
     
