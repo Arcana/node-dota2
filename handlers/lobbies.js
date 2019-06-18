@@ -455,12 +455,13 @@ Dota2.Dota2Client.prototype.joinPracticeLobbyCoachTeam = function(team, callback
 
     this.Logger.debug("Sending match CMsgPracticeLobbySetCoach request");
     
-    var payload = {
+    var payload = new Dota2.schema.CMsgPracticeLobbySetCoach({
         "team": team
-    };
-    this.sendToGC(  Dota2.schema.lookupEnum("EDOTAGCMsg").values.k_EMsgGCPracticeLobbySetCoach, 
-                    Dota2.schema.lookupType("CMsgPracticeLobbySetCoach").encode(payload).finish(), 
-                    onPracticeLobbyResponse, callback);
+    });
+    this.sendToGC(Dota2.schema.EDOTAGCMsg.k_EMsgGCPracticeLobbySetCoach, 
+                    payload, 
+                    onPracticeLobbyResponse,
+                    callback);
 };
 
 /**
