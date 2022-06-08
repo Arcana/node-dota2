@@ -8,6 +8,15 @@ node-dota2
 
 A node-steam plugin for Dota 2, consider it in alpha state.
 
+## Deprecation of node-dota2 (2022-06-08)
+
+After 3 years since the project's last commit, and 9 years since it began, a group of the project's contributors have decided to formally deprecate node-dota2. See #700 for full details.
+
+No further contributors will be accepted. Existing issues and pull requests will be shortly closed, and the repository archived.
+
+Anybody needing to interact with the Dota 2 Game Coordinator programmatically may be interested in [paralin/go-dota2](https://github.com/paralin/go-dota2), which is an up-to-date and maintained package written in Go.
+
+
 ## Contributing
 Check out @RJacksonm1's blog post (his only blog post), [Extending node-dota2](https://blog.rjackson.me/extending-node-dota2/), for a rough overview of adding new functionality to the library.
 A fair warning, while the way you search for new functionality is still the same, quite a lot has changed (and been simplified) implementation wise.
